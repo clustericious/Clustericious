@@ -8,40 +8,73 @@ our $VERSION = '0.01';
 use Log::Log4perl qw(get_logger :levels);
 use Getopt::Long qw(:config pass_through);
 
+my $Init;
+my $LogConfig;
+my $LogFile;
+my %LogLevels;
+
 sub import
 {
-  my ($class, $logconfig) = @_;
+  my $class = shift;
+  $Init = shift;
+}
 
+BEGIN
+{
   GetOptions
   (
-    'logconfig=s' => \$logconfig,
-    'logfile=s'   => \my $logfile
+    'logconfig=s' => \$LogConfig,
+    'logfile=s'   => \$LogFile
   );
 
-  if ($logconfig and -f $logconfig)
+  GetOptions(\%LogLevels,
+    qw(debug:s@ info|verbose:s@ warn:s@ error:s@ fatal:s@ off|quiet:s@));
+}
+
+INIT
+{
+  init($LogConfig ? $LogConfig : $Init);
+}
+
+sub init
+{
+  my ($init) = @_;
+
+  if (defined $init and (ref($init) eq 'SCALAR' or -f $init))
   {
-    Log::Log4perl->init($logconfig);
+    Log::Log4perl->init($init);
   }
-  else
+  elsif (not Log::Log4perl->initialized)
   {
-    Log::Log4perl->easy_init($ERROR) unless Log::Log4perl->initialized();
+    $init = {} unless ref($init) eq 'HASH';
+
+    $init->{level}  ||= $ERROR;
+    $init->{layout} ||= '[%-5p] %m%n';
+
+    Log::Log4perl->easy_init($init);
   }
 
   my $log = get_logger('');
 
-  if ($logfile)
+  if ($LogFile)
   {
+    my $layout = '%d %c %m%n';
+
+    if ($LogFile =~ s/\|(.*)$//)
+    {
+      $layout = $1;
+    }
+
     my $file_appender = Log::Log4perl::Appender->new(
                 "Log::Log4perl::Appender::File",
                 name => 'logfile',
-                filename  => $logfile);
+                filename  => $LogFile);
+
     $file_appender->layout(Log::Log4perl::Layout::PatternLayout->new(
-                   "%d %m\n"));
+                 $layout));
+
     $log->add_appender($file_appender);
   }
-
-  GetOptions(\my %LogLevels,
-    qw(debug:s@ info|verbose:s@ warn:s@ error:s@ fatal:s@ off|quiet:s@));
 
   while (my ($level, $vals) = each %LogLevels)
   {
@@ -72,11 +105,16 @@ Log::Log4perl::CommandLine - Simple Command Line Interface for Log4perl
 
 =head1 SYNOPSIS
 
+ use Log::Log4perl qw(:easy); # to get constants
+
+ # Some alternatives:
+
  use Log::Log4perl::CommandLine;
-
- # or
-
+ use Log::Log4perl::CommandLine { level => $INFO };
+ use Log::Log4perl::CommandLine { layout => '%d %c %m%n' };
+ use Log::Log4perl::CommandLine { level => $WARN, layout => '%d %c %m%n' };
  use Log::Log4perl::CommandLine qw(/my/default/log.conf);
+ use Log::Log4perl::CommandLine \q(...some log4perl config...);
 
  # These configure the root logger:
 
@@ -100,7 +138,10 @@ Log::Log4perl::CommandLine - Simple Command Line Interface for Log4perl
  # Simple changes to log configuration:
 
  my_program.pl --logconfig /another/log.conf  # Command line override
+
  my_program.pl --logfile /path/log.txt        # Add a simple file logger
+
+ my_program.pl --logfile "log.file|%d %m%n"   # Optional layout override
 
  # Complete list of log level options:
  # debug, info (verbose), warn, error, fatal, off (quiet)
@@ -112,12 +153,22 @@ allowing for simple configuration of Log4perl using the command line,
 or easy, temporary overriding of a more complicated Log4perl
 configuration from a file.
 
+The <use Log::Log4perl> line is needed if you want to use the
+constants ($ERROR, $INFO, etc.) or what to use Log4perl logging in
+your program (which you should).  If a main program doesn't use
+Log4perl, but uses modules that do, you can just add one line C<use
+Log::Log4perl::CommandLine;> and everything will just work.
+
 Any options parsed and understood by this module are stripped from
 @ARGV (by C<Getopt::Long>), so they won't interfere with later command
 line parsing.
 
 Be very careful with naming of other options though, since this module
 takes over a bit of option space.
+
+=head1 BUGS
+
+Experimental for comments, interface may change.
 
 =head1 AUTHOR
 

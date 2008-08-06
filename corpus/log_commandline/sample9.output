@@ -1,0 +1,21 @@
+% perl sample9.pl
+[ERROR] error message
+[FATAL] fatal message
+
+% perl sample9.pl --logfile mylog.output
+[ERROR] error message
+[FATAL] fatal message
+
+% cat mylog.output
+2008/08/06 10:06:46 main error message
+2008/08/06 10:06:46 main fatal message
+
+% rm mylog.output
+
+% perl sample9.pl --logfile "mylog.output|%r %m%n"
+[ERROR] error message
+[FATAL] fatal message
+
+% cat mylog.output
+48 error message
+48 fatal message

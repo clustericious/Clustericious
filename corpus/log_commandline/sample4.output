@@ -1,0 +1,11 @@
+% perl sample4.pl
+2008/08/06 09:33:51 main error message
+2008/08/06 09:33:51 main fatal message
+
+% perl sample4.pl -q
+
+% perl sample4.pl -v
+2008/08/06 09:34:00 main info  message
+2008/08/06 09:34:00 main warn  message
+2008/08/06 09:34:00 main error message
+2008/08/06 09:34:00 main fatal message
