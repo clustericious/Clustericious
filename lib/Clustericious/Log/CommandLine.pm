@@ -153,7 +153,7 @@ allowing for simple configuration of Log4perl using the command line,
 or easy, temporary overriding of a more complicated Log4perl
 configuration from a file.
 
-The <use Log::Log4perl> line is needed if you want to use the
+The C<use Log::Log4perl> line is needed if you want to use the
 constants ($ERROR, $INFO, etc.) or what to use Log4perl logging in
 your program (which you should).  If a main program doesn't use
 Log4perl, but uses modules that do, you can just add one line C<use
