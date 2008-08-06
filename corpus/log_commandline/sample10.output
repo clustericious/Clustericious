@@ -3,6 +3,6 @@
 [FATAL] fatal message
 
 % perl sample10.pl --logconfig log4perl.conf
-2008/08/06 10:14:34 main warn  message
-2008/08/06 10:14:34 main error message
-2008/08/06 10:14:34 main fatal message
+main warn  message
+main error message
+main fatal message

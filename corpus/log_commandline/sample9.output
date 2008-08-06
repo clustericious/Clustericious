@@ -6,16 +6,14 @@
 [ERROR] error message
 [FATAL] fatal message
 
-% cat mylog.output
-2008/08/06 10:06:46 main error message
-2008/08/06 10:06:46 main fatal message
+% cat mylog.output && rm mylog.output
+2008/08/06 13:37:24 main error message
+2008/08/06 13:37:24 main fatal message
 
-% rm mylog.output
-
-% perl sample9.pl --logfile "mylog.output|%r %m%n"
+% perl sample9.pl --logfile 'mylog.output|%d %m%n'
 [ERROR] error message
 [FATAL] fatal message
 
-% cat mylog.output
-48 error message
-48 fatal message
+% cat mylog.output && rm mylog.output
+2008/08/06 13:41:50 error message
+2008/08/06 13:41:50 fatal message

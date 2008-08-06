@@ -1,17 +1,12 @@
 % perl sample5.pl 
-[WARN ] main warn  message
-[ERROR] main error message
-[FATAL] main fatal message
-
-% perl sample5.pl 
-2008/08/06 09:41:47 main warn  message
-2008/08/06 09:41:47 main error message
-2008/08/06 09:41:47 main fatal message
+main warn  message
+main error message
+main fatal message
 
 % perl sample5.pl -q
 
 % perl sample5.pl -v
-2008/08/06 09:42:01 main info  message
-2008/08/06 09:42:01 main warn  message
-2008/08/06 09:42:01 main error message
-2008/08/06 09:42:01 main fatal message
+main info  message
+main warn  message
+main error message
+main fatal message

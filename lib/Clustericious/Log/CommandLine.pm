@@ -3,7 +3,7 @@ package Log::Log4perl::CommandLine;
 use warnings;
 use strict;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Log::Log4perl qw(get_logger :levels);
 use Getopt::Long qw(:config pass_through);
