@@ -154,14 +154,14 @@ or easy, temporary overriding of a more complicated Log4perl
 configuration from a file.
 
 The C<use Log::Log4perl> line is needed if you want to use the
-constants ($ERROR, $INFO, etc.) or what to use Log4perl logging in
+constants ($ERROR, $INFO, etc.) or want to use Log4perl logging in
 your program (which you should).  If a main program doesn't use
 Log4perl, but uses modules that do, you can just add one line C<use
 Log::Log4perl::CommandLine;> and everything will just work.
 
 Any options parsed and understood by this module are stripped from
-@ARGV (by C<Getopt::Long>), so they won't interfere with later command
-line parsing.
+C<@ARGV> (by C<Getopt::Long>), so they won't interfere with later
+command line parsing.
 
 Be very careful with naming of other options though, since this module
 takes over a bit of option space.
