@@ -113,6 +113,9 @@ Log::Log4perl::CommandLine - Simple Command Line Interface for Log4perl
  use Log::Log4perl::CommandLine { level => $INFO };
  use Log::Log4perl::CommandLine { layout => '%d %c %m%n' };
  use Log::Log4perl::CommandLine { level => $WARN, layout => '%d %c %m%n' };
+ use Log::Log4perl::CommandLine { level => $WARN,
+                  layout => '%d %c %m%n',
+                  file => '>>logfile.log' };
  use Log::Log4perl::CommandLine qw(/my/default/log.conf);
  use Log::Log4perl::CommandLine \q(...some log4perl config...);
 
