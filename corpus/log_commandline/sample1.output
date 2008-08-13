@@ -43,3 +43,12 @@
 [WARN ] warn  message
 [ERROR] error message
 [FATAL] fatal message
+
+% perl sample1.pl --trace
+[TRACE] trace message
+[DEBUG] debug message
+[INFO ] info  message
+[WARN ] warn  message
+[ERROR] error message
+[FATAL] fatal message
+

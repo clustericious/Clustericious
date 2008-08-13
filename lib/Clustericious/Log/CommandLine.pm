@@ -3,64 +3,124 @@ package Log::Log4perl::CommandLine;
 use warnings;
 use strict;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use Log::Log4perl qw(get_logger :levels);
-use Getopt::Long qw(:config pass_through);
+use Getopt::Long;
 
-my $Init;
-my $LogConfig;
-my $LogFile;
-my %LogLevels;
+my %init;     # logconfig, loginit, logfile, logcategory
+my %options;  # options set on command line
+
+my %levelmap =
+(
+  q => 'off',
+  quiet => 'off',
+  v => 'info',
+  verbose => 'info',
+  d => 'debug'
+);
 
 sub import
 {
   my $class = shift;
-  $Init = shift;
-}
 
-BEGIN
-{
-  GetOptions
-  (
-    'logconfig=s' => \$LogConfig,
-    'logfile=s'   => \$LogFile
-  );
+  my @getoptlist;
+  my $next;
+  foreach (@_)
+  {
+    if ($next)
+    {
+      $init{$next} = $_;
+      $next = undef;
+      next;
+    }
 
-  GetOptions(\%LogLevels,
-    qw(debug:s@ info|verbose:s@ warn:s@ error:s@ fatal:s@ off|quiet:s@));
+    /^:(log(?:config|file|init|category))$/ and $next = $1; # Grab next arg
+
+    /^(?:trace|:levels|:all)$/ and push(@getoptlist, 'trace:s@');
+    /^(?:debug|:levels|:all)$/ and push(@getoptlist, 'debug:s@');
+    /^(?:info|:levels|:all)$/  and push(@getoptlist, 'info:s@');
+    /^(?:warn|:levels|:all)$/  and push(@getoptlist, 'warn:s@');
+    /^(?:error|:levels|:all)$/ and push(@getoptlist, 'error:s@');
+    /^(?:fatal|:levels|:all)$/ and push(@getoptlist, 'fatal:s@');
+    /^(?:off|:levels|:all)$/   and push(@getoptlist, 'off:s@');
+
+    /^(?:quiet|:long|:all)$/   and push(@getoptlist, 'quiet:s@');
+    /^(?:verbose|:long|:all)$/ and push(@getoptlist, 'verbose:s@');
+
+    /^(?:q|:short|:all)$/      and push(@getoptlist, 'q:s@');
+    /^(?:v|:short|:all)$/      and push(@getoptlist, 'v:s@');
+    /^(?:d|:short|:all)$/      and push(@getoptlist, 'd:s@');
+
+    /^(?:loglevel|:logopts|:all)$/  and push(@getoptlist, 'loglevel:s@');
+
+    /^(?:logconfig|:logopts|:all)$/ and
+      push(@getoptlist, 'logconfig=s' => \$init{logconfig});
+
+    /^(?:logfile|:logopts|:all)$/ and
+      push(@getoptlist, 'logfile=s' => \$init{logfile});
+  }
+
+  my $getopt = Getopt::Long::Parser->new
+         ( config => [qw(pass_through no_auto_abbrev
+                 no_ignore_case)] );
+
+  $getopt->getoptions(\%options, @getoptlist);
+
+  # Allow: --option --option foo --option foo,bar
+  while (my ($opt, $cats) = each %options)
+  {
+    $options{$opt} = [ map { length $_ ? split(',') : '' } @$cats ];
+  }
+
+  # --loglevel category=level or --loglevel level
+  foreach (@{$options{'loglevel'}})
+  {
+    my ($category, $level) = /^([^=]*?)=?([^=]+)$/;
+    push(@{$options{$level}}, $category);
+  }
+  delete $options{'loglevel'};
 }
 
 INIT
 {
-  init($LogConfig ? $LogConfig : $Init);
+  init();
 }
 
-sub init
+sub init()
 {
-  my ($init) = @_;
-
-  if (defined $init and (ref($init) eq 'SCALAR' or -f $init))
+  if (defined $init{logconfig} and -f $init{logconfig} and -r _)
   {
-    Log::Log4perl->init($init);
+    Log::Log4perl->init($init{logconfig});
   }
   elsif (not Log::Log4perl->initialized)
   {
-    $init = {} unless ref($init) eq 'HASH';
+    if ($init{loginit} and not ref $init{loginit})
+    {
+      Log::Log4perl->init(\$init{loginit});
+    }
+    elsif ($init{loginit} and ref $init{loginit} eq 'ARRAY')
+    {
+      Log::Log4perl->easy_init(@{$init{loginit}});
+    }
+    else
+    {
+      my $init = ref $init{loginit} eq 'HASH'
+             ? $init{loginit} : {};
 
-    $init->{level}  ||= $ERROR;
-    $init->{layout} ||= '[%-5p] %m%n';
+      $init->{level} ||= $ERROR;
+      $init->{layout} ||= '[%-5p] %m%n';
 
-    Log::Log4perl->easy_init($init);
+      Log::Log4perl->easy_init($init);
+    }
   }
 
-  my $log = get_logger('');
-
-  if ($LogFile)
+  if ($init{'logfile'})
   {
+    my $logfile = $init{'logfile'};
     my $layout = '%d %c %m%n';
 
-    if ($LogFile =~ s/\|(.*)$//)
+    if ($logfile =~ s/\|(.*)$//)   # "logfilename|logpattern"
     {
       $layout = $1;
     }
@@ -68,29 +128,32 @@ sub init
     my $file_appender = Log::Log4perl::Appender->new(
                 "Log::Log4perl::Appender::File",
                 name => 'logfile',
-                filename  => $LogFile);
+                filename  => $logfile);
 
     $file_appender->layout(Log::Log4perl::Layout::PatternLayout->new(
                  $layout));
 
-    $log->add_appender($file_appender);
+    get_logger('')->add_appender($file_appender);
   }
 
-  while (my ($level, $vals) = each %LogLevels)
+  while (my ($level, $vals) = each %options)
   {
+    $level = $levelmap{$level} if exists $levelmap{$level};
+
     my $level_id = Log::Log4perl::Level::to_priority(uc $level);
 
-    @$vals = split(',', join(',', @$vals));
-    if (@$vals)
+    foreach my $category (@$vals)
     {
-      foreach my $category (@$vals)
+      if ($category eq '')
       {
-        get_logger($category)->level($level_id);
+        $category = defined($init{logcategory})
+              ? $init{logcategory}
+              : $level_id >= $WARN ? '' : 'main';
       }
-    }
-    else
-    {
-      $log->level($level_id);
+
+      $category = '' if $category eq 'root';
+
+      get_logger($category)->level($level_id);
     }
   }
 }
@@ -105,49 +168,89 @@ Log::Log4perl::CommandLine - Simple Command Line Interface for Log4perl
 
 =head1 SYNOPSIS
 
- use Log::Log4perl qw(:easy); # to get constants
+ # Simple: just use the Module, with all the options
 
- # Some alternatives:
+ use Log::Log4perl::CommandLine qw(:all);
 
- use Log::Log4perl::CommandLine;
- use Log::Log4perl::CommandLine { level => $INFO };
- use Log::Log4perl::CommandLine { layout => '%d %c %m%n' };
- use Log::Log4perl::CommandLine { level => $WARN, layout => '%d %c %m%n' };
- use Log::Log4perl::CommandLine { level => $WARN,
-                  layout => '%d %c %m%n',
-                  file => '>>logfile.log' };
- use Log::Log4perl::CommandLine qw(/my/default/log.conf);
- use Log::Log4perl::CommandLine \q(...some log4perl config...);
+ # Then run your program
+ my_program.pl --verbose
+ my_program.pl -v
+ my_program.pl --debug
+ my_program.pl -d
+ my_program.pl --quiet
+ my_program.pl -q
 
- # These configure the root logger:
+ # Flexible: include specific logging options:
 
- my_program.pl --verbose                # sets root logger to INFO
- my_program.pl -v                       # sets root logger to INFO
- my_program.pl --debug                  # sets root logger to DEBUG
- my_program.pl -d                       # sets root logger to DEBUG
- my_program.pl --quiet                  # sets root logger to OFF
- my_program.pl -q                       # sets root logger to OFF
+ use Log::Log4perl::CommandLine qw(q v d);
+ # or
+ use Log::Log4perl::CommandLine qw(:short);
 
- # Or you can configure a specific category:
+ use Log::Log4perl::CommandLine qw(quiet verbose);
+ # or
+ use Log::Log4perl::CommandLine qw(:long);
 
- my_program.pl --verbose Some::Module
- my_program.pl --debug Broken::Module
+ use Log::Log4perl::CommandLine qw(trace debug info warn error fatal off);
+ # or
+ use Log::Log4perl::CommandLine qw(:levels);
 
- # You can have multiple options, or separate by commas:
+ # q = quiet = off
+ # v = verbose = info
+ # d = debug
 
- my_program.pl --verbose Module1 --verbose Module2
- my_program.pl --verbose Module1,Module2
+ my_program.pl --debug
+ my_program.pl --debug MyModule
+ my_program.pl --debug MyModule,MyOtherModule --debug Foo
 
- # Simple changes to log configuration:
+ # Override configuration on command line
 
- my_program.pl --logconfig /another/log.conf  # Command line override
+ use Log::Log4perl::CommandLine qw(logconfig logfile loglevel);
+ or
+ use Log::Log4perl::CommandLine qw(:logopts);
 
- my_program.pl --logfile /path/log.txt        # Add a simple file logger
+ # override log4perl configuration on commandline
+ my_program.pl --logconfig /some/log4perl.conf
 
- my_program.pl --logfile "log.file|%d %m%n"   # Optional layout override
+ my_program.pl --logfile /my/logfile.log
 
- # Complete list of log level options:
- # debug, info (verbose), warn, error, fatal, off (quiet)
+ my_program.pl --loglevel MyCat=debug   # equivalent to "-debug MyCat"
+ my_program.pl --loglevel MyCat=mylevel # can use for custom log levels
+
+ # Include simple Log4perl configurations:
+
+ use Log::Log4perl::CommandLine qw(:logconfig /my/default/log4perl.conf);
+
+ use Log::Log4perl::CommandLine qw(:logfile /my/default/logfile.log);
+
+ # These match Log::Log4perl->easy_init():
+ use Log::Log4perl qw(:levels);   # needed to define constants
+
+ use Log::Log4perl::CommandLine ':loginit' => { level => $INFO };
+
+ use Log::Log4perl::CommandLine ':loginit' => { layout => '%d %c %m%n' };
+
+ use Log::Log4perl::CommandLine ':loginit' => { level => $WARN,
+                        layout => '%d %c %m%n' };
+
+ use Log::Log4perl::CommandLine ':loginit' => [ { level => $WARN,
+                          layout => '%d %c %m%n',
+                          category => 'foo',
+                          file => '>>foo.log' },
+                        { level => $DEBUG,
+                          category => 'bar',
+                          file => '>>bar.log' } ];
+
+ # or inline a log4perl configuration:
+ use Log::Log4perl::CommandLine ':loginit' => q(...some log4perl config...);
+
+ # control which logger the unspecified levels affect:
+
+ use Log::Log4perl::CommandLine qw(:logcategory root);
+ # or
+ use Log::Log4perl::CommandLine qw(:logcategory main);
+
+ # if you don't specify :logcategory, levels WARN and higher => 'root',
+ # and DEBUG and INFO => 'main' (see below)
 
 =head1 DESCRIPTION
 
@@ -156,22 +259,126 @@ allowing for simple configuration of Log4perl using the command line,
 or easy, temporary overriding of a more complicated Log4perl
 configuration from a file.
 
-The C<use Log::Log4perl> line is needed if you want to use the
-constants ($ERROR, $INFO, etc.) or want to use Log4perl logging in
-your program (which you should).  If a main program doesn't use
-Log4perl, but uses modules that do, you can just add one line C<use
-Log::Log4perl::CommandLine;> and everything will just work.
+If you want to use the constants ($ERROR, $INFO, etc.), you must C<use
+Log::Log4perl>.
 
 Any options parsed and understood by this module are stripped from
 C<@ARGV> (by C<Getopt::Long>), so they won't interfere with later
 command line parsing.
 
-Be very careful with naming of other options though, since this module
-takes over a bit of option space.
+See L<Log::Log4perl::CommandLine::Cookbook> for examples of usage.
 
-=head1 BUGS
+These enable command line options, parsed with L<Getopt::Long>, so you
+can precede them on the command line with either '-' or '--'.
 
-Experimental for comments, interface may change.
+=head2 OPTIONS
+
+=over
+
+=item :short q v d
+
+=item :long quiet verbose
+
+=item :levels trace debug info warn error fatal off
+
+On the C<use> line, you can explicitly specify just the options you
+want, or the group (:short :long :levels) or :all to get them all.
+
+q = quiet = off
+
+v = verbose = info
+
+d = debug
+
+Each of these "level" options sets the logging level to the specified
+level.  They each take an optional parameter with the category (or
+categories) to apply the level to, or can be specified multiply.
+
+e.g.
+ --debug
+ --debug MyCategory
+ --debug Foo,Bar
+ --debug Foo --debug Bar
+
+If the optional parameter is not specified, the default behavior is to
+apply the level to the root logger if the level is C<OFF>, C<FATAL>,
+C<ERROR> or C<WARN>, and to the 'main' logger if the level is C<INFO>
+or C<DEBUG>.  This may seem a little weird, and it took me a while to
+come to this default, but it fits the way I work best.
+
+This means:
+ my_program.pl -q
+or
+ my_program.pl --quiet
+
+suppresses warnings and errors in the whole logger hierarchy (unless
+you've explicitly forced them through some other Log4perl setting) --
+usually what I want quiet to mean.
+
+ my_program.pl -v, -d, --verbose, or --debug
+
+however, just apply to the main program, so I don't get debugging
+information from other modules I'm not working on.
+
+You can also specifically refer to the root category with 'root':
+
+ my_program.pl --trace root
+
+If you don't like this behavior, you can explicitly define the
+default log category with C<:logcategory E<lt>categoryE<gt>>
+
+=item :logcategory <default category>
+
+This is the category to use if one isn't specified in one of the level
+options.
+
+=item :logopts or loglevel
+
+ --loglevel verbose
+ --loglevel MyModule=debug
+ --loglevel Foo=info,main=debug
+ --loglevel foo=info --loglevel main=debug
+
+This is just another way to set the level.  This can help avoid option
+space pollution if you already use the standard options for other
+purposes, or if you've defined special Log4perl levels beyond the
+standard ones (but don't do that).
+
+=item :logopts or logconfig
+
+Enable C<--logconfig /my/log4perl.conf> to override the entire
+Log4perl configuration.
+
+=item :logopts or logfile
+
+Enable C<--logfile /my/logfile.log> to create a log file.  You can
+also append a special layout for the log file like this:
+
+ my_program.pl --logfile '/my/logfile.log|%d %m%n'
+
+Be sure to respect your shell's metacharacters and quote when needed.
+
+=item :logconfig '/my/log4perl.conf'
+
+Specify a Log4perl configuration file.  Contrary to normal Log4perl,
+it is OK if the file is missing, things will just proceed with the
+default configuration.
+
+=item :logfile '/my/default/logfile.log'
+
+Specify a default log file.  Similar to the --logfile option, you
+can append a layout C<:logfile '/my/logfile.log|%d %m%n'>
+
+=item :loginit { ...Log::Log4perl->easy_init() configuration... }
+
+See basic examples in SYNOPSIS, Cookbook or L<Log::Log4perl> for more
+details.
+
+=item :loginit '... embedded Log4perl configuration ...'
+
+See basic examples in Cookbook or L<Log::Log4perl> for more details.
+
+=back
 
 =head1 AUTHOR
 

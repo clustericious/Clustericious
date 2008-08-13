@@ -1,4 +1,4 @@
-use Test::More tests => 86;
+use Test::More tests => 90;
 
 chdir 'eg' or die "Can't chdir eg: $!";
 

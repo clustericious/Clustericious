@@ -25,3 +25,11 @@
 [FATAL] SampleModule test fatal message
 [ERROR] main error message
 [FATAL] main fatal message
+
+% perl sample8.pl -q -d SampleModule
+[DEBUG] SampleModule test debug message
+[INFO ] SampleModule test info  message
+[WARN ] SampleModule test warn  message
+[ERROR] SampleModule test error message
+[FATAL] SampleModule test fatal message
+
