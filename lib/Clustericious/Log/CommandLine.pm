@@ -3,12 +3,12 @@ package Log::Log4perl::CommandLine;
 use warnings;
 use strict;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 use Log::Log4perl qw(get_logger :levels);
 use Getopt::Long;
 
-my %init;     # logconfig, loginit, logfile, logcategory
+my %init;     # logconfig, loginit, logfile, logcategory, noinit
 my %options;  # options set on command line
 
 my %levelmap =
@@ -23,6 +23,8 @@ my %levelmap =
 sub import
 {
   my $class = shift;
+
+  my $caller = caller;
 
   my @getoptlist;
   my $next;
@@ -52,13 +54,20 @@ sub import
     /^(?:v|:short|:all)$/      and push(@getoptlist, 'v:s@');
     /^(?:d|:short|:all)$/      and push(@getoptlist, 'd:s@');
 
-    /^(?:loglevel|:logopts|:all)$/  and push(@getoptlist, 'loglevel:s@');
+    /^(?:loglevel|:logopts|:all)$/ and push(@getoptlist, 'loglevel:s@');
 
     /^(?:logconfig|:logopts|:all)$/ and
       push(@getoptlist, 'logconfig=s' => \$init{logconfig});
 
     /^(?:logfile|:logopts|:all)$/ and
       push(@getoptlist, 'logfile=s' => \$init{logfile});
+
+    { no strict 'refs';
+      /^handlelogoptions$/ and
+        *{"$caller\::handlelogoptions"} = *handlelogoptions;
+    }
+
+    /^:noinit$/ and $init{noinit} = 1;
   }
 
   my $getopt = Getopt::Long::Parser->new
@@ -74,26 +83,23 @@ sub import
   }
 
   # --loglevel category=level or --loglevel level
-  foreach (@{$options{'loglevel'}})
+  foreach (@{$options{loglevel}})
   {
     my ($category, $level) = /^([^=]*?)=?([^=]+)$/;
     push(@{$options{$level}}, $category);
   }
-  delete $options{'loglevel'};
+  delete $options{loglevel};
 }
 
 INIT
 {
-  init();
-}
+  return if $init{noinit};
 
-sub init()
-{
   if (defined $init{logconfig} and -f $init{logconfig} and -r _)
   {
     Log::Log4perl->init($init{logconfig});
   }
-  elsif (not Log::Log4perl->initialized)
+  else
   {
     if ($init{loginit} and not ref $init{loginit})
     {
@@ -105,8 +111,7 @@ sub init()
     }
     else
     {
-      my $init = ref $init{loginit} eq 'HASH'
-             ? $init{loginit} : {};
+      my $init = ref $init{loginit} eq 'HASH' ? $init{loginit} : {};
 
       $init->{level} ||= $ERROR;
       $init->{layout} ||= '[%-5p] %m%n';
@@ -115,9 +120,14 @@ sub init()
     }
   }
 
-  if ($init{'logfile'})
+  handlelogoptions();
+}
+
+sub handlelogoptions
+{
+  if ($init{logfile})
   {
-    my $logfile = $init{'logfile'};
+    my $logfile = $init{logfile};
     my $layout = '%d %c %m%n';
 
     if ($logfile =~ s/\|(.*)$//)   # "logfilename|logpattern"
@@ -202,13 +212,12 @@ Log::Log4perl::CommandLine - Simple Command Line Interface for Log4perl
  my_program.pl --debug MyModule
  my_program.pl --debug MyModule,MyOtherModule --debug Foo
 
- # Override configuration on command line
+ # Override configuration on command line:
 
  use Log::Log4perl::CommandLine qw(logconfig logfile loglevel);
  or
  use Log::Log4perl::CommandLine qw(:logopts);
 
- # override log4perl configuration on commandline
  my_program.pl --logconfig /some/log4perl.conf
 
  my_program.pl --logfile /my/logfile.log
@@ -251,6 +260,20 @@ Log::Log4perl::CommandLine - Simple Command Line Interface for Log4perl
 
  # if you don't specify :logcategory, levels WARN and higher => 'root',
  # and DEBUG and INFO => 'main' (see below)
+
+ # If you want to do your own initialization:
+ use Log::Log4perl::CommandLine qw(:all :noinit);
+
+ ... initialize Log4perl yourself...
+
+ # Explicitly handle log command line options now
+ Log::Log4perl::CommandLine::handlelogoptions();
+
+ # Also call handlelogoptions() explicitly if you later redefine Log4perl
+
+ # Export handlelogoptions() to caller's namespace
+ use Log::Log4perl::CommandLine qw(handlelogoptions);
+ handlelogoptions();
 
 =head1 DESCRIPTION
 
@@ -377,6 +400,19 @@ details.
 =item :loginit '... embedded Log4perl configuration ...'
 
 See basic examples in Cookbook or L<Log::Log4perl> for more details.
+
+=item :noinit
+
+Disable all the automatic Log4perl initialization.  You must call
+handlelogoptions() explicitly after you initialize Log4perl yourself.
+
+:noinit is incompatible with the '--logconfig' command line option.
+
+=item handlelogoptions
+
+Exports the handlelogoptions() subroutine to the caller's namespace.
+Call handlelogoptions() after re-initializing Log4perl to re-apply the
+command line overrides.
 
 =back
 
