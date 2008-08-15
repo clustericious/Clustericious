@@ -7,6 +7,8 @@
 % perl sample2.pl -q
 
 % perl sample2.pl -v
+[INFO ] test info  message
+[WARN ] test warn  message
 [ERROR] test error message
 [FATAL] test fatal message
 [INFO ] info  message

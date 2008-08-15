@@ -1,4 +1,5 @@
 use Test::More tests => 96;
+use Config;
 
 chdir 'eg' or die "Can't chdir eg: $!";
 
@@ -22,6 +23,8 @@ foreach my $sample (<sample*.pl>)
 
         $case =~ s/^\s*//;
         $case =~ s/\n\n$/\n/;
+
+        $command =~ s/perl/$Config{perl5}/;
 
         my $output = `$command 2>&1`;   # just bundle stdout,stderr
 

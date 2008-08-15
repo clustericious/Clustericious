@@ -3,7 +3,7 @@ package Log::Log4perl::CommandLine;
 use warnings;
 use strict;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use Log::Log4perl qw(get_logger :levels);
 use Getopt::Long;
@@ -158,7 +158,7 @@ sub handlelogoptions
       {
         $category = defined($init{logcategory})
               ? $init{logcategory}
-              : $level_id >= $WARN ? '' : 'main';
+              : $level_id >= $INFO ? '' : 'main';
       }
 
       $category = '' if $category eq 'root';
@@ -258,8 +258,8 @@ Log::Log4perl::CommandLine - Simple Command Line Interface for Log4perl
  # or
  use Log::Log4perl::CommandLine qw(:logcategory main);
 
- # if you don't specify :logcategory, levels WARN and higher => 'root',
- # and DEBUG and INFO => 'main' (see below)
+ # if you don't specify :logcategory, levels INFO and higher => 'root',
+ # and DEBUG and TRACE => 'main' (see below)
 
  # If you want to do your own initialization:
  use Log::Log4perl::CommandLine qw(:all :noinit);
@@ -325,20 +325,19 @@ e.g.
 
 If the optional parameter is not specified, the default behavior is to
 apply the level to the root logger if the level is C<OFF>, C<FATAL>,
-C<ERROR> or C<WARN>, and to the 'main' logger if the level is C<INFO>
-or C<DEBUG>.  This may seem a little weird, and it took me a while to
-come to this default, but it fits the way I work best.
+C<ERROR>, C<WARN> or C<INFO> and to the 'main' logger if the level is
+C<DEBUG> or C<TRACE>.  This may seem a little weird, and it took me a
+while to come to this default, but it fits the way I work best.
 
 This means:
- my_program.pl -q
-or
- my_program.pl --quiet
+ my_program.pl -q or --quiet
 
 suppresses warnings and errors in the whole logger hierarchy (unless
 you've explicitly forced them through some other Log4perl setting) --
-usually what I want quiet to mean.
+usually what I want quiet to mean.  Likewise, -v tells every module to
+be a little more verbose.
 
- my_program.pl -v, -d, --verbose, or --debug
+ my_program.pl -d or --debug or --trace
 
 however, just apply to the main program, so I don't get debugging
 information from other modules I'm not working on.
