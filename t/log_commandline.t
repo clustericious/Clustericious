@@ -24,7 +24,7 @@ foreach my $sample (<sample*.pl>)
         $case =~ s/^\s*//;
         $case =~ s/\n\n$/\n/;
 
-        $command =~ s/perl/$Config{perl5}/;
+        $command =~ s,perl,$^X -I../blib/lib,;
 
         my $output = `$command 2>&1`;   # just bundle stdout,stderr
 
