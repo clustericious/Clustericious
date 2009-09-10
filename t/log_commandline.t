@@ -25,6 +25,9 @@ foreach my $sample (<sample*.pl>)
         $case =~ s/\n\n$/\n/;
 
         $command =~ s,perl,$^X -I../blib/lib,;
+        $command =~ s!'!"!g if $^O =~ /win32/i; 
+        $command =~ s,cat ,$^X -MExtUtils::Command -e cat ,;
+        $command =~ s,rm ,$^X -MExtUtils::Command -e rm_f ,;
 
         my $output = `$command 2>&1`;   # just bundle stdout,stderr
 
