@@ -1,4 +1,4 @@
-package Clustericious;
+package Clustericious::Node;
 
 use base 'Mojolicious';
 use MojoX::Log::Log4perl;
