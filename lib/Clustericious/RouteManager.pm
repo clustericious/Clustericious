@@ -11,6 +11,7 @@ sub import {
     # Route generator
     my $route_sub = sub {
         my ($methods, @args) = @_;
+        our @Routes;
 
         my ($cb, $constraints, $defaults, $name, $pattern);
         my $conditions = [];
@@ -55,9 +56,7 @@ sub import {
         # Name
         $name ||= '';
 
-        # Create bridge
-        push @Routes,
-          {
+        push @Routes, {
             name        => $name,
             pattern     => $pattern,
             constraints => $constraints,
@@ -83,16 +82,19 @@ sub import {
 
 sub add_routes {
     my $class = shift;
-    my $routes = shift;
+    my $app = shift;
+
+    my $routes = $app->routes;
 
     for my $spec (@Routes) {
-        my ($name,$pattern,$constraints,$conditions,$defaults,$methods) =
-            @$spec{qw/name pattern constraints conditions defaults methods/};
+       my      ($name,$pattern,$constraints,$conditions,$defaults,$methods) =
+       @$spec{qw/name  pattern  constraints  conditions  defaults  methods/};
 
-        $routes =
-          $routes->bridge( $pattern, {@$constraints} )->over($conditions)
-          ->to($defaults)->name($name)
-          if !ref $methods && $methods eq 'ladder';
+        do {
+          $routes = $app->routes->bridge( $pattern, {@$constraints} )->over($conditions)
+              ->to($defaults)->name($name);
+          next;
+         } if !ref $methods && $methods eq 'ladder';
 
          # WebSocket?
          my $websocket = 1 if !ref $methods && $methods eq 'websocket';

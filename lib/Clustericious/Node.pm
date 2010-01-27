@@ -25,7 +25,7 @@ sub startup {
     $self->log->info("Initialized logger for $host $$ to level ".$self->log->level);
 
     my $r = $self->routes;
-    Clustericious::RouteManager->add_routes($r);
+    Clustericious::RouteManager->add_routes($self);
 
 }
 
