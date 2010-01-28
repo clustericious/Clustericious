@@ -1,4 +1,4 @@
-package Clustericious::RouteManager;
+package Clustericious::RouteBuilder;
 use strict;
 use warnings;
 
