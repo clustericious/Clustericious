@@ -1,0 +1,5 @@
+
+This is a framework based on Mojo, with easy syntax
+like Mojolicious::Lite, intended for making applications
+which are part of an HTTP-based cluster.
+
