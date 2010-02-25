@@ -1,4 +1,4 @@
-package Clustericious::Node;
+package Clustericious::App;
 
 use base 'Mojolicious';
 use List::Util qw/first/;
