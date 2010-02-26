@@ -8,7 +8,7 @@ use Test::Mojo;
 
 package SomeService;
 
-use base 'Clustericious::Node';
+use base 'Clustericious::App';
 use Clustericious::RouteBuilder;
 
 get '/' => sub { shift->render_text("hello"); };
