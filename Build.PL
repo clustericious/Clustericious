@@ -5,7 +5,7 @@ use warnings;
 use Module::Build;
 
 my $builder = Module::Build->new(
-    module_name         => 'Restmd',
+    module_name         => 'Clustericious',
     license             => 'perl',
     dist_author         => q{Brian Duggan <brian.duggan@nasa.gov>},
     dist_version_from   => 'lib/Clustericious.pm',
