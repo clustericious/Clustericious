@@ -12,9 +12,17 @@ sub startup {
 
     my $name = ref $self;
 
-    my @dirs =  ($ENV{HOME}, $self->home, $self->home."/etc", );
-    push @dirs, "$_", "$_/etc" if ($_ = $ENV{MOJO_HOME});
-    my $dir = first { -e "$_/log4perl.conf" } @dirs;
+    my $dir; # dir with log config file.
+    my $pattern; # pattern for screen logging
+
+    if ($ENV{HARNESS_ACTIVE}) {
+        $pattern = "# %5p: %m%n";
+    } else  {
+        my @dirs =  ($ENV{HOME}, $self->home, $self->home."/etc", );
+        push @dirs, "$_", "$_/etc" if ($_ = $ENV{MOJO_HOME});
+        my $dir = first { -e "$_/log4perl.conf" } @dirs;
+        $pattern =  "[%d] [%Z %H %P] %5p: %m%n";
+    }
 
     Log::Log4perl::Layout::PatternLayout::add_global_cspec('Z', sub {$name});
 
@@ -30,7 +38,7 @@ sub startup {
           "log4perl.rootLogger"               => "$ENV{LOG_LEVEL}, SCREEN",
           "log4perl.appender.SCREEN"          => "Log::Log4perl::Appender::Screen",
           "log4perl.appender.SCREEN.layout"   => "PatternLayout",
-          "log4perl.appender.SCREEN.layout.ConversionPattern" => "[%d] [%Z %H %P] %5p: %m%n",
+          "log4perl.appender.SCREEN.layout.ConversionPattern" => "$pattern",
        )),
       # These categories (%c) are too verbose by default :
        "log4perl.logger.Mojolicious"                     => "WARN",
@@ -41,6 +49,7 @@ sub startup {
 
     $self->log->info("Initialized logger to level ".$self->log->level);
     $self->log->info("Log config found in $dir/log4perl.conf") if $dir;
+    warn "# Using $dir/log4perl.conf for log config\n" if $dir;
 
     my $r = $self->routes;
     Clustericious::RouteBuilder->add_routes($self);
