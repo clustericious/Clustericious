@@ -1,0 +1,11 @@
+Build.PL
+lib/Clustericious.pm
+lib/Clustericious/App.pm
+lib/Clustericious/RouteBuilder.pm
+Makefile.PL
+MANIFEST			This list of files
+MANIFEST.SKIP
+META.yml
+README
+t/app.t
+t/basic.t

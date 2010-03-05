@@ -1,0 +1,27 @@
+---
+name: Clustericious
+version: 0.02
+author:
+  - 'Brian Duggan <brian.duggan@nasa.gov>'
+abstract: Mojo and HTTP based cluster framework
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+build_requires:
+  MojoX::Log::Log4perl: 0
+  Mojolicious: 0.999921
+  Test::More: 0
+configure_requires:
+  Module::Build: 0.340201
+provides:
+  Clustericious:
+    file: lib/Clustericious.pm
+    version: 0.02
+  Clustericious::App:
+    file: lib/Clustericious/App.pm
+  Clustericious::RouteBuilder:
+    file: lib/Clustericious/RouteBuilder.pm
+generated_by: Module::Build version 0.340201
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4

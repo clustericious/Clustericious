@@ -9,10 +9,12 @@ my $builder = Module::Build->new(
     license             => 'perl',
     dist_author         => q{Brian Duggan <brian.duggan@nasa.gov>},
     dist_version_from   => 'lib/Clustericious.pm',
+    dist_abstract       => 'Mojo and HTTP based cluster framework',
     build_requires => {
-        'Test::More' => 0,
+        'Test::More'           => 0,
         'MojoX::Log::Log4perl' => 0,
-    },
+        'Mojolicious'          => '0.999921',
+      },
     add_to_cleanup      => [ 'Clustericious-*' ],
     create_makefile_pl => 'traditional',
 );
