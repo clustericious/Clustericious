@@ -77,6 +77,7 @@ sub import {
     *{"${caller}::get"}       = sub { $route_sub->('get', @_) };
     *{"${caller}::ladder"}    = sub { $route_sub->('ladder', @_) };
     *{"${caller}::post"}      = sub { $route_sub->('post', @_) };
+    *{"${caller}::Delete"}    = sub { $route_sub->('delete', @_) };
     *{"${caller}::websocket"} = sub { $route_sub->('websocket', @_) };
 }
 
