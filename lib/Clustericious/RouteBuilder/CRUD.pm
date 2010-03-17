@@ -1,4 +1,36 @@
 package Clustericious::RouteBuilder::CRUD;
+
+=head1 NAME
+
+Clustericious::RouteBuilder::CRUD -- build crud routes easily
+
+=head1 SYNOPSIS
+
+    use My::Object::Class;
+    use Clustericious::RouteBuilder;
+    use Clustericious::RouteBuilder::CRUD
+            "create" => { -as => "do_create" },
+            "read"   => { -as => "do_read"   },
+            "delete" => { -as => "do_delete" },
+            "update" => { -as => "do_update" },
+            defaults => { model => "My::Object::Class" },
+        ;
+
+    ...
+
+    post => "/:table" => \&do_create;
+
+=head1 DESCRIPTION
+
+This package provides some handy subroutines for building CRUD
+routes in your clustericious application.
+
+=head1 TODO
+
+more documentation
+
+=cut
+
 use Mojo::JSON;
 use strict;
 
