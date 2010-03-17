@@ -14,6 +14,7 @@ my $builder = Module::Build->new(
         'Test::More'           => 0,
         'MojoX::Log::Log4perl' => 0,
         'Mojolicious'          => '0.999921',
+        'Sub::Exporter'        => 0,
       },
     add_to_cleanup      => [ 'Clustericious-*' ],
     create_makefile_pl => 'traditional',

@@ -1,6 +1,6 @@
 ---
 name: Clustericious
-version: 0.02
+version: 0.03
 author:
   - 'Brian Duggan <brian.duggan@nasa.gov>'
 abstract: Mojo and HTTP based cluster framework
@@ -10,13 +10,14 @@ resources:
 build_requires:
   MojoX::Log::Log4perl: 0
   Mojolicious: 0.999921
+  Sub::Exporter: 0
   Test::More: 0
 configure_requires:
   Module::Build: 0.340201
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.02
+    version: 0.03
   Clustericious::App:
     file: lib/Clustericious/App.pm
   Clustericious::RouteBuilder:
