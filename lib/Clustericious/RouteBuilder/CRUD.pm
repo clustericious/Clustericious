@@ -37,10 +37,10 @@ sub _build_read {
     sub {
         my $self  = shift;
         my $table = $self->stash->{table};
-        my $key   = $self->stash->{key};
-        my $obj   = $model->find_object($table,$key)
+        my @keys = split /\//, $self->stash->{key};
+        my $obj   = $model->find_object($table,@keys)
             or return $self->app->static->serve_404($self,"404.html.ep");
-        $self->app->log->debug("Viewing $table $key");
+        $self->app->log->debug("Viewing $table @keys");
 
         $self->stash->{json} = $obj->as_tree;
     };
