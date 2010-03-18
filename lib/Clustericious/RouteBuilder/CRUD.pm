@@ -13,7 +13,7 @@ Clustericious::RouteBuilder::CRUD -- build crud routes easily
             "read"   => { -as => "do_read"   },
             "delete" => { -as => "do_delete" },
             "update" => { -as => "do_update" },
-            defaults => { model => "My::Object::Class" },
+            defaults => { finder => "My::Finder::Class" },
         ;
 
     ...
@@ -24,6 +24,9 @@ Clustericious::RouteBuilder::CRUD -- build crud routes easily
 
 This package provides some handy subroutines for building CRUD
 routes in your clustericious application.
+
+The class referenced by "finder" must have methods named
+find_class and find_object.
 
 =head1 TODO
 
@@ -46,8 +49,8 @@ use Sub::Exporter -setup => {
 
 sub _build_create {
     my ($class, $name, $arg, $defaults) = @_;
-    my $model = $arg->{model} || $defaults->{defaults}{model} || die "no model defined";
-    $model->can("lookup_class") or die "$model must be able to lookup_class";
+    my $finder = $arg->{finder} || $defaults->{defaults}{finder} || die "no finder defined";
+    $finder->can("find_class") or die "$finder must be able to find_class";
     return sub {
         my $self  = shift;
         $self->app->log->info("called do_create");
@@ -55,7 +58,7 @@ sub _build_create {
         my $p = $self->req->headers->content_type eq "application/json"
               ? Mojo::JSON->new->decode( $self->req->body )
               : $self->req->params->to_hash;
-        my $object_class = $model->lookup_class($table);
+        my $object_class = $finder->find_class($table);
         my $object = $object_class->new(%$p);
         $object->save or $self->app->logdie( $object->errors );
         $self->stash->{json} = $object->as_tree;
@@ -64,29 +67,30 @@ sub _build_create {
 
 sub _build_read {
     my ($class, $name, $arg, $defaults) = @_;
-    my $model = $arg->{model} || $defaults->{defaults}{model} || die "no model defined";
-    $model->can("find_object") or die "$model must be able to find_object";
+    my $finder = $arg->{finder} || $defaults->{defaults}{finder} || die "no finder defined";
+    $finder->can("find_object") or die "$finder must be able to find_object";
     sub {
         my $self  = shift;
         my $table = $self->stash->{table};
         my @keys = split /\//, $self->stash->{key};
-        my $obj   = $model->find_object($table,@keys)
+        my $obj   = $finder->find_object($table,@keys)
             or return $self->app->static->serve_404($self,"404.html.ep");
         $self->app->log->debug("Viewing $table @keys");
 
         $self->stash->{json} = $obj->as_tree;
+
     };
 }
 
 sub _build_delete {
     my ($class, $name, $arg, $defaults) = @_;
-    my $model = $arg->{model} || $defaults->{defaults}{model} || die "no model defined";
-    $model->can("find_object") or die "$model must be able to find_object";
+    my $finder = $arg->{finder} || $defaults->{defaults}{finder} || die "no finder defined";
+    $finder->can("find_object") or die "$finder must be able to find_object";
     sub {
         my $self  = shift;
         my $table = $self->stash->{table};
         my @keys = split /\//, $self->stash->{key};
-        my $obj   = $model->find_object($table,@keys)
+        my $obj   = $finder->find_object($table,@keys)
             or return $self->app->static->serve_404($self,"404.html.ep");
         $self->app->log->debug("Deleting $table @keys");
 
