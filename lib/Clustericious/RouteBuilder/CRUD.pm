@@ -28,6 +28,9 @@ routes in your clustericious application.
 The class referenced by "finder" must have methods named
 find_class and find_object.
 
+The objects returned by find_object must be have a method
+named as_hash.
+
 =head1 TODO
 
 more documentation
@@ -61,7 +64,7 @@ sub _build_create {
         my $object_class = $finder->find_class($table);
         my $object = $object_class->new(%$p);
         $object->save or $self->app->logdie( $object->errors );
-        $self->stash->{json} = $object->as_tree;
+        $self->stash->{json} = $object->as_hash;
     };
 }
 
@@ -77,7 +80,7 @@ sub _build_read {
             or return $self->app->static->serve_404($self,"404.html.ep");
         $self->app->log->debug("Viewing $table @keys");
 
-        $self->stash->{json} = $obj->as_tree;
+        $self->stash->{json} = $obj->as_hash;
 
     };
 }
