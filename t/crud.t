@@ -10,11 +10,11 @@ package Fake::Object::Thing;
 
 sub new     { my $class = shift; bless { got => {@_} }, $class; }
 sub save    { return 1; }
-sub as_tree { return shift->{got} };
+sub as_hash { return shift->{got} };
 
 package Fake::Object;
 
-sub lookup_class { return "Fake::Object::Thing"; }
+sub find_class  {  return "Fake::Object::Thing";     }
 sub find_object {  return Fake::Object::Thing->new() }
 
 package SomeService;
@@ -23,7 +23,7 @@ use base 'Clustericious::App';
 use Clustericious::RouteBuilder;
 use Clustericious::RouteBuilder::CRUD
         "create" => { -as => "do_create" },
-        defaults => { model => "Fake::Object" };
+        defaults => { finder => "Fake::Object" };
 
 post '/' => \&do_create;
 
