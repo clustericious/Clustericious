@@ -40,6 +40,7 @@ more documentation
 
 use Mojo::JSON;
 use strict;
+use Log::Log4perl qw/:easy/;
 
 use Sub::Exporter -setup => {
     exports => [
@@ -60,6 +61,7 @@ sub _build_create {
         my $self  = shift;
         $self->app->log->info("called do_create");
         my $table = $self->stash->{table};
+        TRACE "create $table";
         my $p = $self->req->headers->content_type eq "application/json"
               ? Mojo::JSON->new->decode( $self->req->body )
               : $self->req->params->to_hash;
@@ -78,6 +80,7 @@ sub _build_read {
         my $self  = shift;
         my $table = $self->stash->{table};
         my @keys = split /\//, $self->stash->{key};
+        TRACE "read $table (@keys)";
         my $obj   = $finder->find_object($table,@keys)
             or return $self->app->static->serve_404($self,"404.html.ep");
         $self->app->log->debug("Viewing $table @keys");
@@ -95,6 +98,7 @@ sub _build_delete {
         my $self  = shift;
         my $table = $self->stash->{table};
         my @keys = split /\//, $self->stash->{key};
+        TRACE "delete $table (@keys)";
         my $obj   = $finder->find_object($table,@keys)
             or return $self->app->static->serve_404($self,"404.html.ep");
         $self->app->log->debug("Deleting $table @keys");

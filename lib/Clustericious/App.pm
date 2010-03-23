@@ -20,7 +20,7 @@ sub startup {
     } else  {
         my @dirs =  ($ENV{HOME}, $self->home, $self->home."/etc", );
         push @dirs, "$_", "$_/etc" if ($_ = $ENV{MOJO_HOME});
-        my $dir = first { -e "$_/log4perl.conf" } @dirs;
+        $dir = first { -e "$_/log4perl.conf" } @dirs;
         $pattern =  "[%d] [%Z %H %P] %5p: %m%n";
     }
 
