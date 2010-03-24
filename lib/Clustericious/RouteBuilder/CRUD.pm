@@ -115,20 +115,30 @@ sub _build_list {
     sub {
         my $self  = shift;
         my $table = $self->stash->{table};
+        my $limit = $self->stash->{params}->param('limit');
 
         $self->app->log->debug("Listing $table");
 
-        my $object_class = Rose::Planter->find_class($table)
+        my $object_class = $finder->find_class($table)
             or return $self->app->static->serve_404($self, "404.html.ep");
 
         my $pkey = $object_class->meta->primary_key;
 
         my $manager = $object_class . '::Manager';
 
-        my $objectlist = $manager->get_objects(object_class => $object_class,
-                                               sort_by => $pkey);
+        my $objectlist = $manager->get_objects(
+                             object_class => $object_class,
+                             select => [ $pkey->columns ],
+                             sort_by => [ $pkey->columns ],
+                             limit => $limit);
 
-        $self->stash->{json} = [ map { $_->$pkey } @$objectlist ];
+        my @l;
+
+        foreach my $obj (@$objectlist) {
+            push(@l, join('/', map { $obj->$_ } $pkey->columns ));
+        }
+
+        $self->stash->{json} = \@l;
     };
 }
 
