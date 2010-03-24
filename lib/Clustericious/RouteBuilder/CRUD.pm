@@ -13,6 +13,7 @@ Clustericious::RouteBuilder::CRUD -- build crud routes easily
             "read"   => { -as => "do_read"   },
             "delete" => { -as => "do_delete" },
             "update" => { -as => "do_update" },
+            "list"   => { -as => "do_list"   },
             defaults => { finder => "My::Finder::Class" },
         ;
 
@@ -46,6 +47,7 @@ use Sub::Exporter -setup => {
         "read"   => \&_build_read,
         "update" => \&_build_update,
         "delete" => \&_build_delete,
+        "list"   => \&_build_list,
     ],
     collectors => ['defaults'],
 };
@@ -106,6 +108,28 @@ sub _build_update {
     return sub { die "update not yet implemented"; };
 }
 
+sub _build_list {
+    my ($class, $name, $arg, $defaults) = @_;
+    my $finder = $arg->{finder} || $defaults->{defaults}{finder} || die "no finder defined";
+    $finder->can("find_object") or die "$finder must be able to find_object";
+    sub {
+        my $self  = shift;
+        my $table = $self->stash->{table};
+
+        $self->app->log->debug("Listing $table");
+
+        my $object_class = Rose::Planter->find_class($table)
+            or return $self->app->static->serve_404($self, "404.html.ep");
+
+        my $pkey = $object_class->meta->primary_key;
+
+        my $manager = $object_class . '::Manager';
+
+        my $objectlist = $manager->get_objects(object_class => $object_class,
+                                               sort_by => $pkey);
+
+        $self->stash->{json} = [ map { $_->$pkey } @$objectlist ];
+    };
+}
 
 1;
-
