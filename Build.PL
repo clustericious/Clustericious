@@ -13,7 +13,7 @@ my $builder = Module::Build->new(
     build_requires => {
         'Test::More'           => 0,
         'MojoX::Log::Log4perl' => 0,
-        'Mojolicious'          => '0.999921',
+        'Mojolicious'          => '0.999924',
         'Sub::Exporter'        => 0,
       },
     add_to_cleanup      => [ 'Clustericious-*' ],
