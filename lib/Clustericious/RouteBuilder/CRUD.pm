@@ -29,8 +29,7 @@ routes in your clustericious application.
 The class referenced by "finder" must have methods named
 find_class and find_object.
 
-The objects returned by find_object must be have a method
-named as_hash.
+The objects returned by find_object must have a method named as_hash.
 
 =head1 TODO
 
