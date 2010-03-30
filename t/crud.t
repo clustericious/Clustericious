@@ -25,13 +25,13 @@ use Clustericious::RouteBuilder::CRUD
         "create" => { -as => "do_create" },
         defaults => { finder => "Fake::Object" };
 
-post '/' => \&do_create;
+post '/:table' => \&do_create;
 
 package main;
 
 my $t = Test::Mojo->new(app => "SomeService");
 
-$t->post_form_ok("/", { foo => "bar" }, "posted to create")
+$t->post_form_ok("/my_table", { foo => "bar" }, "posted to create")
     ->status_is(200, "got 200")
     ->json_content_is({foo => "bar"}, "got structure back");
 
