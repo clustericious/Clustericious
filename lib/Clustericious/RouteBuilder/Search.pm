@@ -53,12 +53,17 @@ sub _build_search {
         my $p = $self->req->headers->content_type =~ /json/i
           ? Mojo::JSON->new->decode( $self->req->body )
           : $self->req->params->to_hash;
-        TRACE "searching for files : ".Dumper($p);
+        delete $p->{""}; # empty POST is okay.
+        TRACE "searching for $items : ".Dumper($p);
 
         # maybe restrict, by first calling $manager->normalize_get_objects_args(%$p)
 
+        my $all = delete $p->{query_all};
         # "If the first argument is a hash it is treated as 'query'" -- RDBOM docs
-        my @args = ( exists($p->{query}) ? %$p : $p );
+        my @args = $all || exists( $p->{query} ) ? %$p
+                 : ( keys %$p > 0 )              ? $p
+                 : ();
+        TRACE "args are @args";
         push @args, object_class => $manager->object_class;
 
         my $count = $manager->get_objects_count( @args );
