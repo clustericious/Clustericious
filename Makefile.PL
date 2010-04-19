@@ -6,7 +6,7 @@ WriteMakefile
           'VERSION_FROM' => 'lib/Clustericious.pm',
           'PREREQ_PM' => {
                            'MojoX::Log::Log4perl' => 0,
-                           'Mojolicious' => '0.999921',
+                           'Mojolicious' => '0.999924',
                            'Sub::Exporter' => 0,
                            'Test::More' => 0
                          },
