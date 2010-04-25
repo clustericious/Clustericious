@@ -37,7 +37,6 @@ more documentation
 
 =cut
 
-use Mojo::JSON;
 use strict;
 use Log::Log4perl qw/:easy/;
 
@@ -61,13 +60,11 @@ sub _build_create {
         $self->app->log->info("called do_create");
         my $table = $self->stash->{table};
         TRACE "create $table";
-        my $p = $self->req->headers->content_type eq "application/json"
-              ? Mojo::JSON->new->decode( $self->req->body )
-              : $self->req->params->to_hash;
+        $self->app->plugins->run_hook('parse_data', $self);
         my $object_class = $finder->find_class($table);
-        my $object = $object_class->new(%$p);
+        my $object = $object_class->new(%{$self->stash->{data}});
         $object->save or $self->app->logdie( $object->errors );
-        $self->stash->{json} = $object->as_hash;
+        $self->stash->{data} = $object->as_hash;
     };
 }
 
@@ -84,7 +81,7 @@ sub _build_read {
             or return $self->app->static->serve_404($self,"404.html.ep");
         $self->app->log->debug("Viewing $table @keys");
 
-        $self->stash->{json} = $obj->as_hash;
+        $self->stash->{data} = $obj->as_hash;
 
     };
 }
@@ -141,7 +138,7 @@ sub _build_list {
             push(@l, join('/', map { $obj->$_ } $pkey->columns ));
         }
 
-        $self->stash->{json} = \@l;
+        $self->stash->{data} = \@l;
     };
 }
 

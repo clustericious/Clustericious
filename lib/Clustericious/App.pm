@@ -54,7 +54,8 @@ sub startup {
     my $r = $self->routes;
     Clustericious::RouteBuilder->add_routes($self);
 
+    $self->plugins->namespaces(['Clustericious::Plugin']);
+    $self->plugin('data_handler');
 }
 
 1;
-
