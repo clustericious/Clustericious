@@ -64,17 +64,17 @@ $t->get_ok('/my_table/foo',
   ->json_content_is({foo => "bar"}, "got structure back in JSON");
 
 $t->get_ok('/my_table/foo',
-           { Accept => 'application/x-yaml' },
+           { Accept => 'text/x-yaml' },
            '', "get yaml by accept")
   ->status_is(200, "got 200")
-  ->header_is('Content-Type' => 'application/x-yaml')
+  ->header_is('Content-Type' => 'text/x-yaml')
   ->content_is("foo: bar\n", "got structure back in YAML");
 
 $t->get_ok('/my_table/foo',
-           { 'Content-Type' => 'application/x-yaml' }, 
+           { 'Content-Type' => 'text/x-yaml' }, 
            '', "get yaml by Content-Type")
   ->status_is(200, "got 200")
-  ->header_is('Content-Type' => 'application/x-yaml')
+  ->header_is('Content-Type' => 'text/x-yaml')
   ->content_is("foo: bar\n", "got structure back in YAML");
 
 $t->post_ok("/my_table",
@@ -86,15 +86,15 @@ $t->post_ok("/my_table",
     ->json_content_is({foo => "bar"}, "got structure back");
 
 $t->get_ok('/my_table/foo',
-           { Accept => 'application/x-yaml' },
+           { Accept => 'text/x-yaml' },
            '', "get yaml by accept")
   ->status_is(200, "got 200")
-  ->header_is('Content-Type' => 'application/x-yaml')
+  ->header_is('Content-Type' => 'text/x-yaml')
   ->content_is("foo: bar\n", "got structure back in YAML");
 
 $t->post_ok("/my_table",
             { Accept => 'application/json',
-              'Content-Type' => 'application/x-yaml' },
+              'Content-Type' => 'text/x-yaml' },
             'foo: bar',
             "Post json")
     ->status_is(200, "got 200")
