@@ -50,7 +50,7 @@ use warnings;
 use base 'Mojolicious::Plugin';
 
 use Mojo::ByteStream 'b';
-use Mojo::JSON;
+use JSON::XS;
 use YAML::Syck; $YAML::Syck::Headless = 1;
 
 my $default_decode = 'application/x-www-form-urlencoded';
@@ -60,8 +60,8 @@ my %types =
 (
     'application/json' => 
     {
-        encode => sub { Mojo::JSON->new->encode($_[0]) },
-        decode => sub { Mojo::JSON->new->decode($_[0]) }
+        encode => sub { encode_json($_[0]) },
+        decode => sub { decode_json($_[0]) }
     },
     'application/x-yaml' =>
     {
