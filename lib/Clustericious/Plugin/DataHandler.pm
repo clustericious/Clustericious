@@ -13,7 +13,7 @@ renders outputs by type based on HTTP Accept and Content-Type headers.
 Also adds a hook called 'parse_data' that handles incoming data by
 Content-Type.
 
-Supports application/json, application/x-yaml and
+Supports application/json, text/x-yaml and
 application/x-www-form-urlencoded (in-bound only).
 
 When hook 'parse_data' is called from within a route like this:
@@ -63,7 +63,7 @@ my %types =
         encode => sub { encode_json($_[0]) },
         decode => sub { decode_json($_[0]) }
     },
-    'application/x-yaml' =>
+    'text/x-yaml' =>
     {
         encode => sub { YAML::Syck::Dump($_[0]) },
         decode => sub { YAML::Syck::Load($_[0]) }
