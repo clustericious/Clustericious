@@ -51,29 +51,36 @@ sub _build_proxy {
     my $destination   = $arg->{to} || die "no 'to' given for proxy route";
     my $dest_url      = Mojo::URL->new($destination);
     my $strip_prefix  = $arg->{strip_prefix};
+
     return sub {
         my $self = shift;
+
         my $url  = $self->req->url->clone;
         $url->scheme( $dest_url->scheme );
         $url->host( $dest_url->host );
         $url->port( $dest_url->port );
+
         if ($strip_prefix) {
             my $path = $url->path;
             $path =~ s/^$strip_prefix//;
             $url->path($path);
         }
-        my $target = $url->to_string;
+
         TRACE "proxying ".$self->req->url->to_abs." to ".$url->to_abs;
         LOGDIE "recursive proxy " if $self->req->url->to_abs eq $url->to_abs;
+
+        my $tx = Mojo::Transaction::HTTP->new;
+        my $req = $tx->req;
+        $req->method($self->req->method);
+        $req->url($url);
+        $req->body($self->req->body);
+        $req->headers($self->req->headers); # Should I subset?
         $self->pause;
-        $self->client->get(
-            ($target) => sub {
-                my ( $client, $tx ) = @_;
-                $self->resume;
-                $self->render_text( $tx->res->body );
-            }
-        )->process;
-    };
+        $self->client->queue($tx, sub {
+            my ($client, $proxytx) = @_;
+            $self->resume;
+            $self->render_text($proxytx->res->body); } )->process;
+    }
 }
 
 1;
