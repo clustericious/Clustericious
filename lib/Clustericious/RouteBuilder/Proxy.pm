@@ -66,7 +66,9 @@ sub _build_proxy {
             $url->path($path);
         }
 
-        TRACE "proxying ".$self->req->url->to_abs." to ".$url->to_abs;
+        TRACE "proxying " . $self->req->method . ' ' .
+              $self->req->url->to_abs . " to " . $url->to_abs;
+
         LOGDIE "recursive proxy " if $self->req->url->to_abs eq $url->to_abs;
 
         my $tx = Mojo::Transaction::HTTP->new;
@@ -76,10 +78,10 @@ sub _build_proxy {
         $req->body($self->req->body);
         $req->headers($self->req->headers); # Should I subset?
         $self->pause;
-        $self->client->queue($tx, sub {
+        $self->client->process($tx, sub {
             my ($client, $proxytx) = @_;
             $self->resume;
-            $self->render_text($proxytx->res->body); } )->process;
+            $self->render_text($proxytx->res->body); } );
     }
 }
 
