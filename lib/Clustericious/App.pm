@@ -22,6 +22,9 @@ sub startup {
 
     my $r = $self->routes;
     Clustericious::RouteBuilder->add_routes($self);
+
+    $self->plugins->namespaces(['Clustericious::Plugin']);
+    $self->plugin('data_handler');
 }
 
 sub _init_logging {
@@ -92,9 +95,6 @@ sub _load_service_configs {
 }
 
 sub service {
-
-    $self->plugins->namespaces(['Clustericious::Plugin']);
-    $self->plugin('data_handler');
 }
 
 1;
