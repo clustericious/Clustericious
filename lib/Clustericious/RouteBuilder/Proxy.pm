@@ -81,7 +81,14 @@ sub _build_proxy {
         $self->client->process($tx, sub {
             my ($client, $proxytx) = @_;
             $self->resume;
-            $self->render_text($proxytx->res->body); } );
+            my $res = $self->tx->res;
+            my $pr_res = $proxytx->res;
+            $res->code($pr_res->code);
+            $res->message($pr_res->message);
+            $res->headers->content_type($pr_res->headers->content_type);
+            $res->body($pr_res->body);
+            $self->stash->{'rendered'} = 1;  # Cheat
+        });
     }
 }
 
