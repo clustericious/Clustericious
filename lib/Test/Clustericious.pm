@@ -136,12 +136,16 @@ sub decoded_body
 
  $obj = $t->create_ok('/url', { some => 'object' });
  $obj = $t->create_ok('/url', 'filename');
+ $t->create_ok('/url', <many/files*>);
 
  if called with a filename, loads the object from the file as
  described in testdata().
 
  Uses POST to the url to create the object, encoded with JSON.
  Checks for status 200 and returns the decoded body.
+
+ You can also create multiple objects/files at once, but then there is
+ no returned object.
 
  This counts as 2 TAP tests.
 
@@ -150,7 +154,15 @@ sub decoded_body
 sub create_ok
 {
     my $self = shift;
-    my ($url, $object) = @_;
+    my $url = shift;
+
+    if (@_ > 1)
+    {
+        $self->create_ok($url, $_) for @_;
+        return;
+    }
+
+    my $object = shift;
 
     $url = $self->url($url);
 
