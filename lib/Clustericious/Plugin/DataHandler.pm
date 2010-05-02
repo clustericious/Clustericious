@@ -118,7 +118,8 @@ sub _data_parse
 {
     my ($self, $c) = @_;
 
-    my $type = $types{$c->req->headers->content_type}
+    my $type = ($c->req->headers->content_type and
+                $types{$c->req->headers->content_type})
                ? $c->req->headers->content_type
                : $default_decode;
 
