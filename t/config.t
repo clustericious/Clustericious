@@ -10,6 +10,11 @@ use IO::File;
 
 my $dir = tempdir();
 $ENV{CLUSTERICIOUS_TEST_CONF_DIR} = $dir;
+
+#
+# Make one config file called a_local_app.conf
+#
+
 my $fp = IO::File->new("> $dir/a_local_app.conf");
 print $fp <<'EOT';
 {
@@ -17,6 +22,11 @@ print $fp <<'EOT';
 }
 EOT
 $fp->close;
+
+#
+# Make another config file that references the first one,
+# and also has a_remote_app, which has no config file.
+#
 
 my $c = Clustericious::Config->new(\(my $a = <<'EOT'));
 % my $url = "http://localhost:9999";
@@ -44,6 +54,9 @@ my $c = Clustericious::Config->new(\(my $a = <<'EOT'));
 }
 EOT
 
+#
+# Some actual tests.
+#
 is $c->url, 'http://localhost:9999', 'url is ok';
 is $c->{url}, 'http://localhost:9999', 'url is ok';
 is $c->url, 'http://localhost:9999', 'url is ok (still)';

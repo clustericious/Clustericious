@@ -41,26 +41,28 @@ Clustericious::Config - configuration files for clustericious nodes.
  my %hash = $c->daemon_prefork;
  my @ary  = $c->daemon_prefork;
 
- print $c->peers->other_app->url;
+ print $c->peers->a_local_app->url; # comes from another config file
+ print $c->peers->a_remote_app->url; # comes from the above file
 
 =head1 DESCRIPTION
 
 Read config files which are Mojo::Template's of JSON files.
 
 After rendering the template and parsing the JSON, the resulting
-object may be called using method calls instead of keys.
+object may be called using method calls or treated as hashes.
 
 Config files are looked for in the following places (in order) :
 
-    ~/etc/app.conf
     ~/app.conf
+    ~/etc/app.conf
     /util/etc/app.conf
     /etc/app.conf
 
-If the environment variable TEST_HARNESS is set, then the
+If the environment variable HARNESS_ACTIVE is set, then the
 above directories are not used.  Instead the value of the
 environment variable CLUSTERICIOUS_TEST_CONF_DIR is used
-to find the configuration file.
+to find the configuration file.  This is automatically set
+by Test::More and friends.
 
 =head1 METHODS
 
@@ -68,7 +70,7 @@ to find the configuration file.
 
 The special "peers" method is a list of sub-configurations --
 a single name refers to another config file.  Alternatively,
-a set of parameters can be used.  See the SYNOPSIS.
+a sub-configuration may be given.  See the SYNOPSIS.
 
 =cut
 
