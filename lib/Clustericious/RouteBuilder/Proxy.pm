@@ -74,7 +74,7 @@ sub _build_proxy {
         my $tx = Mojo::Transaction::HTTP->new;
         my $req = $tx->req;
         $req->method($self->req->method);
-        $req->url($url);
+        $req->url($self->client->app ? Mojo::URL->new($url->to_string) : $url);
         $req->body($self->req->body);
         my $headers = $self->req->headers->to_hash;
         delete $headers->{Host};
