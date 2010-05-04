@@ -76,7 +76,9 @@ sub _build_proxy {
         $req->method($self->req->method);
         $req->url($url);
         $req->body($self->req->body);
-        $req->headers($self->req->headers); # Should I subset?
+        my $headers = $self->req->headers->to_hash;
+        delete $headers->{Host};
+        $req->headers->from_hash($headers);
         $self->pause;
         $self->client->process($tx, sub {
             my ($client, $proxytx) = @_;
