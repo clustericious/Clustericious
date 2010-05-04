@@ -21,7 +21,7 @@ package main;
 my $t = Test::Mojo->new(app => "SomeService");
 
 my $got =
-$t->get_ok('/proxyme/here', 'got proxy url')->content_is("you made it",'proxy had right content');
+$t->get_ok('/proxyme/here', '', 'got proxy url')->content_is("you made it",'proxy had right content');
 
 1;
 
