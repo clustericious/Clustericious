@@ -17,10 +17,10 @@ Clustericious::Config - configuration files for clustericious nodes.
        "maxspare" : 2,
        "start"    : 2
     },
-    "services" : [
+    "peers" : [
 
        # Uses "a_local_app.conf" for key-value pairs.
-       { "name" : "a_local_app" },
+       "a_local_app",
 
        # Local values override anything in "a_remote_app.conf".
        { "name" : "a_remote_app",
@@ -41,7 +41,7 @@ Clustericious::Config - configuration files for clustericious nodes.
  my %hash = $c->daemon_prefork;
  my @ary  = $c->daemon_prefork;
 
- print $c->services->other_app->url;
+ print $c->peers->other_app->url;
 
 =head1 DESCRIPTION
 
@@ -64,11 +64,11 @@ to find the configuration file.
 
 =head1 METHODS
 
-=head2 services
+=head2 peers
 
-The special "services" method will automatically look for
+The special "peers" method will automatically look for
 another Clustericious::Config file named after the "name"
-token in the "services" entry.  Values for a particular
+token in the "peers" entry.  Values for a particular
 service take predecedence over values given in the another
 file.  See the SYNOPSIS.
 
@@ -84,6 +84,7 @@ use JSON::XS;
 use Mojo::Template;
 use Log::Log4perl qw/:easy/;
 use Storable qw/dclone/;
+use Data::Dumper;
 
 sub new {
     my $class = shift;
@@ -98,22 +99,31 @@ sub new {
     } elsif (ref $arg eq 'HASH') {
         $conf_data = dclone $arg;
     } else {
-        my @conf_dirs = $ENV{TEST_HARNESS} ?
-            ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
-            ($ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" );
+        my @conf_dirs;
+        if ($ENV{HARNESS_ACTIVE}) {
+            LOGDIE "\n\nplease set CLUSTERICIOUS_TEST_CONF_DIR when running tests\n\n "
+                unless $ENV{CLUSTERICIOUS_TEST_CONF_DIR};
+            @conf_dirs = ( $ENV{CLUSTERICIOUS_TEST_CONF_DIR} );
+        } else {
+            @conf_dirs = ($ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" );
+        }
 
         my $conf_file = "$arg.conf";
         my ($dir) = first { -e "$_/$conf_file" } @conf_dirs;
+        LOGDIE "could not find $conf_file file in: @conf_dirs" unless $dir;
 
         TRACE "loading config file $dir/$conf_file";
-        $conf_data = $json->decode( $mt->render_file("$dir/$conf_file" ) );
+        my $rendered = $mt->render_file("$dir/$conf_file" );
+        $rendered or die "could not render $dir/$conf_file";
+        $conf_data = $json->decode( $rendered );
+    }
+    my @peers = @{ $conf_data->{peers} || [] };
+    $conf_data->{peers} = {};
+    for my $p (@peers) {
+        my $name = (ref $p ? $p->{name} : $p) or die "no name for peer ".Dumper($p);
+        $conf_data->{peers}{$name} = $class->new($p);
     }
     bless $conf_data, $class;
-}
-
-sub services {
-    # TODO
-    die "todo";
 }
 
 sub _stringify {
@@ -129,7 +139,8 @@ sub AUTOLOAD {
     our $AUTOLOAD;
     my $called = $AUTOLOAD;
     $called =~ s/.*:://g;
-    die "$called not found" if $called =~ /^_/ || !exists($self->{$called});
+    die "$called not found in ".join ',',keys(%$self)
+        if $called =~ /^_/ || !exists($self->{$called});
     my $value = $self->{$called};
     my $obj;
     if (ref $value eq 'HASH') {
@@ -137,10 +148,12 @@ sub AUTOLOAD {
     }
     no strict 'refs';
     *{ __PACKAGE__ . "::$called" } = sub {
+          my $self = shift;
+          my $value = $self->{$called};
             wantarray && (ref $value eq 'HASH' ) ? %$value
           : wantarray && (ref $value eq 'ARRAY') ? @$value
-          :                     defined($obj)  ? $obj
-          :                                      $value;
+          :                       defined($obj)  ? $obj
+          :                                        $value;
     };
     use strict 'refs';
     $self->$called;

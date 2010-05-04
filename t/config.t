@@ -4,7 +4,19 @@ use strict;
 use warnings;
 
 use Test::More qw/no_plan/;
+use File::Temp qw/tempdir/;
 use Clustericious::Config;
+use IO::File;
+
+my $dir = tempdir();
+$ENV{CLUSTERICIOUS_TEST_CONF_DIR} = $dir;
+my $fp = IO::File->new("> $dir/a_local_app.conf");
+print $fp <<'EOT';
+{
+    "url" : "http://localhost:10211"
+}
+EOT
+$fp->close;
 
 my $c = Clustericious::Config->new(\(my $a = <<'EOT'));
 % my $url = "http://localhost:9999";
@@ -19,10 +31,10 @@ my $c = Clustericious::Config->new(\(my $a = <<'EOT'));
       "maxspare" : 2,
       "start"    : 2
    },
-   "services" : [
+   "peers" : [
 
 %# Uses "a_local_app.conf" for key-value pairs.
-      { "name" : "a_local_app" },
+      "a_local_app",
 
 %# Local values override anything in "a_remote_app.conf".
       { "name" : "a_remote_app",
@@ -45,6 +57,9 @@ my %i = ( 'listen' => 'http://localhost:9999',
            'start' => 2
          );
 is_deeply \%h, \%i, "got as a hash";
+
+is $c->peers->a_remote_app->url, "http://localhost:9191", "remote peer";
+is $c->peers->a_local_app->url, "http://localhost:10211", "local peer";
 
 1;
 
