@@ -66,11 +66,9 @@ to find the configuration file.
 
 =head2 peers
 
-The special "peers" method will automatically look for
-another Clustericious::Config file named after the "name"
-token in the "peers" entry.  Values for a particular
-service take predecedence over values given in the another
-file.  See the SYNOPSIS.
+The special "peers" method is a list of sub-configurations --
+a single name refers to another config file.  Alternatively,
+a set of parameters can be used.  See the SYNOPSIS.
 
 =cut
 

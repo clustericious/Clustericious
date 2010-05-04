@@ -17,9 +17,6 @@ sub startup {
 
     $self->_init_logging();
 
-    my $config = $self->_load_config();
-    $self->_load_service_configs($config);
-
     my $r = $self->routes;
     Clustericious::RouteBuilder->add_routes($self);
 
@@ -71,30 +68,6 @@ sub _init_logging {
     $self->log->info("Initialized logger to level ".$self->log->level);
     $self->log->info("Log config found in $l4p_dir/log4perl.conf") if $l4p_dir;
     warn "# Using $l4p_dir/log4perl.conf for log config\n" if $l4p_dir;
-}
-
-sub _load_config {
-    my $self = shift;
-    our @Confdirs;
-    my $app_name = $_[0] || lc ref $self;
-    my $stash_key = @_ ? "config_$app_name" : "config";
-    my $conf_dir = first { -d $_ && -e "$_/$app_name.conf" } @Confdirs
-      or die "cannot load config for $app_name";
-    warn "# Using $conf_dir/$app_name.conf for $app_name\n";
-    return $self->plugin( 'json_config',
-        { file => "$conf_dir/$app_name.conf", stash_key => $stash_key } );
-}
-
-sub _load_service_configs {
-    my ($self,$config) = @_;
-    for (@{ $config->{services} }) {
-        next if $_->{url};
-        my $service = $_->{name};
-        $self->_load_config($service);
-    }
-}
-
-sub service {
 }
 
 1;
