@@ -55,7 +55,7 @@ sub _build_proxy {
     return sub {
         my $self = shift;
 
-        my $url  = $self->req->url->clone;
+        my $url  = Mojo::URL->new( $self->req->url->to_string );
         $url->scheme( $dest_url->scheme );
         $url->host( $dest_url->host );
         $url->port( $dest_url->port );
@@ -74,7 +74,7 @@ sub _build_proxy {
         my $tx = Mojo::Transaction::HTTP->new;
         my $req = $tx->req;
         $req->method($self->req->method);
-        $req->url($self->client->app ? Mojo::URL->new($url->to_string) : $url);
+        $req->url($url);
         $req->body($self->req->body);
         my $headers = $self->req->headers->to_hash;
         delete $headers->{Host};
