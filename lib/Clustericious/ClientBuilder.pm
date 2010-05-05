@@ -65,6 +65,7 @@ use base 'Mojo::Base';
 
 use Mojo::Client;
 use JSON::XS;
+use Clustericious::Config;
 
 =head1 ATTRIBUTES
 
@@ -97,7 +98,11 @@ res->code and res->message are the returned HTTP code and message.
 =cut
 
 __PACKAGE__->attr(client => sub { Mojo::Client->new });
-__PACKAGE__->attr('server_url');
+
+__PACKAGE__->attr(server_url => sub {
+    my $app = ref shift; $app =~ s/:.*$//;
+    Clustericious::Config->new($app)->url; });
+
 __PACKAGE__->attr('res');
 
 sub import
