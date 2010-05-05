@@ -231,6 +231,25 @@ sub _mycallback
     }
 }
 
+sub run
+{
+    my $self = shift;
+
+    my $method = shift @ARGV;
+
+    if ($self->can($method))
+    {
+        if (my $obj = $self->$method(@ARGV))
+        {
+            print Dump($obj);
+        }
+        else
+        {
+            warn "Error: (", $self->res->code, ") ", $self->res->message, "\n";
+        }
+    }
+}
+
 1;
 
 __END__
