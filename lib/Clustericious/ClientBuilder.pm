@@ -241,6 +241,7 @@ sub run
     {
         if (my $obj = $self->$method(@ARGV))
         {
+            use YAML::Syck;
             print Dump($obj);
         }
         else
