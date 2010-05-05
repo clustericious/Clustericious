@@ -11,7 +11,7 @@ Clustericious::Config - configuration files for clustericious nodes.
     "url"        : "<%= $url %>",
     "start_mode" : "daemon_prefork",
     "daemon_prefork" : {
-       "listen"   : "<%= $url %>"
+       "listen"   : "<%= $url %>",
        "pid"      : "/tmp/my_app.pid",
        "lock"     : "/tmp/my_app.lock",
        "maxspare" : 2,
