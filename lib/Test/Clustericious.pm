@@ -40,6 +40,7 @@ use YAML::Syck;
 use File::Slurp qw/slurp/;
 use Carp;
 use List::Util qw(first);
+use Clustericious::Config;
 
 =head1 ATTRIBUTES
 
@@ -58,7 +59,8 @@ use List::Util qw(first);
 =cut
 
 __PACKAGE__->attr('server');
-__PACKAGE__->attr('server_url');
+__PACKAGE__->attr(server_url =>
+    sub { Clustericious::Config->new(shift->server)->url; });
 
 =head1 METHODS
 
