@@ -94,8 +94,8 @@ sub new
 
  my $object = $t->testdata('filename');
 
- Looks for filename, filename.json, filename.yaml in 't' or 'eg' 
- directories.  Parses with json or yaml if appropriate, then 
+ Looks for filename, filename.json, filename.yaml in 't', 'data' or
+ 't/data' directories.  Parses with json or yaml if appropriate, then
  returns the object.
 
 =cut
@@ -106,10 +106,9 @@ sub testdata
     my ($filename) = @_;
 
     $filename = first { -r }
-                $filename, "t/$filename", "eg/$filename",
-                "$filename.json", "$filename.yaml",
-                "t/$filename.json", "t/$filename.yaml",
-                "eg/$filename.json", "eg/$filename.yaml";
+                map { $_, "$_.yaml", "$_.json" }
+                map { $_, "t/$_", "data/$_", "t/data/$_" }
+                $filename;
 
     my $content = slurp($filename) or croak "Missing $filename";
     
