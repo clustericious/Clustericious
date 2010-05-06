@@ -266,11 +266,41 @@ sub notfound_ok
     my $self = shift;
     my ($url) = @_;
 
-    $url = $self->url($url);
+    $url = $self->_url($url);
 
     $self->get_ok($url, '', "GET $url")
          ->status_is(404, "$url status is 404")
          ->content_like(qr/Not found/i, "$url content is Not Found");
+}
+
+=head2 C<truncate_ok>
+
+ $t->truncate_ok($url);
+
+ GETs the URL, which should return a list of keys, then iterates
+ over the list and delete_ok() each one.
+
+=cut
+
+# Should probably do this directly on the server side for speed,
+# but this way is fun..
+
+sub truncate_ok
+{
+    my $self = shift;
+    my ($url) = @_;
+
+    while (1)
+    {
+        my $list = $self->retrieve_ok($url) or return;
+
+        return unless @$list;
+
+        foreach my $key (@$list)
+        {
+            $self->remove_ok("$url/$key") or return;
+        }
+    }
 }
 
 1;
