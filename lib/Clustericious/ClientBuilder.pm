@@ -65,6 +65,7 @@ use base 'Mojo::Base';
 
 use Mojo::Client;
 use JSON::XS;
+use YAML::XS;
 use Clustericious::Config;
 
 =head1 ATTRIBUTES
@@ -114,6 +115,24 @@ sub import
     *{"${caller}::route"} = \&route;
     *{"${caller}::object"} = \&object;
     *{"${caller}::import"} = sub {};
+}
+
+=head1 METHODS
+
+=head2 C<errorstring>
+
+ After an error, this returns an error string made up of the
+ server error code and message.  (use res->code and res->message to
+ get the parts)
+
+ (e.g. "Error: (500) Internal Server Error
+
+=cut
+
+sub errorstring
+{
+    my $self = shift;
+    "Error: (" . $self->res->code . ") " . $self->res->message . "\n";
 }
 
 =head1 FUNCTIONS
@@ -237,16 +256,32 @@ sub run
 
     my $method = shift @ARGV;
 
+    return warn "Usage: $0 <object> <keys>\n" .
+                "       $0 create <object>\n" unless $method;
+
+    if ($method eq 'create')
+    {
+        $method = shift @ARGV;
+        die "Missing <object>\n" unless $method;
+
+        die "Invalid method $method\n" unless $self->can($method);
+
+        my $content = Load(join('', <>))
+            or die "Invalid YAML content\n";
+
+        $self->$method($content) or warn $self->errorstring;
+        return;
+    }
+
     if ($self->can($method))
     {
         if (my $obj = $self->$method(@ARGV))
         {
-            use YAML::Syck;
             print Dump($obj);
         }
         else
         {
-            warn "Error: (", $self->res->code, ") ", $self->res->message, "\n";
+            warn $self->errorstring;
         }
     }
 }
