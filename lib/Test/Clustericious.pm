@@ -12,9 +12,7 @@ Test::Clustericious - Test Clustericious apps
  use Test::Clustericious;
 
  my $t = Test::Clustericious(app => 'SomeMojoApp');
-
  my $t = Test::Clustericious(server => 'myapp');
-
  my $t = Test::Clustericious(server_url => 'http://foo'); 
 
  my $obj = $t->create_ok('/my/url', { my => 'object' }); # 2 tests
@@ -48,7 +46,8 @@ use Clustericious::Config;
 
  my $t = Test::Clustericious->new(server => 'MyServer');
 
- Looks up the URI for the server in the config file ...
+ Looks up the URL for the server in the config file for the
+ specified server.
 
 =head2 C<server_url>
 
@@ -59,10 +58,37 @@ use Clustericious::Config;
 =cut
 
 __PACKAGE__->attr('server');
-__PACKAGE__->attr(server_url =>
-    sub { Clustericious::Config->new(shift->server)->url; });
+__PACKAGE__->attr('server_url');
 
 =head1 METHODS
+
+=head2 C<new>
+
+ my $t = Test::Clustericious(app => 'SomeMojoApp');
+ my $t = Test::Clustericious(server => 'myapp');
+ my $t = Test::Clustericious(server_url => 'http://foo'); 
+
+=cut
+
+sub new
+{
+    my $self = shift->SUPER::new(@_);
+
+    if ($self->app)
+    {
+        $self->server_url('');
+    }
+    elsif ($self->server)
+    {
+        $self->server_url(Clustericious::Config->new($self->server)->url);
+    }
+    else
+    {
+        return undef unless $self->server_url;
+    }
+
+    return $self;
+}
 
 =head2 C<testdata>
 
@@ -94,15 +120,14 @@ sub testdata
     return $content;
 }
 
-sub url
+sub _url
 {
     my $self = shift;
     my ($url) = @_;
 
-    return $url if not defined $self->{server_url}
-                   or $url =~ /^$self->{server_url}/;
-
-    return $self->{server_url} ? "$self->{server_url}$url" : $url;    
+    my $server_url = $self->server_url;
+    return $url if $url =~ /^$server_url/;
+    return $server_url . $url;
 }
 
 =head2 C<decoded_body>
@@ -166,7 +191,7 @@ sub create_ok
 
     my $object = shift;
 
-    $url = $self->url($url);
+    $url = $self->_url($url);
 
     unless (ref $object)
     {
@@ -196,7 +221,7 @@ sub retrieve_ok
     my $self = shift;
     my ($url) = @_;
     
-    $url = $self->url($url);
+    $url = $self->_url($url);
 
     $self->get_ok($url, '', "GET $url")
          ->status_is(200, "GET $url status is 200")
@@ -219,7 +244,7 @@ sub remove_ok
     my $self = shift;
     my ($url) = @_;
 
-    $url = $self->url($url);
+    $url = $self->_url($url);
 
     $self->delete_ok($url, '', "DELETE $url")
          ->status_is(200, "deleted $url status is 200" )
