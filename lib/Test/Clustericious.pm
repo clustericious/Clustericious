@@ -34,7 +34,7 @@ L<Test::Mojo>, and add the following new attributes and methods.
 use base 'Test::Mojo';
 
 use JSON::XS;
-use YAML::Syck;
+use YAML::XS;
 use File::Slurp qw/slurp/;
 use Carp;
 use List::Util qw(first);
