@@ -88,7 +88,9 @@ use Data::Dumper;
 
 sub new {
     my $class = shift;
-    my $arg = $_[0] or die "no app name or conf data given to Clustericious::Config";
+    my $arg = $_[0];
+    ($arg = caller) =~ s/:.*$// unless $arg; # Determine from caller's class
+
     my $conf_data;
 
     my $json = JSON::XS->new;
