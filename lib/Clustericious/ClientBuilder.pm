@@ -29,7 +29,9 @@ Clustericious::ClientBuilder - Construct clients for Clustericious apps
 
  use Foo::Client;
 
+ my $f = Foo::Client->new();
  my $f = Foo::Client->new(server_url => 'http://someurl');
+ my $f = Foo::Client->new(app => 'MyApp'); # For testing...
 
  my $welcome = $f->welcome();              # GET /
 
@@ -78,16 +80,17 @@ that class.  The following additional attributes are used.
 A client to process the HTTP stuff with.  Defaults to a
 L<Mojo::Client>.
 
-You can configure the client with a Mojo application for testing:
-$f->client->app('MyApp');
+You can use the L<Mojo::Client> asynchronous stuff with callbacks and
+$f->client->async and $f->client->process.
 
-You can also use the L<Mojo::Client> asynchronous stuff with callbacks
-and $f->client->async and $f->client->process.
+=head2 C<app>
+
+For testing, you can specify a Mojolicious app name.
 
 =head2 C<server_url>
 
-The URL prefix for the client.  TODO: Change this to lookup the
-server from the config file.
+You can override the URL prefix for the client, otherwise it
+will look it up in the config file.
 
 =head2 C<res>
 
@@ -99,12 +102,8 @@ res->code and res->message are the returned HTTP code and message.
 =cut
 
 __PACKAGE__->attr(client => sub { Mojo::Client->new });
-
-__PACKAGE__->attr(server_url => sub {
-    my $app = ref shift; $app =~ s/:.*$//;
-    Clustericious::Config->new($app)->url; });
-
-__PACKAGE__->attr('res');
+__PACKAGE__->attr(server_url => '');
+__PACKAGE__->attr([qw(app res)]);
 
 sub import
 {
@@ -118,6 +117,34 @@ sub import
 }
 
 =head1 METHODS
+
+=head2 C<new>
+
+ my $f = Foo::Client->new();
+ my $f = Foo::Client->new(server_url => 'http://someurl');
+ my $f = Foo::Client->new(app => 'MyApp'); # For testing...
+
+=cut 
+
+sub new
+{
+    my $self = shift->SUPER::new(@_);
+
+    if ($self->app)
+    {
+        $self->client->app($self->app);
+    }
+    elsif (not length $self->server_url)
+    {
+        (my $appname = ref $self) =~ s/:.*$//;
+        $self->server_url(Clustericious::Config->new($appname)->url);
+    }
+    else
+    {
+        return undef;
+    }
+    return $self;
+}
 
 =head2 C<errorstring>
 

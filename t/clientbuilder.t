@@ -41,8 +41,7 @@ object 'foo';
 
 package main;
 
-my $client = SomeClient->new;
-$client->client->app('SomeService');
+my $client = SomeClient->new(app => 'SomeService');
 
 is($client->welcome(), 'welcome', 'Got welcome route');
 
