@@ -67,7 +67,7 @@ use base 'Mojo::Base';
 
 use Mojo::Client;
 use JSON::XS;
-use YAML::XS;
+use YAML::XS qw(Load Dump LoadFile);
 use Clustericious::Config;
 
 =head1 ATTRIBUTES
@@ -284,7 +284,8 @@ sub run
     my $method = shift @ARGV;
 
     return warn "Usage: $0 <object> <keys>\n" .
-                "       $0 create <object>\n" unless $method;
+                "       $0 create <object> [<filename list>]\n" .
+                "       $0 delete <object> <keys>\n" unless $method;
 
     if ($method eq 'create')
     {
@@ -293,10 +294,36 @@ sub run
 
         die "Invalid method $method\n" unless $self->can($method);
 
-        my $content = Load(join('', <>))
-            or die "Invalid YAML content\n";
+        if (@ARGV)
+        {
+            foreach my $filename (@ARGV)
+            {
+                my $content = LoadFile($filename)
+                    or die "Invalid YAML : $filename\n";
+                print "Loading $filename\n";
+                $self->$method($content) or warn $self->errorstring;
+            }
+        }
+        else
+        {
+            my $content = Load(join('', <>))
+                or die "Invalid YAML content\n";
 
-        $self->$method($content) or warn $self->errorstring;
+            $self->$method($content) or warn $self->errorstring;
+        }
+        return;
+    }
+
+    if ($method eq 'delete')
+    {
+        $method = shift @ARGV;
+        die "Missing <object>\n" unless $method;
+
+        $method .= '_delete';
+
+        die "Invalid object $method\n" unless $self->can($method);
+
+        $self->$method(@ARGV) or warn $self->errorstring;
         return;
     }
 
@@ -310,7 +337,10 @@ sub run
         {
             warn $self->errorstring;
         }
+        return;
     }
+
+    die "Invalid args\n";
 }
 
 1;
