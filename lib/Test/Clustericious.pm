@@ -261,9 +261,10 @@ sub remove_ok
 
 =head2 C<notfound_ok>
 
- $t->notfound_ok($url);
+ $t->notfound_ok($url[, $object]);
 
- GETs the url and checks for a 404 Not found return.
+ GETs the url, or if $object specified, POSTs the encoded object
+ and checks for a 404 Not found return.
 
  This counts as 3 TAP tests.
 
@@ -272,12 +273,21 @@ sub remove_ok
 sub notfound_ok
 {
     my $self = shift;
-    my ($url) = @_;
+    my ($url, $object) = @_;
 
     $url = $self->_url($url);
 
-    $self->get_ok($url, '', "GET $url")
-         ->status_is(404, "$url status is 404")
+    if ($object)
+    {
+        $self->post_ok($url, { "Content-Type" => "application/json" },
+                       encode_json($object), "POST $url");
+    }
+    else
+    {
+        $self->get_ok($url, '', "GET $url");
+    };
+
+    $self->status_is(404, "$url status is 404")
          ->content_like(qr/Not found/i, "$url content is Not Found");
 }
 
