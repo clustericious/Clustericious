@@ -285,6 +285,7 @@ sub run
 
     return warn "Usage: $0 <object> <keys>\n" .
                 "       $0 create <object> [<filename list>]\n" .
+                "       $0 update <object> <keys> [<filename>]\n" .
                 "       $0 delete <object> <keys>\n" unless $method;
 
     if ($method eq 'create')
@@ -311,6 +312,29 @@ sub run
 
             $self->$method($content) or warn $self->errorstring;
         }
+        return;
+    }
+
+    if ($method eq 'update')
+    {
+        $method = shift @ARGV;
+        die "Missing <object>\n" unless $method;
+
+        my $content;
+        if (-r $ARGV[-1])  # Does it look like a filename?
+        {
+            my $filename = pop @ARGV;
+            $content = LoadFile($filename)
+                or die "Invalid YAML: $filename\n";
+            print "Loading $filename\n";
+        }
+        else
+        {
+            $content = Load(join('', <STDIN>))
+                or die "Invalid YAML: stdin\n";
+        }
+        my $ret = $self->$method(@ARGV, $content) or warn $self->errorstring;
+        print Dump($ret);
         return;
     }
 
