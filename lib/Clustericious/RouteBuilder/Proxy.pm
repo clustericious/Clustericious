@@ -15,7 +15,7 @@ Clustericious::RouteBuilder::Proxy -- build proxy routes easily
         -as           => "proxy_google",
       },
       "proxy" => {
-        to => "http://localhost:1023",
+        app => 'MyServer',
         -as => "proxy_local"
       },
       ;
@@ -48,9 +48,11 @@ use Sub::Exporter -setup => {
 
 sub _build_proxy {
     my ( $class, $name, $arg, $defaults ) = @_;
-    my $destination   = $arg->{to} || die "no 'to' given for proxy route";
-    my $dest_url      = Mojo::URL->new($destination);
     my $strip_prefix  = $arg->{strip_prefix};
+    my $destination   = $arg->{to};
+    $destination = Clustericious::Config->new($arg->{app})->url if $arg->{app};
+    die "Can't determine url for proxy route.\n" unless $destination;
+    my $dest_url      = Mojo::URL->new($destination);
 
     return sub {
         my $self = shift;
