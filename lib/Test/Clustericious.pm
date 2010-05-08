@@ -205,6 +205,14 @@ sub create_ok
          ->decoded_body;
 }
 
+=head2 C<update_ok>
+
+ update_ok is really just an alias for create_ok
+
+=cut
+
+sub update_ok { create_ok(@_) }
+
 =head2 C<retrieve_ok>
 
  $obj = $t->retrieve_ok('/url');
