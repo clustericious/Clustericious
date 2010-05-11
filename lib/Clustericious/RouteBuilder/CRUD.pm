@@ -39,6 +39,7 @@ more documentation
 
 use strict;
 use Log::Log4perl qw/:easy/;
+use List::MoreUtils qw(any);
 
 use Sub::Exporter -setup => {
     exports => [
@@ -105,7 +106,42 @@ sub _build_delete {
 }
 
 sub _build_update {
-    return sub { die "update not yet implemented"; };
+    my ($class, $name, $arg, $defaults) = @_;
+
+    my $finder = $arg->{finder} || $defaults->{defaults}{finder}
+                 || die "no finder defined";
+
+    $finder->can("find_object") or die "$finder must be able to find_object";
+
+    sub {
+        my $self  = shift;
+        my $table = $self->stash->{table};
+        my @keys = split /\//, $self->stash->{key};
+
+        my $obj = $finder->find_object($table, @keys)
+            or return $self->app->static->serve_404($self, "404.html.ep");
+
+        $self->app->log->debug("Updating $table @keys");
+
+        my $pkeys = $obj->meta->primary_key_column_names;
+        my $ukeys = $obj->meta->unique_keys_column_names;
+        my $columns = $obj->meta->column_names;
+        my $nested = $finder->nested_tables($table);
+
+        while (my ($key, $value) = each %{$self->stash->{data}})
+        {
+            next if any { $key eq $_ } @$pkeys, @$ukeys; # Skip key fields
+
+            $self->app->logdie("Can't update $key")
+                unless any { $key eq $_ } @$columns, @$nested;
+
+            $obj->$key($value) or $self->app->logdie($obj->errors);
+        }
+
+        $obj->save or $self->app->logdie($obj->errors);
+
+        $self->stash->{data} = $obj->as_hash;
+    };
 }
 
 sub _build_list {

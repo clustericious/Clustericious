@@ -16,7 +16,8 @@ my $builder = Module::Build->new(
         'Mojolicious'          => '0.999924',
         'Sub::Exporter'        => 0,
         'YAML::Syck'           => 0,
-        'JSON::XS'             => 0
+        'JSON::XS'             => 0,
+        'List::MoreUtils'      => 0,
       },
     add_to_cleanup      => [ 'Clustericious-*' ],
     create_makefile_pl => 'traditional',
