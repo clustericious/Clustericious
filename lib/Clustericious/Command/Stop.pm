@@ -21,6 +21,7 @@ contain "daemonize" and "pid" keys, e.g. :
 
 package Clustericious::Command::Stop;
 use Log::Log4perl qw/:easy/;
+use Clustericious::App;
 
 use base 'Mojo::Command';
 use Clustericious::Config;
@@ -43,10 +44,15 @@ EOT
 sub run {
     my $self     = shift;
     my $conf     = Clustericious::Config->new( $ENV{MOJO_APP} );
+
+    Clustericious::App->init_logging();
+
     my $pid_file = $conf->daemon_prefork->pid
       or LOGDIE "no pid file in conf file";
-    my $pid = slurp $pid_file or LOGDIE "could not open $pid_file";
+    -e $pid_file or LOGDIE "No pid file $pid_file\n";
+    my $pid = slurp $pid_file; # dies automatically
     kill 0, $pid or LOGDIE "$pid is not running";
+    INFO "Stopping server ($pid)";
     kill 'TERM', $pid;
     sleep 1;
     my $nap = 1;

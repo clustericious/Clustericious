@@ -16,7 +16,7 @@ sub start {
 
    my @args = @_ ? @_ : @ARGV;
 
-   my $config = Clustericious::Config->new($ENV{MOJO_APP});  
+   my $config = Clustericious::Config->new($ENV{MOJO_APP});
 
    unless (@args)
    {

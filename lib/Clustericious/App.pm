@@ -6,16 +6,14 @@ use MojoX::Log::Log4perl;
 use warnings;
 use strict;
 
-our @Confdirs;
+our @Confdirs = $ENV{TEST_HARNESS} ?
+   ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
+   ($ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" );
 
 sub startup {
     my $self = shift;
-    our @Confdirs = $ENV{TEST_HARNESS} ? 
-        ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
-        ($ENV{HOME}, "$ENV{HOME}/etc", $self->home, $self->home."/etc",
-         "/util/etc", "/etc" );
 
-    $self->_init_logging();
+    $self->init_logging();
 
     my $r = $self->routes;
     Clustericious::RouteBuilder->add_routes($self);
@@ -24,13 +22,13 @@ sub startup {
     $self->plugin('data_handler');
 }
 
-sub _init_logging {
+sub init_logging {
     my $self = shift;
 
     # Logging
     $ENV{LOG_LEVEL} ||= ( $ENV{HARNESS_ACTIVE} ? "WARN" : "DEBUG" );
 
-    my $app_name = lc ref $self;
+    my $app_name = lc ref $self || $ENV{MOJO_APP};
 
     my $l4p_dir; # dir with log config file.
     my $l4p_pat; # pattern for screen logging
@@ -67,7 +65,7 @@ sub _init_logging {
 
     $self->log->info("Initialized logger to level ".$self->log->level);
     $self->log->info("Log config found in $l4p_dir/log4perl.conf") if $l4p_dir;
-    warn "# Using $l4p_dir/log4perl.conf for log config\n" if $l4p_dir;
+    warn "# started logging ($l4p_dir/log4perl.conf)\n" if $l4p_dir;
 }
 
 1;
