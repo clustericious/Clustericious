@@ -1,8 +1,11 @@
 package Clustericious::App;
 
-use base 'Mojolicious';
 use List::Util qw/first/;
 use MojoX::Log::Log4perl;
+use base 'Mojolicious';
+
+use Clustericious::RouteBuilder::Common;
+
 use warnings;
 use strict;
 
@@ -16,7 +19,11 @@ sub startup {
     $self->init_logging();
 
     my $r = $self->routes;
+    # "Common" ones are not overrideable.
+    Clustericious::RouteBuilder::Common->add_routes($self);
     Clustericious::RouteBuilder->add_routes($self);
+    # "default" ones are :
+    # Clustericious::RouteBuilder::Default->add_routes($self);
 
     $self->plugins->namespaces(['Clustericious::Plugin']);
     $self->plugin('data_handler');
