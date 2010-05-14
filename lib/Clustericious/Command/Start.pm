@@ -50,7 +50,7 @@ sub run {
     Clustericious::App->init_logging;
 
     my $mode = $conf->start_mode;
-    TRACE "Starting in mode $mode";
+    INFO "Starting in mode $mode";
 
     my %args = mesh
       @{ [ map "--$_", keys %{ $conf->$mode } ] },
