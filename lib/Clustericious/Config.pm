@@ -17,16 +17,6 @@ Clustericious::Config - configuration files for clustericious nodes.
        "maxspare" : 2,
        "start"    : 2
     },
-    "peers" : [
-
-       # Uses "a_local_app.conf" for key-value pairs.
-       "a_local_app",
-
-       # Local values override anything in "a_remote_app.conf".
-       { "name" : "a_remote_app",
-         "url"  : "http://localhost:9191"
-       }
-    ],
  }
 
  my $c = Clustericious::Config->new("my_app");
@@ -40,9 +30,6 @@ Clustericious::Config - configuration files for clustericious nodes.
  print $c->daemon_prefork->{listen};
  my %hash = $c->daemon_prefork;
  my @ary  = $c->daemon_prefork;
-
- print $c->peers->a_local_app->url; # comes from another config file
- print $c->peers->a_remote_app->url; # comes from the above file
 
 =head1 DESCRIPTION
 
@@ -63,14 +50,6 @@ above directories are not used.  Instead the value of the
 environment variable CLUSTERICIOUS_TEST_CONF_DIR is used
 to find the configuration file.  This is automatically set
 by Test::More and friends.
-
-=head1 METHODS
-
-=head2 peers
-
-The special "peers" method is a list of sub-configurations --
-a single name refers to another config file.  Alternatively,
-a sub-configuration may be given.  See the SYNOPSIS.
 
 =cut
 
@@ -118,12 +97,6 @@ sub new {
         my $rendered = $mt->render_file("$dir/$conf_file" );
         $rendered or die "could not render $dir/$conf_file";
         $conf_data = $json->decode( $rendered );
-    }
-    my @peers = @{ $conf_data->{peers} || [] };
-    $conf_data->{peers} = {};
-    for my $p (@peers) {
-        my $name = (ref $p ? $p->{name} : $p) or die "no name for peer ".Dumper($p);
-        $conf_data->{peers}{$name} = $class->new($p);
     }
     bless $conf_data, $class;
 }

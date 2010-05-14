@@ -40,17 +40,7 @@ my $c = Clustericious::Config->new(\(my $a = <<'EOT'));
       "lock"     : "/tmp/my_app.lock",
       "maxspare" : 2,
       "start"    : 2
-   },
-   "peers" : [
-
-%# Uses "a_local_app.conf" for key-value pairs.
-      "a_local_app",
-
-%# Local values override anything in "a_remote_app.conf".
-      { "name" : "a_remote_app",
-        "url"  : "http://localhost:9191"
-      }
-   ]
+   }
 }
 EOT
 
@@ -70,9 +60,6 @@ my %i = ( 'listen' => 'http://localhost:9999',
            'start' => 2
          );
 is_deeply \%h, \%i, "got as a hash";
-
-is $c->peers->a_remote_app->url, "http://localhost:9191", "remote peer";
-is $c->peers->a_local_app->url, "http://localhost:10211", "local peer";
 
 1;
 
