@@ -40,16 +40,14 @@ object may be called using method calls or treated as hashes.
 
 Config files are looked for in the following places (in order) :
 
+    $ENV{CLUSTERICIOUS_CONF_DIR}
     ~/app.conf
     ~/etc/app.conf
     /util/etc/app.conf
     /etc/app.conf
 
-If the environment variable HARNESS_ACTIVE is set, then the
-above directories are not used.  Instead the value of the
-environment variable CLUSTERICIOUS_TEST_CONF_DIR is used
-to find the configuration file.  This is automatically set
-by Test::More and friends.
+If the environment variable HARNESS_ACTIVE is set, only $ENV{CLUSTERICIOUS_CONF_DIR}
+is used.
 
 =cut
 
@@ -81,14 +79,12 @@ sub new {
         $conf_data = dclone $arg;
     } else {
         my @conf_dirs;
-        if ($ENV{HARNESS_ACTIVE}) {
-            LOGDIE "\n\nplease set CLUSTERICIOUS_TEST_CONF_DIR when running tests\n\n "
-                unless $ENV{CLUSTERICIOUS_TEST_CONF_DIR};
-            @conf_dirs = ( $ENV{CLUSTERICIOUS_TEST_CONF_DIR} );
-        } else {
-            @conf_dirs = ($ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" );
-        }
+        LOGDIE "\n\nplease set CLUSTERICIOUS_CONF_DIR when running tests\n\n "
+          if $ENV{HARNESS_ACTIVE} && !$ENV{CLUSTERICIOUS_CONF_DIR};
 
+        @conf_dirs = $ENV{CLUSTERICIOUS_CONF_DIR} if defined( $ENV{CLUSTERICIOUS_CONF_DIR} );
+
+        push @conf_dirs, ( $ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" ) unless $ENV{HARNESS_ACTIVE};
         my $conf_file = "$arg.conf";
         my ($dir) = first { -e "$_/$conf_file" } @conf_dirs;
         LOGDIE "could not find $conf_file file in: @conf_dirs" unless $dir;

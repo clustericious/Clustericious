@@ -9,7 +9,7 @@ use Clustericious::Config;
 use IO::File;
 
 my $dir = tempdir();
-$ENV{CLUSTERICIOUS_TEST_CONF_DIR} = $dir;
+$ENV{CLUSTERICIOUS_CONF_DIR} = $dir;
 
 #
 # Make one config file called a_local_app.conf
