@@ -49,11 +49,10 @@ sub _build_search {
         my $items = $self->stash("items") or LOGDIE "no items in request";
 
         my $manager = $finder->find_class($items) or LOGDIE "no class for $items";
+        $self->app->plugins->run_hook('parse_data', $self);
 
-        my $p = $self->req->headers->content_type =~ /json/i
-          ? Mojo::JSON->new->decode( $self->req->body )
-          : $self->req->params->to_hash;
-        delete $p->{""}; # empty POST is okay.
+        my $p = $self->stash->{data};
+
         TRACE "searching for $items : ".Dumper($p);
 
         # maybe restrict, by first calling $manager->normalize_get_objects_args(%$p)
@@ -67,10 +66,10 @@ sub _build_search {
         push @args, object_class => $manager->object_class;
 
         my $count = $manager->get_objects_count( @args );
-        $self->render_json({
+        $self->stash->{data} = {
             count     => $count,
             resultset => [ map $_->as_hash, @{ $manager->get_objects( @args ) } ]
-           });
+           };
     };
 }
 
