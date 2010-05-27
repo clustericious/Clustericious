@@ -8,7 +8,7 @@ use Test::Mojo;
 
 use_ok('Clustericious');
 use_ok('Clustericious::App');
-use_ok('Clustericious::RouteBuilder');
+use_ok('Clustericious::RouteBuilder', "TestAppClass");
 
 1;
 

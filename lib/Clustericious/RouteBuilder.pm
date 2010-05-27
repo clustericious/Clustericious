@@ -2,16 +2,27 @@ package Clustericious::RouteBuilder;
 use strict;
 use warnings;
 
-our @Routes;
+our %Routes;
 
 # Much of the code below taken directly from Mojolicious::Lite.
 sub import {
     my $class = shift;
+    my $caller = caller;
+    my $app_class;
+    if (@_) { # allow specification in the "use".
+        $app_class = shift;
+    } elsif ($caller->isa("Clustericious::App")) {
+        $app_class = $caller;
+    } else {
+        $app_class = $caller;
+        $app_class =~ s/::Routes$// or die "could not guess app class : ";
+    }
+    my @routes;
+    $Routes{$app_class} = \@routes;
 
     # Route generator
     my $route_sub = sub {
         my ($methods, @args) = @_;
-        our @Routes;
 
         my ($cb, $constraints, $defaults, $name, $pattern);
         my $conditions = [];
@@ -56,7 +67,7 @@ sub import {
         # Name
         $name ||= '';
 
-        push @Routes, {
+        push @routes, {
             name        => $name,
             pattern     => $pattern,
             constraints => $constraints,
@@ -68,7 +79,6 @@ sub import {
     };
 
     # Prepare exports
-    my $caller = caller;
     no strict 'refs';
     no warnings 'redefine';
 
@@ -85,9 +95,11 @@ sub add_routes {
     my $class = shift;
     my $app = shift;
 
+    my $stashed = $Routes{ref $app} or Carp::confess("no routes stashed for $app");
+    my @stashed = @$stashed;
     my $routes = $app->routes;
 
-    for my $spec (@Routes) {
+    for my $spec (@stashed) {
        my      ($name,$pattern,$constraints,$conditions,$defaults,$methods) =
        @$spec{qw/name  pattern  constraints  conditions  defaults  methods/};
 

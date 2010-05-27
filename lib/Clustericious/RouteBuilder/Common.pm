@@ -12,15 +12,21 @@ These routes will be added first; they cannot be overridden.
 
 package Clustericious::RouteBuilder::Common;
 use Log::Log4perl qw/:easy/;
-use Clustericious::RouteBuilder;
-our @ISA = qw/Clustericious::RouteBuilder/;
 
 use strict;
 use warnings;
 
-get '/version' => sub {
-    my $self = shift;
-    $self->stash->{data} = [ $self->app->VERSION ];
+sub add_routes {
+    my $class = shift;
+    my $app = shift;
+
+    $app->routes->route('/version')->to(
+        callback => sub {
+            my $self = shift;
+            $self->stash->{data} = [ $self->app->VERSION ];
+        }
+    );
 }
 
+1;
 
