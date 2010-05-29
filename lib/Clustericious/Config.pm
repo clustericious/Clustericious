@@ -120,6 +120,8 @@ sub AUTOLOAD {
     no strict 'refs';
     *{ __PACKAGE__ . "::$called" } = sub {
           my $self = shift;
+          die "$called not found in ".join ',',keys(%$self)
+              unless exists($self->{$called});
           my $value = $self->{$called};
             wantarray && (ref $value eq 'HASH' ) ? %$value
           : wantarray && (ref $value eq 'ARRAY') ? @$value
