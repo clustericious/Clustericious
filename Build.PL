@@ -11,6 +11,7 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Clustericious.pm',
     dist_abstract       => 'Mojo and HTTP based cluster framework',
     build_requires => {
+        'Module::Build'        => '0.36',
         'Test::More'           => 0,
         'MojoX::Log::Log4perl' => 0,
         'Mojolicious'          => '0.999924',
@@ -21,9 +22,9 @@ my $builder = Module::Build->new(
       },
     add_to_cleanup      => [ 'Clustericious-*' ],
     create_makefile_pl => 'traditional',
+    share_dir => 'share'
 );
 
 $builder->create_build_script();
 
 1;
-
