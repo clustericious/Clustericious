@@ -19,6 +19,7 @@ my $builder = Module::Build->new(
         'YAML::Syck'           => 0,
         'JSON::XS'             => 0,
         'List::MoreUtils'      => 0,
+        'File::ShareDir'       => 0,
       },
     add_to_cleanup      => [ 'Clustericious-*' ],
     create_makefile_pl => 'traditional',
