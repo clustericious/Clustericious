@@ -11,6 +11,7 @@ Use this package to load all the <%%= $class %%>::Object::* classes.
 
 package <%%= $class %%>::Objects;
 
+use <%%= $class %%>::DB;
 use Rose::Planter
         loader_params => {
             class_prefix => "<%%= $class %%>::Object",
