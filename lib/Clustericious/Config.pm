@@ -77,10 +77,10 @@ sub new {
         $conf_data = $json->decode( $mt->render($$arg) );
     } elsif (ref $arg eq 'HASH') {
         $conf_data = dclone $arg;
+    } elsif ($ENV{HARNESS_ACTIVE} && !$ENV{CLUSTERICIOUS_CONF_DIR}) {
+        $conf_data = {};
     } else {
         my @conf_dirs;
-        LOGDIE "\n\nplease set CLUSTERICIOUS_CONF_DIR when running tests\n\n "
-          if $ENV{HARNESS_ACTIVE} && !$ENV{CLUSTERICIOUS_CONF_DIR};
 
         @conf_dirs = $ENV{CLUSTERICIOUS_CONF_DIR} if defined( $ENV{CLUSTERICIOUS_CONF_DIR} );
 
