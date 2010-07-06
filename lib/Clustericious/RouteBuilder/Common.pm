@@ -21,7 +21,7 @@ sub add_routes {
     my $app = shift;
 
     $app->routes->route('/version')->to(
-        callback => sub {
+        cb => sub {
             my $self = shift;
             $self->stash->{data} = [ $self->app->VERSION ];
         }

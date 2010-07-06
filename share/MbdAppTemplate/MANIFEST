@@ -5,10 +5,6 @@ MANIFEST
 bin/<%%= $name %%>
 db/patches/0010_start.sql
 eg/<%%= $class %%>.conf
-etc/tmpl/footer.tmpl
-etc/tmpl/header.tmpl
-etc/tmpl/html.tmpl
-etc/tmpl/pod.tmpl
 lib/<%%= $class %%>.pm
 lib/<%%= $class %%>/App.pm
 lib/<%%= $class %%>/DB.pm

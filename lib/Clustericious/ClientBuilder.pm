@@ -183,7 +183,7 @@ sub route
     my $subname = shift;
     my $url     = pop || '/';
     my $method  = shift || 'GET';
-    
+
     *{caller() . "::$subname"} = sub { shift->_doit($method,$url,@_); };
 }
 
@@ -240,10 +240,12 @@ sub _doit
         }
     }
 
-    return $self->client->_build_tx($method, $url, $headers, $body, $cb) if $cb;
+    return $self->client->process(
+            $self->client->build_tx($method, $url, $headers, $body, $cb) ) if $cb;
 
-    my $tx = $self->client->_build_tx($method, $url, $headers, $body);
+    my $tx = $self->client->build_tx($method, $url, $headers, $body);
 
+    $self->client->process($tx);
     $self->res($tx->res);
 
     return undef unless $tx->res->is_status_class(200);

@@ -62,7 +62,7 @@ sub import {
 
         # Merge
         $defaults ||= {};
-        $defaults = {%$defaults, callback => $cb};
+        $defaults = {%$defaults, cb => $cb};
 
         # Name
         $name ||= '';
