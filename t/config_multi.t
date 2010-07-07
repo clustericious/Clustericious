@@ -23,10 +23,10 @@ is $confa->a, 'valuea';
 is $confa->b, 'valueb';
 
 eval { $confa->missing };
-like $@, qr/missing not found/;
+like $@, qr/'missing' not found/;
 
 eval { $confb->missing };
-like $@, qr/missing not found/;
+like $@, qr/'missing' not found/;
 
 eval { $confb->b };
-like $@, qr/b not found/;
+like $@, qr/'b' not found/;

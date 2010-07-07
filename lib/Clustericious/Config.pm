@@ -4,19 +4,30 @@ Clustericious::Config - configuration files for clustericious nodes.
 
 =head1 SYNOPSIS
 
- cat >> ~/my_app.conf
+ $ cat > ~/my_app.conf
  % my $url = "http://localhost:9999";
+ % my $app = "my_app";
+ % read_from "global";  # looks for global.conf
+ % read_from common => ($url, $app); # looks for common.conf (w/ parameters)
 
  {
     "url"        : "<%= $url %>",
     "start_mode" : "daemon_prefork",
     "daemon_prefork" : {
+        maxspare : 3,
+    }
+ }
+
+ $ cat > ~/common.conf
+ % my ($url, $app) = @_;
+ {
+    "daemon_prefork" : {
        "listen"   : "<%= $url %>",
-       "pid"      : "/tmp/my_app.pid",
-       "lock"     : "/tmp/my_app.lock",
+       "pid"      : "/tmp/<%= $app %>.pid",
+       "lock"     : "/tmp/<%= $app %>.lock",
        "maxspare" : 2,
        "start"    : 2
-    },
+    }
  }
 
  my $c = Clustericious::Config->new("my_app");
@@ -49,6 +60,16 @@ Config files are looked for in the following places (in order) :
 If the environment variable HARNESS_ACTIVE is set, only $ENV{CLUSTERICIOUS_CONF_DIR}
 is used.
 
+The directive "read_from" may be used to read default settings
+from another config file.  The first argument to read_from is the
+basename of the config file.  Additional arguments will be
+passed to the config file and can be read in by parsing @_
+within that file.
+
+=head1 SEE ALSO
+
+Mojo::Template
+
 =cut
 
 package Clustericious::Config;
@@ -61,20 +82,24 @@ use JSON::XS;
 use Mojo::Template;
 use Log::Log4perl qw/:easy/;
 use Storable qw/dclone/;
+use Clustericious::Config::Plugin;
 use Data::Dumper;
 
 sub new {
     my $class = shift;
+    my @t_args = (ref $_[-1] eq 'ARRAY' ? @{( pop )} : () );
     my $arg = $_[0];
     ($arg = caller) =~ s/:.*$// unless $arg; # Determine from caller's class
 
     my $conf_data;
 
     my $json = JSON::XS->new;
-    my $mt = Mojo::Template->new->auto_escape(0);
+    my $mt = Mojo::Template->new(namespace => 'Clustericious::Config::Plugin')->auto_escape(0);
 
     if (ref $arg eq 'SCALAR') {
-        $conf_data = $json->decode( $mt->render($$arg) );
+        my $rendered = $mt->render($$arg, @t_args);
+        die $rendered if ( (ref($rendered)) =~ /Exception/ );
+        $conf_data = $json->decode( $rendered );
     } elsif (ref $arg eq 'HASH') {
         $conf_data = dclone $arg;
     } elsif ($ENV{HARNESS_ACTIVE} && !$ENV{CLUSTERICIOUS_CONF_DIR}) {
@@ -89,11 +114,12 @@ sub new {
         my ($dir) = first { -e "$_/$conf_file" } @conf_dirs;
         LOGDIE "could not find $conf_file file in: @conf_dirs" unless $dir;
 
-        TRACE "loading config file $dir/$conf_file";
-        my $rendered = $mt->render_file("$dir/$conf_file" );
-        $rendered or die "could not render $dir/$conf_file";
+        TRACE "reading from config file $dir/$conf_file";
+        my $rendered = $mt->render_file("$dir/$conf_file", @t_args );
+        die $rendered if ( (ref $rendered) =~ /Exception/ );
         $conf_data = $json->decode( $rendered );
     }
+    Clustericious::Config::Plugin->do_merges($conf_data);
     bless $conf_data, $class;
 }
 
@@ -110,7 +136,7 @@ sub AUTOLOAD {
     our $AUTOLOAD;
     my $called = $AUTOLOAD;
     $called =~ s/.*:://g;
-    die "$called not found in ".join ',',keys(%$self)
+    die "config element '$called' not found (".(join ',',keys(%$self)).")"
         if $called =~ /^_/ || !exists($self->{$called});
     my $value = $self->{$called};
     my $obj;
@@ -120,7 +146,7 @@ sub AUTOLOAD {
     no strict 'refs';
     *{ __PACKAGE__ . "::$called" } = sub {
           my $self = shift;
-          die "$called not found in ".join ',',keys(%$self)
+          die "'$called' not found in ".join ',',keys(%$self)
               unless exists($self->{$called});
           my $value = $self->{$called};
             wantarray && (ref $value eq 'HASH' ) ? %$value

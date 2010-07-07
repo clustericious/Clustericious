@@ -8,20 +8,40 @@ use File::Temp qw/tempdir/;
 use Clustericious::Config;
 use IO::File;
 
-my $dir = tempdir();
+my $dir = tempdir( CLEANUP => 1 );
 $ENV{CLUSTERICIOUS_CONF_DIR} = $dir;
 
 #
-# Make one config file called a_local_app.conf
+# Make a common config file called common.conf
 #
 
-my $fp = IO::File->new("> $dir/a_local_app.conf");
+my $fp = IO::File->new("> $dir/common.conf");
 print $fp <<'EOT';
+% my ($url,$app) = @_;
 {
-    "url" : "http://localhost:10211"
+   "override_me" : 9,
+   "url"        : "<%= $url %>",
+   "daemon_prefork" : {
+      "listen"   : "<%= $url %>",
+      "pid"      : "/tmp/<%= $app %>.pid"
+   }
 }
 EOT
 $fp->close;
+
+#
+# Make a special config file called special.conf
+#
+
+$fp = IO::File->new("> $dir/special.conf");
+print $fp <<'EOT';
+{
+   "specialvalue"  : 123,
+   "override_me"   : 10
+}
+EOT
+$fp->close;
+
 
 #
 # Make another config file that references the first one,
@@ -30,13 +50,14 @@ $fp->close;
 
 my $c = Clustericious::Config->new(\(my $a = <<'EOT'));
 % my $url = "http://localhost:9999";
-
+% my $app = "my_app";
+% read_from common => ($url, $app);
+% read_from "special";
 {
    "url"        : "<%= $url %>",
+   "override_me" : 11,
    "start_mode" : "daemon_prefork",
    "daemon_prefork" : {
-      "listen"   : "<%= $url %>",
-      "pid"      : "/tmp/my_app.pid",
       "lock"     : "/tmp/my_app.lock",
       "maxspare" : 2,
       "start"    : 2
@@ -50,7 +71,7 @@ EOT
 is $c->url, 'http://localhost:9999', 'url is ok';
 is $c->{url}, 'http://localhost:9999', 'url is ok';
 is $c->url, 'http://localhost:9999', 'url is ok (still)';
-is $c->daemon_prefork->listen, $c->url, "nested config var";
+is $c->daemon_prefork->listen, $c->url, "read_from plugin";
 is $c->daemon_prefork->listen, "http://localhost:9999", "nested config var again";
 my %h = $c->daemon_prefork;
 my %i = ( 'listen' => 'http://localhost:9999',
@@ -60,6 +81,8 @@ my %i = ( 'listen' => 'http://localhost:9999',
            'start' => 2
          );
 is_deeply \%h, \%i, "got as a hash";
+is $c->specialvalue, 123, "read from another conf file";
+is $c->override_me, 11, "override a config variable";
 
 1;
 

@@ -20,6 +20,7 @@ my $builder = Module::Build->new(
         'JSON::XS'             => 0,
         'List::MoreUtils'      => 0,
         'File::ShareDir'       => 0,
+        'Hash::Merge'          => 0,
       },
     add_to_cleanup      => [ 'Clustericious-*' ],
     create_makefile_pl => 'traditional',
