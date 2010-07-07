@@ -72,12 +72,6 @@ sub init_logging {
 
     $self->log->info("Initialized logger to level ".$self->log->level);
     $self->log->info("Log config found in $l4p_dir/log4perl.conf") if $l4p_dir;
-    $SIG{__DIE__} = sub {
-        print STDERR "# DIE called : @_" if $self->log->is_trace;
-        return if $^S; # inside an eval
-        $self->log->fatal(@_);
-        die @_;
-    };
     warn "# started logging ($l4p_dir/log4perl.conf)\n" if $l4p_dir;
 }
 

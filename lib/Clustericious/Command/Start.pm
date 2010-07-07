@@ -45,7 +45,13 @@ EOT
 sub run {
     my $self     = shift;
     my @args = @_ ? @_ : @ARGV;
-    my $conf     = Clustericious::Config->new( $ENV{MOJO_APP} );
+    my $app  = $ENV{MOJO_APP};
+    my $conf     = Clustericious::Config->new( $app );
+
+    eval "use $app;";
+    if ($@) {
+        die "\n----------Error loading $app----------\n$@\n--------------\n";
+    }
 
     Clustericious::App->init_logging;
 
