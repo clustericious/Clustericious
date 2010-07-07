@@ -6,6 +6,3 @@ create table clustericious (
     version varchar
     );
 
-insert into clustericious (app,version)
-    values ( '<%%= $class %%>', '0.01' );
-
