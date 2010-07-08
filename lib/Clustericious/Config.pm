@@ -7,8 +7,8 @@ Clustericious::Config - configuration files for clustericious nodes.
  $ cat > ~/my_app.conf
  % my $url = "http://localhost:9999";
  % my $app = "my_app";
- % read_from "global";  # looks for global.conf
- % read_from common => ($url, $app); # looks for common.conf (w/ parameters)
+ % defaults_from "global";  # looks for global.conf
+ % defaults_from common => ($url, $app); # looks for common.conf (w/ parameters)
 
  {
     "url"        : "<%= $url %>",
@@ -60,8 +60,8 @@ Config files are looked for in the following places (in order) :
 If the environment variable HARNESS_ACTIVE is set, only $ENV{CLUSTERICIOUS_CONF_DIR}
 is used.
 
-The directive "read_from" may be used to read default settings
-from another config file.  The first argument to read_from is the
+The directive "defaults_from" may be used to read default settings
+from another config file.  The first argument to defaults_from is the
 basename of the config file.  Additional arguments will be
 passed to the config file and can be read in by parsing @_
 within that file.

@@ -51,8 +51,8 @@ $fp->close;
 my $c = Clustericious::Config->new(\(my $a = <<'EOT'));
 % my $url = "http://localhost:9999";
 % my $app = "my_app";
-% read_from common => ($url, $app);
-% read_from "special";
+% defaults_from common => ($url, $app);
+% defaults_from "special";
 {
    "url"        : "<%= $url %>",
    "override_me" : 11,
@@ -71,7 +71,7 @@ EOT
 is $c->url, 'http://localhost:9999', 'url is ok';
 is $c->{url}, 'http://localhost:9999', 'url is ok';
 is $c->url, 'http://localhost:9999', 'url is ok (still)';
-is $c->daemon_prefork->listen, $c->url, "read_from plugin";
+is $c->daemon_prefork->listen, $c->url, "defaults_from plugin";
 is $c->daemon_prefork->listen, "http://localhost:9999", "nested config var again";
 my %h = $c->daemon_prefork;
 my %i = ( 'listen' => 'http://localhost:9999',
