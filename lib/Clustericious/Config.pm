@@ -102,7 +102,8 @@ sub new {
     if (ref $arg eq 'SCALAR') {
         my $rendered = $mt->render($$arg);
         die $rendered if ( (ref($rendered)) =~ /Exception/ );
-        $conf_data = $json->decode( $rendered );
+        $conf_data = eval { $json->decode( $rendered ); };
+        LOGDIE "Could not parse\n-------\n$rendered\n---------\n$@\n" if $@;
     } elsif (ref $arg eq 'HASH') {
         $conf_data = dclone $arg;
     } elsif ($ENV{HARNESS_ACTIVE} && !$ENV{CLUSTERICIOUS_CONF_DIR}) {
@@ -120,7 +121,8 @@ sub new {
         TRACE "reading from config file $dir/$conf_file";
         my $rendered = $mt->render_file("$dir/$conf_file");
         die $rendered if ( (ref $rendered) =~ /Exception/ );
-        $conf_data = $json->decode( $rendered );
+        $conf_data = eval { $json->decode( $rendered ) };
+        LOGDIE "Could not parse\n-------\n$rendered\n---------\n$@\n" if $@;
     }
     Clustericious::Config::Plugin->do_merges($conf_data);
     bless $conf_data, $class;
