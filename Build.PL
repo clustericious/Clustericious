@@ -21,6 +21,7 @@ my $builder = Module::Build->new(
         'List::MoreUtils'      => 0,
         'File::ShareDir'       => 0,
         'Hash::Merge'          => 0,
+        'Plack'                => 0,
       },
     add_to_cleanup      => [ 'Clustericious-*' ],
     create_makefile_pl => 'traditional',

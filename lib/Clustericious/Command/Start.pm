@@ -15,8 +15,14 @@ contain "daemonize" and "pid" keys, e.g. :
    "daemon_prefork" : {
       "daemonize": 1,
       "pid"      : "/tmp/restmd.pid",
-      ....
+      ...
+      "env"      : {
+        "foo" : "bar"
+      }
     }
+
+Tthe label "env" is an optional hash of environment variables
+to set before starting the command.
 
 =cut
 
@@ -55,15 +61,29 @@ sub run {
 
     Clustericious::App->init_logging;
 
-    my $mode = $conf->start_mode;
-    INFO "Starting in mode $mode";
+    for my $mode ($conf->start_mode) {
+        #  local %ENV = %ENV;
+        INFO "Starting $mode";
+        my %conf = $conf->$mode;
 
-    my %args = mesh
-      @{ [ map "--$_", keys %{ $conf->$mode } ] },
-      @{ [ values %{ $conf->$mode } ] };
+        # env hash goes to the environment
+        my $env = delete $conf{env} || {};
+        use Data::Dumper;
+        warn Dumper(\%conf);
+        @ENV{ keys %$env } = values %$env;
 
-    $ENV{MOJO_COMMANDS_DONE} = 0;
-    Mojolicious::Commands->start($mode,%args);
+        # if it starts with a dash, leave it alone, else add two dashes
+        my %args = mesh
+          @{ [ map {/^-/ ? "$_" : "--$_"} keys %conf ] },
+          @{ [ values %conf                          ] };
+
+        # squash "null"s (for boolean arguments)
+        my @args = grep { $_ ne 'null' } %args;
+        DEBUG "Sending args for $mode : @args";
+
+        $ENV{MOJO_COMMANDS_DONE} = 0;
+        Clustericious::Commands->start($mode,@args);
+    }
 }
 
 
