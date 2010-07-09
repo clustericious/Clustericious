@@ -17,7 +17,6 @@ $ENV{CLUSTERICIOUS_CONF_DIR} = $dir;
 
 my $fp = IO::File->new("> $dir/common.conf");
 print $fp <<'EOT';
-% my ($url,$app) = @_;
 {
    "override_me" : 9,
    "url"        : "<%= $url %>",
@@ -49,12 +48,9 @@ $fp->close;
 #
 
 my $c = Clustericious::Config->new(\(my $a = <<'EOT'));
-% my $url = "http://localhost:9999";
-% my $app = "my_app";
-% defaults_from common => ($url, $app);
-% defaults_from "special";
+% extends_config 'common', url => 'http://localhost:9999', app => 'my_app';
+% extends_config 'special';
 {
-   "url"        : "<%= $url %>",
    "override_me" : 11,
    "start_mode" : "daemon_prefork",
    "daemon_prefork" : {
@@ -71,7 +67,7 @@ EOT
 is $c->url, 'http://localhost:9999', 'url is ok';
 is $c->{url}, 'http://localhost:9999', 'url is ok';
 is $c->url, 'http://localhost:9999', 'url is ok (still)';
-is $c->daemon_prefork->listen, $c->url, "defaults_from plugin";
+is $c->daemon_prefork->listen, $c->url, "extends_config plugin";
 is $c->daemon_prefork->listen, "http://localhost:9999", "nested config var again";
 my %h = $c->daemon_prefork;
 my %i = ( 'listen' => 'http://localhost:9999',

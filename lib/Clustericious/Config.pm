@@ -4,23 +4,25 @@ Clustericious::Config - configuration files for clustericious nodes.
 
 =head1 SYNOPSIS
 
- $ cat > ~/my_app.conf
- % my $url = "http://localhost:9999";
- % my $app = "my_app";
- % defaults_from "global";  # looks for global.conf
- % defaults_from common => ($url, $app); # looks for common.conf (w/ parameters)
+ $ cat > ~/MyApp.conf
+ % extends_config 'global';
+ % extends_config 'common', url => 'http://localhost:9999', app => 'MyApp';
 
  {
-    "url"        : "<%= $url %>",
     "start_mode" : "daemon_prefork",
     "daemon_prefork" : {
         maxspare : 3,
     }
  }
 
- $ cat > ~/common.conf
- % my ($url, $app) = @_;
+ $ cat > ~/global.conf
  {
+    "some_var" : "some_value"
+ }
+
+ $ cat > ~/common.conf
+ {
+    "url" : "<%= $url %>",
     "daemon_prefork" : {
        "listen"   : "<%= $url %>",
        "pid"      : "/tmp/<%= $app %>.pid",
@@ -30,7 +32,7 @@ Clustericious::Config - configuration files for clustericious nodes.
     }
  }
 
- my $c = Clustericious::Config->new("my_app");
+ my $c = Clustericious::Config->new("MyApp");
  my $c = Clustericious::Config->new( \$config_string );
  my $c = Clustericious::Config->new( \%config_data_structure );
 
@@ -49,22 +51,22 @@ Read config files which are Mojo::Template's of JSON files.
 After rendering the template and parsing the JSON, the resulting
 object may be called using method calls or treated as hashes.
 
-Config files are looked for in the following places (in order) :
+Config files are looked for in the following places (in order, where
+"MyApp" is the name of the app) :
 
-    $ENV{CLUSTERICIOUS_CONF_DIR}
-    ~/app.conf
-    ~/etc/app.conf
-    /util/etc/app.conf
-    /etc/app.conf
+    $ENV{CLUSTERICIOUS_CONF_DIR}/MyApp.conf
+    ~/MyApp.conf
+    ~/etc/MyApp.conf
+    /util/etc/MyApp.conf
+    /etc/MyApp.conf
 
 If the environment variable HARNESS_ACTIVE is set, only $ENV{CLUSTERICIOUS_CONF_DIR}
 is used.
 
-The directive "defaults_from" may be used to read default settings
-from another config file.  The first argument to defaults_from is the
-basename of the config file.  Additional arguments will be
-passed to the config file and can be read in by parsing @_
-within that file.
+The helper "extends_config" may be used to read default settings
+from another config file.  The first argument to extends_config is the
+basename of the config file.  Additional named arguments may be passed
+to that config file and used as variables within that file.
 
 =head1 SEE ALSO
 
@@ -87,7 +89,7 @@ use Data::Dumper;
 
 sub new {
     my $class = shift;
-    my @t_args = (ref $_[-1] eq 'ARRAY' ? @{( pop )} : () );
+    my %t_args = (ref $_[-1] eq 'ARRAY' ? @{( pop )} : () );
     my $arg = $_[0];
     ($arg = caller) =~ s/:.*$// unless $arg; # Determine from caller's class
 
@@ -95,9 +97,10 @@ sub new {
 
     my $json = JSON::XS->new;
     my $mt = Mojo::Template->new(namespace => 'Clustericious::Config::Plugin')->auto_escape(0);
+    $mt->prepend( join "\n", map " my \$$_ = q{$t_args{$_}};", sort keys %t_args );
 
     if (ref $arg eq 'SCALAR') {
-        my $rendered = $mt->render($$arg, @t_args);
+        my $rendered = $mt->render($$arg);
         die $rendered if ( (ref($rendered)) =~ /Exception/ );
         $conf_data = $json->decode( $rendered );
     } elsif (ref $arg eq 'HASH') {
@@ -115,7 +118,7 @@ sub new {
         LOGDIE "could not find $conf_file file in: @conf_dirs" unless $dir;
 
         TRACE "reading from config file $dir/$conf_file";
-        my $rendered = $mt->render_file("$dir/$conf_file", @t_args );
+        my $rendered = $mt->render_file("$dir/$conf_file");
         die $rendered if ( (ref $rendered) =~ /Exception/ );
         $conf_data = $json->decode( $rendered );
     }

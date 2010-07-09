@@ -7,7 +7,7 @@ use warnings;
 
 our @mergeStack;
 
-sub defaults_from {
+sub extends_config {
     my $filename = shift;
     my @args = @_;
     push @mergeStack, Clustericious::Config->new($filename, \@args);
