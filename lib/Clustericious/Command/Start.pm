@@ -68,8 +68,6 @@ sub run {
 
         # env hash goes to the environment
         my $env = delete $conf{env} || {};
-        use Data::Dumper;
-        warn Dumper(\%conf);
         @ENV{ keys %$env } = values %$env;
 
         # if it starts with a dash, leave it alone, else add two dashes
