@@ -31,8 +31,6 @@ sub startup {
 
 sub init_logging {
     my $self = shift;
-    our $_did_loginit;
-    return if $_did_loginit++;
 
     # Logging
     $ENV{LOG_LEVEL} ||= ( $ENV{HARNESS_ACTIVE} ? "WARN" : "DEBUG" );
