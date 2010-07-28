@@ -4,9 +4,9 @@ Clustericious::Command::Start
 
 =head1 DESCRIPTION
 
-Stop a daemon using the config file and the start_mode.
+Start a daemon using the config file and the start_mode.
 
-=head1 NOTES
+=head1 EXAMPLE
 
 For a prefork daemon, the config file should
 contain "daemonize" and "pid" keys, e.g. :
@@ -15,13 +15,26 @@ contain "daemonize" and "pid" keys, e.g. :
    "daemon_prefork" : {
       "daemonize": 1,
       "pid"      : "/tmp/restmd.pid",
-      ...
+      [...]
       "env"      : {
         "foo" : "bar"
       }
     }
 
-Tthe label "env" is an optional hash of environment variables
+The above configuration will will cause "app start"
+to be equivalent to
+
+  foo=bar MyApp.pl daemon_preform --daemonize 1 --id /tmp/restmd.pid [..]
+
+In other words, keys and values in the configuration file become
+options preceded by double dashes.
+
+If a key has a single dash, it is sent as is (with no double dash).
+
+The special value "null" means don't send an argument to the
+command line option  (e.g. --daemonize)
+
+The special label "env" is an optional hash of environment variables
 to set before starting the command.
 
 =cut
@@ -46,6 +59,7 @@ __PACKAGE__->attr(usage => <<EOT);
 usage $0: start
 Start a daemon using the start_mode in the config file.
 See Clustericious::Config for the format of the config file.
+See Clustericious::Command::Start for examples.
 EOT
 
 sub run {

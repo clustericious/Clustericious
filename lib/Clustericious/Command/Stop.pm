@@ -8,14 +8,28 @@ Stop a running daemon.
 
 =head1 NOTES
 
-For a prefork daemon, the config file should
-contain "daemonize" and "pid" keys, e.g. :
+The different methods of starting put their pid files in
+different places in the config file.   Here are some
+examples :
 
    "daemon_prefork" : {
       "daemonize": 1,
-      "pid"      : "/tmp/restmd.pid",
+      "pid"      : "/tmp/filename.pid",
       ....
     }
+
+   "plackup" : {
+      "pidfile"   : "/tmp/nother_filename.pid",
+      "daemonize" : "null"    # means include "--daemonize"
+   ...
+   },
+
+   "lighttpd" : {
+      "env" : {
+          "lighttpd_pid"    : "/tmp/third_filename.pid"
+           ...
+      },
+   },
 
 =cut
 
@@ -37,9 +51,30 @@ EOT
 __PACKAGE__->attr(usage => <<EOT);
 usage $0: stop
 
-There are no options available.  It will send a TERM signal to
-the running daemon, if there is one.
+Send a TERM signal to running daemon(s).
+See Clustericious::Command::Stop.
 EOT
+
+sub _stop_pidfile {
+    my $pid_file = shift;
+    -e $pid_file or LOGDIE "No pid file $pid_file\n";
+    my $pid = slurp $pid_file; # dies automatically
+    chomp $pid;
+    unless ($pid && $pid=~/\d/) {
+        WARN "pid file $pid_file had '$pid'.  Not stopping process.";
+        return;
+    }
+    kill 0, $pid or LOGDIE "$pid is not running";
+    INFO "Sending TERM to $pid (in $pid_file)";
+    kill 'TERM', $pid;
+    sleep 1;
+    my $nap = 1;
+    while (kill 0, $pid) {
+        INFO "waiting for $pid";
+        sleep $nap++;
+        LOGDIE "pid $pid did not die" if $nap > 10;
+    }
+}
 
 sub run {
     my $self     = shift;
@@ -47,21 +82,12 @@ sub run {
 
     Clustericious::App->init_logging();
 
-    my $pid_file = $conf->daemon_prefork->pid
-      or LOGDIE "no pid file in conf file";
-    -e $pid_file or LOGDIE "No pid file $pid_file\n";
-    my $pid = slurp $pid_file; # dies automatically
-    kill 0, $pid or LOGDIE "$pid is not running";
-    INFO "Stopping server ($pid)";
-    kill 'TERM', $pid;
-    sleep 1;
-    my $nap = 1;
-    # Seem like Mojo::Server::Daemon::Prefork should do this.
-    while (kill 0, $pid) {
-        INFO "waiting for $pid";
-        sleep $nap++;
-        LOGDIE "pid $pid did not die" if $nap > 10;
+    for (reverse $conf->start_mode) {
+        /daemon_prefork/ and _stop_pidfile($conf->daemon_prefork->pid);
+        /plackup/        and _stop_pidfile($conf->plackup->pidfile);
+        /lighttpd/       and _stop_pidfile($conf->lighttpd->env->lighttpd_pid);
     }
+
     1;
 }
 
