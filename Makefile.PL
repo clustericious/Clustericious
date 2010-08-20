@@ -6,14 +6,17 @@ WriteMakefile
           'VERSION_FROM' => 'lib/Clustericious.pm',
           'PREREQ_PM' => {
                            'File::ShareDir' => '1.00',
+                           'Hash::Merge' => 0,
                            'JSON::XS' => 0,
                            'List::MoreUtils' => 0,
                            'Module::Build' => '0.36',
                            'MojoX::Log::Log4perl' => 0,
-                           'Mojolicious' => '0.999924',
+                           'Mojolicious' => '0.999929',
+                           'Plack' => 0,
                            'Sub::Exporter' => 0,
                            'Test::More' => 0,
-                           'YAML::Syck' => 0
+                           'YAML::Syck' => 0,
+                           'YAML::XS' => 0
                          },
           'INSTALLDIRS' => 'site',
           'EXE_FILES' => [

@@ -4,14 +4,17 @@ author:
   - 'Brian Duggan <brian.duggan@nasa.gov>'
 build_requires:
   File::ShareDir: 0
+  Hash::Merge: 0
   JSON::XS: 0
   List::MoreUtils: 0
   Module::Build: 0.36
   MojoX::Log::Log4perl: 0
-  Mojolicious: 0.999924
+  Mojolicious: 0.999929
+  Plack: 0
   Sub::Exporter: 0
   Test::More: 0
   YAML::Syck: 0
+  YAML::XS: 0
 configure_requires:
   Module::Build: 0.36
 generated_by: 'Module::Build version 0.3607'
@@ -23,13 +26,41 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.05
+    version: 0.06
   Clustericious::App:
     file: lib/Clustericious/App.pm
+  Clustericious::ClientBuilder:
+    file: lib/Clustericious/ClientBuilder.pm
+  Clustericious::Command::Generate:
+    file: lib/Clustericious/Command/Generate.pm
+  Clustericious::Command::Generate::MbdApp:
+    file: lib/Clustericious/Command/Generate/MbdApp.pm
+  Clustericious::Command::Start:
+    file: lib/Clustericious/Command/Start.pm
+  Clustericious::Command::Stop:
+    file: lib/Clustericious/Command/Stop.pm
+  Clustericious::Commands:
+    file: lib/Clustericious/Commands.pm
+  Clustericious::Config:
+    file: lib/Clustericious/Config.pm
+  Clustericious::Config::Plugin:
+    file: lib/Clustericious/Config/Plugin.pm
+  Clustericious::Plugin::DataHandler:
+    file: lib/Clustericious/Plugin/DataHandler.pm
   Clustericious::RouteBuilder:
     file: lib/Clustericious/RouteBuilder.pm
+  Clustericious::RouteBuilder::CRUD:
+    file: lib/Clustericious/RouteBuilder/CRUD.pm
+  Clustericious::RouteBuilder::Common:
+    file: lib/Clustericious/RouteBuilder/Common.pm
+  Clustericious::RouteBuilder::Proxy:
+    file: lib/Clustericious/RouteBuilder/Proxy.pm
+  Clustericious::RouteBuilder::Search:
+    file: lib/Clustericious/RouteBuilder/Search.pm
+  Test::Clustericious:
+    file: lib/Test/Clustericious.pm
 requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.05
+version: 0.06
