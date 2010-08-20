@@ -37,7 +37,7 @@ package main;
 
 my $t = Test::Mojo->new(app => "SomeService");
 
-$t->post_form_ok("/my_table", { foo => "bar" }, "posted to create")
+$t->post_form_ok("/my_table", { foo => "bar" }, {}, "posted to create")
     ->status_is(200, "got 200")
     ->header_is('Content-Type' => 'application/json')
     ->json_content_is({foo => "bar"}, "got structure back");
