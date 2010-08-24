@@ -28,7 +28,6 @@ share/MbdAppTemplate/Build.PL
 share/MbdAppTemplate/db/patches/0010_start.sql
 share/MbdAppTemplate/eg/APPCLASS.conf
 share/MbdAppTemplate/lib/APPCLASS.pm
-share/MbdAppTemplate/lib/APPCLASS/App.pm
 share/MbdAppTemplate/lib/APPCLASS/DB.pm
 share/MbdAppTemplate/lib/APPCLASS/Objects.pm
 share/MbdAppTemplate/lib/APPCLASS/Routes.pm

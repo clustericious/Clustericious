@@ -16,10 +16,9 @@ package <%%= $class %%>;
 use strict;
 use warnings;
 
-use base '<%%= $class %%>::App';
+use base 'Clustericious::App';
+use <%%= $class %%>::Routes;
 
 our $VERSION = '0.01';
-
-# This package is basically just an alias for <%%= $class %%>::App.
 
 1;
