@@ -32,6 +32,8 @@ Clustericious::Config - configuration files for clustericious nodes.
     }
  }
 
+Then later in a program somewhere :
+
  my $c = Clustericious::Config->new("MyApp");
  my $c = Clustericious::Config->new( \$config_string );
  my $c = Clustericious::Config->new( \%config_data_structure );
@@ -43,6 +45,10 @@ Clustericious::Config - configuration files for clustericious nodes.
  print $c->daemon_prefork->{listen};
  my %hash = $c->daemon_prefork;
  my @ary  = $c->daemon_prefork;
+
+ # Supply a default value for a missing configuration parameter :
+ $c->url(default => "http://example.com");
+ print $c->this_param_is_missing(default => "something_else");
 
 =head1 DESCRIPTION
 
@@ -138,9 +144,15 @@ sub DESTROY {
 
 sub AUTOLOAD {
     my $self = shift;
+    my %args = @_;
+    my $default = $args{default};
+    my $default_exists = exists $args{default};
     our $AUTOLOAD;
     my $called = $AUTOLOAD;
     $called =~ s/.*:://g;
+    if ($default_exists && !exists($self->{$called})) {
+        $self->{$called} = $args{default};
+    }
     die "config element '$called' not found (".(join ',',keys(%$self)).")"
         if $called =~ /^_/ || !exists($self->{$called});
     my $value = $self->{$called};
@@ -151,6 +163,7 @@ sub AUTOLOAD {
     no strict 'refs';
     *{ __PACKAGE__ . "::$called" } = sub {
           my $self = shift;
+          $self->{$called} = $default if $default_exists && !exists($self->{$called});
           die "'$called' not found in ".join ',',keys(%$self)
               unless exists($self->{$called});
           my $value = $self->{$called};

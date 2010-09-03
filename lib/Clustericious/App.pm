@@ -5,6 +5,7 @@ use MojoX::Log::Log4perl;
 use base 'Mojolicious';
 
 use Clustericious::RouteBuilder::Common;
+use Clustericious::Config;
 
 use warnings;
 use strict;
@@ -27,6 +28,8 @@ sub startup {
 
     $self->plugins->namespaces(['Clustericious::Plugin']);
     $self->plugin('data_handler');
+    my $url_base = Clustericious::Config->new(ref $self)->url_base(default => '/');
+    $self->renderer->add_helper(url_base => sub { $url_base } );
 }
 
 sub init_logging {
