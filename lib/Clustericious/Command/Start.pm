@@ -68,6 +68,7 @@ sub run {
     my $app  = $ENV{MOJO_APP};
     my $conf     = Clustericious::Config->new( $app );
 
+    local $SIG{__DIE__} = \&Carp::confess;
     eval "use $app;";
     if ($@) {
         die "\n----------Error loading $app----------\n$@\n--------------\n";
