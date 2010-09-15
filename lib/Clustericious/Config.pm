@@ -66,8 +66,10 @@ Config files are looked for in the following places (in order, where
     /util/etc/MyApp.conf
     /etc/MyApp.conf
 
-If the environment variable HARNESS_ACTIVE is set, only $ENV{CLUSTERICIOUS_CONF_DIR}
-is used.
+If the environment variable HARNESS_ACTIVE is set,
+and the current module::build object tells us that
+the calling module is being tested, then only
+$ENV{CLUSTERICIOUS_CONF_DIR} is used.
 
 The helper "extends_config" may be used to read default settings
 from another config file.  The first argument to extends_config is the
@@ -92,12 +94,19 @@ use Log::Log4perl qw/:easy/;
 use Storable qw/dclone/;
 use Clustericious::Config::Plugin;
 use Data::Dumper;
+use Module::Build;
 
 sub new {
     my $class = shift;
     my %t_args = (ref $_[-1] eq 'ARRAY' ? @{( pop )} : () );
     my $arg = $_[0];
     ($arg = caller) =~ s/:.*$// unless $arg; # Determine from caller's class
+
+    my $we_are_testing_this_module = 0;
+    if ($ENV{HARNESS_ACTIVE} and Module::Build->can("current")) {
+        my $mb = Module::Build->current;
+        $we_are_testing_this_module = $mb && $mb->module_name eq $arg;
+    }
 
     my $conf_data;
 
@@ -112,23 +121,26 @@ sub new {
         LOGDIE "Could not parse\n-------\n$rendered\n---------\n$@\n" if $@;
     } elsif (ref $arg eq 'HASH') {
         $conf_data = dclone $arg;
-    } elsif ($ENV{HARNESS_ACTIVE} && !$ENV{CLUSTERICIOUS_CONF_DIR}) {
+    } elsif ($we_are_testing_this_module && !$ENV{CLUSTERICIOUS_CONF_DIR}) {
         $conf_data = {};
     } else {
         my @conf_dirs;
 
         @conf_dirs = $ENV{CLUSTERICIOUS_CONF_DIR} if defined( $ENV{CLUSTERICIOUS_CONF_DIR} );
 
-        push @conf_dirs, ( $ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" ) unless $ENV{HARNESS_ACTIVE};
+        push @conf_dirs, ( $ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" ) unless $we_are_testing_this_module;
         my $conf_file = "$arg.conf";
         my ($dir) = first { -e "$_/$conf_file" } @conf_dirs;
-        LOGDIE "could not find $conf_file file in: @conf_dirs" unless $dir;
-
-        TRACE "reading from config file $dir/$conf_file";
-        my $rendered = $mt->render_file("$dir/$conf_file");
-        die $rendered if ( (ref $rendered) =~ /Exception/ );
-        $conf_data = eval { $json->decode( $rendered ) };
-        LOGDIE "Could not parse\n-------\n$rendered\n---------\n$@\n" if $@;
+        if ($dir) {
+            TRACE "reading from config file $dir/$conf_file";
+            my $rendered = $mt->render_file("$dir/$conf_file");
+            die $rendered if ( (ref $rendered) =~ /Exception/ );
+            $conf_data = eval { $json->decode( $rendered ) };
+            LOGDIE "Could not parse\n-------\n$rendered\n---------\n$@\n" if $@;
+        } else {
+            TRACE "could not find $conf_file file in: @conf_dirs" unless $dir;
+            $conf_data = {};
+        }
     }
     Clustericious::Config::Plugin->do_merges($conf_data);
     bless $conf_data, $class;
