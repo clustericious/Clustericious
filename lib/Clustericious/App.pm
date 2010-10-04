@@ -75,7 +75,7 @@ sub init_logging {
 
     $self->log->info("Initialized logger to level ".$self->log->level);
     $self->log->info("Log config found in $l4p_dir/log4perl.conf") if $l4p_dir;
-    warn "# started logging ($l4p_dir/log4perl.conf)\n" if $l4p_dir;
+    # warn "# started logging ($l4p_dir/log4perl.conf)\n" if $l4p_dir;
 }
 
 1;

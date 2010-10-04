@@ -20,7 +20,7 @@ sub do_merges {
 
     return $conf_data unless @mergeStack;
 
-    # Nested defaults_from's form a tree which we traverse depth first.
+    # Nested extends_config's form a tree which we traverse depth first.
     Hash::Merge::set_behavior( 'RIGHT_PRECEDENT' );
     my %so_far = %{ shift @mergeStack };
     while (my $c = shift @mergeStack) {
