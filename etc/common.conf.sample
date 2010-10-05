@@ -17,7 +17,7 @@
    "plackup" : {
       "server"    : "FCGI",
       "listen"    : "<%= $fcgi_socket %>",
-      "app"       : "<%= $ENV{HOME} %>/git/Restmd/bin/restmd.psgi",
+      "app"       : "<%= $ENV{HOME} %>/some/location/<%= $app =%>.psgi",
       "daemonize" : "null"
    },
    "lighttpd" : {
