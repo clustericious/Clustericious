@@ -37,31 +37,70 @@ sub _check_pidfile {
     return ( state => 'down', message => "Pid $pid in file is not running." );
 }
 
+sub _check_database {
+    my $db_class = shift;
+    my $db = $db_class->new_or_cached;
+    my ( $domain, $type ) = ( $db->default_domain, $db->default_type );
+    my $dbh = $db->dbh;
+    my ( $state, $message );
+    if ($dbh) {
+        $state = 'ok';
+        ($message) = join ':', grep {defined && length}
+          $dbh->selectrow_array(
+            q[select current_database(), inet_server_addr(), inet_server_port()]
+          );
+    }
+    else {
+        $state   = 'down';
+        $message = $db_class->name;
+    }
+    return +{
+        name    => "database",
+        state   => $state,
+        message => "$domain:$type $message",
+    };
+}
+
 sub run {
     my $self = shift;
     my @args = @_ ? @_ : @ARGV;
     my $app  = $ENV{MOJO_APP};
     my $conf = Clustericious::Config->new($app);
 
-    my @status;
+    eval "require $app";
+    die "Could not load $app : \n$@\n" if $@;
+
+    my @status; # array of { name =>.., state =>.., message =>.. } hashrefs.
+
+    # webserver
     for ($conf->start_mode) {
         push @status, { name => $_,
          ( /daemon_prefork/ ? _check_pidfile($conf->daemon_prefork->pid)
          : /plackup/        ? _check_pidfile($conf->plackup->pidfile) 
+           # NB: see http://redmine.lighttpd.net/issues/2137
+           # lighttpd's pid files disappear.  Time to switch to nginx?
          : /lighttpd/       ? _check_pidfile($conf->lighttpd->env->lighttpd_pid)
          : ( state => 'error', message => "Status for start_mode $_ is unimplemented." ))};
     }
+
+    # Do a HEAD request if the webserver(s) are ok.
+    if ((grep {$_->{state} eq 'ok'} @status)==@status) {
+        my $res = Mojo::Client->new->head($conf->url)->res;
+        printf qq[%10s : %-10s (%d %s)\n], "url", $conf->url, $res->code, $res->message;
+    }
+
+    # Database
+    if ( $INC{q[Rose/Planter/DB.pm]} ) {
+        if ( my $db_class = Rose::Planter::DB->registered_by($app) ) {
+            push @status, _check_database($db_class);
+        }
+    }
+
     # Send as YAML if requested?
-    my $ok = 0;
     for (@status) {
         $_->{message} &&= "($_->{message})";;
         $_->{message} ||= "";
         printf "%10s : %-10s %s\n", @$_{qw/name state message/};
-        $ok++ if $_->{state} eq 'ok';
-    }
-    if ($ok==@status) {
-        my $res = Mojo::Client->new->get($conf->url)->res;
-        printf qq[%10s : %-10s (%d %s)\n], "url", $conf->url, $res->code, $res->message;
     }
 }
 

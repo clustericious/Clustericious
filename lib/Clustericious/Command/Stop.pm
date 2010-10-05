@@ -57,7 +57,7 @@ EOT
 
 sub _stop_pidfile {
     my $pid_file = shift;
-    -e $pid_file or LOGDIE "No pid file $pid_file\n";
+    -e $pid_file or do { WARN "No pid file $pid_file\n"; return; };
     my $pid = slurp $pid_file; # dies automatically
     chomp $pid;
     unless ($pid && $pid=~/\d/) {
