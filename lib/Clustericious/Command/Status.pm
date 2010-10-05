@@ -60,15 +60,10 @@ sub run {
         $ok++ if $_->{state} eq 'ok';
     }
     if ($ok==@status) {
-        my $get = Mojo::Client->new->get($conf->url)->res->body;
-        printf qq[%10s : %-10s (got: "%s")\n], "url", $conf->url, $get;
+        my $res = Mojo::Client->new->get($conf->url)->res;
+        printf qq[%10s : %-10s (%d %s)\n], "url", $conf->url, $res->code, $res->message;
     }
 }
-
-
-
-
-
 
 1;
 
