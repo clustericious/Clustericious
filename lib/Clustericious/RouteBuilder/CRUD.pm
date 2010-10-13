@@ -150,8 +150,9 @@ sub _build_list {
     $finder->can("find_object") or die "$finder must be able to find_object";
     sub {
         my $self  = shift;
-        my $table = $self->stash->{table};
-        my $limit = $self->stash->{params}->param('limit');
+        my $table = $self->stash('table');
+        my $params = $self->stash('params');
+        my $limit = $params ? $params->param('limit') : 10;
 
         $self->app->log->debug("Listing $table");
 
