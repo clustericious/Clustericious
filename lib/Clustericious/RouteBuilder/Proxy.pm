@@ -81,7 +81,6 @@ sub _build_proxy {
         my $headers = $self->req->headers->to_hash;
         delete $headers->{Host};
         $req->headers->from_hash($headers);
-        $self->pause;
         $self->client->process($tx, sub {
             my ($client, $proxytx) = @_;
             $self->resume;
