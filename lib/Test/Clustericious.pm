@@ -284,7 +284,7 @@ sub notfound_ok
     }
     else
     {
-        $self->get_ok($url, '', "GET $url");
+        $self->get_ok($url);
     };
 
     $self->status_is(404, "$url status is 404")

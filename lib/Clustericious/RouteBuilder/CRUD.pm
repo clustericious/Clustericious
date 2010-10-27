@@ -79,7 +79,7 @@ sub _build_read {
         my @keys = split /\//, $self->stash->{key};
         TRACE "read $table (@keys)";
         my $obj   = $finder->find_object($table,@keys)
-            or return $self->app->static->serve_404($self,"404.html.ep");
+            or return $self->render_not_found( join '/',$table,@keys );
         $self->app->log->debug("Viewing $table @keys");
 
         $self->stash->{data} = $obj->as_hash;
@@ -97,7 +97,7 @@ sub _build_delete {
         my @keys = split /\//, $self->stash->{key};
         TRACE "delete $table (@keys)";
         my $obj   = $finder->find_object($table,@keys)
-            or return $self->app->static->serve_404($self,"404.html.ep");
+            or return $self->render_not_found( join '/',$table,@keys );
         $self->app->log->debug("Deleting $table @keys");
 
         $obj->delete or $self->app->logdie($obj->errors);
@@ -119,7 +119,7 @@ sub _build_update {
         my @keys = split /\//, $self->stash->{key};
 
         my $obj = $finder->find_object($table, @keys)
-            or return $self->app->static->serve_404($self, "404.html.ep");
+            or return $self->render_not_found( join '/',$table,@keys );
 
         $self->app->log->debug("Updating $table @keys");
 
@@ -157,7 +157,7 @@ sub _build_list {
         $self->app->log->debug("Listing $table");
 
         my $object_class = $finder->find_class($table)
-            or return $self->app->static->serve_404($self, "404.html.ep");
+            or return $self->render_not_found( $table );
 
         my $pkey = $object_class->meta->primary_key;
 
