@@ -81,10 +81,9 @@ sub _build_proxy {
         my $headers = $self->req->headers->to_hash;
         delete $headers->{Host};
         $req->headers->from_hash($headers);
-        $self->pause;
-        $self->client->process($tx, sub {
+        $self->client->start($tx, sub {
             my ($client, $proxytx) = @_;
-            $self->resume;
+            $self->tx->resume;
             my $res = $self->tx->res;
             my $pr_res = $proxytx->res;
             $res->code($pr_res->code);
