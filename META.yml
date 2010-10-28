@@ -26,7 +26,7 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.10
+    version: 0.11
   Clustericious::App:
     file: lib/Clustericious/App.pm
   Clustericious::ClientBuilder:
@@ -35,8 +35,14 @@ provides:
     file: lib/Clustericious/Command/Generate.pm
   Clustericious::Command::Generate::MbdApp:
     file: lib/Clustericious/Command/Generate/MbdApp.pm
+  Clustericious::Command::Lighttpd:
+    file: lib/Clustericious/Command/Lighttpd.pm
+  Clustericious::Command::Plackup:
+    file: lib/Clustericious/Command/Plackup.pm
   Clustericious::Command::Start:
     file: lib/Clustericious/Command/Start.pm
+  Clustericious::Command::Status:
+    file: lib/Clustericious/Command/Status.pm
   Clustericious::Command::Stop:
     file: lib/Clustericious/Command/Stop.pm
   Clustericious::Commands:
@@ -45,6 +51,8 @@ provides:
     file: lib/Clustericious/Config.pm
   Clustericious::Config::Plugin:
     file: lib/Clustericious/Config/Plugin.pm
+  Clustericious::Controller:
+    file: lib/Clustericious/Controller.pm
   Clustericious::Plugin::DataHandler:
     file: lib/Clustericious/Plugin/DataHandler.pm
   Clustericious::RouteBuilder:
@@ -63,4 +71,4 @@ requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.10
+version: 0.11
