@@ -4,6 +4,7 @@ use List::Util qw/first/;
 use MojoX::Log::Log4perl;
 use base 'Mojolicious';
 
+use Clustericious::Controller;
 use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
 
@@ -17,6 +18,7 @@ our @Confdirs = $ENV{TEST_HARNESS} ?
 sub startup {
     my $self = shift;
 
+    $self->controller_class('Clustericious::Controller');
     $self->init_logging();
 
     my $r = $self->routes;
@@ -28,8 +30,13 @@ sub startup {
 
     $self->plugins->namespaces(['Clustericious::Plugin']);
     $self->plugin('data_handler');
-    my $url_base = Clustericious::Config->new(ref $self)->url_base(default => '/');
-    $self->renderer->add_helper(url_base => sub { $url_base } );
+    if (my $base = Clustericious::Config->new(ref $self)->url_base(default => '')) {
+        $self->helper( url_for =>
+              sub { my $url = shift->url_for(@_);
+                    $url->base->parse($base);
+                    $url;
+                 } );
+    }
 }
 
 sub init_logging {
