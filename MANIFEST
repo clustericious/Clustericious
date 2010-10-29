@@ -14,8 +14,6 @@ lib/Clustericious/Command/Start.pm
 lib/Clustericious/Command/Status.pm
 lib/Clustericious/Command/Stop.pm
 lib/Clustericious/Commands.pm
-lib/Clustericious/Config.pm
-lib/Clustericious/Config/Plugin.pm
 lib/Clustericious/Controller.pm
 lib/Clustericious/Plugin/DataHandler.pm
 lib/Clustericious/RouteBuilder.pm
@@ -48,8 +46,6 @@ share/MbdAppTemplate/templates/not_found.html.ep
 t/app.t
 t/basic.t
 t/clientbuilder.t
-t/config.t
-t/config_multi.t
 t/crud.t
 t/plugin_datahandler.t
 t/proxy.t
