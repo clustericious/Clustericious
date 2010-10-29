@@ -25,6 +25,9 @@ Clustericious::ClientBuilder - Construct clients for Clustericious apps
 
  object 'foo' => '/something/foo';         # Can override the URL
 
+ # Provide array refs for the command line client to document args
+ route something_with_args => GET => "/url/prefix" => [ "<argname1>" ]
+
  ----------------------------------------------------------------------
 
  use Foo::Client;
@@ -50,7 +53,7 @@ Clustericious::ClientBuilder - Construct clients for Clustericious apps
  $f->obj_delete('this', 27);               # DELETE /obj/this/27
 
  my $obj = $f->foo('this');                # GET /something/foo/this
- 
+
 =head1 DESCRIPTION
 
 Some very simple helper functions with a clean syntax to build a REST
@@ -104,6 +107,10 @@ res->code and res->message are the returned HTTP code and message.
 __PACKAGE__->attr(client => sub { Mojo::Client->new });
 __PACKAGE__->attr(server_url => '');
 __PACKAGE__->attr([qw(app res)]);
+
+our @validObjects;
+our @validRoutes;
+our %routeArgs;
 
 sub import
 {
@@ -181,9 +188,12 @@ sub errorstring
 sub route
 {
     my $subname = shift;
+    my $arg_doc = pop if ref $_[-1] eq 'ARRAY';
     my $url     = pop || '/';
     my $method  = shift || 'GET';
 
+    push @validRoutes, $subname;
+    $routeArgs{$subname} = $arg_doc;
     *{caller() . "::$subname"} = sub { shift->_doit($method,$url,@_); };
 }
 
@@ -207,6 +217,8 @@ sub object
     my $objname = shift;
     my $url     = shift || "/$objname";
     my $api     = caller;
+
+    push @validObjects, $objname;
     *{"${api}::$objname"}          = sub { shift->_doit(GET    => $url, @_) };
     *{"${api}::${objname}_delete"} = sub { shift->_doit(DELETE => $url, @_) };
 }
@@ -279,23 +291,37 @@ sub _mycallback
     }
 }
 
+sub usage {
+    my $msg = shift;
+    warn "$msg\n\n" if $msg;
+    warn "Usage : \n";
+    for (@validRoutes) {
+      my $argdoc = $routeArgs{$_};
+      warn "\t$0 $_". ( $argdoc ? " @$argdoc" : "" ). "\n";
+    }
+    warn join "\n",
+      "\t$0 <object> <keys>",
+      "\t$0 create <object> [<filename list>]",
+      "\t$0 update <object> <keys> [<filename>]",
+      "\t$0 delete <object> <keys>\n";
+    warn "\n\tValid objects are : " . ( join ',', @validObjects ). "\n\n";
+    die "\n";
+}
+
 sub run
 {
     my $self = shift;
 
     my $method = shift @ARGV;
 
-    return warn "Usage: $0 <object> <keys>\n" .
-                "       $0 create <object> [<filename list>]\n" .
-                "       $0 update <object> <keys> [<filename>]\n" .
-                "       $0 delete <object> <keys>\n" unless $method;
+    usage() unless $method;
 
     if ($method eq 'create')
     {
         $method = shift @ARGV;
-        die "Missing <object>\n" unless $method;
+        usage("Missing <object>") unless $method;
 
-        die "Invalid method $method\n" unless $self->can($method);
+        usage("Invalid method $method") unless $self->can($method);
 
         if (@ARGV)
         {
@@ -320,7 +346,7 @@ sub run
     if ($method eq 'update')
     {
         $method = shift @ARGV;
-        die "Missing <object>\n" unless $method;
+        usage ("Missing <object>") unless $method;
 
         my $content;
         if (-r $ARGV[-1])  # Does it look like a filename?
@@ -343,11 +369,11 @@ sub run
     if ($method eq 'delete')
     {
         $method = shift @ARGV;
-        die "Missing <object>\n" unless $method;
+        usage("Missing <object>") unless $method;
 
         $method .= '_delete';
 
-        die "Invalid object $method\n" unless $self->can($method);
+        usage("Invalid object $method") unless $self->can($method);
 
         $self->$method(@ARGV) or warn $self->errorstring;
         return;
@@ -366,7 +392,7 @@ sub run
         return;
     }
 
-    die "Invalid args\n";
+    usage ("Invalid arguments");
 }
 
 1;
