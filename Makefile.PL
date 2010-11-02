@@ -5,6 +5,7 @@ WriteMakefile
           'NAME' => 'Clustericious',
           'VERSION_FROM' => 'lib/Clustericious.pm',
           'PREREQ_PM' => {
+                           'Clustericious::Config' => '0.01',
                            'File::ShareDir' => '1.00',
                            'Hash::Merge' => 0,
                            'JSON::XS' => 0,

@@ -5,7 +5,6 @@ etc/log4perl.conf.sample
 etc/MyApp.conf.sample
 lib/Clustericious.pm
 lib/Clustericious/App.pm
-lib/Clustericious/ClientBuilder.pm
 lib/Clustericious/Command/Generate.pm
 lib/Clustericious/Command/Generate/MbdApp.pm
 lib/Clustericious/Command/Lighttpd.pm
@@ -45,7 +44,6 @@ share/MbdAppTemplate/templates/layouts/default.html.ep
 share/MbdAppTemplate/templates/not_found.html.ep
 t/app.t
 t/basic.t
-t/clientbuilder.t
 t/crud.t
 t/plugin_datahandler.t
 t/proxy.t

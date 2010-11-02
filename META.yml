@@ -3,6 +3,7 @@ abstract: 'Mojo and HTTP based cluster framework'
 author:
   - 'Brian Duggan <brian.duggan@nasa.gov>'
 build_requires:
+  Clustericious::Config: 0.01
   File::ShareDir: 0
   Hash::Merge: 0
   JSON::XS: 0
@@ -26,11 +27,9 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.12
+    version: 0.13
   Clustericious::App:
     file: lib/Clustericious/App.pm
-  Clustericious::ClientBuilder:
-    file: lib/Clustericious/ClientBuilder.pm
   Clustericious::Command::Generate:
     file: lib/Clustericious/Command/Generate.pm
   Clustericious::Command::Generate::MbdApp:
@@ -47,10 +46,6 @@ provides:
     file: lib/Clustericious/Command/Stop.pm
   Clustericious::Commands:
     file: lib/Clustericious/Commands.pm
-  Clustericious::Config:
-    file: lib/Clustericious/Config.pm
-  Clustericious::Config::Plugin:
-    file: lib/Clustericious/Config/Plugin.pm
   Clustericious::Controller:
     file: lib/Clustericious/Controller.pm
   Clustericious::Plugin::DataHandler:
@@ -71,4 +66,4 @@ requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.12
+version: 0.13
