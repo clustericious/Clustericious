@@ -83,31 +83,55 @@ sub import {
     no warnings 'redefine';
 
     # Export
-    *{"${caller}::any"}       = sub { $route_sub->(ref $_[0] ? shift : [], @_) };
-    *{"${caller}::get"}       = sub { $route_sub->('get', @_) };
-    *{"${caller}::ladder"}    = sub { $route_sub->('ladder', @_) };
-    *{"${caller}::post"}      = sub { $route_sub->('post', @_) };
-    *{"${caller}::Delete"}    = sub { $route_sub->('delete', @_) };
-    *{"${caller}::websocket"} = sub { $route_sub->('websocket', @_) };
+    *{"${caller}::any"}          = sub { $route_sub->(ref $_[0] ? shift : [], @_) };
+    *{"${caller}::get"}          = sub { $route_sub->('get', @_) };
+    *{"${caller}::ladder"}       = sub { $route_sub->('ladder', @_) };
+    *{"${caller}::post"}         = sub { $route_sub->('post', @_) };
+    *{"${caller}::Delete"}       = sub { $route_sub->('delete', @_) };
+    *{"${caller}::websocket"}    = sub { $route_sub->('websocket', @_) };
+    *{"${caller}::authenticate"} = sub { $route_sub->('authenticate',@_) };
+    *{"${caller}::authorize"}    = sub { $route_sub->('authorize',@_) };
 }
 
 sub add_routes {
     my $class = shift;
     my $app = shift;
 
-    my $stashed = $Routes{ref $app} or Carp::confess("no routes stashed for $app");
-    my @stashed = @$stashed;
-    my $routes = $app->routes;
+    my $stashed = $Routes{ ref $app }
+      or Carp::confess("no routes stashed for $app");
+    my @stashed            = @$stashed;
+    my $routes             = $app->routes;
+    my $head_route         = $app->routes;
+    my $head_authenticated = $head_route;
 
     for my $spec (@stashed) {
        my      ($name,$pattern,$constraints,$conditions,$defaults,$methods) =
        @$spec{qw/name  pattern  constraints  conditions  defaults  methods/};
 
-        do {
-          $routes = $app->routes->bridge( $pattern, {@$constraints} )->over($conditions)
-              ->to($defaults)->name($name);
-          next;
-         } if !ref $methods && $methods eq 'ladder';
+         # authenticate, always connects to app->routes
+         if (!ref $methods && $methods eq 'authenticate') {
+             $head_route = $head_authenticated = $routes =
+             $app->routes->bridge->to( {
+                    cb => sub { warn "authenticate $name"; 1; }
+                });
+             next;
+         }
+
+         # authorize replaces previous authorize's
+         if (!ref $methods && $methods eq 'authorize') {
+            die "put authenticate before authorize" unless $head_authenticated;
+            $head_route = $routes = $head_authenticated->bridge->to( {
+                cb => sub { warn "authorizing $name" }
+            } );
+            next;
+         }
+
+         # ladders replace previous ladders
+         if (!ref $methods && $methods eq 'ladder') {
+              $routes = $head_route->bridge( $pattern, {@$constraints} )->over($conditions)
+                  ->to($defaults)->name($name);
+              next;
+         }
 
          # WebSocket?
          my $websocket = 1 if !ref $methods && $methods eq 'websocket';
