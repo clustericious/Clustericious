@@ -1,6 +1,12 @@
 package Clustericious::Plugin::SimpleAuth;
 
 use Log::Log4perl qw/:easy/;
+use Mojo::ByteStream qw/b/;
+use Mojo::Client;
+use Mojo::URL;
+
+use Clustericious::Config;
+
 use warnings;
 use strict;
 
@@ -60,16 +66,40 @@ sub authenticate {
     my $self = shift;
     my $c = shift;
     my $realm = shift;
-    $c->app->log->trace("Authenticating for realm $realm");
-    # TODO
-    1;
+    TRACE ("Authenticating for realm $realm");
+    my $auth = $c->req->headers->authorization or do {
+        $c->res->headers->www_authenticate("Basic '$realm'");
+        $c->render(text => "auth required", status => 401);
+        return;
+    };
+    my ($method,$str) = split / /,$auth;
+    my $userinfo = b($str)->b64_decode;
+    my ($user,$pw) = split /:/, $userinfo;
+    my $config_url = $c->config->simple_auth->url;
+    my $auth_url = Mojo::URL->new("$config_url/auth");
+    $auth_url->userinfo($userinfo);
+    my $client = Mojo::Client->singleton;
+    my $check = $client->head($auth_url)->res->code();
+    unless (defined($check)) {
+        WARN ("Error connecting to simple auth at $config_url");
+        $c->render(text => "auth server down", status => 403);
+        return 0;
+    }
+    if ($check == 200) {
+        $c->stash(user => $user);
+        return 1;
+    }
+    INFO "Authentication denied for $user";
+    $c->render(text => "authentication failure", status => 403);
+    return 0;
 }
 
 sub authorize {
     my $self = shift;
     my $c = shift;
     my ($action,$resource) = @_;
-    $c->app->log->trace("Authorizing action $action, resource $resource");
+    my $user = $c->stash("user");
+    TRACE ("Authorizing user $user, action $action, resource $resource");
     # TODO
     1;
 }

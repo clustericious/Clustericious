@@ -31,13 +31,17 @@ sub startup {
     $self->plugins->namespaces(['Clustericious::Plugin']);
     $self->plugin('data_handler');
     $self->plugin('simple_auth');
-    if (my $base = Clustericious::Config->new(ref $self)->url_base(default => '')) {
+    my $config = Clustericious::Config->new(ref $self);
+    if (my $base = $config->url_base(default => '')) {
         $self->helper( url_for =>
               sub { my $url = shift->url_for(@_);
                     $url->base->parse($base);
                     $url;
                  } );
     }
+    $self->helper( config => sub { $config } );
+    my $client = Mojo::Client->singleton;
+    $client->log($self->log);
 }
 
 sub init_logging {
