@@ -99,9 +99,15 @@ sub authorize {
     my $c = shift;
     my ($action,$resource) = @_;
     my $user = $c->stash("user");
-    TRACE ("Authorizing user $user, action $action, resource $resource");
-    # TODO
-    1;
+    TRACE "Authorizing user $user, action $action, resource $resource";
+    $resource =~ s[^/][];
+    my $url = Mojo::URL->new( join '/', $c->config->simple_auth->url,
+        "authz/user", $user, $action, $resource );
+    my $code = Mojo::Client->singleton->head($url)->res->code;
+    return 1 if $code && $code == 200;
+    INFO "Unauthorized access by $user to $action $resource";
+    $c->render(text => "unauthorized", status => 403);
+    return 0;
 }
 
 =head1 SEE ALSO
