@@ -32,6 +32,8 @@ my $auth_url = $ENV{CLUSTERICIOUS_TEST_AUTH_URL};
 if ($auth_url) {
     Clustericious::Config->new("SomeService")
       ->simple_auth( default => { url => $auth_url } );
+} else {
+    Clustericious::Config->new("SomeService")->simple_auth(default => 1 );
 }
 
 $t->get_ok("/")->status_is(200)->content_like(qr/unprotected/, "got unprotected content");

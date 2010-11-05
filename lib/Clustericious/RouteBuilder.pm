@@ -115,6 +115,7 @@ sub add_routes {
              $app->routes->bridge->to( {
                     cb => sub {
                         my $c = shift;
+                        return 1 unless $c->config->simple_auth(default => '');
                         $c->app->plugins->load_plugin('simple_auth')
                             ->authenticate( $c, $realm );
                       }
@@ -130,6 +131,7 @@ sub add_routes {
             $head_route = $routes = $head_authenticated->bridge->to( {
                     cb => sub {
                         my $c = shift;
+                        return 1 unless $c->config->simple_auth(default => '');
                         $c->app->plugins->load_plugin('simple_auth')
                             ->authorize( $c, $action, $resource || $c->req->url->path );
                       } });

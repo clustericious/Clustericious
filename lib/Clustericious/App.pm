@@ -30,8 +30,13 @@ sub startup {
 
     $self->plugins->namespaces(['Clustericious::Plugin']);
     $self->plugin('data_handler');
-    $self->plugin('simple_auth');
     my $config = Clustericious::Config->new(ref $self);
+    if ($config->simple_auth(default => '')) {
+        $self->log->info("Loading auth plugin");
+        $self->plugin('simple_auth');
+    } else {
+        $self->log->info("No auth configured");
+    }
     if (my $base = $config->url_base(default => '')) {
         $self->helper( url_for =>
               sub { my $url = shift->url_for(@_);
