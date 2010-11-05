@@ -110,9 +110,14 @@ sub add_routes {
 
          # authenticate, always connects to app->routes
          if (!ref $methods && $methods eq 'authenticate') {
+             my $realm = $pattern || ref $app;
              $head_route = $head_authenticated = $routes =
              $app->routes->bridge->to( {
-                    cb => sub { warn "authenticate $name"; 1; }
+                    cb => sub {
+                        my $c = shift;
+                        $c->app->plugins->load_plugin('simple_auth')
+                            ->authenticate( $c, $realm );
+                      }
                 });
              next;
          }
@@ -120,9 +125,14 @@ sub add_routes {
          # authorize replaces previous authorize's
          if (!ref $methods && $methods eq 'authorize') {
             die "put authenticate before authorize" unless $head_authenticated;
+            my $action = $pattern;
+            my $resource = $name;
             $head_route = $routes = $head_authenticated->bridge->to( {
-                cb => sub { warn "authorizing $name" }
-            } );
+                    cb => sub {
+                        my $c = shift;
+                        $c->app->plugins->load_plugin('simple_auth')
+                            ->authorize( $c, $action, $resource || $c->req->url->path );
+                      } });
             next;
          }
 

@@ -30,6 +30,7 @@ sub startup {
 
     $self->plugins->namespaces(['Clustericious::Plugin']);
     $self->plugin('data_handler');
+    $self->plugin('simple_auth');
     if (my $base = Clustericious::Config->new(ref $self)->url_base(default => '')) {
         $self->helper( url_for =>
               sub { my $url = shift->url_for(@_);
