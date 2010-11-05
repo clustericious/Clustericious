@@ -98,7 +98,8 @@ sub authorize {
     my $self = shift;
     my $c = shift;
     my ($action,$resource) = @_;
-    my $user = $c->stash("user");
+    my $user = $c->stash("user") or LOGDIE "missing user in authorize()";
+    LOGDIE "missing action or resource in authorize()" unless @_==2;
     TRACE "Authorizing user $user, action $action, resource $resource";
     $resource =~ s[^/][];
     my $url = Mojo::URL->new( join '/', $c->config->simple_auth->url,
