@@ -17,7 +17,7 @@ $t->get_ok('/')->status_is(200)->content_type_is('text/html')
 
 
 $t->post_ok('/clustericious', { "Content-Type" => "application/json" },
-          qq[{ "app": "<%%= $class %%>", "version" : "$Restauth::VERSION" }])
+          qq[{ "app": "<%%= $class %%>", "version" : "$<%%= $class %%>::VERSION" }])
         ->status_is(200, "posted version");
 
 $t->get_ok('/clustericious/<%%= $class %%>')
