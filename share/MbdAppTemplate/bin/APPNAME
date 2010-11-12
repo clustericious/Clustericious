@@ -4,6 +4,11 @@
 use strict;
 use warnings;
 
+use File::Spec;
+
+use lib join '/', File::Spec->splitdir(dirname(__FILE__)), 'lib';
+use lib join '/', File::Spec->splitdir(dirname(__FILE__)), '..', 'lib';
+
 use Clustericious::Commands;
 
 $ENV{MOJO_APP} ||= '<%%= $class %%>';
