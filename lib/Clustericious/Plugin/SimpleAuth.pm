@@ -66,19 +66,30 @@ sub authenticate {
     my $self = shift;
     my $c = shift;
     my $realm = shift;
+
     TRACE ("Authenticating for realm $realm");
+    # Everyone needs to send an authorization header
     my $auth = $c->req->headers->authorization or do {
         $c->res->headers->www_authenticate("Basic '$realm'");
         $c->render(text => "auth required", status => 401);
         return;
     };
+
+    # VIP treatment for some hosts
+    my $config_url = $c->config->simple_auth->url;
+    my $client = Mojo::Client->singleton;
+    my $ip = $c->tx->remote_address;
+    if ($client->get("$config_url/host/$ip/trusted")->res->code==200) {
+        TRACE "Host $ip is trusted, not authenticating";
+        return 1;
+    }
+
+    # Everyone else get in line
     my ($method,$str) = split / /,$auth;
     my $userinfo = b($str)->b64_decode;
     my ($user,$pw) = split /:/, $userinfo;
-    my $config_url = $c->config->simple_auth->url;
     my $auth_url = Mojo::URL->new("$config_url/auth");
     $auth_url->userinfo($userinfo);
-    my $client = Mojo::Client->singleton;
     my $check = $client->head($auth_url)->res->code();
     unless (defined($check)) {
         WARN ("Error connecting to simple auth at $config_url");
