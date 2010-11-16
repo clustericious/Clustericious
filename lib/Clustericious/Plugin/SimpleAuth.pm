@@ -75,19 +75,22 @@ sub authenticate {
         return;
     };
 
-    # VIP treatment for some hosts
     my $config_url = $c->config->simple_auth->url;
     my $client = Mojo::Client->singleton;
+
+    my ($method,$str) = split / /,$auth;
+    my $userinfo = b($str)->b64_decode;
+    my ($user,$pw) = split /:/, $userinfo;
+
+    # VIP treatment for some hosts
     my $ip = $c->tx->remote_address;
     if ($client->get("$config_url/host/$ip/trusted")->res->code==200) {
         TRACE "Host $ip is trusted, not authenticating";
+        $c->stash(user => $user);
         return 1;
     }
 
     # Everyone else get in line
-    my ($method,$str) = split / /,$auth;
-    my $userinfo = b($str)->b64_decode;
-    my ($user,$pw) = split /:/, $userinfo;
     my $auth_url = Mojo::URL->new("$config_url/auth");
     $auth_url->userinfo($userinfo);
     my $check = $client->head($auth_url)->res->code();
