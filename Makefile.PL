@@ -15,6 +15,7 @@ WriteMakefile
                            'Mojolicious' => '0.999931',
                            'Plack' => 0,
                            'Sub::Exporter' => 0,
+                           'Sys::Hostname' => 0,
                            'Test::More' => 0,
                            'YAML::Syck' => 0,
                            'YAML::XS' => 0
