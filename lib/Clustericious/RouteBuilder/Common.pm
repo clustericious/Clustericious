@@ -12,6 +12,7 @@ These routes will be added first; they cannot be overridden.
 
 package Clustericious::RouteBuilder::Common;
 use Log::Log4perl qw/:easy/;
+use Sys::Hostname qw/hostname/;
 
 use strict;
 use warnings;
@@ -24,6 +25,15 @@ sub add_routes {
         cb => sub {
             my $self = shift;
             $self->stash->{data} = [ $self->app->VERSION ];
+        }
+    );
+
+    $app->routes->route('/status')->to(
+        cb => sub {
+            my $self = shift;
+            $self->stash->{data} = { server_version => $self->app->VERSION,
+                                     server_hostname => hostname(),
+                                     server_url => $self->config->url(default => 'undef') };
         }
     );
 }

@@ -24,6 +24,7 @@ my $builder = Module::Build->new(
         'File::ShareDir'       => 0,
         'Hash::Merge'          => 0,
         'Plack'                => 0,
+        'Sys::Hostname'        => 0,
       },
     add_to_cleanup      => [ 'Clustericious-*' ],
     create_makefile_pl => 'traditional',
