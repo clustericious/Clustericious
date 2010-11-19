@@ -45,5 +45,12 @@ sub redirect_to {
     return $self;
 }
 
+sub render_not_found {
+    my $self = shift;
+    delete $self->stash->{data};
+    $self->SUPER::render_not_found(@_);
+}
+
+
 1;
 
