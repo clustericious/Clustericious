@@ -126,7 +126,7 @@ sub _build_update {
         my $pkeys = $obj->meta->primary_key_column_names;
         my $ukeys = $obj->meta->unique_keys_column_names;
         my $columns = $obj->meta->column_names;
-        my $nested = $finder->nested_tables($table);
+        my $nested = $obj->nested_tables;
 
         while (my ($key, $value) = each %{$self->stash->{data}})
         {

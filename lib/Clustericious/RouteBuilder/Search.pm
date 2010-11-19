@@ -20,7 +20,7 @@ Clustericious::RouteBuilder::Search -- build routes for searching for objects
 
 This automates the creation of routes for searching for objects.
 
-Manager::Finder::Class must the following methods :
+Manager::Finder::Class must provide the following methods :
 
  - lookup_class : given the plural of a table, look up the name of the class
 
@@ -29,6 +29,7 @@ Manager::Finder::Class must the following methods :
 package Clustericious::RouteBuilder::Search;
 use Mojo::JSON;
 use Log::Log4perl qw/:easy/;
+use List::MoreUtils qw/uniq/;
 use Data::Dumper;
 use strict;
 
@@ -52,6 +53,15 @@ sub _build_search {
         $self->app->plugins->run_hook('parse_data', $self);
 
         my $p = $self->stash->{data};
+
+        # "nested_tables" automatically become with_objects
+        my $nested = $manager->object_class->nested_tables;
+        if ( @$nested && ref($p) eq 'HASH' ) {
+            $p = { query => [ %$p ] } unless exists($p->{query});
+            TRACE "nested tables : @$nested";
+            my $existing = $p->{with_objects} ||= [];
+            $p->{with_objects} = [ uniq @$existing, @$nested ];
+        }
 
         TRACE "searching for $items : ".Dumper($p);
 
