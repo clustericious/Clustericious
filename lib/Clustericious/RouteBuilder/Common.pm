@@ -36,6 +36,13 @@ sub add_routes {
                                      server_url => $self->config->url(default => 'undef') };
         }
     );
+
+    $app->routes->route('/api')->to(
+        cb => sub {
+            my $self = shift;
+            $self->render_text( $self->app->dump_api()."\n" )
+            }
+    );
 }
 
 1;

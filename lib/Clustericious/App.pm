@@ -1,6 +1,19 @@
+=head1 NAME
+
+Clustericious::App -- base class for clustericious apps
+
+=head1 DESCRIPTION
+
+Inherits from Mojolicious, add adds the following functionality :
+
+=over
+
+=cut
+
 package Clustericious::App;
 
 use List::Util qw/first/;
+use List::MoreUtils qw/uniq/;
 use MojoX::Log::Log4perl;
 use base 'Mojolicious';
 
@@ -14,6 +27,13 @@ use strict;
 our @Confdirs = $ENV{TEST_HARNESS} ?
    ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
    ($ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" );
+
+=item startup
+
+Adds the data_handler plugin, common routes,
+and sets up logging for the client using log::log4perl.
+
+=cut
 
 sub startup {
     my $self = shift;
@@ -48,6 +68,12 @@ sub startup {
     my $client = Mojo::Client->singleton;
     $client->log($self->log);
 }
+
+=item init_logging
+
+Initializing logging using ~/etc/log4perl.conf
+
+=cut
 
 sub init_logging {
     my $self = shift;
@@ -93,6 +119,43 @@ sub init_logging {
     $self->log->info("Initialized logger to level ".$self->log->level);
     $self->log->info("Log config found in $l4p_dir/log4perl.conf") if $l4p_dir;
     # warn "# started logging ($l4p_dir/log4perl.conf)\n" if $l4p_dir;
+}
+
+=item dump_api
+
+Dump out the API for this REST server.
+
+=cut
+
+sub dump_api {
+    my $self = shift;
+    my $routes = shift || $self->routes->children;
+    my @all;
+    for my $r (@$routes) {
+        my $pat = $r->pattern;
+        $pat->_compile;
+        my %symbols = map { $_ => "<$_>" } @{ $pat->symbols };
+        if ($symbols{table}) {
+            for my $table (Rose::Planter->tables) {
+                $symbols{table} = $table;
+                my $line = $pat->render(\%symbols);
+                push @all, $line;
+            }
+        } elsif ($symbols{items}) {
+            for my $plural (Rose::Planter->plurals) {
+                $symbols{items} = $plural;
+                my $line = $pat->render(\%symbols);
+                push @all, $line;
+            }
+        } elsif (defined($pat->pattern)) {
+            push @all, join ' ', $pat->pattern;
+        } else {
+            push @all, $self->dump_api($r->children);
+        }
+    }
+    return @all if wantarray();
+    return join "\n", (uniq sort @all);
+
 }
 
 1;
