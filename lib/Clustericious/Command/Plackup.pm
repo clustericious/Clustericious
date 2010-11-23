@@ -43,6 +43,7 @@ sub run {
     chomp $plackup;
 
     DEBUG "starting $plackup @args";
+    delete $ENV{MOJO_COMMANDS_DONE};
     system($plackup, @args)==0 or die "could not start $plackup @args";
 }
 
