@@ -135,20 +135,22 @@ sub dump_api {
         my $pat = $r->pattern;
         $pat->_compile;
         my %symbols = map { $_ => "<$_>" } @{ $pat->symbols };
+        my %conditions = @{ $r->conditions };
+        my $method = uc join ',', @{ $conditions{method} || [] };
         if ($symbols{table}) {
             for my $table (Rose::Planter->tables) {
                 $symbols{table} = $table;
                 my $line = $pat->render(\%symbols);
-                push @all, $line;
+                push @all, "$method $line";
             }
         } elsif ($symbols{items}) {
             for my $plural (Rose::Planter->plurals) {
                 $symbols{items} = $plural;
                 my $line = $pat->render(\%symbols);
-                push @all, $line;
+                push @all, "$method $line";
             }
         } elsif (defined($pat->pattern)) {
-            push @all, join ' ', $pat->pattern;
+            push @all, join ' ', $method, $pat->pattern;
         } else {
             push @all, $self->dump_api($r->children);
         }

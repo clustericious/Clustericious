@@ -25,6 +25,10 @@ use Clustericious::RouteBuilder::CRUD
         "create" => { -as => "do_create" },
         defaults => { finder => "Fake::Object" };
 
+authenticate;
+
+authorize 'foo';
+
 post '/:table' => \&do_create;
 get '/:items' => "noop";
 
@@ -46,13 +50,16 @@ $t->post_form_ok("/my_table", { foo => "bar" }, {}, "posted to create")
     ->status_is(200, "got 200")
     ->json_content_is({foo => "bar"}, "got structure back");
 
-$t->get_ok("/api")->text_is(<<API);
-/one
-/ones
-/three
-/threes
-/two
-/twos
+$t->get_ok("/api")->content_is(<<API);
+ /api
+ /status
+ /version
+GET /ones
+GET /threes
+GET /twos
+POST /one
+POST /three
+POST /two
 API
 
 1;
