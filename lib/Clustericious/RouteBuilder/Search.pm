@@ -56,7 +56,7 @@ sub _build_search {
 
         # "nested_tables" automatically become with_objects
         my $nested = $manager->object_class->nested_tables;
-        if ( @$nested && ref($p) eq 'HASH' ) {
+        if ( $nested && @$nested && ref($p) eq 'HASH' ) {
             $p = { query => [ %$p ] } unless exists($p->{query});
             TRACE "nested tables : @$nested";
             my $existing = $p->{with_objects} ||= [];
