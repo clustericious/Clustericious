@@ -84,6 +84,11 @@ sub run {
         # env hash goes to the environment
         my $env = delete $conf{env} || {};
         @ENV{ keys %$env } = values %$env;
+        if ($env->{PERL5LIB}) {
+            # Do it now, in case we are not spawning a new process.
+            push @INC, split /:/, $env->{PERL5LIB};
+        }
+        TRACE "Setting env vars : ".join ',', keys %$env;
 
         # if it starts with a dash, leave it alone, else add two dashes
         my %args = mesh
