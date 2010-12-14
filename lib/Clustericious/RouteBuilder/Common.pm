@@ -31,7 +31,9 @@ sub add_routes {
     $app->routes->route('/status')->to(
         cb => sub {
             my $self = shift;
-            $self->stash->{data} = { server_version => $self->app->VERSION,
+            my $app = ref $self->app || $self->app;
+            $self->stash->{data} = { app_name => $app,
+                                     server_version => $self->app->VERSION,
                                      server_hostname => hostname(),
                                      server_url => $self->config->url(default => 'undef') };
         }
