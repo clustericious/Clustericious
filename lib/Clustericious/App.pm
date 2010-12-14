@@ -140,8 +140,9 @@ sub dump_api {
         if ($symbols{table}) {
             for my $table (Rose::Planter->tables) {
                 $symbols{table} = $table;
-                my $line = $pat->render(\%symbols);
-                push @all, "$method $line";
+                my $pat = $pat->pattern;
+                $pat =~ s/:table/$table/;
+                push @all, "$method $pat";
             }
         } elsif ($symbols{items}) {
             for my $plural (Rose::Planter->plurals) {
