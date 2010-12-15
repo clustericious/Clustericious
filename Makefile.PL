@@ -8,6 +8,7 @@ WriteMakefile
                            'Clustericious::Config' => '0.01',
                            'File::ShareDir' => '1.00',
                            'Hash::Merge' => 0,
+                           'IO::Prompt' => 0,
                            'JSON::XS' => 0,
                            'List::MoreUtils' => 0,
                            'Module::Build' => '0.36',
