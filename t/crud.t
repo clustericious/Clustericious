@@ -50,17 +50,19 @@ $t->post_form_ok("/my_table", { foo => "bar" }, {}, "posted to create")
     ->status_is(200, "got 200")
     ->json_content_is({foo => "bar"}, "got structure back");
 
-$t->get_ok("/api")->content_is(<<API);
- /api
- /status
- /version
-GET /ones
-GET /threes
-GET /twos
-POST /one
-POST /three
-POST /two
-API
+$t->get_ok("/api")->json_content_is(
+    [
+        "GET /api",
+        "GET /ones",
+        "GET /status",
+        "GET /threes",
+        "GET /twos",
+        "GET /version",
+        "POST /one",
+        "POST /three",
+        "POST /two"
+    ]
+);
 
 1;
 
