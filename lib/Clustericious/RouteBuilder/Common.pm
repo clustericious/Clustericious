@@ -42,7 +42,7 @@ sub add_routes {
     $app->routes->route('/api')->to(
         cb => sub {
             my $self = shift;
-            $self->render_text( $self->app->dump_api()."\n" )
+            $self->render_data( [ $self->app->dump_api() ] );
             }
     );
 }

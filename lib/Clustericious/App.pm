@@ -156,9 +156,7 @@ sub dump_api {
             push @all, $self->dump_api($r->children);
         }
     }
-    return @all if wantarray();
-    return join "\n", (uniq sort @all);
-
+    return uniq sort @all;
 }
 
 1;
