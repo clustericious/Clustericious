@@ -64,6 +64,9 @@ sub startup {
                     $url;
                  } );
     }
+    unless (my $url = $config->url(default => '')) {
+        $self->log->error("Configuration file should contain 'url'.");
+    }
     $self->helper( config => sub { $config } );
     my $client = Mojo::Client->singleton;
     $client->log($self->log);
