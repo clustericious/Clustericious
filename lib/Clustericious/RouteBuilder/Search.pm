@@ -24,6 +24,13 @@ Manager::Finder::Class must provide the following methods :
 
  - lookup_class : given the plural of a table, look up the name of the class
 
+The route that is created turns a JSON structure which is POSTed into
+parameters for Rose::DB::Object::Manager::get_objects.
+
+Additionally a "mode" parameters is suported, which just calls a
+search_$mode method within the manager class, and returns that
+resultset to the client.
+
 =cut
 
 package Clustericious::RouteBuilder::Search;
