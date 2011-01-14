@@ -93,7 +93,7 @@ sub _find_type
     foreach my $type (map { /^([^;]*)/ } # get only stuff before ;
                       split(',', $headers->header('Accept') || ''),
                       $headers->content_type || '')
-                       
+
     {
         return $type if $types{$type} and $types{$type}->{encode};
     }

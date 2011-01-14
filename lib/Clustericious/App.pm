@@ -40,6 +40,7 @@ sub startup {
 
     $self->controller_class('Clustericious::Controller');
     $self->init_logging();
+    $self->secret( (ref $self || $self) );
 
     my $r = $self->routes;
     # "Common" ones are not overrideable.
@@ -119,8 +120,8 @@ sub init_logging {
     });
     $self->log( $logger );
 
-    $self->log->info("Initialized logger to level ".$self->log->level);
-    $self->log->info("Log config found in $l4p_dir/log4perl.conf") if $l4p_dir;
+    $self->log->debug("Initialized logger to level ".$self->log->level);
+    $self->log->debug("Log config found in $l4p_dir/log4perl.conf") if $l4p_dir;
     # warn "# started logging ($l4p_dir/log4perl.conf)\n" if $l4p_dir;
 }
 

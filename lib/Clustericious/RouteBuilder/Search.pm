@@ -54,12 +54,29 @@ sub _build_search {
 
         my $p = $self->stash->{data};
 
+        if (my $mode = $p->{mode}) {
+            DEBUG "Called search mode $mode";
+            # A search "mode" indicates that we use a pre-canned
+            # query stored in the manager class.  This query is 
+            # run by calling a method named "search_$mode" on the
+            # manager class.  This method should return a count
+            # and a resultset (array ref of hashrefs).
+            my $method = "search_$mode";
+            my $got = $manager->$method($p);
+            ERROR "search_$mode did not return count/resultset"
+                 unless ref($got) eq 'HASH' && exists($got->{count}) && exists($got->{resultset});
+            $self->stash->{data} = $got;
+            return;
+        }
+
         # "nested_tables" automatically become with_objects
         my $nested = $manager->object_class->nested_tables;
         if ( $nested && @$nested && ref($p) eq 'HASH' ) {
             $p = { query => [ %$p ] } unless exists($p->{query});
             TRACE "nested tables : @$nested";
-            my $existing = $p->{with_objects} ||= [];
+            my $existing = $p->{with_objects} || [];
+            $existing = [ $existing ] unless ref $existing;
+            TRACE "existing tables : @$existing";
             $p->{with_objects} = [ uniq @$existing, @$nested ];
         }
 
