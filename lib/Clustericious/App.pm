@@ -66,7 +66,7 @@ sub startup {
                  } );
     }
     unless (my $url = $config->url(default => '')) {
-        $self->log->error("Configuration file should contain 'url'.");
+        $self->log->warn("Configuration file should contain 'url'.") unless $ENV{HARNESS_ACTIVE};
     }
     $self->helper( config => sub { $config } );
     my $client = Mojo::Client->singleton;
