@@ -152,22 +152,42 @@ sub _build_list {
         my $self  = shift;
         my $table = $self->stash('table');
         my $params = $self->stash('params');
-        my $limit = $params ? $params->param('limit') : 10;
+
+        # Use http range header for limit and offset.
+        my %range;
+        if (my $range = $self->req->headers->range) {
+            my ($items) = $range =~ /^items=(.*)$/;
+            my ($first,$last) = $items =~ /^(\d+)-(\d+)$/;
+            if (defined($first) && defined($last))  {
+                %range = ( offset => $first - 1, limit => ($last-$first+1) );
+            } else {
+                WARN "Unrecognized range header : $range";
+                %range = (limit => 10);
+            }
+        } else {
+            %range = (limit => 10);
+        }
 
         $self->app->log->debug("Listing $table");
-
         my $object_class = $finder->find_class($table)
             or return $self->render_not_found( $table );
-
         my $pkey = $object_class->meta->primary_key;
-
         my $manager = $object_class . '::Manager';
 
         my $objectlist = $manager->get_objects(
                              object_class => $object_class,
                              select => [ $pkey->columns ],
                              sort_by => [ $pkey->columns ],
-                             limit => $limit);
+                             %range);
+
+        # Return total count in "content-range".
+        my $count = $manager->get_objects_count( object_class => $object_class );
+        $self->res->headers->content_range(
+            sprintf( "items %d-%d/%d",
+                ( 1 + ($range{offset} || 0)),
+                ( ($range{offset} || 0) + @$objectlist ),
+                $count )
+        );
 
         my @l;
 
@@ -176,6 +196,7 @@ sub _build_list {
         }
 
         $self->stash->{data} = \@l;
+        $self->res->code(206); # "Partial content"
     };
 }
 
