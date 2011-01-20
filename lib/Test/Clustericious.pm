@@ -40,6 +40,8 @@ use Carp;
 use List::Util qw(first);
 use Clustericious::Config;
 
+require Test::More;
+
 =head1 ATTRIBUTES
 
 =head2 C<server>
@@ -230,9 +232,10 @@ sub retrieve_ok
     
     $url = $self->_url($url);
 
-    $self->get_ok($url, '', "GET $url")
-         ->status_is(200, "GET $url status is 200")
-         ->decoded_body;
+    $self->get_ok($url, '', "GET $url");
+    my $res = $self->tx->res;
+    Test::More::ok ($res->is_status_class(200), "GET $url status is 200");
+    return $self->decoded_body;
 }
 
 =head2 C<remove_ok>
