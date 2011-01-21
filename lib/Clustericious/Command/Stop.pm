@@ -36,6 +36,7 @@ examples :
 package Clustericious::Command::Stop;
 use Log::Log4perl qw/:easy/;
 use Clustericious::App;
+use Mojo::URL;
 
 use base 'Mojo::Command';
 use Clustericious::Config;
@@ -60,12 +61,17 @@ sub _stop_pidfile {
     -e $pid_file or do { WARN "No pid file $pid_file\n"; return; };
     my $pid = slurp $pid_file; # dies automatically
     chomp $pid;
+    _stop_pid($pid);
+}
+
+sub _stop_pid {
+    my $pid = shift;
     unless ($pid && $pid=~/\d/) {
-        WARN "pid file $pid_file had '$pid'.  Not stopping process.";
+        WARN "Bad pid '$pid'.  Not stopping process.";
         return;
     }
     kill 0, $pid or LOGDIE "$pid is not running";
-    INFO "Sending TERM to $pid (in $pid_file)";
+    INFO "Sending TERM to $pid";
     kill 'TERM', $pid;
     sleep 1;
     my $nap = 1;
@@ -74,6 +80,20 @@ sub _stop_pidfile {
         sleep $nap++;
         LOGDIE "pid $pid did not die" if $nap > 10;
     }
+}
+
+sub _stop_daemon {
+    my $listen = shift; # e.g. http://localhost:9123
+    my $port = Mojo::URL->new($listen)->port;
+    my $out = `lsof -i :$port | awk '{print \$2}'`;
+    my ($pid) = $out =~ /^PID$(.*)$/mxs;
+    $pid =~ s/\D//g if $pid;
+    unless ($pid) {
+        WARN "could not find pid for daemon on port $port";
+        return;
+    }
+    TRACE "Stopping pid $pid";
+    _stop_pid($pid);
 }
 
 sub run {
@@ -86,6 +106,7 @@ sub run {
         /daemon_prefork/ and _stop_pidfile($conf->daemon_prefork->pid);
         /plackup/        and _stop_pidfile($conf->plackup->pidfile);
         /lighttpd/       and _stop_pidfile($conf->lighttpd->env->lighttpd_pid);
+        /daemon/         and _stop_daemon($conf->daemon->listen);
     }
 
     1;

@@ -57,6 +57,10 @@ sub _build_search {
         my $items = $self->stash("items") or LOGDIE "no items in request";
 
         my $manager = $finder->find_class($items) or LOGDIE "no class for $items";
+        unless ($manager->can("object_class")) {
+            # Allow tables names in addition to plurals
+            $manager .= "::Manager";
+        }
         $self->app->plugins->run_hook('parse_data', $self);
 
         my $p = $self->stash->{data};
@@ -100,8 +104,10 @@ sub _build_search {
         push @args, object_class => $manager->object_class;
 
         my $count = $manager->get_objects_count( @args );
+        my @key = $manager->object_class->meta->primary_key_column_names;
         $self->stash->{data} = {
             count     => $count,
+            key       => (@key > 1 ? \@key : $key[0]),
             resultset => [ map $_->as_hash, @{ $manager->get_objects( @args ) } ]
            };
     };
