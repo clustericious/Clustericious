@@ -66,7 +66,7 @@ sub _stop_pidfile {
 
 sub _stop_pid {
     my $pid = shift;
-    unless ($pid && $pid=~/\d/) {
+    unless ($pid && $pid=~/^\d+$/) {
         WARN "Bad pid '$pid'.  Not stopping process.";
         return;
     }
@@ -87,7 +87,7 @@ sub _stop_daemon {
     my $port = Mojo::URL->new($listen)->port;
     my $out = `lsof -i :$port | awk '{print \$2}'`;
     my ($pid) = $out =~ /^PID$(.*)$/mxs;
-    $pid =~ s/\D//g if $pid;
+    $pid =~ s/\s//g if $pid;
     unless ($pid) {
         WARN "could not find pid for daemon on port $port";
         return;
