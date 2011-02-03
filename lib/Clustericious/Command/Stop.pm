@@ -85,9 +85,9 @@ sub _stop_pid {
 sub _stop_daemon {
     my $listen = shift; # e.g. http://localhost:9123
     my $port = Mojo::URL->new($listen)->port;
-    my $out = `lsof -i :$port | awk '{print \$2}'`;
-    my ($pid) = $out =~ /^PID$(.*)$/mxs;
-    $pid =~ s/\s//g if $pid;
+    my @got = `lsof -n -FR -i:$port`;
+    # Only the first one; others may be child processes
+    my ($pid) = $got[0] =~ /^p(\d+)$/;
     unless ($pid) {
         WARN "could not find pid for daemon on port $port";
         return;
