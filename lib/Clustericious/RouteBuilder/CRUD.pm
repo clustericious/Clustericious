@@ -39,7 +39,6 @@ more documentation
 
 use strict;
 use Log::Log4perl qw/:easy/;
-use List::MoreUtils qw(any);
 
 use Sub::Exporter -setup => {
     exports => [
@@ -64,7 +63,7 @@ sub _build_create {
         $self->app->plugins->run_hook('parse_data', $self);
         my $object_class = $finder->find_class($table);
         my $object = $object_class->new(%{$self->stash->{data}});
-        $object->save or $self->app->logdie( $object->errors );
+        $object->save or LOGDIE( $object->errors );
         $self->stash->{data} = $object->as_hash;
     };
 }
@@ -100,7 +99,7 @@ sub _build_delete {
             or return $self->render_not_found( join '/',$table,@keys );
         $self->app->log->debug("Deleting $table @keys");
 
-        $obj->delete or $self->app->logdie($obj->errors);
+        $obj->delete or LOGDIE($obj->errors);
         $self->stash->{text} = "ok";
     }
 }
@@ -130,15 +129,15 @@ sub _build_update {
 
         while (my ($key, $value) = each %{$self->stash->{data}})
         {
-            next if any { $key eq $_ } @$pkeys, @$ukeys; # Skip key fields
+            next if grep { $key eq $_ } @$pkeys, @$ukeys; # Skip key fields
 
-            $self->app->logdie("Can't update $key")
-                unless any { $key eq $_ } @$columns, @$nested;
+            LOGDIE("Can't update $key in for $table (only @$columns, @$nested)")
+                unless grep { $key eq $_ } @$columns, @$nested;
 
-            $obj->$key($value) or $self->app->logdie($obj->errors);
+            $obj->$key($value) or LOGDIE($obj->errors);
         }
 
-        $obj->save or $self->app->logdie($obj->errors);
+        $obj->save or LOGDIE($obj->errors);
 
         $self->stash->{data} = $obj->as_hash;
     };

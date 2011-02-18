@@ -86,6 +86,7 @@ sub _stop_daemon {
     my $listen = shift; # e.g. http://localhost:9123
     my $port = Mojo::URL->new($listen)->port;
     my @got = `lsof -n -FR -i:$port`;
+    return unless @got && $got[0];
     # Only the first one; others may be child processes
     my ($pid) = $got[0] =~ /^p(\d+)$/;
     unless ($pid) {
