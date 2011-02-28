@@ -10,6 +10,7 @@ package Fake::Object::Thing;
 
 sub new     { my $class = shift; bless { got => {@_} }, $class; }
 sub save    { return 1; }
+sub load    { return 1; }
 sub as_hash { return shift->{got} };
 
 package Fake::Object;
