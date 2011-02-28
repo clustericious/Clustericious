@@ -39,6 +39,7 @@ more documentation
 
 use strict;
 use Log::Log4perl qw/:easy/;
+use Data::Dumper;
 
 use Sub::Exporter -setup => {
     exports => [
@@ -62,8 +63,10 @@ sub _build_create {
         TRACE "create $table";
         $self->app->plugins->run_hook('parse_data', $self);
         my $object_class = $finder->find_class($table);
+        TRACE "data : ".Dumper($self->stash("data"));
         my $object = $object_class->new(%{$self->stash->{data}});
         $object->save or LOGDIE( $object->errors );
+        $object->load or LOGDIE "Could not reload object : ".$object->errors;
         $self->stash->{data} = $object->as_hash;
     };
 }
@@ -134,6 +137,7 @@ sub _build_update {
             LOGDIE("Can't update $key in for $table (only @$columns, @$nested)")
                 unless grep { $key eq $_ } @$columns, @$nested;
 
+            TRACE "Setting $key to $value for $table @keys";
             $obj->$key($value) or LOGDIE($obj->errors);
         }
 
