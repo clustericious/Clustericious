@@ -14,6 +14,7 @@ my $persist;  # Always find the last one created
 
 sub new     { my $class = shift; $persist = bless { got => {@_} }, $class; }
 sub save    { return 1; }
+sub load    { 1; }
 sub as_hash { return shift->{got} };
 
 package Fake::Object;
