@@ -5,13 +5,14 @@ author:
 build_requires:
   Clustericious::Config: 0.01
   File::ShareDir: 0
+  File::Slurp: 0
   Hash::Merge: 0
   IO::Prompt: 0
   JSON::XS: 0
   List::MoreUtils: 0
   Module::Build: 0.36
   MojoX::Log::Log4perl: 0
-  Mojolicious: 1.01
+  Mojolicious: 1.11
   Plack: 0
   Sub::Exporter: 0
   Sys::Hostname: 0
@@ -29,7 +30,7 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.28
+    version: 0.29
   Clustericious::App:
     file: lib/Clustericious/App.pm
   Clustericious::Command::Generate:
@@ -68,4 +69,4 @@ requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.28
+version: 0.29
