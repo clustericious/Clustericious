@@ -140,7 +140,7 @@ sub dump_api {
         $pat->_compile;
         my %symbols = map { $_ => "<$_>" } @{ $pat->symbols };
         my %conditions = @{ $r->conditions };
-        my $method = uc join ',', @{ $conditions{method} || ["GET"] };
+        my $method = uc join ',', @{ $r->via || ["GET"] };
         if ($symbols{table}) {
             for my $table (Rose::Planter->tables) {
                 $symbols{table} = $table;
