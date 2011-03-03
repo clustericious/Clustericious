@@ -15,6 +15,7 @@ package Clustericious::App;
 use List::Util qw/first/;
 use List::MoreUtils qw/uniq/;
 use MojoX::Log::Log4perl;
+use Mojo::Client;
 use base 'Mojolicious';
 
 use Clustericious::Controller;
