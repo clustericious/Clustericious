@@ -42,6 +42,7 @@
 \bBuild.COM$
 \bBUILD.COM$
 \bbuild.com$
+\.swp
 
 # Avoid archives of this distribution
 \bClustericious-[\d\.\_]+
