@@ -41,9 +41,6 @@ share/MbdAppTemplate/t/001_basic.t
 share/MbdAppTemplate/t/999_pod.t
 share/MbdAppTemplate/t/999_pod_coverage.t
 share/MbdAppTemplate/t/999_stop_db.t
-share/MbdAppTemplate/templates/exception.html.ep
-share/MbdAppTemplate/templates/layouts/default.html.ep
-share/MbdAppTemplate/templates/not_found.html.ep
 t/app.t
 t/auth.t
 t/basic.t
