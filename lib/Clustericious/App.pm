@@ -16,6 +16,7 @@ use List::Util qw/first/;
 use List::MoreUtils qw/uniq/;
 use MojoX::Log::Log4perl;
 use Mojo::Client;
+use Clustericious::Templates;
 use base 'Mojolicious';
 
 use Clustericious::Controller;
@@ -39,6 +40,7 @@ and sets up logging for the client using log::log4perl.
 sub startup {
     my $self = shift;
 
+    $self->renderer->default_template_class("Clustericious::Templates");
     $self->controller_class('Clustericious::Controller');
     $self->init_logging();
     $self->secret( (ref $self || $self) );
