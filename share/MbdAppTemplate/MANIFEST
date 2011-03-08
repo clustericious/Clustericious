@@ -14,6 +14,3 @@ t/001_basic.t
 t/999_pod.t
 t/999_pod_coverage.t
 t/999_stop_db.t
-templates/exception.html.ep
-templates/layouts/default.html.ep
-templates/not_found.html.ep
