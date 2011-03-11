@@ -67,7 +67,7 @@ sub startup {
                     $url->base->parse($base);
                     $url;
                  } );
-        $self->helper( base_tag => sub { qq[<base href="$base" />] } );
+        $self->helper( base_tag => sub { $self->_tag('base', href => $base, @_) } );
     }
     unless (my $url = $config->url(default => '')) {
         $self->log->warn("Configuration file should contain 'url'.") unless $ENV{HARNESS_ACTIVE};
