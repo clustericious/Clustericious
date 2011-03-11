@@ -17,6 +17,7 @@ use List::MoreUtils qw/uniq/;
 use MojoX::Log::Log4perl;
 use Mojo::Client;
 use Clustericious::Templates;
+use Mojo::ByteStream qw/b/;
 use base 'Mojolicious';
 
 use Clustericious::Controller;
@@ -67,7 +68,7 @@ sub startup {
                     $url->base->parse($base);
                     $url;
                  } );
-        $self->helper( base_tag => sub { $self->_tag('base', href => $base, @_) } );
+        $self->helper( base_tag => sub { b( qq[<base href="$base" />] ) } );
     }
     unless (my $url = $config->url(default => '')) {
         $self->log->warn("Configuration file should contain 'url'.") unless $ENV{HARNESS_ACTIVE};
