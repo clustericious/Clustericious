@@ -113,7 +113,7 @@ sub testdata
                 $filename;
 
     my $content = slurp($filename) or croak "Missing $filename";
-    
+
     return decode_json($content) if $filename =~ /json$/;
 
     return Load($content) if $filename =~ /yaml$/;
