@@ -134,7 +134,7 @@ sub _build_update {
         {
             next if grep { $key eq $_ } @$pkeys, @$ukeys; # Skip key fields
 
-            LOGDIE("Can't update $key in for $table (only @$columns, @$nested)")
+            LOGDIE("Can't update $key in $table (only @$columns, @$nested)")
                 unless grep { $key eq $_ } @$columns, @$nested;
 
             TRACE "Setting $key to $value for $table @keys";
