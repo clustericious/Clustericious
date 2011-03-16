@@ -38,7 +38,7 @@ if ($auth_url) {
 
 $t->get_ok("/")->status_is(200)->content_like(qr/unprotected/, "got unprotected content");
 
-my $port = $t->client->test_server;
+my $port = $t->ua->test_server;
 
 $t->get_ok("/sensitive")->status_is(401);
 

@@ -15,7 +15,7 @@ package Clustericious::App;
 use List::Util qw/first/;
 use List::MoreUtils qw/uniq/;
 use MojoX::Log::Log4perl;
-use Mojo::Client;
+use Mojo::UserAgent;
 use Clustericious::Templates;
 use Mojo::ByteStream qw/b/;
 use base 'Mojolicious';
@@ -74,8 +74,8 @@ sub startup {
         $self->log->warn("Configuration file should contain 'url'.") unless $ENV{HARNESS_ACTIVE};
     }
     $self->helper( config => sub { $config } );
-    my $client = Mojo::Client->singleton;
-    $client->log($self->log);
+    my $ua = Mojo::UserAgent->new;
+    $ua->log($self->log);
 }
 
 =item init_logging

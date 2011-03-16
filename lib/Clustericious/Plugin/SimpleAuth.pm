@@ -2,7 +2,7 @@ package Clustericious::Plugin::SimpleAuth;
 
 use Log::Log4perl qw/:easy/;
 use Mojo::ByteStream qw/b/;
-use Mojo::Client;
+use Mojo::UserAgent;
 use Mojo::URL;
 
 use Clustericious::Config;
@@ -76,7 +76,7 @@ sub authenticate {
     };
 
     my $config_url = $c->config->simple_auth->url;
-    my $client = Mojo::Client->singleton;
+    my $ua = Mojo::UserAgent->new;
 
     my ($method,$str) = split / /,$auth;
     my $userinfo = b($str)->b64_decode;
@@ -84,7 +84,7 @@ sub authenticate {
 
     # VIP treatment for some hosts
     my $ip = $c->tx->remote_address;
-    if ($client->get("$config_url/host/$ip/trusted")->res->code==200) {
+    if ($ua->get("$config_url/host/$ip/trusted")->res->code==200) {
         TRACE "Host $ip is trusted, not authenticating";
         $c->stash(user => $user);
         return 1;
@@ -93,7 +93,7 @@ sub authenticate {
     # Everyone else get in line
     my $auth_url = Mojo::URL->new("$config_url/auth");
     $auth_url->userinfo($userinfo);
-    my $check = $client->head($auth_url)->res->code();
+    my $check = $ua->head($auth_url)->res->code();
     unless (defined($check)) {
         WARN ("Error connecting to simple auth at $config_url");
         $c->render(text => "auth server down", status => 403);
@@ -118,7 +118,7 @@ sub authorize {
     $resource =~ s[^/][];
     my $url = Mojo::URL->new( join '/', $c->config->simple_auth->url,
         "authz/user", $user, $action, $resource );
-    my $code = Mojo::Client->singleton->head($url)->res->code;
+    my $code = Mojo::UserAgent->new->head($url)->res->code;
     return 1 if $code && $code == 200;
     INFO "Unauthorized access by $user to $action $resource";
     $c->render(text => "unauthorized", status => 403);

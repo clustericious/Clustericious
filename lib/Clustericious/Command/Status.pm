@@ -10,7 +10,7 @@ Report the status of a running clustericious daemon, based on its start_mode.
 
 package Clustericious::Command::Status;
 use Log::Log4perl qw/:easy/;
-use Mojo::Client;
+use Mojo::UserAgent;
 
 use Clustericious::App;
 use Clustericious::Config;
@@ -85,7 +85,7 @@ sub run {
 
     # Do a HEAD request if the webserver(s) are ok.
     if ((grep {$_->{state} eq 'ok'} @status)==@status) {
-        my $res = Mojo::Client->new->head($conf->url)->res;
+        my $res = Mojo::UserAgent->new->head($conf->url)->res;
         printf qq[%10s : %-10s (%d %s)\n], "url", $conf->url, $res->code, $res->message;
     }
 
