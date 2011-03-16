@@ -81,17 +81,18 @@ sub _build_proxy {
         my $headers = $self->req->headers->to_hash;
         delete $headers->{Host};
         $req->headers->from_hash($headers);
-        $self->client->start($tx, sub {
-            my ($client, $proxytx) = @_;
-            $self->tx->resume;
+        $self->ua->start($tx, sub {
+            my ($ua, $proxytx) = @_;
+            Mojo::IOLoop->stop;
             my $res = $self->tx->res;
             my $pr_res = $proxytx->res;
             $res->code($pr_res->code);
             $res->message($pr_res->message);
             $res->headers->content_type($pr_res->headers->content_type);
             $res->body($pr_res->body);
-            $self->stash->{'rendered'} = 1;  # Cheat
+            $self->rendered;
         });
+        Mojo::IOLoop->start;
     }
 }
 
