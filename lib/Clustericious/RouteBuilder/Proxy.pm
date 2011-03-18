@@ -11,18 +11,22 @@ Clustericious::RouteBuilder::Proxy -- build proxy routes easily
     use Clustericious::RouteBuilder::Proxy
       "proxy" => {
         to            => "http://google.com:80",
-        strip_prefix  => "/google"
+        strip_prefix  => "/google",
         -as           => "proxy_google",
       },
       "proxy" => {
         app => 'MyServer',
         -as => "proxy_local"
       },
-      ;
+      proxy_service => {  # Bulk mapping
+             services => { "froogle" => "http://froogle.com",
+                           "fraggle" => "http://fraggle.com" }
+      };
 
     ...
-    get => "/google/:somewhere"    => \&proxy_google;
-    get => "/something/:somewhere" => \&proxy_local;
+    get '/google/:somewhere'    => \&proxy_google;
+    get '/something/:somewhere' => \&proxy_local;
+    get '/:service/(*whatever)' => \&proxy_service;
 
 =head1 DESCRIPTION
 
@@ -42,6 +46,7 @@ use strict;
 use Sub::Exporter -setup => {
     exports => [
         "proxy" => \&_build_proxy,
+        "proxy_service" => \&_build_proxy_service,
     ],
     collectors => ['defaults'],
 };
@@ -90,6 +95,23 @@ sub _build_proxy {
         $res->body($pr_res->body);
         $self->stash->{'rendered'} = 1;  # Cheat
         $self->rendered;
+    }
+}
+
+sub _build_proxy_service {
+    my ( $class, $name, $arg, $defaults ) = @_;
+    my $name2url = $arg->{services}; # map name to url
+    my $service2sub;
+    for my $service (keys %$name2url) {
+        my $dest = $name2url->{$service} or next;
+        TRACE "Building proxy for $service to $dest";
+        my $sub = $class->_build_proxy( "dummy", { to => $dest, strip_prefix => "/$service" } );
+        $service2sub->{$service} = $sub;
+    }
+    return sub {
+        my $c = shift;
+        my $service = $c->stash("service") or die "no service in url";
+        $service2sub->{$service}->($c);
     }
 }
 
