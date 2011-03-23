@@ -15,6 +15,8 @@ Just inherits from Mojolicious::Renderer with some customizations.
 package Clustericious::Renderer;
 
 use base 'Mojolicious::Renderer';
+use strict;
+use warnings;
 
 =item render
 

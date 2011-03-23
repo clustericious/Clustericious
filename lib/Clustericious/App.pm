@@ -45,6 +45,9 @@ sub startup {
     $self->renderer->default_template_class("Clustericious::Templates");
     $self->controller_class('Clustericious::Controller');
     $self->renderer(Clustericious::Renderer->new());
+    my $home = $self->home;
+    $self->renderer->root($home->rel_dir('templates'));
+
     $self->init_logging();
     $self->secret( (ref $self || $self) );
 
@@ -55,8 +58,16 @@ sub startup {
     # "default" ones are :
     # Clustericious::RouteBuilder::Default->add_routes($self);
 
-    $self->plugins->namespaces(['Clustericious::Plugin']);
+    $self->plugins->namespaces(['Mojolicious::Plugin','Clustericious::Plugin']);
     $self->plugin('autodata_handler');
+    $self->plugin('default_helpers');
+    $self->plugin('agent_condition');
+    $self->plugin('tag_helpers');
+    $self->plugin('epl_renderer');
+    $self->plugin('ep_renderer');
+    $self->plugin('request_timer');
+    $self->plugin('powered_by');
+
     my $config = Clustericious::Config->new(ref $self);
     if ($config->simple_auth(default => '')) {
         $self->log->info("Loading auth plugin");
