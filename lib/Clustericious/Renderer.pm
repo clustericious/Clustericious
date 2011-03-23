@@ -27,7 +27,7 @@ sub render {
     my $self = shift;
     my ($c, $args) = @_;
 
-    $c->stash->{handler} = "autodata" if defined($c->stash("autodata")) || exists($args->{autodata});
+    $c->stash->{handler} = "autodata" if exists($c->stash->{autodata}) || exists($args->{autodata});
     $self->SUPER::render(@_);
 }
 

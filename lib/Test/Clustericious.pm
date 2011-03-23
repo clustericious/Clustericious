@@ -267,7 +267,7 @@ sub remove_ok
  $t->notfound_ok($url[, $object]);
 
  GETs the url, or if $object specified, POSTs the encoded object
- and checks for a 404 Not found return.
+ and checks for a 404 response code and "not found" or "null".
 
  This counts as 3 TAP tests.
 
@@ -291,7 +291,7 @@ sub notfound_ok
     };
 
     $self->status_is(404, "$url status is 404")
-         ->content_like(qr/Not found/i, "$url content is Not Found");
+         ->content_like(qr/(Not found|null)/i, "$url content is null or Not Found");
 }
 
 =head2 C<truncate_ok>
