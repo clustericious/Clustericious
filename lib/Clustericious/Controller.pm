@@ -47,7 +47,7 @@ sub redirect_to {
 
 sub render_not_found {
     my $self = shift;
-    delete $self->stash->{data};
+    delete $self->stash->{autodata};
     $self->SUPER::render_not_found(@_);
 }
 

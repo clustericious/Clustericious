@@ -61,9 +61,9 @@ sub _build_search {
             # Allow tables names in addition to plurals
             $manager .= "::Manager";
         }
-        $self->app->plugins->run_hook('parse_data', $self);
+        $self->app->plugins->run_hook('parse_autodata', $self);
 
-        my $p = $self->stash->{data};
+        my $p = $self->stash->{autodata};
 
         if (my $mode = $p->{mode}) {
             DEBUG "Called search mode $mode";
@@ -76,7 +76,7 @@ sub _build_search {
             my $got = $manager->$method($p);
             ERROR "search_$mode did not return count/resultset"
                  unless ref($got) eq 'HASH' && exists($got->{count}) && exists($got->{resultset});
-            $self->stash->{data} = $got;
+            $self->stash(autodata => $got);
             return;
         }
 
@@ -95,11 +95,11 @@ sub _build_search {
 
         my $count = $manager->get_objects_count( @args );
         my @key = $manager->object_class->meta->primary_key_column_names;
-        $self->stash->{data} = {
+        $self->stash(autodata => {
             count     => $count,
             key       => (@key > 1 ? \@key : $key[0]),
             resultset => [ map $_->as_hash, @{ $manager->get_objects( @args ) } ]
-           };
+           });
     };
 }
 

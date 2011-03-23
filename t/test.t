@@ -21,8 +21,8 @@ get    '/object/id' => sub { my $c = shift;
                                     $c->render_text('Not Found') } };
 
 post   '/object'    => sub { my $c = shift;
-                             $c->app->plugins->run_hook('parse_data', $c);
-                             $object = $c->stash->{data};
+                             $c->app->plugins->run_hook('parse_autodata', $c);
+                             $object = $c->stash->{autodata};
                              $c->render_json($object) };
 
 Delete '/object/id' => sub { my $c = shift;

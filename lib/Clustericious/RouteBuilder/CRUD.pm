@@ -61,13 +61,13 @@ sub _build_create {
         $self->app->log->info("called do_create");
         my $table = $self->stash->{table};
         TRACE "create $table";
-        $self->app->plugins->run_hook('parse_data', $self);
+        $self->app->plugins->run_hook('parse_autodata', $self);
         my $object_class = $finder->find_class($table);
-        TRACE "data : ".Dumper($self->stash("data"));
-        my $object = $object_class->new(%{$self->stash->{data}});
+        TRACE "data : ".Dumper($self->stash("autodata"));
+        my $object = $object_class->new(%{$self->stash->{autodata}});
         $object->save or LOGDIE( $object->errors );
         $object->load or LOGDIE "Could not reload object : ".$object->errors;
-        $self->stash->{data} = $object->as_hash;
+        $self->stash(autodata => $object->as_hash);
     };
 }
 
@@ -84,7 +84,7 @@ sub _build_read {
             or return $self->render_not_found( join '/',$table,@keys );
         $self->app->log->debug("Viewing $table @keys");
 
-        $self->stash->{data} = $obj->as_hash;
+        $self->stash(autodata => $obj->as_hash);
 
     };
 }
@@ -130,7 +130,7 @@ sub _build_update {
         my $columns = $obj->meta->column_names;
         my $nested = $obj->nested_tables;
 
-        while (my ($key, $value) = each %{$self->stash->{data}})
+        while (my ($key, $value) = each %{$self->stash->{autodata}})
         {
             next if grep { $key eq $_ } @$pkeys, @$ukeys; # Skip key fields
 
@@ -143,7 +143,7 @@ sub _build_update {
 
         $obj->save or LOGDIE($obj->errors);
 
-        $self->stash->{data} = $obj->as_hash;
+        $self->stash->{autodata} = $obj->as_hash;
     };
 }
 
@@ -198,7 +198,7 @@ sub _build_list {
             push(@l, join('/', map { $obj->$_ } $pkey->columns ));
         }
 
-        $self->stash->{data} = \@l;
+        $self->stash(autodata => \@l);
         $self->res->code(206); # "Partial content"
     };
 }

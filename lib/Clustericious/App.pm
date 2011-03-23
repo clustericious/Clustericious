@@ -21,6 +21,7 @@ use Mojo::ByteStream qw/b/;
 use base 'Mojolicious';
 
 use Clustericious::Controller;
+use Clustericious::Renderer;
 use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
 
@@ -33,7 +34,7 @@ our @Confdirs = $ENV{TEST_HARNESS} ?
 
 =item startup
 
-Adds the data_handler plugin, common routes,
+Adds the autodata_handler plugin, common routes,
 and sets up logging for the client using log::log4perl.
 
 =cut
@@ -43,6 +44,7 @@ sub startup {
 
     $self->renderer->default_template_class("Clustericious::Templates");
     $self->controller_class('Clustericious::Controller');
+    $self->renderer(Clustericious::Renderer->new());
     $self->init_logging();
     $self->secret( (ref $self || $self) );
 
@@ -54,7 +56,7 @@ sub startup {
     # Clustericious::RouteBuilder::Default->add_routes($self);
 
     $self->plugins->namespaces(['Clustericious::Plugin']);
-    $self->plugin('data_handler');
+    $self->plugin('autodata_handler');
     my $config = Clustericious::Config->new(ref $self);
     if ($config->simple_auth(default => '')) {
         $self->log->info("Loading auth plugin");
