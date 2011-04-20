@@ -19,6 +19,7 @@ use Mojo::UserAgent;
 use Clustericious::Templates;
 use Mojo::ByteStream qw/b/;
 use Data::Dumper;
+use Log::Log4perl qw/:easy/;
 use base 'Mojolicious';
 
 use Clustericious::Controller;
@@ -69,8 +70,6 @@ sub startup {
     $self->plugin('request_timer');
     $self->plugin('powered_by');
 
-
-
     my $config = Clustericious::Config->new(ref $self);
     if ($config->simple_auth(default => '')) {
         $self->log->info("Loading auth plugin");
@@ -79,9 +78,7 @@ sub startup {
         $self->log->info("No auth configured");
     }
 
-    #
     # Helpers
-    #
     if (my $base = $config->url_base(default => '')) {
         $self->helper( url_for =>
               sub { my $url = shift->url_for(@_);
@@ -90,19 +87,12 @@ sub startup {
                  } );
         $self->helper( base_tag => sub { b( qq[<base href="$base" />] ) } );
     }
-
     unless (my $url = $config->url(default => '')) {
         $self->log->warn("Configuration file should contain 'url'.") unless $ENV{HARNESS_ACTIVE};
     }
     $self->helper( config => sub { $config } );
 
-    $self->helper(
-       dumper => sub {
-         shift;
-         Data::Dumper->new([@_])->Maxdepth(10)->Indent(1)->Terse(1)->Dump;
-       }
-     );
-
+    # Set log for user agent singleton
     my $ua = Mojo::UserAgent->new;
     $ua->log($self->log);
 }
