@@ -3,6 +3,7 @@ use Clustericious::Config;
 use Log::Log4perl qw/:easy/;
 
 use base 'Mojolicious::Controller';
+
 use strict;
 use warnings;
 
@@ -44,20 +45,6 @@ sub redirect_to {
 
     return $self;
 }
-
-$Mojolicious::Controller::EXCEPTION =
-  Mojo::Command->new->get_data( 'exception.html.ep',
-    "Clustericious::Templates" );
-
-$Mojolicious::Controller::DEVELOPMENT_EXCEPTION =
-    $Mojolicious::Controller::EXCEPTION;
-
-$Mojolicious::Controller::NOT_FOUND =
-  Mojo::Command->new->get_data( 'not_found.html.ep',
-    "Clustericious::Templates" );
-
-$Mojolicious::Controller::DEVELOPMENT_NOT_FOUND =
-    $Mojolicious::Controller::NOT_FOUND;
 
 sub render_not_found {
     my $self = shift;

@@ -44,9 +44,9 @@ and sets up logging for the client using log::log4perl.
 sub startup {
     my $self = shift;
 
-    $self->renderer->default_template_class("Clustericious::Templates");
     $self->controller_class('Clustericious::Controller');
     $self->renderer(Clustericious::Renderer->new());
+    $self->renderer->default_template_class("Clustericious::Templates");
     my $home = $self->home;
     $self->renderer->root($home->rel_dir('templates'));
 
