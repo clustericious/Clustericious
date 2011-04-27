@@ -46,11 +46,20 @@ In routes :
 
  authorize "action", "resource";
 
- get "/five"; # => check for permission to do $action on $resource
+ get "/five"; # check for permission to do $action on $resource
 
  authorize "action";
 
- get '/four'; # => "use the url path as the name of the resource".
+ get '/four'; # use the url path as the name of the resource
+
+ authorize "<method>";
+
+ get '/six'; # use the request method as the $action, and the url as the path
+
+ authorize "<method>", "/myprefix/<path>";
+
+ get 'seven'; # fill in <path> with request path to compute the resource
+
 
 =cut
 

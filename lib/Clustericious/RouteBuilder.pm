@@ -133,8 +133,14 @@ sub add_routes {
                     cb => sub {
                         my $c = shift;
                         return 1 unless $c->config->simple_auth(default => '');
+                        # Dynamically compute resource/action
+                        my ($d_resource,$d_action) = ($resource, $action);
+                        $d_resource =~ s/<path>/$c->req->url->path/e if $d_resource;
+                        $d_resource ||= $c->req->url->path;
+                        $d_action =~ s/<method>/$c->req->method/e if $d_action;
+                        $d_action ||= $c->req->method;
                         $c->app->plugins->load_plugin('simple_auth')
-                            ->authorize( $c, $action, $resource || $c->req->url->path );
+                            ->authorize( $c, $d_action, $d_resource );
                       } });
             next;
          }

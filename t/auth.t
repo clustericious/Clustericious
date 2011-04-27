@@ -23,6 +23,10 @@ authorize 'kick';
 
 get '/football' => sub { shift->render_text("success"); };
 
+authorize '<method>', '<path>';
+
+get '/methodpath' => sub { shift->render_text("success"); };
+
 package main;
 use Clustericious::Config;
 
@@ -51,7 +55,9 @@ SKIP: {
         ->status_is(200)
         ->content_like(qr/success/);
     $t->get_ok("http://elmer:fudd\@localhost:$port/football")->status_is(403);
-
+    $t->get_ok("http://charliebrown:snoopy\@localhost:$port/methodpath")
+        ->status_is(200)
+        ->content_like(qr/success/);
 }
 
 1;
