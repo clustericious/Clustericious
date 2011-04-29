@@ -123,7 +123,8 @@ sub _build_update {
         my $obj = $finder->find_object($table, @keys)
             or return $self->render_not_found( join '/',$table,@keys );
 
-        $self->app->log->debug("Updating $table @keys");
+        TRACE "Updating $table @keys";
+        $self->app->plugins->run_hook('parse_autodata', $self);
 
         my $pkeys = $obj->meta->primary_key_column_names;
         my $ukeys = $obj->meta->unique_keys_column_names;
