@@ -83,7 +83,7 @@ sub startup {
         $self->helper( url_for =>
               sub { my $url = shift->url_for(@_);
                     $url->base->parse($base);
-                    b($url);
+                    $url;
                  } );
         $self->helper( base_tag => sub { b( qq[<base href="$base" />] ) } );
     }
