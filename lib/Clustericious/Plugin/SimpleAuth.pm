@@ -105,7 +105,7 @@ sub authenticate {
     my $check = $ua->head($auth_url)->res->code();
     unless (defined($check)) {
         WARN ("Error connecting to simple auth at $config_url");
-        $c->render(text => "auth server down", status => 403);
+        $c->render(text => "auth server down", status => 401);
         return 0;
     }
     if ($check == 200) {
@@ -113,7 +113,7 @@ sub authenticate {
         return 1;
     }
     INFO "Authentication denied for $user";
-    $c->render(text => "authentication failure", status => 403);
+    $c->render(text => "authentication failure", status => 401);
     return 0;
 }
 
