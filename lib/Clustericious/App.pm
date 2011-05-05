@@ -20,6 +20,7 @@ use Clustericious::Templates;
 use Mojo::ByteStream qw/b/;
 use Data::Dumper;
 use Log::Log4perl qw/:easy/;
+use Mojo::URL;
 use base 'Mojolicious';
 
 use Clustericious::Controller;
@@ -80,11 +81,6 @@ sub startup {
 
     # Helpers
     if (my $base = $config->url_base(default => '')) {
-        $self->helper( url_for =>
-              sub { my $url = shift->url_for(@_);
-                    $url->base->parse($base);
-                    $url;
-                 } );
         $self->helper( base_tag => sub { b( qq[<base href="$base" />] ) } );
     }
     unless (my $url = $config->url(default => '')) {

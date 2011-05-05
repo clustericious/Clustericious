@@ -7,6 +7,21 @@ use base 'Mojolicious::Controller';
 use strict;
 use warnings;
 
+sub url_for {
+    my $c = shift;
+
+    # link_to calls url_for on a Mojo::URL which for some reason
+    # causes /a/b?c=d to not work properly (? is escaped)
+    return $_[0] if @_==1 && ref($_[0]) && $_[0]->isa("Mojo::URL");
+
+    my $base = Clustericious::Config->new( ref $c->app )->url_base( default => '' );
+    my $url = $c->SUPER::url_for(@_);
+    return $url unless $base;
+    $url->base->parse($base);
+    return $url;
+}
+
+
 =head1 redirect_to
 
 Copied from Mojolicious::Controller, but works around
