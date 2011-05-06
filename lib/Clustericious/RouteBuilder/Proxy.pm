@@ -67,10 +67,17 @@ sub _build_proxy {
         $url->host( $dest_url->host );
         $url->port( $dest_url->port );
 
+        # NB: if there is a $base_url for this service, then any parts from
+        # that should be stripped too.  So, this while() loop will remove
+        # anything before the desired prefix.
         if ($strip_prefix) {
-            my $path = $url->path;
-            $path =~ s/^$strip_prefix//;
-            $url->path($path);
+            $strip_prefix =~ s[^/][];
+            my @parts = @{ $url->path->parts };
+            my $last = '';
+            while (my $got = shift @parts) {
+                last if $got eq $strip_prefix;
+            }
+            $url->path->parts([@parts]);
         }
 
         TRACE "proxying " . $self->req->method . ' ' .
