@@ -87,6 +87,13 @@ sub startup {
         $self->log->warn("Configuration file should contain 'url'.") unless $ENV{HARNESS_ACTIVE};
     }
     $self->helper( config => sub { $config } );
+    $self->helper( url_with => sub {
+        my $c = shift;
+        my $q = $c->req->url->clone->query;
+        my $url = $c->url_for->clone;
+        $url->query($q);
+        $url;
+    });
 
     # Set log for user agent singleton
     my $ua = Mojo::UserAgent->new;
