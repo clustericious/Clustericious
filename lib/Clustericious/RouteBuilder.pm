@@ -89,6 +89,7 @@ sub import {
     *{"${caller}::post"}         = sub { $route_sub->('post', @_) };
     *{"${caller}::put"}          = sub { $route_sub->('put', @_) };
     *{"${caller}::Delete"}       = sub { $route_sub->('delete', @_) };
+    *{"${caller}::del"}          = sub { $route_sub->('delete', @_) };
     *{"${caller}::websocket"}    = sub { $route_sub->('websocket', @_) };
     *{"${caller}::authenticate"} = sub { $route_sub->('authenticate',@_) };
     *{"${caller}::authorize"}    = sub { $route_sub->('authorize',@_) };
