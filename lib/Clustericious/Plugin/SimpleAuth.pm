@@ -104,6 +104,7 @@ sub authenticate {
     $auth_url->userinfo($userinfo);
     my $check = $ua->head($auth_url)->res->code();
     unless (defined($check)) {
+        $c->res->headers->www_authenticate("Basic '$realm'");
         WARN ("Error connecting to simple auth at $config_url");
         $c->render(text => "auth server down", status => 401);
         return 0;
@@ -113,6 +114,7 @@ sub authenticate {
         return 1;
     }
     INFO "Authentication denied for $user";
+    $c->res->headers->www_authenticate("Basic '$realm'");
     $c->render(text => "authentication failure", status => 401);
     return 0;
 }
