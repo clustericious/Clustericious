@@ -6,7 +6,7 @@ Clustericious -- mojolicious based cluster processing system
 
 =cut
 
-our $VERSION = '0.52';
+our $VERSION = '0.53';
 
 1;
 
