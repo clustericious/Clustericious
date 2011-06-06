@@ -38,7 +38,9 @@ sub run {
     my $lighttpd = qx[which lighttpd] or LOGDIE "could not find lighttpd in $ENV{PATH}";
     chomp $lighttpd;
     DEBUG "starting $lighttpd @args";
-    system( $lighttpd, @args )==0 or die "$lighttpd failed to start : $!\n";
+    system( $lighttpd, @args ) == 0
+      or die "could not start $lighttpd @args ($?) "
+      . ( ${^CHILD_ERROR_NATIVE} || '' );
 }
 
 1;

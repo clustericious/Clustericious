@@ -44,7 +44,9 @@ sub run {
 
     DEBUG "starting $plackup @args";
     delete $ENV{MOJO_COMMANDS_DONE};
-    system($plackup, @args)==0 or die "could not start $plackup @args";
+    system( $plackup, @args ) == 0
+      or die "could not start $plackup @args ($?) "
+      . ( ${^CHILD_ERROR_NATIVE} || '' );
 }
 
 1;
