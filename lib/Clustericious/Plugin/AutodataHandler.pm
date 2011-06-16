@@ -115,7 +115,7 @@ sub _autodata_renderer
 
 sub _autodata_parse
 {
-    my ($self, $c) = @_;
+    my ($c) = @_;
 
     my $type = ($c->req->headers->content_type and
                 $types{$c->req->headers->content_type})
