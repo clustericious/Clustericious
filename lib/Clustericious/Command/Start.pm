@@ -8,12 +8,11 @@ Start a daemon using the config file and the start_mode.
 
 =head1 EXAMPLE
 
-For a prefork daemon, the config file should
+For hypnotoad, the config file should
 contain "daemonize" and "pid" keys, e.g. :
 
-   "start_mode" : "daemon_prefork",
-   "daemon_prefork" : {
-      "daemonize": 1,
+   "start_mode" : "hypnotoad",
+   "hypnotoad" : {
       "pid"      : "/tmp/restmd.pid",
       [...]
       "env"      : {

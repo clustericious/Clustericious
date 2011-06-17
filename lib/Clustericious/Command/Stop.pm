@@ -12,9 +12,8 @@ The different methods of starting put their pid files in
 different places in the config file.   Here are some
 examples :
 
-   "daemon_prefork" : {
-      "daemonize": 1,
-      "pid"      : "/tmp/filename.pid",
+   "hypnotoad" : {
+      "pid_file"  : "/tmp/filename.pid",
       ....
     }
 
@@ -37,6 +36,7 @@ package Clustericious::Command::Stop;
 use Log::Log4perl qw/:easy/;
 use Clustericious::App;
 use Mojo::URL;
+use File::Basename qw/dirname/;
 
 use base 'Mojo::Command';
 use Clustericious::Config;
@@ -104,10 +104,11 @@ sub run {
     Clustericious::App->init_logging();
 
     for (reverse $conf->start_mode) {
-        /daemon_prefork/ and _stop_pidfile($conf->daemon_prefork->pid);
-        /plackup/        and _stop_pidfile($conf->plackup->pidfile);
-        /lighttpd/       and _stop_pidfile($conf->lighttpd->env->lighttpd_pid);
-        /daemon/         and _stop_daemon($conf->daemon->listen);
+        DEBUG "Stopping $_ server";
+        /hypnotoad/ and _stop_pidfile($conf->hypnotoad->pid_file(default => dirname($ENV{MOJO_EXE}).'/hypnotoad.pid' ));
+        /plackup/   and _stop_pidfile($conf->plackup->pidfile);
+        /lighttpd/  and _stop_pidfile($conf->lighttpd->env->lighttpd_pid);
+        /daemon/    and _stop_daemon($conf->daemon->listen);
     }
 
     1;
