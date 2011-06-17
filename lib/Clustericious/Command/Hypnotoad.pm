@@ -25,7 +25,7 @@ use base 'Mojo::Command';
 use strict;
 use warnings;
 
-__PACKAGE__->attr(description => "Start a hypnotad web server.");
+__PACKAGE__->attr(description => "Start a hypnotad web server.\n");
 
 __PACKAGE__->attr(usage => <<EOT);
 Usage $0: hypnotoad
