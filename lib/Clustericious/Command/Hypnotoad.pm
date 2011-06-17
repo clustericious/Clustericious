@@ -6,6 +6,23 @@ Clustericious::Command::Hypnotoad
 
 Start a hypnotoad webserver.
 
+Configuration for the server is taken directly from the
+"hypnotoad" entry in the config file, and turned into
+a config file for hypnotoad.  The location of the file
+can be controllled by setting HYPNOTOAD_CONFIG.
+
+=head1 EXAMPLE
+
+ start_mode : "hypnotoad"
+ hypnotoad:
+    env :
+        HYPNOTOAD_CONFIG : /tmp/miniondriver.hypnotoad.conf
+    workers : 1
+    listen : [ "http://*:3000" ]
+    keep_alive_timeout : 50
+    pid_file : /tmp/minionrelay.pid
+
+
 =head1 SEE ALSO
 
 Mojo::Server::Hypnotoad
