@@ -30,6 +30,10 @@ examples :
       },
    },
 
+   "nginx" : {
+     '-p' : '/home/foo/appname/nginx'
+    }
+
 =cut
 
 package Clustericious::Command::Stop;
@@ -97,6 +101,13 @@ sub _stop_daemon {
     _stop_pid($pid);
 }
 
+sub _stop_nginx {
+    my %conf = @_;
+    my $prefix = $conf{'-p'};
+    INFO "stopping nginx in $prefix";
+    system("nginx -p $prefix -s quit")==0 or LOGDIE "could not stop nginx";
+}
+
 sub run {
     my $self     = shift;
     my $conf     = Clustericious::Config->new( $ENV{MOJO_APP} );
@@ -109,6 +120,7 @@ sub run {
         /plackup/   and _stop_pidfile($conf->plackup->pidfile);
         /lighttpd/  and _stop_pidfile($conf->lighttpd->env->lighttpd_pid);
         /daemon/    and _stop_daemon($conf->daemon->listen);
+        /nginx/     and _stop_nginx($conf->nginx);
     }
 
     1;
