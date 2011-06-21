@@ -105,7 +105,7 @@ sub _stop_nginx {
     my %conf = @_;
     my $prefix = $conf{'-p'};
     INFO "stopping nginx in $prefix";
-    system("nginx -p $prefix -s quit")==0 or LOGDIE "could not stop nginx";
+    system("nginx -p $prefix -s quit")==0 or WARN "could not stop nginx";
 }
 
 sub run {

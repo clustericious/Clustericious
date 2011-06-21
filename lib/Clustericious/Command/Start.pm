@@ -42,6 +42,8 @@ package Clustericious::Command::Start;
 use Log::Log4perl qw/:easy/;
 use File::Slurp qw/slurp/;
 use List::MoreUtils qw/mesh/;
+use File::Path qw/mkpath/;
+use File::Basename qw/dirname/;
 
 use Clustericious::App;
 use Clustericious::Config;
@@ -79,6 +81,16 @@ sub run {
         #  local %ENV = %ENV;
         INFO "Starting $mode";
         my %conf = $conf->$mode;
+        if (my $autogen = delete $conf{autogen}) {
+            $autogen = [ $autogen ] if ref $autogen eq 'HASH';
+            for my $i (@$autogen) {
+                DEBUG "autowriting ".$i->{filename};
+                mkpath dirname($i->{filename});
+                open my $fp, ">$i->{filename}" or LOGDIE "cannot write to $i->{filename} : $!";
+                print $fp $i->{content};
+                close $fp or LOGDIE $!;
+            }
+        }
 
         # env hash goes to the environment
         my $env = delete $conf{env} || {};
