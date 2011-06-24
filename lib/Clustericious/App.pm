@@ -83,9 +83,10 @@ sub startup {
     if (my $base = $config->url_base(default => '')) {
         $self->helper( base_tag => sub { b( qq[<base href="$base" />] ) } );
     }
-    unless (my $url = $config->url(default => '')) {
+    my $url = $config->url(default => '') or do {
         $self->log->warn("Configuration file should contain 'url'.") unless $ENV{HARNESS_ACTIVE};
-    }
+    };
+
     $self->helper( config => sub { $config } );
     $self->helper( url_with => sub {
         my $c = shift;
@@ -98,6 +99,17 @@ sub startup {
     # Set log for user agent singleton
     my $ua = Mojo::UserAgent->new;
     $ua->log($self->log);
+
+    # See http://groups.google.com/group/mojolicious/browse_thread/thread/000e251f0748c997
+    my $murl = Mojo::URL->new($url);
+    my $part_count = @{ $murl->path->parts };
+    if ($part_count > 0 ) {
+        $self->hook(before_dispatch  => sub {
+            my $c = shift;
+            push @{ $c->req->url->base->path->parts },
+              splice @{ $c->req->url->path->parts }, 0, $part_count;
+        });
+    }
 }
 
 =item init_logging
