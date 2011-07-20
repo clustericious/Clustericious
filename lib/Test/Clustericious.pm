@@ -11,9 +11,9 @@ Test::Clustericious - Test Clustericious apps
 
  use Test::Clustericious;
 
- my $t = Test::Clustericious(app => 'SomeMojoApp');
- my $t = Test::Clustericious(server => 'myapp');
- my $t = Test::Clustericious(server_url => 'http://foo'); 
+ my $t = Test::Clustericious->new(app => 'SomeMojoApp');
+ my $t = Test::Clustericious->new(server => 'myapp');
+ my $t = Test::Clustericious->new(server_url => 'http://foo');
 
  my $obj = $t->create_ok('/my/url', { my => 'object' }); # 2 tests
 
