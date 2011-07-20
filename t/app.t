@@ -17,7 +17,7 @@ get '/' => sub { shift->render_text("hello"); };
 
 package main;
 
-my $t = Test::Mojo->new(app => "SomeService");
+my $t = Test::Mojo->new("SomeService");
 
 $t->get_ok("/")->status_is(200)->content_like(qr/hello/, "got content");
 

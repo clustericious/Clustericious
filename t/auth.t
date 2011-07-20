@@ -30,7 +30,7 @@ get '/methodpath' => sub { shift->render_text("success"); };
 package main;
 use Clustericious::Config;
 
-my $t = Test::Mojo->new(app => "SomeService");
+my $t = Test::Mojo->new("SomeService");
 
 my $auth_url = $ENV{CLUSTERICIOUS_TEST_AUTH_URL};
 if ($auth_url) {

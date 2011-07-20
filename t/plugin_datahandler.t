@@ -36,7 +36,7 @@ get  '/:table/(*key)' => \&do_read;
 
 package main;
 
-my $t = Test::Mojo->new(app => "SomeService");
+my $t = Test::Mojo->new("SomeService");
 
 $t->post_form_ok("/my_table", { foo => "bar" }, {}, "posted to create")
     ->status_is(200, "got 200")

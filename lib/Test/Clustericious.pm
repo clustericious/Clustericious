@@ -74,7 +74,9 @@ __PACKAGE__->attr('server_url');
 
 sub new
 {
-    my $self = shift->SUPER::new(@_);
+    my $class = shift;
+    shift @_ if (@_==2 && $_[0] eq 'app'); # allow deprecated app => 'foo'
+    my $self = $class->SUPER::new(@_);
 
     if ($self->app)
     {

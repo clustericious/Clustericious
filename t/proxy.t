@@ -18,7 +18,7 @@ get '/here' => sub { sleep 2; shift->render_text("you made it") };
 
 package main;
 
-my $t = Test::Mojo->new(app => "SomeService");
+my $t = Test::Mojo->new("SomeService");
 
 my $got =
   $t->get_ok( '/proxyme/here', '', 'got proxy url' )
