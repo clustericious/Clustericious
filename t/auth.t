@@ -30,8 +30,6 @@ get '/methodpath' => sub { shift->render_text("success"); };
 package main;
 use Clustericious::Config;
 
-my $t = Test::Mojo->new("SomeService");
-
 my $auth_url = $ENV{CLUSTERICIOUS_TEST_AUTH_URL};
 if ($auth_url) {
     Clustericious::Config->new("SomeService")
@@ -39,6 +37,8 @@ if ($auth_url) {
 } else {
     Clustericious::Config->new("SomeService")->simple_auth(default => 1 );
 }
+
+my $t = Test::Mojo->new("SomeService");
 
 $t->get_ok("/")->status_is(200)->content_like(qr/unprotected/, "got unprotected content");
 
