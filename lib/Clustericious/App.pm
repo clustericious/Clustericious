@@ -64,7 +64,6 @@ sub startup {
     $self->plugins->namespaces(['Mojolicious::Plugin','Clustericious::Plugin']);
     $self->plugin('autodata_handler');
     $self->plugin('default_helpers');
-    $self->plugin('agent_condition');
     $self->plugin('tag_helpers');
     $self->plugin('epl_renderer');
     $self->plugin('ep_renderer');
