@@ -75,8 +75,8 @@ sub _stop_pid {
         return;
     }
     kill 0, $pid or LOGDIE "$pid is not running";
-    INFO "Sending TERM to $pid";
-    kill 'TERM', $pid;
+    INFO "Sending QUIT to $pid";
+    kill 'QUIT', $pid;
     sleep 1;
     my $nap = 1;
     while (kill 0, $pid) {

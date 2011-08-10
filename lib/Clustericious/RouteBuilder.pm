@@ -85,6 +85,7 @@ sub import {
     # Export
     *{"${caller}::any"}          = sub { $route_sub->(ref $_[0] ? shift : [], @_) };
     *{"${caller}::get"}          = sub { $route_sub->('get', @_) };
+    *{"${caller}::head"}         = sub { $route_sub->('head', @_) };
     *{"${caller}::ladder"}       = sub { $route_sub->('ladder', @_) };
     *{"${caller}::post"}         = sub { $route_sub->('post', @_) };
     *{"${caller}::put"}          = sub { $route_sub->('put', @_) };
