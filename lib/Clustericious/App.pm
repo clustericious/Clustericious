@@ -65,7 +65,7 @@ sub startup {
     $self->plugin('autodata_handler');
     $self->plugin('default_helpers');
     $self->plugin('tag_helpers');
-    $self->plugin('epl_renderer');
+    $self->plugin('EPLRenderer');
     $self->plugin('ep_renderer');
     $self->plugin('request_timer');
     $self->plugin('powered_by');
