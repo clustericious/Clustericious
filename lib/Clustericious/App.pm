@@ -62,13 +62,13 @@ sub startup {
     # Clustericious::RouteBuilder::Default->add_routes($self);
 
     $self->plugins->namespaces(['Mojolicious::Plugin','Clustericious::Plugin']);
-    $self->plugin('autodata_handler');
-    $self->plugin('default_helpers');
-    $self->plugin('tag_helpers');
+    $self->plugin('AutodataHandler');
+    $self->plugin('DefaultHelpers');
+    $self->plugin('TagHelpers');
     $self->plugin('EPLRenderer');
-    $self->plugin('ep_renderer');
-    $self->plugin('request_timer');
-    $self->plugin('powered_by');
+    $self->plugin('EPRenderer');
+    $self->plugin('RequestTimer');
+    $self->plugin('PoweredBy');
 
     my $config = Clustericious::Config->new(ref $self);
     if ($config->simple_auth(default => '')) {
