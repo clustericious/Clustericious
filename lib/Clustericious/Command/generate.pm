@@ -3,7 +3,7 @@ package Clustericious::Command::Generate;
 use strict;
 use warnings;
 
-use base 'Mojolicious::Command::Generate';
+use base 'Mojolicious::Command::generate';
 
 __PACKAGE__->attr(namespaces =>
       sub { [qw/Clustericious::Command::Generate
