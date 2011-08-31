@@ -30,13 +30,13 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.64
+    version: 0.65
   Clustericious::App:
     file: lib/Clustericious/App.pm
   Clustericious::Command::Generate:
-    file: lib/Clustericious/Command/Generate.pm
+    file: lib/Clustericious/Command/generate.pm
   Clustericious::Command::Generate::MbdApp:
-    file: lib/Clustericious/Command/Generate/MbdApp.pm
+    file: lib/Clustericious/Command/generate/MbdApp.pm
   Clustericious::Command::Hypnotoad:
     file: lib/Clustericious/Command/Hypnotoad.pm
   Clustericious::Command::Lighttpd:
@@ -80,4 +80,4 @@ requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.64
+version: 0.65
