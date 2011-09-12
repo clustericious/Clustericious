@@ -36,7 +36,7 @@ use Clustericious::App;
 use Clustericious::Config;
 use Mojo::Server::Hypnotoad;
 use Data::Dumper;
-use Cwd qw/abs_path/;
+use Cwd qw/getcwd abs_path/;
 use base 'Mojo::Command';
 
 use strict;
@@ -55,7 +55,11 @@ sub run {
     # args are ignored, since hypnotoad doesn't take command line arguments.
 
     my $conf = Clustericious::Config->new($ENV{MOJO_APP})->hypnotoad;
-    my $conf_file = abs_path($ENV{HYPNOTOAD_CONFIG} || "hypnotoad.conf");
+    my $filename = abs_path($ENV{HYPNOTOAD_CONFIG} || "hypnotoad.conf");
+    my $conf_file = $filename =~ m[^/] ? $filename : abs_path($filename);
+    unless ($conf_file) {
+        $conf_file = getcwd().'/'.$filename;
+    }
     my %conf = %$conf;
     my $conf_string = Data::Dumper->Dump([\%conf],["conf"]);
     DEBUG "Starting hypnotoad (executable: $ENV{MOJO_EXE}, config: $conf_file)";
