@@ -95,6 +95,13 @@ sub startup {
         $url;
     });
 
+    $self->helper( render_moved => sub {
+        my $c = shift;
+        $c->res->code(301);
+        my $where = $c->url_for(@_)->to_abs;
+        $c->res->headers->location($where);
+        $c->render(text => "moved to $where");
+    } );
     # Set log for user agent singleton
     my $ua = Mojo::UserAgent->new;
     $ua->log($self->log);
