@@ -55,11 +55,8 @@ sub run {
     # args are ignored, since hypnotoad doesn't take command line arguments.
 
     my $conf = Clustericious::Config->new($ENV{MOJO_APP})->hypnotoad;
-    my $filename = abs_path($ENV{HYPNOTOAD_CONFIG} || "hypnotoad.conf");
-    my $conf_file = $filename =~ m[^/] ? $filename : abs_path($filename);
-    unless ($conf_file) {
-        $conf_file = getcwd().'/'.$filename;
-    }
+    my $filename = $ENV{HYPNOTOAD_CONFIG} || "hypnotoad.conf";
+    my $conf_file = abs_path($filename) or LOGDIE "Cannot compute absolute path for $filename.  Set HYPNOTOAD_CONFIG?";
     my %conf = %$conf;
     my $conf_string = Data::Dumper->Dump([\%conf],["conf"]);
     DEBUG "Starting hypnotoad (executable: $ENV{MOJO_EXE}, config: $conf_file)";
