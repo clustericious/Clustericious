@@ -42,7 +42,7 @@ my $t = Test::Mojo->new("SomeService");
 
 $t->get_ok("/")->status_is(200)->content_like(qr/unprotected/, "got unprotected content");
 
-my $port = $t->ua->test_server;
+my $port = $t->ua->test_server->port;
 
 $t->get_ok("/sensitive")->status_is(401);
 
