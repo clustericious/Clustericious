@@ -79,7 +79,7 @@ sub authenticate {
     TRACE ("Authenticating for realm $realm");
     # Everyone needs to send an authorization header
     my $auth = $c->req->headers->authorization or do {
-        $c->res->headers->www_authenticate("Basic '$realm'");
+        $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
         $c->render(text => "auth required", status => 401);
         return;
     };
@@ -104,7 +104,7 @@ sub authenticate {
     $auth_url->userinfo($userinfo);
     my $check = $ua->head($auth_url)->res->code();
     unless (defined($check)) {
-        $c->res->headers->www_authenticate("Basic '$realm'");
+        $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
         WARN ("Error connecting to simple auth at $config_url");
         $c->render(text => "auth server down", status => 401);
         return 0;
@@ -114,7 +114,7 @@ sub authenticate {
         return 1;
     }
     INFO "Authentication denied for $user";
-    $c->res->headers->www_authenticate("Basic '$realm'");
+    $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
     $c->render(text => "authentication failure", status => 401);
     return 0;
 }
