@@ -1,6 +1,6 @@
 package Clustericious::Controller;
 use Clustericious::Config;
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 
 use base 'Mojolicious::Controller';
 

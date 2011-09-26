@@ -11,7 +11,7 @@ These routes will be added first; they cannot be overridden.
 =cut
 
 package Clustericious::RouteBuilder::Common;
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 use Sys::Hostname qw/hostname/;
 
 use strict;

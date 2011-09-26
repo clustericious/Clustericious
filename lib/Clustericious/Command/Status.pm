@@ -9,7 +9,7 @@ Report the status of a running clustericious daemon, based on its start_mode.
 =cut
 
 package Clustericious::Command::Status;
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 use Mojo::UserAgent;
 
 use Clustericious::App;

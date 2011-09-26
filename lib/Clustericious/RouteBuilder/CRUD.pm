@@ -38,7 +38,7 @@ more documentation
 =cut
 
 use strict;
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 use Data::Dumper;
 
 use Sub::Exporter -setup => {

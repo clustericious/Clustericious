@@ -9,7 +9,7 @@ Start a lighttpd web server.
 =cut
 
 package Clustericious::Command::Lighttpd;
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 
 use Clustericious::App;
 use Clustericious::Config;

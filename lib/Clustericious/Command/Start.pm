@@ -39,7 +39,7 @@ to set before starting the command.
 =cut
 
 package Clustericious::Command::Start;
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 use File::Slurp qw/slurp/;
 use List::MoreUtils qw/mesh/;
 use File::Path qw/mkpath/;

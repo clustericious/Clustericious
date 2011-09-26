@@ -13,7 +13,7 @@ plackup, Plack
 =cut
 
 package Clustericious::Command::Plackup;
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 
 use Clustericious::App;
 use Mojo::Server::PSGI;

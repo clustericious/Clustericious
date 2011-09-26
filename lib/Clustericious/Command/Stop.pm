@@ -37,7 +37,7 @@ examples :
 =cut
 
 package Clustericious::Command::Stop;
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 use Clustericious::App;
 use Mojo::URL;
 use File::Basename qw/dirname/;

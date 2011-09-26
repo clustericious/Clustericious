@@ -30,7 +30,7 @@ Mojo::Server::Hypnotoad
 =cut
 
 package Clustericious::Command::Hypnotoad;
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 
 use Clustericious::App;
 use Clustericious::Config;

@@ -1,6 +1,6 @@
 package Clustericious::Plugin::SimpleAuth;
 
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 use Mojo::ByteStream qw/b/;
 use Mojo::UserAgent;
 use Mojo::URL;

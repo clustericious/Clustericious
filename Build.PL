@@ -16,6 +16,7 @@ my $builder = Module::Build->new(
         'Module::Build'        => '0.36',
         'Test::More'           => 0,
         'MojoX::Log::Log4perl' => 0,
+        'Clustericious::Log'   => '0.04',
         'Mojolicious'          => '1.89',
         'Sub::Exporter'        => 0,
         'YAML::Syck'           => 0,

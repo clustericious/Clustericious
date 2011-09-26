@@ -40,7 +40,7 @@ more documentation
 
 =cut
 
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 use strict;
 
 use Sub::Exporter -setup => {

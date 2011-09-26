@@ -14,7 +14,7 @@ use Clustericious::Config;
 use File::Path qw/mkpath/;
 use base 'Mojo::Command';
 
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 __PACKAGE__->attr(description => <<EOT);
 Start an nginx web server.
 EOT

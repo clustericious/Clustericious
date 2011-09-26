@@ -35,7 +35,7 @@ resultset to the client.
 
 package Clustericious::RouteBuilder::Search;
 use Mojo::JSON;
-use Log::Log4perl qw/:easy/;
+use Clustericious::Log;
 use List::MoreUtils qw/uniq/;
 use Data::Dumper;
 use strict;
