@@ -4,6 +4,7 @@ author:
   - 'Brian Duggan <brian.duggan@nasa.gov>'
 build_requires:
   Clustericious::Config: 0.01
+  Clustericious::Log: 0.05
   File::ShareDir: 0
   File::Slurp: 0
   Hash::Merge: 0
@@ -30,7 +31,7 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.68
+    version: 0.69
   Clustericious::App:
     file: lib/Clustericious/App.pm
   Clustericious::Command::Generate:
@@ -80,4 +81,4 @@ requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.68
+version: 0.69
