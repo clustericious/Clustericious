@@ -45,6 +45,16 @@ sub add_routes {
             $self->render( autodata => [ $self->app->dump_api() ] );
             }
     );
+
+    $app->routes->get('/log/:lines' => [ lines => qr/\d+/ ] =>
+        sub {
+            my $c = shift;
+            my $lines = $c->stash("lines");
+            unless ($c->config->export_logs(default => 0)) {
+                return $c->render_text('logs not available');
+            }
+            $c->render_text(Clustericious::Log->tail(lines => $lines || 10) || '** empty log **');
+        });
 }
 
 1;

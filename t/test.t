@@ -25,7 +25,7 @@ post   '/object'    => sub { my $c = shift;
                              $object = $c->stash->{autodata};
                              $c->render_json($object) };
 
-Delete '/object/id' => sub { my $c = shift;
+del  '/object/id' => sub { my $c = shift;
                              $object = undef;
                              $c->render_text('ok') };
 
