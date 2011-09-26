@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 use Test::Mojo;
 
 package Fake::Object::Thing;
@@ -54,6 +54,7 @@ $t->post_form_ok("/my_table", { foo => "bar" }, {}, "posted to create")
 $t->get_ok("/api")->json_content_is(
     [
         "GET /api",
+        "GET /log/:lines",
         "GET /ones",
         "GET /status",
         "GET /threes",
@@ -64,6 +65,8 @@ $t->get_ok("/api")->json_content_is(
         "POST /two"
     ]
 );
+
+$t->get_ok('/log/1')->content_is("logs not available");
 
 1;
 
