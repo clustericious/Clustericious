@@ -92,6 +92,7 @@ sub _build_proxy {
         $req->body($self->req->body);
         my $headers = $self->req->headers->to_hash;
         delete $headers->{Host};
+        $headers->{'X-Forwarded-For'} = $self->tx->remote_address;
         $req->headers->from_hash($headers);
         $self->ua->start($tx);
         my $res = $self->tx->res;
