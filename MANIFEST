@@ -6,6 +6,7 @@ etc/log4perl.conf.sample
 etc/MyApp.conf.sample
 lib/Clustericious.pm
 lib/Clustericious/App.pm
+lib/Clustericious/Command/Apache.pm
 lib/Clustericious/Command/generate.pm
 lib/Clustericious/Command/generate/MbdApp.pm
 lib/Clustericious/Command/Hypnotoad.pm
