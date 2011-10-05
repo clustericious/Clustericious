@@ -116,6 +116,10 @@ sub startup {
               splice @{ $c->req->url->path->parts }, 0, $part_count;
         });
     }
+
+    $self->hook( before_dispatch => sub {
+        Log::Log4perl::MDC->put(remote_ip => shift->tx->remote_address || 'unknown');
+    });
 }
 
 =item init_logging
