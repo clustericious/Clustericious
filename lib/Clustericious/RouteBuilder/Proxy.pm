@@ -82,7 +82,8 @@ sub _build_proxy {
 
         LOGDIE "recursive proxy " if $self->req->url->to_abs eq $url->to_abs;
 
-        TRACE "proxying " . $self->req->method . ' ' .
+        my $remote = $self->tx->remote_address;
+        TRACE "proxying (from $remote) " . $self->req->method . ' ' .
               _sanitize_url($self->req->url->to_abs) . " to " .
               _sanitize_url($url->to_abs);
 
@@ -93,7 +94,7 @@ sub _build_proxy {
         $req->body($self->req->body);
         my $headers = $self->req->headers->to_hash;
         delete $headers->{Host};
-        $headers->{'X-Forwarded-For'} = $self->tx->remote_address;
+        $headers->{'X-Forwarded-For'} = $remote;
         $req->headers->from_hash($headers);
         $self->ua->start($tx);
         my $res = $self->tx->res;

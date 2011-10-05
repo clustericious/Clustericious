@@ -65,18 +65,19 @@ sub _stop_pidfile {
     -e $pid_file or do { WARN "No pid file $pid_file\n"; return; };
     my $pid = slurp $pid_file; # dies automatically
     chomp $pid;
-    _stop_pid($pid);
+    _stop_pid($pid,@_);
 }
 
 sub _stop_pid {
     my $pid = shift;
+    my $signal = shift || 'QUIT';
     unless ($pid && $pid=~/^\d+$/) {
         WARN "Bad pid '$pid'.  Not stopping process.";
         return;
     }
     kill 0, $pid or LOGDIE "$pid is not running";
-    INFO "Sending QUIT to $pid";
-    kill 'QUIT', $pid;
+    INFO "Sending $signal to $pid";
+    kill $signal, $pid;
     sleep 1;
     my $nap = 1;
     while (kill 0, $pid) {
@@ -108,6 +109,13 @@ sub _stop_nginx {
     system("nginx -p $prefix -s quit")==0 or WARN "could not stop nginx";
 }
 
+sub _stop_apache {
+    my %conf = @_;
+    my $prefix = $conf{'-d'};
+    INFO "stopping apache in $prefix";
+    _stop_pidfile("$prefix/logs/httpd.pid",'TERM');
+}
+
 sub run {
     my $self     = shift;
     my $conf     = Clustericious::Config->new( $ENV{MOJO_APP} );
@@ -121,6 +129,7 @@ sub run {
         /lighttpd/  and _stop_pidfile($conf->lighttpd->env->lighttpd_pid);
         /daemon/    and _stop_daemon($conf->daemon->listen);
         /nginx/     and _stop_nginx($conf->nginx);
+        /apache/    and _stop_apache($conf->apache);
     }
 
     1;
