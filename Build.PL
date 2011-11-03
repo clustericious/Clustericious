@@ -25,7 +25,6 @@ my $builder = Module::Build->new(
         'List::MoreUtils'      => 0,
         'File::ShareDir'       => 0,
         'Hash::Merge'          => 0,
-        'Plack'                => 0,
         'File::Slurp'          => 0,
         'Sys::Hostname'        => 0,
       },
