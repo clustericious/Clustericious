@@ -21,8 +21,7 @@ get    '/object/id' => sub { my $c = shift;
                                     $c->render_text('Not Found') } };
 
 post   '/object'    => sub { my $c = shift;
-                             $c->parse_autodata;
-                             $object = $c->stash->{autodata};
+                             $object = $c->parse_autodata;
                              $c->render_json($object) };
 
 del  '/object/id' => sub { my $c = shift;

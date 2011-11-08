@@ -21,7 +21,8 @@ When parse_autodata is called from within a route like this:
     $self->parse_autodata;
 
 POSTed data is parsed according to the type in the 'Content-Type'
-header with the data left in stash->{autodata}.
+header with the data left in stash->{autodata}.  It is also
+returned by the above call.
 
 If a route leaves data in stash->{autodata}, it is rendered by this
 handler, which chooses the type with the first acceptable type listed
@@ -125,6 +126,7 @@ sub _autodata_parse
                : $default_decode;
 
     $c->stash->{autodata} = $types{$type}->{decode}->($c->req->body, $c);
+    return $c->stash->{autodata};
 }
 
 1;
