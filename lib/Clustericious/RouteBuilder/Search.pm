@@ -61,7 +61,7 @@ sub _build_search {
             # Allow tables names in addition to plurals
             $manager .= "::Manager";
         }
-        $self->app->plugins->emit_hook('parse_autodata', $self);
+        $self->parse_autodata;
 
         my $p = $self->stash->{autodata};
 

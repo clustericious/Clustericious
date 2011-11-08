@@ -21,7 +21,7 @@ get    '/object/id' => sub { my $c = shift;
                                     $c->render_text('Not Found') } };
 
 post   '/object'    => sub { my $c = shift;
-                             $c->app->plugins->emit_hook('parse_autodata', $c);
+                             $c->parse_autodata;
                              $object = $c->stash->{autodata};
                              $c->render_json($object) };
 

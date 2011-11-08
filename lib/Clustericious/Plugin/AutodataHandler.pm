@@ -10,15 +10,15 @@ Clustericious::Plugin::DataHandler -- Handle data types automatically
 
 Adds a renderer that automatically serializes that "autodata" in the
 stash into a format based on HTTP Accept and Content-Type headers.
-Also adds a hook called 'parse_autodata' that handles incoming data by
+Also adds a helper called 'parse_autodata' that handles incoming data by
 Content-Type.
 
 Supports application/json, text/x-yaml and
 application/x-www-form-urlencoded (in-bound only).
 
-When hook 'parse_autodata' is called from within a route like this:
+When parse_autodata is called from within a route like this:
 
- $self->app->plugins->emit_hook('parse_autodata', $self);
+    $self->parse_autodata;
 
 POSTed data is parsed according to the type in the 'Content-Type'
 header with the data left in stash->{autodata}.
@@ -83,7 +83,9 @@ sub register
 
     $app->renderer->add_handler('autodata' => \&_autodata_renderer);
 
-    $app->plugins->on(parse_autodata => \&_autodata_parse);
+    $app->plugins->on( parse_autodata => \&_autodata_parse);
+
+    $app->helper( parse_autodata => \&_autodata_parse );
 }
 
 sub _find_type
