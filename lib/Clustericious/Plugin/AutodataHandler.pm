@@ -18,7 +18,7 @@ application/x-www-form-urlencoded (in-bound only).
 
 When hook 'parse_autodata' is called from within a route like this:
 
- $self->app->plugins->run_hook('parse_autodata', $self);
+ $self->app->plugins->emit_hook('parse_autodata', $self);
 
 POSTed data is parsed according to the type in the 'Content-Type'
 header with the data left in stash->{autodata}.
@@ -83,7 +83,7 @@ sub register
 
     $app->renderer->add_handler('autodata' => \&_autodata_renderer);
 
-    $app->plugins->add_hook(parse_autodata => \&_autodata_parse);
+    $app->plugins->on(parse_autodata => \&_autodata_parse);
 }
 
 sub _find_type

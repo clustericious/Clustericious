@@ -61,7 +61,7 @@ sub _build_create {
         $self->app->log->info("called do_create");
         my $table = $self->stash->{table};
         TRACE "create $table";
-        $self->app->plugins->run_hook('parse_autodata', $self);
+        $self->app->plugins->emit_hook('parse_autodata', $self);
         my $object_class = $finder->find_class($table);
         TRACE "data : ".Dumper($self->stash("autodata"));
         my $object = $object_class->new(%{$self->stash->{autodata}});
@@ -124,7 +124,7 @@ sub _build_update {
             or return $self->render_not_found( join '/',$table,@keys );
 
         TRACE "Updating $table @keys";
-        $self->app->plugins->run_hook('parse_autodata', $self);
+        $self->app->plugins->emit_hook('parse_autodata', $self);
 
         my $pkeys = $obj->meta->primary_key_column_names;
         my $ukeys = $obj->meta->unique_keys_column_names;
