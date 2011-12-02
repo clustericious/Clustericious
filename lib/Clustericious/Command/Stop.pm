@@ -75,7 +75,7 @@ sub _stop_pid {
         WARN "Bad pid '$pid'.  Not stopping process.";
         return;
     }
-    kill 0, $pid or LOGDIE "$pid is not running";
+    kill 0, $pid or do { WARN "$pid is not running"; return; };
     INFO "Sending $signal to $pid";
     kill $signal, $pid;
     sleep 1;

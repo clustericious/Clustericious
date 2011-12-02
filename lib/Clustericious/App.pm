@@ -21,6 +21,7 @@ use Mojo::ByteStream qw/b/;
 use Data::Dumper;
 use Clustericious::Log;
 use Mojo::URL;
+use JSON::XS;
 use base 'Mojolicious';
 
 use Clustericious::Controller;
@@ -45,6 +46,7 @@ and sets up logging for the client using log::log4perl.
 sub startup {
     my $self = shift;
 
+    Mojo::Message->json_class("JSON::XS");
     $self->controller_class('Clustericious::Controller');
     $self->renderer(Clustericious::Renderer->new());
     $self->renderer->default_template_class("Clustericious::Templates");
