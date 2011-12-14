@@ -1,6 +1,6 @@
 =head1 NAME
 
-Clustericious::Command::Apache
+Clustericious::Command::apache
 
 =head1 DESCRIPTION
 
@@ -8,7 +8,7 @@ Start an apache web server.
 
 =cut
 
-package Clustericious::Command::Apache;
+package Clustericious::Command::apache;
 use Clustericious::App;
 use Clustericious::Config;
 use File::Path qw/mkpath/;

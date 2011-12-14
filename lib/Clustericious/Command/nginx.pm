@@ -1,6 +1,6 @@
 =head1 NAME
 
-Clustericious::Command::Nginx
+Clustericious::Command::nginx
 
 =head1 DESCRIPTION
 
@@ -8,7 +8,7 @@ Start an nginx web server.
 
 =cut
 
-package Clustericious::Command::Nginx;
+package Clustericious::Command::nginx;
 use Clustericious::App;
 use Clustericious::Config;
 use File::Path qw/mkpath/;

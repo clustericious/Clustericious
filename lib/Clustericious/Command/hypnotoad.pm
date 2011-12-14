@@ -29,7 +29,7 @@ Mojo::Server::Hypnotoad
 
 =cut
 
-package Clustericious::Command::Hypnotoad;
+package Clustericious::Command::hypnotoad;
 use Clustericious::Log;
 
 use Clustericious::App;

@@ -1,6 +1,6 @@
 =head1 NAME
 
-Clustericious::Command::Status
+Clustericious::Command::status
 
 =head1 DESCRIPTION
 
@@ -8,7 +8,7 @@ Report the status of a running clustericious daemon, based on its start_mode.
 
 =cut
 
-package Clustericious::Command::Status;
+package Clustericious::Command::status;
 use Clustericious::Log;
 use Mojo::UserAgent;
 

@@ -1,6 +1,6 @@
 =head1 NAME
 
-Clustericious::Command::Stop
+Clustericious::Command::stop
 
 =head1 DESCRIPTION
 
@@ -36,7 +36,7 @@ examples :
 
 =cut
 
-package Clustericious::Command::Stop;
+package Clustericious::Command::stop;
 use Clustericious::Log;
 use Clustericious::App;
 use Mojo::URL;

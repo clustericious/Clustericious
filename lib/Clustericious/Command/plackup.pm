@@ -12,7 +12,7 @@ plackup, Plack
 
 =cut
 
-package Clustericious::Command::Plackup;
+package Clustericious::Command::plackup;
 use Clustericious::Log;
 
 use Clustericious::App;

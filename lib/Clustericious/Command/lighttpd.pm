@@ -1,6 +1,6 @@
 =head1 NAME
 
-Clustericious::Command::Lighttpd
+Clustericious::Command::lighttpd
 
 =head1 DESCRIPTION
 
@@ -8,7 +8,7 @@ Start a lighttpd web server.
 
 =cut
 
-package Clustericious::Command::Lighttpd;
+package Clustericious::Command::lighttpd;
 use Clustericious::Log;
 
 use Clustericious::App;

@@ -1,6 +1,6 @@
 =head1 NAME
 
-Clustericious::Command::Start
+Clustericious::Command::start
 
 =head1 DESCRIPTION
 
@@ -38,7 +38,7 @@ to set before starting the command.
 
 =cut
 
-package Clustericious::Command::Start;
+package Clustericious::Command::start;
 use Clustericious::Log;
 use File::Slurp qw/slurp/;
 use List::MoreUtils qw/mesh/;
