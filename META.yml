@@ -30,33 +30,35 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.76
+    version: 0.77
   Clustericious::App:
     file: lib/Clustericious/App.pm
-  Clustericious::Command::Apache:
-    file: lib/Clustericious/Command/Apache.pm
   Clustericious::Command::Generate:
     file: lib/Clustericious/Command/generate.pm
   Clustericious::Command::Generate::MbdApp:
     file: lib/Clustericious/Command/generate/MbdApp.pm
-  Clustericious::Command::Hypnotoad:
-    file: lib/Clustericious/Command/Hypnotoad.pm
-  Clustericious::Command::Lighttpd:
-    file: lib/Clustericious/Command/Lighttpd.pm
-  Clustericious::Command::Nginx:
-    file: lib/Clustericious/Command/Nginx.pm
-  Clustericious::Command::Plackup:
-    file: lib/Clustericious/Command/Plackup.pm
-  Clustericious::Command::Start:
-    file: lib/Clustericious/Command/Start.pm
-  Clustericious::Command::Status:
-    file: lib/Clustericious/Command/Status.pm
-  Clustericious::Command::Stop:
-    file: lib/Clustericious/Command/Stop.pm
+  Clustericious::Command::apache:
+    file: lib/Clustericious/Command/apache.pm
+  Clustericious::Command::hypnotoad:
+    file: lib/Clustericious/Command/hypnotoad.pm
+  Clustericious::Command::lighttpd:
+    file: lib/Clustericious/Command/lighttpd.pm
+  Clustericious::Command::nginx:
+    file: lib/Clustericious/Command/nginx.pm
+  Clustericious::Command::plackup:
+    file: lib/Clustericious/Command/plackup.pm
+  Clustericious::Command::start:
+    file: lib/Clustericious/Command/start.pm
+  Clustericious::Command::status:
+    file: lib/Clustericious/Command/status.pm
+  Clustericious::Command::stop:
+    file: lib/Clustericious/Command/stop.pm
   Clustericious::Commands:
     file: lib/Clustericious/Commands.pm
   Clustericious::Controller:
     file: lib/Clustericious/Controller.pm
+  Clustericious::JSON:
+    file: lib/Clustericious/JSON.pm
   Clustericious::Plugin::AutodataHandler:
     file: lib/Clustericious/Plugin/AutodataHandler.pm
   Clustericious::Plugin::SimpleAuth:
@@ -82,4 +84,4 @@ requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.76
+version: 0.77

@@ -18,6 +18,7 @@ lib/Clustericious/Command/status.pm
 lib/Clustericious/Command/stop.pm
 lib/Clustericious/Commands.pm
 lib/Clustericious/Controller.pm
+lib/Clustericious/JSON.pm
 lib/Clustericious/Plugin/AutodataHandler.pm
 lib/Clustericious/Plugin/SimpleAuth.pm
 lib/Clustericious/Renderer.pm
