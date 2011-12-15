@@ -28,6 +28,7 @@ use Clustericious::Controller;
 use Clustericious::Renderer;
 use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
+use Clustericious::JSON;
 
 use warnings;
 use strict;
@@ -46,7 +47,7 @@ and sets up logging for the client using log::log4perl.
 sub startup {
     my $self = shift;
 
-    Mojo::Message->json_class("JSON::XS");
+    Mojo::Message->json_class("Clustericious::JSON");
     $self->controller_class('Clustericious::Controller');
     $self->renderer(Clustericious::Renderer->new());
     $self->renderer->default_template_class("Clustericious::Templates");
