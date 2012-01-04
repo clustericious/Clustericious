@@ -105,9 +105,6 @@ sub startup {
         $c->res->headers->location($where);
         $c->render(text => "moved to $where");
     } );
-    # Set log for user agent singleton
-    my $ua = Mojo::UserAgent->new;
-    $ua->log($self->log);
 
     # See http://groups.google.com/group/mojolicious/browse_thread/thread/000e251f0748c997
     my $murl = Mojo::URL->new($url);

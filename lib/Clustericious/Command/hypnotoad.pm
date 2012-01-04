@@ -19,7 +19,7 @@ can be controllled by setting HYPNOTOAD_CONFIG.
         HYPNOTOAD_CONFIG : /tmp/miniondriver.hypnotoad.conf
     workers : 1
     listen : [ "http://*:3000" ]
-    keep_alive_timeout : 50
+    inactivity_timeout : 50
     pid_file : /tmp/minionrelay.pid
 
 
