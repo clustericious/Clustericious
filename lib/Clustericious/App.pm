@@ -52,7 +52,7 @@ sub startup {
     $self->renderer(Clustericious::Renderer->new());
     $self->renderer->default_template_class("Clustericious::Templates");
     my $home = $self->home;
-    $self->renderer->root($home->rel_dir('templates'));
+    $self->renderer->paths($home->rel_dir('templates'));
 
     $self->init_logging();
     $self->secret( (ref $self || $self) );

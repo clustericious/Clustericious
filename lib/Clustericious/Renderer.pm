@@ -14,6 +14,7 @@ Just inherits from Mojolicious::Renderer with some customizations.
 
 package Clustericious::Renderer;
 
+use Clustericious::Log;
 use base 'Mojolicious::Renderer';
 use strict;
 use warnings;
@@ -31,6 +32,11 @@ sub render {
 
     $c->stash->{handler} = "autodata" if exists($c->stash->{autodata}) || exists($args->{autodata});
     $self->SUPER::render(@_);
+}
+
+sub root  {
+    WARN "Use paths() instead of root";
+    shift->SUPER::paths(@_);
 }
 
 1;
