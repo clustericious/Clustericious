@@ -15,8 +15,6 @@ can be controllled by setting HYPNOTOAD_CONFIG.
 
  start_mode : "hypnotoad"
  hypnotoad:
-    env :
-        HYPNOTOAD_CONFIG : /tmp/miniondriver.hypnotoad.conf
     workers : 1
     listen : [ "http://*:3000" ]
     inactivity_timeout : 50
@@ -58,7 +56,8 @@ sub run {
     DEBUG "Config : $conf_string";
     my $toad = Mojo::Server::Hypnotoad->new;
     DEBUG "Running hypnotoad : $ENV{MOJO_EXE}";
-    $toad->run($ENV{MOJO_EXE});
+    $ENV{HYPNOTOAD_EXE} = "$0 hypnotoad";
+    $toad->run($ENV{MOJO_EXE},'/no/such/file/because/these/are/deprecated');
     DEBUG "sleeping 1";
     sleep 1;
 }
