@@ -176,7 +176,12 @@ sub dump_api {
 
 sub config {
     my $app = shift;
-    $app->_clustericious_config(@_);
+    if (my $what = shift) {
+        # Mojo config interface
+        $app->_clustericious_config(@_)->{$what};
+    } else {
+        $app->_clustericious_config(@_);
+    }
 }
 
 1;
