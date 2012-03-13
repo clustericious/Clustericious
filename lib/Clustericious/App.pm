@@ -89,7 +89,7 @@ sub startup {
         $self->log->warn("Configuration file should contain 'url'.") unless $ENV{HARNESS_ACTIVE};
     };
 
-    $self->helper( config => sub { $config } );
+    $self->helper( _clustericious_config => sub { $config } );
     $self->helper( url_with => sub {
         my $c = shift;
         my $q = $c->req->url->clone->query;
@@ -172,6 +172,11 @@ sub dump_api {
         }
     }
     return uniq sort @all;
+}
+
+sub config {
+    my $app = shift;
+    $app->_clustericious_config(@_);
 }
 
 1;
