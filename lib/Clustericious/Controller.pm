@@ -21,7 +21,6 @@ sub url_for {
     return $url;
 }
 
-
 =head1 redirect_to
 
 Copied from Mojolicious::Controller, but works around

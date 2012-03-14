@@ -36,8 +36,10 @@ sub render {
 
 sub root  {
     my $self = shift;
-    my @args = @_;
-    $self->SUPER::paths([ $args[0] ]);
+    if (my $arg = shift) {
+        $self->SUPER::paths([ $arg ]);
+    }
+    return $self;
 }
 
 1;
