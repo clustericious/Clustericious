@@ -35,8 +35,9 @@ sub render {
 }
 
 sub root  {
-    WARN "Use paths() instead of root";
-    shift->SUPER::paths(@_);
+    my $self = shift;
+    my @args = @_;
+    $self->SUPER::paths([ $args[0] ]);
 }
 
 1;
