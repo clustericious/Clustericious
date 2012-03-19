@@ -50,6 +50,7 @@ share/MbdAppTemplate/t/999_stop_db.t
 t/app.t
 t/auth.t
 t/basic.t
+t/config.t
 t/crud.t
 t/plugin_datahandler.t
 t/proxy.t
