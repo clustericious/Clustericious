@@ -58,7 +58,7 @@ sub run {
     DEBUG "Running hypnotoad : $ENV{MOJO_EXE}";
     $ENV{HYPNOTOAD_EXE} = "$0 hypnotoad";
     if ( $ENV{HYPNOTOAD_CONFIG} ) {
-        WARN "remove HYPNOTOAD_CONFIG form config file : no longer necessary";
+        WARN "remove HYPNOTOAD_CONFIG from config file : no longer necessary";
     }
     $ENV{HYPNOTOAD_CONFIG} = "/no/such/file/because/these/are/deprecated";
     $toad->run($ENV{MOJO_EXE});
