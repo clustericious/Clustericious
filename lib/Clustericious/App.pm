@@ -50,7 +50,7 @@ sub startup {
     Mojo::Message->json_class("Clustericious::JSON");
     $self->controller_class('Clustericious::Controller');
     $self->renderer(Clustericious::Renderer->new());
-    $self->renderer->default_template_class("Clustericious::Templates");
+    $self->renderer->classes([qw/Clustericious::Templates/]);
     my $home = $self->home;
     $self->renderer->paths([ $home->rel_dir('templates') ]);
 
