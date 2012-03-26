@@ -63,10 +63,20 @@ sub run {
     }
     # During deprecation, this value must be defined but not pass the -r test
     # to avoid warnings.
-    local $ENV{HYPNOTOAD_CONFIG} = $sentinel;
-    $toad->run($ENV{MOJO_EXE});
-    DEBUG "sleeping 1";
+    my $pid = fork();
+    if (!defined($pid)) {
+        LOGDIE "Unable to fork";
+    }
+
+    unless ($pid) {
+        DEBUG "Child process $$";
+        local $ENV{HYPNOTOAD_CONFIG} = $sentinel;
+        $toad->run($ENV{MOJO_EXE});
+        WARN "hypnotoad exited";
+        exit;
+    }
     sleep 1;
+    return 1;
 }
 
 1;
