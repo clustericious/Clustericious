@@ -68,7 +68,8 @@ sub _stop_pidfile {
     chomp $pid;
     TRACE "file $pid_file has pid $pid";
     _stop_pid($pid,@_);
-    unlink $pid_file or LOGDIE "Could not remove $pid_file";
+    -e $pid_file or return;
+    unlink $pid_file or WARN "Could not remove $pid_file";
 }
 
 sub _stop_pid {
