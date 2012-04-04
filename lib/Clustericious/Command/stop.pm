@@ -63,9 +63,12 @@ EOT
 sub _stop_pidfile {
     my $pid_file = shift;
     -e $pid_file or do { WARN "No pid file $pid_file\n"; return; };
+    TRACE "pid_file : $pid_file";
     my $pid = slurp $pid_file; # dies automatically
     chomp $pid;
+    TRACE "file $pid_file has pid $pid";
     _stop_pid($pid,@_);
+    unlink $pid_file or LOGDIE "Could not remove $pid_file";
 }
 
 sub _stop_pid {

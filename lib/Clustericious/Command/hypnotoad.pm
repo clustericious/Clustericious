@@ -34,6 +34,7 @@ use Clustericious::App;
 use Clustericious::Config;
 use Mojo::Server::Hypnotoad;
 use Data::Dumper;
+use File::Slurp qw/slurp/;
 use Cwd qw/getcwd abs_path/;
 use base 'Mojo::Command';
 
@@ -70,6 +71,14 @@ sub run {
     unless ($pid) {
         DEBUG "Child process $$";
         local $ENV{HYPNOTOAD_CONFIG} = $sentinel;
+        my $pid_file = $conf->{pid_file};
+        if (-e $pid_file) {
+            chomp (my $pid = slurp $pid_file);
+            if (!kill 0, $pid) {
+                WARN "removing old pid file $pid_file";
+                unlink $pid_file or WARN "Could not remove $pid_file : $!";
+            }
+        }
         my $toad = Mojo::Server::Hypnotoad->new;
         $toad->run($ENV{MOJO_EXE});
         WARN "hypnotoad exited";
