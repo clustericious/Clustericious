@@ -54,7 +54,6 @@ sub run {
     my %conf = %$conf;
     my $conf_string = Data::Dumper->Dump([\%conf],["conf"]);
     DEBUG "Config : $conf_string";
-    my $toad = Mojo::Server::Hypnotoad->new;
     DEBUG "Running hypnotoad : $ENV{MOJO_EXE}";
     $ENV{HYPNOTOAD_EXE} = "$0 hypnotoad";
     my $sentinel = '/no/such/file/because/these/are/deprecated';
@@ -71,6 +70,7 @@ sub run {
     unless ($pid) {
         DEBUG "Child process $$";
         local $ENV{HYPNOTOAD_CONFIG} = $sentinel;
+        my $toad = Mojo::Server::Hypnotoad->new;
         $toad->run($ENV{MOJO_EXE});
         WARN "hypnotoad exited";
         exit;
