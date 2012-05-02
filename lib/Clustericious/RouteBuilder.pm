@@ -160,7 +160,7 @@ sub add_routes {
 
          # Create route
          my $route =
-           $routes->route( $pattern, {@$constraints} )->over($conditions)
+           $routes->route( $pattern, @$constraints )->over($conditions)
            ->via($methods)->to($defaults)->name($name);
 
          # WebSocket
