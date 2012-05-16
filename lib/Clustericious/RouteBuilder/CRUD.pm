@@ -65,6 +65,11 @@ sub _build_create {
         my $object_class = $finder->find_class($table);
         TRACE "data : ".Dumper($self->stash("autodata"));
         my $object = $object_class->new(%{$self->stash->{autodata}});
+        if ($self->param("skip_existing") && $object->load(speculative => 1)) {
+            DEBUG "Found existing $table, not saving";
+            $self->stash(autodata => { text => "skipped" });
+            return;
+        }
         $object->save or LOGDIE( $object->errors );
         $object->load or LOGDIE "Could not reload object : ".$object->errors;
         $self->stash(autodata => $object->as_hash);

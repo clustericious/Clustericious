@@ -1,5 +1,4 @@
 package Clustericious::RouteBuilder;
-use Data::Dumper;
 use strict;
 use warnings;
 
@@ -150,8 +149,7 @@ sub add_routes {
 
          # ladders replace previous ladders
          if (!ref $methods && $methods eq 'ladder') {
-              die "constraints for ladders not implemented :".Dumper($constraints) if $constraints && @$constraints;
-              $routes = $head_route->bridge( $pattern )->over($conditions)
+              $routes = $head_route->bridge( $pattern, {@$constraints} )->over($conditions)
                   ->to($defaults)->name($name);
               next;
          }
