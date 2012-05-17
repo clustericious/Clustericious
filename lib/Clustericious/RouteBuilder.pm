@@ -122,7 +122,7 @@ sub add_routes {
                         $c->app->plugins->load_plugin('simple_auth')
                             ->authenticate( $c, $realm );
                       }
-                });
+                })->name("authenticated");
              next;
          }
 
