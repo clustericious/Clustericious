@@ -71,6 +71,11 @@ sub register_plugin {
     1;
 }
 
+sub register {
+
+    1;
+}
+
 sub authenticate {
     my $self = shift;
     my $c = shift;
@@ -102,7 +107,9 @@ sub authenticate {
     # Everyone else get in line
     my $auth_url = Mojo::URL->new("$config_url/auth");
     $auth_url->userinfo($userinfo);
-    my $check = $ua->head($auth_url)->res->code();
+    my $tx = $ua->head($auth_url);
+    my $res = $tx->res;
+    my $check = $res->code();
     unless (defined($check)) {
         $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
         WARN ("Error connecting to simple auth at $config_url");
@@ -113,7 +120,8 @@ sub authenticate {
         $c->stash(user => $user);
         return 1;
     }
-    INFO "Authentication denied for $user";
+    INFO "Authentication denied for $user, status code : ".$check;
+    TRACE "Response was ".$res->to_string;
     $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
     $c->render(text => "authentication failure", status => 401);
     return 0;
