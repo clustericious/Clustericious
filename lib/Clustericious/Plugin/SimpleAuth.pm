@@ -98,22 +98,35 @@ sub authenticate {
 
     # VIP treatment for some hosts
     my $ip = $c->tx->remote_address;
-    if ($ua->get("$config_url/host/$ip/trusted")->res->code==200) {
-        TRACE "Host $ip is trusted, not authenticating";
-        $c->stash(user => $user);
-        return 1;
+    my $tx = $ua->get("$config_url/host/$ip/trusted");
+    if ( my $res = $tx->success ) {
+        if ( $res->code == 200 ) {
+            TRACE "Host $ip is trusted, not authenticating";
+            $c->stash( user => $user );
+            return 1;
+        }
+        else {
+            WARN "Simpleauth returned code " . $res->code;
+        }
+    } else {
+        my ( $message, $code ) = $tx->error;
+        if ($code) {
+            TRACE "Host $ip is not a VIP : code $code ($message)";
+        } else {
+            WARN "Error connecting to simpleauth at $config_url : $message";
+        }
     }
 
     # Everyone else get in line
     my $auth_url = Mojo::URL->new("$config_url/auth");
     $auth_url->userinfo($userinfo);
-    my $tx = $ua->head($auth_url);
+    $tx = $ua->head($auth_url);
     my $res = $tx->res;
     my $check = $res->code();
     unless (defined($check)) {
         $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
-        WARN ("Error connecting to simple auth at $config_url");
-        $c->render(text => "auth server down", status => 401);
+        WARN ("Error connecting to simpleauth at $config_url");
+        $c->render(text => "auth server down", status => 503); # "Service unavailable"
         return 0;
     }
     if ($check == 200) {
