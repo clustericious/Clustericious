@@ -97,6 +97,7 @@ sub _build_proxy {
         $headers->{'X-Forwarded-For'} = $remote;
         $req->headers->from_hash($headers);
         $self->ua->inactivity_timeout(120);
+        $self->ua->max_redirects(10);
         $self->ua->start($tx);
         my $res = $self->tx->res;
         my $pr_res = $tx->res;

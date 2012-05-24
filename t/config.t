@@ -14,7 +14,7 @@ use Test::More;
 use Test::Mojo;
 use File::Temp;
 
-my $t = Test::Mojo->new('Yars');
+my $t = Test::Mojo->new('SomeService');
 
 ok $t->app->config->isa('Clustericious::Config'),'got a config objects';
 
