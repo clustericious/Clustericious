@@ -57,3 +57,4 @@ t/proxy.t
 t/test.t
 t/testobject.yaml
 t/testremote.t
+META.json

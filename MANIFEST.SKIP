@@ -47,3 +47,4 @@
 # Avoid archives of this distribution
 \bClustericious-[\d\.\_]+
 ^MYMETA.yml$
+^MYMETA\.json$
