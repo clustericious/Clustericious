@@ -93,11 +93,11 @@ sub _build_search {
         TRACE "args are @args";
         push @args, object_class => $manager->object_class;
         my %a = @args;
-        if (!$a{limit}) {
+        if (!$a{limit} && !$a{page}) {
             DEBUG "Adding limit 100 to query";
             push @args, ( limit => 100 );
-        } elsif ($a{limit} > 1000) {
-            WARN "Very large limit ($a{limit}) for query.";
+        } elsif ( ($a{limit} || $a{per_page} || 0) > 1000) {
+            WARN "Very large limit : ".($a{limit} || $a{per_page});
         }
 
         my $count = $manager->get_objects_count( @args );
