@@ -60,13 +60,21 @@ In routes :
 
  get 'seven'; # fill in <path> with request path to compute the resource
 
+=head2 skip_auth
+
+    Clustericious::Plugin::SimpleAuth->skip_auth(1);
+
+    Set this global flag to bypass authentication and authorization, e.g. during
+    a subequest.  This flag is reset at the end of the dispatch cycle.
 
 =cut
 
-use base 'Mojolicious::Plugin';
+use Mojo::Base 'Mojolicious::Plugin';
 
 sub register_plugin {
     my ($self, $app) = @_;
+
+    $app->hook(after_dispatch => sub { Clustericious::Plugin::SimpleAuth->skip_auth(0) });
 
     1;
 }
@@ -76,10 +84,22 @@ sub register {
     1;
 }
 
+{
+    my $skip_auth = 0;
+    sub skip_auth {
+        my $class = shift;
+        return $skip_auth unless @_;
+        $skip_auth = shift;
+        return $skip_auth;
+    }
+
+}
+
 sub authenticate {
     my $self = shift;
     my $c = shift;
     my $realm = shift;
+    return 1 if $self->skip_auth;
 
     TRACE ("Authenticating for realm $realm");
     # Everyone needs to send an authorization header
@@ -143,6 +163,7 @@ sub authenticate {
 sub authorize {
     my $self = shift;
     my $c = shift;
+    return 1 if $self->skip_auth;
     my ($action,$resource) = @_;
     my $user = $c->stash("user") or LOGDIE "missing user in authorize()";
     LOGDIE "missing action or resource in authorize()" unless @_==2;
