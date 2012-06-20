@@ -112,6 +112,10 @@ sub startup {
     if ($part_count > 0 ) {
         $self->hook(before_dispatch  => sub {
             my $c = shift;
+            if (@{ $c->req->url->base->path->parts } > 0) {
+                # subrequest
+                my @extra = splice @{ $c->req->url->base->path->parts }, -$part_count;
+            }
             push @{ $c->req->url->base->path->parts },
               splice @{ $c->req->url->path->parts }, 0, $part_count;
         });
