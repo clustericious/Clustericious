@@ -147,9 +147,9 @@ sub add_routes {
             next;
          }
 
-         # ladders replace previous ladders
+         # ladders don't replace previous ladders
          if (!ref $methods && $methods eq 'ladder') {
-              $routes = $head_route->bridge( $pattern, {@$constraints} )->over($conditions)
+              $routes = $routes->bridge( $pattern, {@$constraints} )->over($conditions)
                   ->to($defaults)->name($name);
               next;
          }
