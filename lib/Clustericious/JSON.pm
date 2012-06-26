@@ -12,7 +12,9 @@ sub new {
 
 sub Math::BigInt::TO_JSON {
     my $val = shift;
-    return "$val";
+    my $copy = "$val";
+    my $i = 0 + $copy;
+    return $i;
 }
 
 
