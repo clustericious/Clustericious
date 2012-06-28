@@ -116,9 +116,11 @@ sub authenticate {
     my $userinfo = b($str)->b64_decode;
     my ($user,$pw) = split /:/, $userinfo;
 
+    my $self_simple_auth = ref($c->app) eq 'SimpleAuth';
+
     # VIP treatment for some hosts
     my $ip = $c->tx->remote_address;
-    my $tx = $ua->get("$config_url/host/$ip/trusted");
+    my $tx = $self_simple_auth ? $c->subdispatch(GET => "$config_url/host/$ip/trusted") : $ua->get("$config_url/host/$ip/trusted");
     if ( my $res = $tx->success ) {
         if ( $res->code == 200 ) {
             TRACE "Host $ip is trusted, not authenticating";
@@ -140,9 +142,16 @@ sub authenticate {
     # Everyone else get in line
     my $auth_url = Mojo::URL->new("$config_url/auth");
     $auth_url->userinfo($userinfo);
-    $tx = $ua->head($auth_url);
-    my $res = $tx->res;
-    my $check = $res->code();
+
+    my $check;
+    my $res;
+    if($self_simple_auth) {
+        $check = SimpleAuth::Data->check_credentials($user, $pw) ? 200 : 401;
+    } else {
+        $tx = ref($c->app) eq 'SimpleAuth' ? $c->subdispatch(HEAD => $auth_url) : $ua->head($auth_url);
+        $res = $tx->res;
+        $check = $res->code();
+    }
     unless (defined($check)) {
         $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
         WARN ("Error connecting to simpleauth at $config_url");
@@ -154,7 +163,7 @@ sub authenticate {
         return 1;
     }
     INFO "Authentication denied for $user, status code : ".$check;
-    TRACE "Response was ".$res->to_string;
+    TRACE "Response was ".$res->to_string if defined $res;
     $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
     $c->render(text => "authentication failure", status => 401);
     return 0;
@@ -171,7 +180,7 @@ sub authorize {
     $resource =~ s[^/][];
     my $url = Mojo::URL->new( join '/', $c->config->simple_auth->url,
         "authz/user", $user, $action, $resource );
-    my $code = Mojo::UserAgent->new->head($url)->res->code;
+    my $code = (ref($c->app) eq 'SimpleAuth' ? $c->subdispatch : Mojo::UserAgent->new)->head($url)->code;
     return 1 if $code && $code == 200;
     INFO "Unauthorized access by $user to $action $resource";
     $c->render(text => "unauthorized", status => 403);
