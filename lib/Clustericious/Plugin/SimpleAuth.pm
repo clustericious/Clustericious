@@ -180,7 +180,7 @@ sub authorize {
     $resource =~ s[^/][];
     my $url = Mojo::URL->new( join '/', $c->config->simple_auth->url,
         "authz/user", $user, $action, $resource );
-    my $code = (ref($c->app) eq 'SimpleAuth' ? $c->subdispatch : Mojo::UserAgent->new)->head($url)->res->code;
+    my $code = (ref($c->app) eq 'SimpleAuth' ? $c->subdispatch(HEAD => $url) : Mojo::UserAgent->new->head($url))->res->code;
     return 1 if $code && $code == 200;
     INFO "Unauthorized access by $user to $action $resource";
     $c->render(text => "unauthorized", status => 403);
