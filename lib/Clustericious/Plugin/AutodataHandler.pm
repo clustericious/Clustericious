@@ -51,7 +51,6 @@ use base 'Mojolicious::Plugin';
 use Mojo::ByteStream 'b';
 use JSON::XS;
 use YAML::XS qw/Dump Load/;
-use Clustericious::JSON;  # Fixes bigints
 
 my $default_decode = 'application/x-www-form-urlencoded';
 my $default_encode = 'application/json';
