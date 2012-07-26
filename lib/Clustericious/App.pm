@@ -37,6 +37,16 @@ our @Confdirs = $ENV{TEST_HARNESS} ?
    ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
    ($ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" );
 
+{
+no warnings 'redefine';
+sub Math::BigInt::TO_JSON {
+    my $val = shift;
+    my $copy = "$val";
+    my $i = 0 + $copy;
+    return $i;
+}
+}
+
 =item startup
 
 Adds the autodata_handler plugin, common routes,
@@ -47,7 +57,6 @@ and sets up logging for the client using log::log4perl.
 sub startup {
     my $self = shift;
 
-    Mojo::Message->json_class("Clustericious::JSON");
     $self->controller_class('Clustericious::Controller');
     $self->renderer(Clustericious::Renderer->new());
     $self->renderer->classes([qw/Clustericious::Templates/]);
@@ -153,19 +162,19 @@ sub dump_api {
     for my $r (@$routes) {
         my $pat = $r->pattern;
         $pat->_compile;
-        my %symbols = map { $_ => "<$_>" } @{ $pat->symbols };
+        my %placeholders = map { $_ => "<$_>" } @{ $pat->placeholders };
         my $method = uc join ',', @{ $r->via || ["GET"] };
-        if ($symbols{table}) {
+        if ($placeholders{table}) {
             for my $table (Rose::Planter->tables) {
-                $symbols{table} = $table;
+                $placeholders{table} = $table;
                 my $pat = $pat->pattern;
                 $pat =~ s/:table/$table/;
                 push @all, "$method $pat";
             }
-        } elsif ($symbols{items}) {
+        } elsif ($placeholders{items}) {
             for my $plural (Rose::Planter->plurals) {
-                $symbols{items} = $plural;
-                my $line = $pat->render(\%symbols);
+                $placeholders{items} = $plural;
+                my $line = $pat->render(\%placeholders);
                 push @all, "$method $line";
             }
         } elsif (defined($pat->pattern)) {
