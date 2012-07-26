@@ -149,7 +149,8 @@ sub add_routes {
 
          # ladders don't replace previous ladders
          if (!ref $methods && $methods eq 'ladder') {
-              $routes = $routes->bridge( $pattern, {@$constraints} )->over($conditions)
+              die "constraints not handled in ladders" if $constraints && @$constraints;
+              $routes = $routes->bridge( $pattern )->over($conditions)
                   ->to($defaults)->name($name);
               next;
          }
