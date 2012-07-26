@@ -15,7 +15,7 @@ WriteMakefile
                            'List::MoreUtils' => 0,
                            'Module::Build' => '0.36',
                            'MojoX::Log::Log4perl' => 0,
-                           'Mojolicious' => '2.62',
+                           'Mojolicious' => '3.09',
                            'Sub::Exporter' => 0,
                            'Sys::Hostname' => 0,
                            'Test::More' => 0,

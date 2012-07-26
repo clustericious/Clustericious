@@ -26,7 +26,7 @@
             "List::MoreUtils" : "0",
             "Module::Build" : "0.36",
             "MojoX::Log::Log4perl" : "0",
-            "Mojolicious" : "2.62",
+            "Mojolicious" : "3.09",
             "Sub::Exporter" : "0",
             "Sys::Hostname" : "0",
             "Test::More" : "0",
@@ -48,7 +48,7 @@
    "provides" : {
       "Clustericious" : {
          "file" : "lib/Clustericious.pm",
-         "version" : "0.95"
+         "version" : "0.96"
       },
       "Clustericious::App" : {
          "file" : "lib/Clustericious/App.pm",
@@ -102,10 +102,6 @@
          "file" : "lib/Clustericious/Controller.pm",
          "version" : 0
       },
-      "Clustericious::JSON" : {
-         "file" : "lib/Clustericious/JSON.pm",
-         "version" : 0
-      },
       "Clustericious::Plugin::AutodataHandler" : {
          "file" : "lib/Clustericious/Plugin/AutodataHandler.pm",
          "version" : 0
@@ -153,5 +149,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.95"
+   "version" : "0.96"
 }
