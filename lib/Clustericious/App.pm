@@ -28,7 +28,6 @@ use Clustericious::Controller;
 use Clustericious::Renderer;
 use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
-use Clustericious::JSON;
 
 use warnings;
 use strict;
