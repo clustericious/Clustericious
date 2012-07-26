@@ -17,7 +17,7 @@ use Clustericious::Log;
 
 use Clustericious::App;
 use Mojo::Server::PSGI;
-use base 'Mojo::Command';
+use base 'Mojolicious::Command';
 
 use strict;
 use warnings;

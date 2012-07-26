@@ -47,7 +47,7 @@ use File::Basename qw/dirname/;
 
 use Clustericious::App;
 use Clustericious::Config;
-use base 'Mojo::Command';
+use base 'Mojolicious::Command';
 
 use strict;
 use warnings;

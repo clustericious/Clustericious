@@ -5,10 +5,10 @@ use warnings;
 
 use Clustericious::Config;
 
-use base 'Mojolicious::Commands';
+use Mojo::Base 'Mojolicious::Commands';
 
-__PACKAGE__->attr(namespaces => sub { [qw/Clustericious::Command
-                                          Mojolicious::Command
-                                          Mojo::Command/] });
+has namespaces => sub { [qw/Clustericious::Command
+                           Mojolicious::Command
+                           Mojo::Command/] };
 
 1;

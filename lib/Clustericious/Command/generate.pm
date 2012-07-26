@@ -8,6 +8,6 @@ use base 'Mojolicious::Command::generate';
 __PACKAGE__->attr(namespaces =>
       sub { [qw/Clustericious::Command::Generate
                 Mojolicious::Command::Generate
-                Mojo::Command::Generate/] });
+                Mojolicious::Command::Generate/] });
 
 1;

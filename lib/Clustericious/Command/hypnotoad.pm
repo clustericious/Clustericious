@@ -36,7 +36,7 @@ use Mojo::Server::Hypnotoad;
 use Data::Dumper;
 use File::Slurp qw/slurp/;
 use Cwd qw/getcwd abs_path/;
-use base 'Mojo::Command';
+use base 'Mojolicious::Command';
 
 use strict;
 use warnings;
@@ -55,7 +55,8 @@ sub run {
     my %conf = %$conf;
     my $conf_string = Data::Dumper->Dump([\%conf],["conf"]);
     DEBUG "Config : $conf_string";
-    DEBUG "Running hypnotoad : $ENV{MOJO_EXE}";
+    my $exe = $0;
+    DEBUG "Running hypnotoad : $exe";
     $ENV{HYPNOTOAD_EXE} = "$0 hypnotoad";
     my $sentinel = '/no/such/file/because/these/are/deprecated';
     if ( $ENV{HYPNOTOAD_CONFIG} && $ENV{HYPNOTOAD_CONFIG} ne $sentinel ) {
@@ -80,7 +81,7 @@ sub run {
             }
         }
         my $toad = Mojo::Server::Hypnotoad->new;
-        $toad->run($ENV{MOJO_EXE});
+        $toad->run($exe);
         WARN "hypnotoad exited";
         exit;
     }

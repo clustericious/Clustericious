@@ -42,7 +42,7 @@ use Clustericious::App;
 use Mojo::URL;
 use File::Basename qw/dirname/;
 
-use base 'Mojo::Command';
+use base 'Mojolicious::Command';
 use Clustericious::Config;
 use File::Slurp qw/slurp/;
 
@@ -126,9 +126,10 @@ sub run {
 
     Clustericious::App->init_logging();
 
+    my $exe = $0;
     for (reverse $conf->start_mode) {
         DEBUG "Stopping $_ server";
-        /hypnotoad/ and _stop_pidfile($conf->hypnotoad->pid_file(default => dirname($ENV{MOJO_EXE}).'/hypnotoad.pid' ));
+        /hypnotoad/ and _stop_pidfile($conf->hypnotoad->pid_file(default => dirname($exe).'/hypnotoad.pid' ));
         /plackup/   and _stop_pidfile($conf->plackup->pidfile);
         /lighttpd/  and _stop_pidfile($conf->lighttpd->env->lighttpd_pid);
         /daemon/    and _stop_daemon($conf->daemon->listen);

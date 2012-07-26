@@ -12,7 +12,7 @@ package Clustericious::Command::apache;
 use Clustericious::App;
 use Clustericious::Config;
 use File::Path qw/mkpath/;
-use base 'Mojo::Command';
+use base 'Mojolicious::Command';
 
 use Clustericious::Log;
 __PACKAGE__->attr(description => <<EOT);

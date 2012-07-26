@@ -3,7 +3,7 @@ package Clustericious::Command::Generate::MbdApp;
 use strict;
 use warnings;
 
-use base 'Mojo::Command';
+use base 'Mojolicious::Command';
 
 use File::Find;
 use File::Slurp 'slurp';
