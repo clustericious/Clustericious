@@ -1,4 +1,4 @@
-%% my $class = shift;
+% my $class = shift;
 -- Put database schema here
 
 create table clustericious (

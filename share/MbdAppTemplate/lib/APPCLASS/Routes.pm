@@ -1,21 +1,21 @@
-%% my $class = shift;
-package <%%= $class %%>::Routes;
+% my $class = shift;
+package <%= $class %>::Routes;
 
 =head1 NAME
 
-<%%= $class %%>::Routes -- set up the routes for <%%= $class %%>.
+<%= $class %>::Routes -- set up the routes for <%= $class %>.
 
 =head1 DESCRIPTION
 
 This package creates all the routes, and thus defines
-the API for <%%= $class %%>.
+the API for <%= $class %>.
 
 =cut
 
 use strict;
 use warnings;
 
-use <%%= $class %%>::Objects;
+use <%= $class %>::Objects;
 use Clustericious::RouteBuilder;
 use Clustericious::RouteBuilder::CRUD
         "create" => { -as => "do_create" },
@@ -29,7 +29,7 @@ use Clustericious::RouteBuilder::Search
         defaults => { finder => "Rose::Planter" };
 
 get    '/'              => sub {shift->
-                                render_text("welcome to <%%= $class %%>")};
+                                render_text("welcome to <%= $class %>")};
 post   '/:items/search' => \&do_search;
 get    '/:items/search' => \&do_search;
 post   '/:table'        => \&do_create;

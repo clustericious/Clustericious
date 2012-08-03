@@ -1,13 +1,13 @@
-package Clustericious::Command::Generate;
+package Clustericious::Command::generate;
 
 use strict;
 use warnings;
 
-use base 'Mojolicious::Command::generate';
+use Mojo::Base 'Mojolicious::Command::generate';
 
-__PACKAGE__->attr(namespaces =>
-      sub { [qw/Clustericious::Command::Generate
-                Mojolicious::Command::Generate
-                Mojolicious::Command::Generate/] });
+has namespaces =>
+      sub { [qw/Clustericious::Command::generate
+                Mojolicious::Command::generate
+                Mojo::Command::generate/] };
 
 1;

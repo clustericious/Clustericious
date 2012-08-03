@@ -1,18 +1,19 @@
-package Clustericious::Command::Generate::MbdApp;
+package Clustericious::Command::generate::mbd_app;
 
 use strict;
 use warnings;
 
-use base 'Mojolicious::Command';
+use Mojo::Base 'Clustericious::Command';
 
 use File::Find;
 use File::Slurp 'slurp';
 use File::ShareDir 'dist_dir';
   
-__PACKAGE__->attr(description => <<'EOF');
+has description => <<'EOF';
 Generate Clustericious app based on Module::Build::Database.
 EOF
-__PACKAGE__->attr(usage => <<"EOF");
+
+has usage => <<"EOF";
 usage: $0 generate mbd_app [NAME]
 EOF
 
@@ -34,7 +35,10 @@ sub _installfile
     $relpath =~ s/APPCLASS/$class/g;
     $relpath =~ s/APPNAME/$name/g;
 
-    $self->render_to_rel_file($file, $relpath, $class) unless -e $relpath;
+    return if -e $relpath;
+
+    my $content = Mojo::Template->new->render_file( $file, $class );
+    return $self->write_file($relpath, $content );
 }
 
 sub run
@@ -45,10 +49,6 @@ sub run
     my $templatedir = dist_dir('Clustericious') . "/MbdAppTemplate";
 
     die "Can't find template.\n" unless -d $templatedir;
-
-    $self->renderer->line_start('%%');
-    $self->renderer->tag_start('<%%');
-    $self->renderer->tag_end('%%>');
 
     find({wanted => sub { $self->_installfile($templatedir, $_, $class) if -f },
           no_chdir => 1}, $templatedir);

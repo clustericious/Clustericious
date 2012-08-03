@@ -1,13 +1,13 @@
-%% my $class = shift;
-package <%%= $class %%>;
+% my $class = shift;
+package <%= $class %>;
 
 =head1 NAME
 
-<%%= $class %%> - Application Class
+<%= $class %> - Application Class
 
 =head1 SYNOPSIS
 
-<%%= $class %%>
+<%= $class %>
 
 =head1 DESCRIPTION
 
@@ -17,7 +17,7 @@ use strict;
 use warnings;
 
 use base 'Clustericious::App';
-use <%%= $class %%>::Routes;
+use <%= $class %>::Routes;
 
 our $VERSION = '0.01';
 

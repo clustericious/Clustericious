@@ -1,4 +1,4 @@
-%% my $class = shift;
+% my $class = shift;
 #!/usr/bin/env perl
 
 use File::Basename 'dirname';
@@ -12,6 +12,6 @@ use Clustericious::Commands;
 use strict;
 use warnings;
 
-$ENV{MOJO_APP} ||= '<%%= $class %%>';
+$ENV{MOJO_APP} ||= '<%= $class %>';
 
 Clustericious::Commands->start;
