@@ -23,6 +23,7 @@ my $builder = Module::Build::Database->new(
         'Rose'                => 0,
         'DBD::Pg'             => 0,
         'Rose::Planter'       => '0.04',
+        'DBIx::Connector'     => 0,
     },
     add_to_cleanup      => [ '<%= $class %>-*' ],
     create_makefile_pl => 'traditional',

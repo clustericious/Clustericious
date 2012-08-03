@@ -10,9 +10,9 @@ use Test::Mojo;
 
 use_ok('<%= $class %>');
 
-my $t = Test::Mojo->new(app => '<%= $class %>');
+my $t = Test::Mojo->new('<%= $class %>');
 
-$t->get_ok('/')->status_is(200)->content_type_is('text/html')
+$t->get_ok('/')->status_is(200)->content_type_like('text/html')
   ->content_like(qr/welcome/i);
 
 

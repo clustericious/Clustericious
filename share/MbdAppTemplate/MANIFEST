@@ -6,7 +6,6 @@ bin/<%= $name %>
 db/patches/0010_start.sql
 eg/<%= $class %>.conf
 lib/<%= $class %>.pm
-lib/<%= $class %>/App.pm
 lib/<%= $class %>/DB.pm
 lib/<%= $class %>/Objects.pm
 lib/<%= $class %>/Routes.pm
