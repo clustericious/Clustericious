@@ -57,12 +57,9 @@ Step 2.
 
     clustericious generate mbd_app Musicrest --schema schema.sql
 
-Done!
+Now skip to step 7 if you just want to see it work.
 
-At this point skip to step 7 if you are in a hurry
-and excited to just see it work.
-
-Step 4.  Try it out :
+Step 4.  Try the test suite :
 
     cd Musicrest
     perl Build.PL
@@ -92,7 +89,20 @@ Step 7.  Prepare to distribute your application and schema.
 
     ./Build dbdist
     ./Build dist
+    # and commit and tag if desired
 
+Step 8.  Install and configure
 
+    ./Build install
+    ./Build dbinstall
+    mkdir ~/etc
+    cp eg/*.conf ~/etc
 
+Step 9.  Start it up
+
+    musicrest start
+
+Step 10.  Try it :
+
+    curl -v http://localhost:3000/status
 
