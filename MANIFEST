@@ -8,7 +8,7 @@ lib/Clustericious.pm
 lib/Clustericious/App.pm
 lib/Clustericious/Command/apache.pm
 lib/Clustericious/Command/generate.pm
-lib/Clustericious/Command/generate/MbdApp.pm
+lib/Clustericious/Command/generate/mbd_app.pm
 lib/Clustericious/Command/hypnotoad.pm
 lib/Clustericious/Command/lighttpd.pm
 lib/Clustericious/Command/nginx.pm
