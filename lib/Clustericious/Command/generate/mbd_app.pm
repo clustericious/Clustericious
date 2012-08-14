@@ -8,6 +8,7 @@ use Mojo::Base 'Clustericious::Command';
 use File::Find;
 use File::Slurp 'slurp';
 use File::ShareDir 'dist_dir';
+use File::Basename qw/basename/;
   
 has description => <<'EOF';
 Generate Clustericious app based on Module::Build::Database.
@@ -43,7 +44,7 @@ sub _installfile
 
 sub run
 {
-    my ($self, $class) = @_;
+    my ($self, $class, %args ) = @_;
     $class ||= 'MyClustericiousApp';
 
     my $templatedir = dist_dir('Clustericious') . "/MbdAppTemplate";
@@ -52,6 +53,12 @@ sub run
 
     find({wanted => sub { $self->_installfile($templatedir, $_, $class) if -f },
           no_chdir => 1}, $templatedir);
+
+    if (my $schema = $args{'--schema'}) {
+        my $content = slurp $schema;
+        my $base = basename $schema;
+        $self->write_file("db/patches/0020_$base", $content);
+    }
 }
 
 1;
