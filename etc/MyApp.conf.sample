@@ -1,5 +1,5 @@
 ---
-% extends_config 'common',
+% extends_config 'common_nginx',
 %     app => 'MyApp',
 %     url => 'http://localhost:9010';
 db :
