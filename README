@@ -1,5 +1,58 @@
 
+DESCRIPTION
+
 This is a framework based on Mojo, with easy syntax
 like Mojolicious::Lite, intended for making applications
 which are part of an HTTP-based cluster.
+
+When used with Rose::DB::Planter, Clustericious
+allows for the easy conversion of a database
+schema into a RESTful interface and a web
+frontend.
+
+EXAMPLE
+
+Let's turn a database schema below into a RESTful
+web service with a web front end.
+
+Step 1.  Make your schema :
+
+    create table artist (
+        id integer primary key,
+        name varchar
+    );
+
+    create table album (
+        id integer primary key,
+        artist integer references artist,
+        title varchar,
+        year integer
+    );
+
+    create table song (
+        id integer primary key,
+        album integer references album(id),
+        title varchar,
+        length integer
+    );
+
+    create table performance (
+        id integer primary key,
+        location varchar
+    );
+
+    create table song_performance (
+        song integer references song(id),
+        performance integer references performance (id),
+        primary key (song, performance)
+    );
+
+Note we have several 1-many relationships and one
+many-many relationship.
+
+Step 2.
+
+    clustericious generate mbd_app Musicrest
+
+
 
