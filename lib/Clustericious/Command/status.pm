@@ -14,6 +14,7 @@ use Mojo::UserAgent;
 
 use Clustericious::App;
 use Clustericious::Config;
+use File::Basename qw/dirname/;
 use base 'Mojolicious::Command';
 
 use strict;
@@ -72,11 +73,13 @@ sub run {
 
     my @status; # array of { name =>.., state =>.., message =>.. } hashrefs.
 
+    my $exe = $0;
     # webserver
     for ($conf->start_mode) {
         push @status, { name => $_,
-         ( /daemon_prefork/ ? _check_pidfile($conf->daemon_prefork->pid)
-         : /plackup/        ? _check_pidfile($conf->plackup->pidfile) 
+         (
+           /hypnotoad/ ? _check_pidfile($conf->hypnotoad->pid_file(default => dirname($exe).'/hypnotoad.pid'))
+         : /plackup/   ? _check_pidfile($conf->plackup->pidfile) 
            # NB: see http://redmine.lighttpd.net/issues/2137
            # lighttpd's pid files disappear.  Time to switch to nginx?
          : /lighttpd/       ? _check_pidfile($conf->lighttpd->env->lighttpd_pid)
@@ -86,7 +89,7 @@ sub run {
     # Do a HEAD request if the webserver(s) are ok.
     if ((grep {$_->{state} eq 'ok'} @status)==@status) {
         my $res = Mojo::UserAgent->new->head($conf->url)->res;
-        printf qq[%10s : %-10s (%d %s)\n], "url", $conf->url, $res->code, $res->message;
+        printf qq[%10s : %-10s (%s %s)\n], "url", $conf->url, $res->code || '?', $res->message || '';
     }
 
     # Database
