@@ -109,8 +109,10 @@ sub _stop_daemon {
 sub _stop_nginx {
     my %conf = @_;
     my $prefix = $conf{'-p'};
+    my $cnf = $conf{'-c'} || "";
+    $cnf = "-c $cnf" if $cnf;
     INFO "stopping nginx in $prefix";
-    system("nginx -p $prefix -s quit")==0 or WARN "could not stop nginx";
+    system("nginx -p $prefix $cnf -s quit")==0 or WARN "could not stop nginx";
 }
 
 sub _stop_apache {
