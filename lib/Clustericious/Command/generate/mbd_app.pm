@@ -44,8 +44,12 @@ sub _installfile
 
 sub run
 {
-    my ($self, $class, %args ) = @_;
+    my ($self, $class, @args ) = @_;
     $class ||= 'MyClustericiousApp';
+    if (@args % 2) {
+        die "usage : $0 generate mbd_app <name> --schema <schema>.sql\n";
+    }
+    my %args = @args;
 
     my $templatedir = dist_dir('Clustericious') . "/MbdAppTemplate";
 
@@ -57,7 +61,7 @@ sub run
     if (my $schema = $args{'--schema'}) {
         my $content = slurp $schema;
         my $base = basename $schema;
-        $self->write_file("db/patches/0020_$base", $content);
+        $self->write_file("$class/db/patches/0020_$base", $content);
     }
 }
 

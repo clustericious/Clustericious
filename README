@@ -106,3 +106,15 @@ Step 10.  Try it :
 
     curl -v http://localhost:3000/status
 
+Now for some sample REST calls :
+
+    add an artist
+    add an album
+    add some songs
+    add a performance
+
+    get a list of artists
+    get the songs for an artist
+    get the performances by an artist
+
+
