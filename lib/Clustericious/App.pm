@@ -22,12 +22,20 @@ use Data::Dumper;
 use Clustericious::Log;
 use Mojo::URL;
 use JSON::XS;
-use base 'Mojolicious';
+use Scalar::Util qw/weaken/;
+use Mojo::Base 'Mojolicious';
 
 use Clustericious::Controller;
 use Clustericious::Renderer;
 use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
+use Clustericious::Commands;
+
+has commands => sub {
+  my $commands = Clustericious::Commands->new(app => shift);
+    weaken $commands->{app};
+    return $commands;
+};
 
 use warnings;
 use strict;

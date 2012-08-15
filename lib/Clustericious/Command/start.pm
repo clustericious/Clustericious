@@ -11,19 +11,18 @@ Start a daemon using the config file and the start_mode.
 For hypnotoad, the config file should
 contain "daemonize" and "pid" keys, e.g. :
 
-   "start_mode" : "hypnotoad",
-   "hypnotoad" : {
-      "pid"      : "/tmp/restmd.pid",
+   ---
+   start_mode : hypnotoad
+   hypnotoad :
+      pid      : /tmp/restmd.pid
       [...]
-      "env"      : {
-        "foo" : "bar"
-      }
-    }
+      env      :
+        foo : bar
 
 The above configuration will will cause "app start"
 to be equivalent to
 
-  foo=bar MyApp.pl daemon_preform --daemonize 1 --id /tmp/restmd.pid [..]
+  foo=bar MyApp.pl hypnotoad -pid /tmp/restmd.pid [..]
 
 In other words, keys and values in the configuration file become
 options preceded by double dashes.
@@ -31,7 +30,7 @@ options preceded by double dashes.
 If a key has a single dash, it is sent as is (with no double dash).
 
 The special value "null" means don't send an argument to the
-command line option  (e.g. --daemonize)
+command line option.
 
 The special label "env" is an optional hash of environment variables
 to set before starting the command.
@@ -47,16 +46,16 @@ use File::Basename qw/dirname/;
 
 use Clustericious::App;
 use Clustericious::Config;
-use base 'Mojolicious::Command';
+use Mojo::Base 'Mojolicious::Command';
 
 use strict;
 use warnings;
 
-__PACKAGE__->attr(description => <<EOT);
+has description => <<EOT;
 Start a daemon using the config file.
 EOT
 
-__PACKAGE__->attr(usage => <<EOT);
+has usage => <<EOT;
 usage $0: start
 Start a daemon using the start_mode in the config file.
 See Clustericious::Config for the format of the config file.
