@@ -94,18 +94,31 @@ Step 7.  Prepare to distribute your application and schema.
 
 Step 8.  Install and configure
 
+    ./Build fakeinstall
+    ./Build dbfakeinstall
+
     ./Build install
     ./Build dbinstall
+
+Check the db that was installed :
+    psql --list
+    psql musicrestserver
+    \dt
+
+Step 9.  Configure
+
     mkdir ~/etc
     cp eg/*.conf ~/etc
 
-Step 9.  Start it up
+Step 10. Start it up
 
     musicrest start
 
-Step 10.  Try it :
+Step 11.  Try it :
 
     curl -v http://localhost:3000/status
+    mojo get http://localhost:3000/status
+    musicrest get -v /status
 
 Now for some sample REST calls :
 
