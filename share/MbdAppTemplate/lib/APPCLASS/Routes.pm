@@ -28,14 +28,14 @@ use Clustericious::RouteBuilder::Search
         "search" => { -as => "do_search" },
         defaults => { finder => "Rose::Planter" };
 
-get    '/'              => sub {shift->
-                                render_text("welcome to <%= $class %>")};
-post   '/:items/search' => \&do_search;
-get    '/:items/search' => \&do_search;
-post   '/:table'        => \&do_create;
-get    '/:table/(*key)' => \&do_read;
-post   '/:table/(*key)' => \&do_update;
-Delete '/:table/(*key)' => \&do_delete;
-get    '/:table'        => \&do_list;
+get   '/' => sub {shift->render_text("welcome to <%= $class %>")};
+
+post  '/:items/search' => \&do_search;
+get   '/:items/search' => \&do_search;
+post  '/:table'        => [ table => Rose::Planter->regex_for_tables ] => \&do_create;
+get   '/:table/*key'   => [ table => Rose::Planter->regex_for_tables ] => \&do_read;
+post  '/:table/*key'   => [ table => Rose::Planter->regex_for_tables ] => \&do_update;
+del   '/:table/*key'   => [ table => Rose::Planter->regex_for_tables ] => \&do_delete;
+get   '/:table'        => [ table => Rose::Planter->regex_for_tables ] => \&do_list;
 
 1;

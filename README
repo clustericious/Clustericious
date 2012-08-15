@@ -83,13 +83,14 @@ Step 5.  Add a test :
     $t->remove_ok( "/artist/$id" );
     done_testing();
 
-Step 6.  Repeat step 4 to run this test.
+Step 6.  Run ./Build test to see it work.
 
 Step 7.  Prepare to distribute your application and schema.
 
     ./Build dbdist
+    ./Build manifest
     ./Build dist
-    # and commit and tag if desired
+    # (and commit and tag)
 
 Step 8.  Install and configure
 
