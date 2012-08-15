@@ -116,11 +116,13 @@ Step 10. Start it up
 
 Step 11.  Try it :
 
-    curl -v http://localhost:3000/status
-    mojo get http://localhost:3000/status
-    musicrest get -v /status
+    curl -v http://localhost:3000
 
 Now for some sample REST calls :
+
+Note for testing, you can use the server
+as a client, e.g. :
+    musicrest get -v /status
 
     add an artist
     add an album
