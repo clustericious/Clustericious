@@ -7,6 +7,10 @@ use Clustericious::Commands;
 
 use strict;
 
+BEGIN {
+    $ENV{LOG_LEVEL} = 'FATAL';
+}
+
 my $c;
 {
     local $ENV{HARNESS_ACTIVE};
