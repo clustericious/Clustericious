@@ -1,12 +1,25 @@
 =head1 NAME
 
-Clustericious::RouteBuilder::Common -- routes common to all clustericious apps.
+Clustericious::RouteBuilder::Common -- Routes common to all clustericious apps.
+
+=head1 SYNOPSIS
+
+ Clustericious::RouteBuilder::Common->add_routes($app);
 
 =head1 DESCRIPTION
 
 This package adds routes that are common to all clustericious servers.
 
-These routes will be added first; they cannot be overridden.
+These routes will be added first; they cannot be overridden.  The following
+routes are added :
+
+    /version
+    /status
+    /api
+    /log
+
+/log is not available unless the configuration option "export_logs" is set
+to a true value.
 
 =cut
 
