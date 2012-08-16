@@ -1,11 +1,13 @@
 bin/clustericious
 Build.PL
+Changes
 eg/server.conf
-etc/common.conf.sample
+etc/common_nginx.conf
 etc/log4perl.conf.sample
 etc/MyApp.conf.sample
 lib/Clustericious.pm
 lib/Clustericious/App.pm
+lib/Clustericious/Command.pm
 lib/Clustericious/Command/apache.pm
 lib/Clustericious/Command/generate.pm
 lib/Clustericious/Command/generate/mbd_app.pm
@@ -18,6 +20,7 @@ lib/Clustericious/Command/status.pm
 lib/Clustericious/Command/stop.pm
 lib/Clustericious/Commands.pm
 lib/Clustericious/Controller.pm
+lib/Clustericious/HelloWorld.pm
 lib/Clustericious/Plugin/AutodataHandler.pm
 lib/Clustericious/Plugin/SimpleAuth.pm
 lib/Clustericious/Renderer.pm
@@ -38,6 +41,9 @@ share/MbdAppTemplate/bin/APPNAME
 share/MbdAppTemplate/Build.PL
 share/MbdAppTemplate/db/patches/0010_start.sql
 share/MbdAppTemplate/eg/APPCLASS.conf
+share/MbdAppTemplate/eg/APPCLASS.sample.conf
+share/MbdAppTemplate/eg/hypnotoad.conf
+share/MbdAppTemplate/eg/nginx.conf
 share/MbdAppTemplate/lib/APPCLASS.pm
 share/MbdAppTemplate/lib/APPCLASS/DB.pm
 share/MbdAppTemplate/lib/APPCLASS/Objects.pm
@@ -52,7 +58,9 @@ t/auth.t
 t/basic.t
 t/config.t
 t/crud.t
+t/generate.t
 t/plugin_datahandler.t
+t/pod.t
 t/proxy.t
 t/test.t
 t/testobject.yaml

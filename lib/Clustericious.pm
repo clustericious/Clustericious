@@ -44,7 +44,7 @@ facilities for a variety of deployment options.
 
 =cut
 
-our $VERSION = '0.99';
+our $VERSION = '0.9900';
 
 =head1 NOTES
 

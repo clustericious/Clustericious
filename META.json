@@ -22,6 +22,7 @@
             "File::Slurp" : "0",
             "Hash::Merge" : "0",
             "IO::Prompt" : "0",
+            "IO::Scalar" : "0",
             "JSON::XS" : "0",
             "List::MoreUtils" : "0",
             "Module::Build" : "0.36",
@@ -48,22 +49,26 @@
    "provides" : {
       "Clustericious" : {
          "file" : "lib/Clustericious.pm",
-         "version" : "0.99"
+         "version" : "0.9900"
       },
       "Clustericious::App" : {
          "file" : "lib/Clustericious/App.pm",
          "version" : 0
       },
-      "Clustericious::Command::Generate" : {
-         "file" : "lib/Clustericious/Command/generate.pm",
-         "version" : 0
-      },
-      "Clustericious::Command::Generate::MbdApp" : {
-         "file" : "lib/Clustericious/Command/generate/MbdApp.pm",
+      "Clustericious::Command" : {
+         "file" : "lib/Clustericious/Command.pm",
          "version" : 0
       },
       "Clustericious::Command::apache" : {
          "file" : "lib/Clustericious/Command/apache.pm",
+         "version" : 0
+      },
+      "Clustericious::Command::generate" : {
+         "file" : "lib/Clustericious/Command/generate.pm",
+         "version" : 0
+      },
+      "Clustericious::Command::generate::mbd_app" : {
+         "file" : "lib/Clustericious/Command/generate/mbd_app.pm",
          "version" : 0
       },
       "Clustericious::Command::hypnotoad" : {
@@ -100,6 +105,10 @@
       },
       "Clustericious::Controller" : {
          "file" : "lib/Clustericious/Controller.pm",
+         "version" : 0
+      },
+      "Clustericious::HelloWorld" : {
+         "file" : "lib/Clustericious/HelloWorld.pm",
          "version" : 0
       },
       "Clustericious::Plugin::AutodataHandler" : {
@@ -149,5 +158,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.99"
+   "version" : "0.9900"
 }

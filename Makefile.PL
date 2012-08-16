@@ -2,30 +2,31 @@
 use ExtUtils::MakeMaker;
 WriteMakefile
 (
-          'NAME' => 'Clustericious',
-          'VERSION_FROM' => 'lib/Clustericious.pm',
-          'PREREQ_PM' => {
-                           'Clustericious::Config' => '0.01',
-                           'Clustericious::Log' => '0.05',
-                           'File::ShareDir' => '1.00',
-                           'File::Slurp' => 0,
-                           'Hash::Merge' => 0,
-                           'IO::Prompt' => 0,
-                           'JSON::XS' => 0,
-                           'List::MoreUtils' => 0,
-                           'Module::Build' => '0.36',
-                           'MojoX::Log::Log4perl' => 0,
-                           'Mojolicious' => '3.09',
-                           'Sub::Exporter' => 0,
-                           'Sys::Hostname' => 0,
-                           'Test::More' => 0,
-                           'YAML::Syck' => 0,
-                           'YAML::XS' => 0
-                         },
-          'INSTALLDIRS' => 'site',
-          'EXE_FILES' => [
-                           'bin/clustericious'
-                         ],
-          'PL_FILES' => {}
-        )
+  'NAME' => 'Clustericious',
+  'VERSION_FROM' => 'lib/Clustericious.pm',
+  'PREREQ_PM' => {
+                   'Clustericious::Config' => '0.01',
+                   'Clustericious::Log' => '0.05',
+                   'File::ShareDir' => '1.00',
+                   'File::Slurp' => 0,
+                   'Hash::Merge' => 0,
+                   'IO::Prompt' => 0,
+                   'IO::Scalar' => 0,
+                   'JSON::XS' => 0,
+                   'List::MoreUtils' => 0,
+                   'Module::Build' => '0.36',
+                   'MojoX::Log::Log4perl' => 0,
+                   'Mojolicious' => '3.09',
+                   'Sub::Exporter' => 0,
+                   'Sys::Hostname' => 0,
+                   'Test::More' => 0,
+                   'YAML::Syck' => 0,
+                   'YAML::XS' => 0
+                 },
+  'INSTALLDIRS' => 'site',
+  'EXE_FILES' => [
+                   'bin/clustericious'
+                 ],
+  'PL_FILES' => {}
+)
 ;
