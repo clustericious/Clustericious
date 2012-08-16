@@ -49,7 +49,7 @@
    "provides" : {
       "Clustericious" : {
          "file" : "lib/Clustericious.pm",
-         "version" : "0.9900"
+         "version" : "0.9901"
       },
       "Clustericious::App" : {
          "file" : "lib/Clustericious/App.pm",
@@ -158,5 +158,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.9900"
+   "version" : "0.9901"
 }
