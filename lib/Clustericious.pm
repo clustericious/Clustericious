@@ -32,7 +32,7 @@ clients.
 - Uses L<Clustericious::Log> for logging.
 
 - Integrates with L<Module::Build::Database> and L<Rose::Planter>
-to provide a basic CRUD interface to a database backends.
+to provide a basic RESTful CRUD interface to a database.
 
 - Provides 'stop' and 'start' commands, and high-level configuration
 facilities for a variety of deployment options.
