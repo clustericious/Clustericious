@@ -39,7 +39,8 @@ sub _installfile
     return if -e $relpath;
 
     my $content = Mojo::Template->new->render_file( $file, $class );
-    return $self->write_file($relpath, $content );
+    $self->write_file($relpath, $content );
+    -x $file && $self->chmod_file($relpath, 0744);
 }
 
 sub run
