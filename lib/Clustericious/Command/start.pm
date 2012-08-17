@@ -8,9 +8,6 @@ Start a daemon using the config file and the start_mode.
 
 =head1 EXAMPLE
 
-For hypnotoad, the config file should
-contain "daemonize" and "pid" keys, e.g. :
-
    ---
    start_mode : hypnotoad
    hypnotoad :
@@ -19,10 +16,10 @@ contain "daemonize" and "pid" keys, e.g. :
       env      :
         foo : bar
 
-The above configuration will will cause "app start"
+The above configuration will will cause "myapp start"
 to be equivalent to
 
-  foo=bar MyApp.pl hypnotoad -pid /tmp/restmd.pid [..]
+  foo=bar myapp hypnotoad --pid /tmp/restmd.pid [..]
 
 In other words, keys and values in the configuration file become
 options preceded by double dashes.
@@ -34,6 +31,10 @@ command line option.
 
 The special label "env" is an optional hash of environment variables
 to set before starting the command.
+
+=head1 SEE ALSO
+
+L<Clustericious::Command::hypnotoad>
 
 =cut
 

@@ -8,22 +8,22 @@ Start a hypnotoad webserver.
 
 Configuration for the server is taken directly from the
 "hypnotoad" entry in the config file, and turned into
-a config file for hypnotoad.  The location of the file
-can be controllled by setting HYPNOTOAD_CONFIG.
+a config file for hypnotoad.
 
 =head1 EXAMPLE
 
  start_mode : "hypnotoad"
  hypnotoad:
     workers : 1
-    listen : [ "http://*:3000" ]
+        listen :
+            - "http://*:3000"
     inactivity_timeout : 50
     pid_file : /tmp/minionrelay.pid
 
 
 =head1 SEE ALSO
 
-Mojo::Server::Hypnotoad
+L<Mojo::Server::Hypnotoad>
 
 =cut
 
