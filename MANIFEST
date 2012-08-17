@@ -10,6 +10,7 @@ lib/Clustericious/App.pm
 lib/Clustericious/Command.pm
 lib/Clustericious/Command/apache.pm
 lib/Clustericious/Command/generate.pm
+lib/Clustericious/Command/generate/client.pm
 lib/Clustericious/Command/generate/mbd_app.pm
 lib/Clustericious/Command/hypnotoad.pm
 lib/Clustericious/Command/lighttpd.pm
@@ -37,12 +38,16 @@ MANIFEST.SKIP
 META.json
 META.yml
 README
+share/ClientTemplate/bin/APPNAMEclient
+share/ClientTemplate/Build.PL
+share/ClientTemplate/lib/APPCLASS/Client.pm
 share/MbdAppTemplate/bin/APPNAME
 share/MbdAppTemplate/Build.PL
 share/MbdAppTemplate/db/patches/0010_start.sql
 share/MbdAppTemplate/eg/APPCLASS.conf
 share/MbdAppTemplate/eg/APPCLASS.sample.conf
 share/MbdAppTemplate/eg/hypnotoad.conf
+share/MbdAppTemplate/eg/log4perl.conf
 share/MbdAppTemplate/eg/nginx.conf
 share/MbdAppTemplate/lib/APPCLASS.pm
 share/MbdAppTemplate/lib/APPCLASS/DB.pm
