@@ -6,6 +6,7 @@ use Mojo::UserAgent;
 use Mojo::URL;
 
 use Clustericious::Config;
+use Mojo::Base 'Mojolicious::Plugin';
 
 use warnings;
 use strict;
@@ -24,52 +25,59 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-In the config file :
+SimpleApp.conf:
 
-  "simple_auth" : { "url : "http://simpleauthserver.com:9999" }
+ {"simple_auth":{"url":"http://simpleauthserver:3000"}}
 
-In startup() (done by default for all clustericious apps) :
+Application:
 
-    $app->plugin('simple_auth');
+ package SimpleApp;
+ 
+ sub startup {
+   my $self = shift;
+   $self->SUPER::startup(@_);
+   # done by default for all clustericious applications.
+   #$self->plugin('simple_auth');
+ }
+ 
+ package SimpleApp::Routes;
+ 
+ use Clustericious::RouteBuilder;
 
-In routes :
+ # unprotected 
+ get '/public' => 'unprotected';
+ 
+ # requires simpleauth username/password
+ authenticate; 
+ get '/private1' => 'protected';
+ 
+ # protected by simple auth using an explicit realm
+ autheticate 'realm';
+ get '/private2' => 'realm protected';
+ 
+ # check for permissions to do $action on $resource
+ authorize 'action', 'resource';
+ get '/restricted1' => 'authz_restricted';
+ 
+ # check for premissions to do $action on the resource /restricted2
+ authorize 'action';
+ get '/restricted2';
+ 
+ # HTTP method as the $action and /http_method_get as the resource
+ authorize '<method>';
+ get '/http_method_get';
 
- get '/one' => "unprotected";
+ # HTTP method as the $action and "/prefix/http_method_with_prefix"
+ # as the resource.
+ authorize '<method>', '/myprefix/<path>';
+ get '/http_method_with_prefix';
 
- authenticate;
+=head1 DESCRIPTION
 
- get '/two' => "protected by simpleauth";
-
- authenticate "Realm";
-
- get '/three' => "protected by simpleauth, different realm";
-
- authorize "action", "resource";
-
- get "/five"; # check for permission to do $action on $resource
-
- authorize "action";
-
- get '/four'; # use the url path as the name of the resource
-
- authorize "<method>";
-
- get '/six'; # use the request method as the $action, and the url as the path
-
- authorize "<method>", "/myprefix/<path>";
-
- get 'seven'; # fill in <path> with request path to compute the resource
-
-=head2 skip_auth
-
-    Clustericious::Plugin::SimpleAuth->skip_auth(1);
-
-    Set this global flag to bypass authentication and authorization, e.g. during
-    a subequest.  This flag is reset at the end of the dispatch cycle.
+This provides authenticate and authorize methods which can be called from your applications
+Route class.
 
 =cut
-
-use Mojo::Base 'Mojolicious::Plugin';
 
 sub register_plugin {
     my ($self, $app) = @_;
@@ -84,16 +92,14 @@ sub register {
     1;
 }
 
-{
-    my $skip_auth = 0;
-    sub skip_auth {
-        my $class = shift;
-        return $skip_auth unless @_;
-        $skip_auth = shift;
-        return $skip_auth;
-    }
+=head1 METHODS
 
-}
+=head2 authenticate [ $realm ]
+
+Require username and password authentication, optionally with a realm.
+If a realm is not provided, '' is used.
+
+=cut
 
 sub authenticate {
     my $self = shift;
@@ -169,6 +175,13 @@ sub authenticate {
     return 0;
 }
 
+=head2 authorize [$action, [$resource]]
+
+Require the authenticated user have the authorization to perform
+the given action on the given resource.
+
+=cut
+
 sub authorize {
     my $self = shift;
     my $c = shift;
@@ -187,9 +200,26 @@ sub authorize {
     return 0;
 }
 
+=head2 skip_auth
+
+ Clustericious::Plugin::SimpleAuth->skip_auth(1);
+
+Set this global flag to bypass authentication and authorization, e.g. during
+a subequest.  This flag is reset at the end of the dispatch cycle.
+
+=cut
+
+sub skip_auth {
+    state $skip_auth = 0;
+    my $class = shift;
+    return $skip_auth unless @_;
+    $skip_auth = shift;
+    return $skip_auth;
+}
+
 =head1 SEE ALSO
 
-SimpleAuth
+L<SimpleAuth>
 
 =cut
 
