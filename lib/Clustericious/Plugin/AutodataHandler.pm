@@ -75,6 +75,12 @@ my %types =
     }
 );
 
+my %formats =
+(
+    'json' => 'application/json',
+    'yml'  => 'text/x-yaml',
+);
+
 sub register
 {
     my ($self, $app, $conf) = @_;
@@ -91,7 +97,9 @@ sub register
 
 sub _find_type
 {
-    my ($headers) = @_;
+    my ($c) = @_;
+
+    my $headers = $c->tx->req->content->headers;
 
     foreach my $type (map { /^([^;]*)/ } # get only stuff before ;
                       split(',', $headers->header('Accept') || ''),
@@ -101,14 +109,14 @@ sub _find_type
         return $type if $types{$type} and $types{$type}->{encode};
     }
 
-    return $default_encode;
+    return $formats{$c->stash->{format} // 'json'};
 }
 
 sub _autodata_renderer
 {
     my ($r, $c, $output, $data) = @_;
 
-    my $type = _find_type($c->tx->req->content->headers);
+    my $type = _find_type($c);
     $$output = $types{$type}->{encode}->($c->stash("autodata"), $c);
 
     $c->tx->res->headers->content_type($type);
