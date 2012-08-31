@@ -28,6 +28,7 @@ my $builder = Module::Build->new(
         'File::Slurp'          => 0,
         'Sys::Hostname'        => 0,
         'IO::Scalar'           => 0,
+        'File::HomeDir'        => 0,
       },
     add_to_cleanup      => [ 'Clustericious-*' ],
     create_makefile_pl => 'traditional',

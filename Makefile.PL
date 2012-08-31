@@ -22,6 +22,7 @@ WriteMakefile
                    'Test::More' => 0,
                    'YAML::Syck' => 0,
                    'YAML::XS' => 0
+                   'File::HomeDir' => 0,
                  },
   'INSTALLDIRS' => 'site',
   'EXE_FILES' => [
