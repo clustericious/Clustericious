@@ -33,6 +33,8 @@ Application:
 
  package SimpleApp;
  
+ use base qw( Clustericious::App );
+ 
  sub startup {
    my $self = shift;
    $self->SUPER::startup(@_);
