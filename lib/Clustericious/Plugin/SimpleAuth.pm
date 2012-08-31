@@ -160,7 +160,7 @@ sub authenticate {
         $res = $tx->res;
         $check = $res->code();
     }
-    unless (defined($check)) {
+    if(!defined $check || $check == 503) {
         $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
         WARN ("Error connecting to simpleauth at $config_url");
         $c->render(text => "auth server down", status => 503); # "Service unavailable"
@@ -198,7 +198,11 @@ sub authorize {
     my $code = (ref($c->app) eq 'SimpleAuth' ? $c->subdispatch(HEAD => $url) : Mojo::UserAgent->new->head($url))->res->code;
     return 1 if $code && $code == 200;
     INFO "Unauthorized access by $user to $action $resource";
-    $c->render(text => "unauthorized", status => 403);
+    if($code == 503) {
+        $c->render(text => "auth server down", status => 503); # "Service unavailable"
+    } else {
+        $c->render(text => "unauthorized", status => 403);
+    }
     return 0;
 }
 
