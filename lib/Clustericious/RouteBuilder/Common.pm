@@ -59,6 +59,14 @@ sub add_routes {
             }
     );
 
+    $app->routes->route('/api/:table')->to(
+        cb => sub {
+            my($self) = @_;
+            my $table = $self->app->dump_api_table($self->stash('table'));
+            $table ? $self->render( autodata => $table ) : $self->render_not_found;
+        },
+    );
+
     $app->routes->get('/log/:lines' => [ lines => qr/\d+/ ] =>
         sub {
             my $c = shift;

@@ -194,6 +194,48 @@ sub dump_api {
     return uniq sort @all;
 }
 
+=head2 $app-E<gt>dump_api_table( $table )
+
+Dump out the column information for the given table.
+
+=cut
+
+sub _dump_api_table_types
+{
+    my($rose_type) = @_;
+    return 'datetime' if $rose_type =~ /^datetime/;
+    state $types = {
+        (map { $_ => 'string' } qw( character text varchar )),
+        (map { $_ => 'numeric' } 'numeric', 'float', 'double precision','decimal'),
+        (map { $_ => $_ } qw( blob set time interval enum bytea chkpass bitfield date boolean )),
+        (map { $_ => 'integer' } qw( bigint integer bigserial serial )),
+        (map { $_ => 'epoch' } 'epoch', 'epoch hires'),
+        (map { $_ => 'timestamp' } 'timestamp', 'timestamp with time zone'),
+    };
+    return $types->{$rose_type} // 'unknown';
+}
+
+sub dump_api_table
+{
+    my($self, $table) = @_;
+    my $class = Rose::Planter->find_class($table);
+    return unless defined $class;
+
+    return {
+        columns => {
+            map {
+                $_->name => {
+                    rose_db_type => $_->type,
+                    not_null     => $_->not_null,
+                    type         => _dump_api_table_types($_->type),
+                } } $class->meta->columns
+            },
+        primary_key => [
+            map { $_->name } $class->meta->primary_key_columns
+        ],
+    };
+}
+
 =head2 $app-E<gt>config
 
 Returns the config (an instance of L<Clustericious::Config>) for the application.

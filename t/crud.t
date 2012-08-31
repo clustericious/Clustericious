@@ -54,6 +54,9 @@ $t->post_form_ok("/my_table", { foo => "bar" }, {}, "posted to create")
 $t->get_ok("/api")->json_content_is(
     [
         "GET /api",
+        "GET /api/one",
+        "GET /api/three",
+        "GET /api/two",
         "GET /log/:lines",
         "GET /ones",
         "GET /status",

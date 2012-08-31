@@ -58,6 +58,7 @@ share/MbdAppTemplate/t/001_basic.t
 share/MbdAppTemplate/t/999_pod.t
 share/MbdAppTemplate/t/999_pod_coverage.t
 share/MbdAppTemplate/t/999_stop_db.t
+t/api_table.t
 t/app.t
 t/auth.t
 t/basic.t
