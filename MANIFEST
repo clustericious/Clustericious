@@ -66,6 +66,7 @@ t/config.t
 t/crud.t
 t/generate.t
 t/plugin_datahandler.t
+t/plugin_simpleauth.t
 t/pod.t
 t/proxy.t
 t/test.t
