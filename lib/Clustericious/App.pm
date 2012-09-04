@@ -218,7 +218,7 @@ sub _dump_api_table_types
 sub dump_api_table
 {
     my($self, $table) = @_;
-    my $class = Rose::Planter->find_class($table);
+    my $class = eval { Rose::Planter->find_class($table) };
     return unless defined $class;
 
     return {
