@@ -52,6 +52,8 @@ use Mojo::ByteStream 'b';
 use JSON::XS;
 use YAML::XS qw/Dump Load/;
 
+use Clustericious::Log;
+
 my $default_decode = 'application/x-www-form-urlencoded';
 my $default_encode = 'application/json';
 
@@ -103,13 +105,14 @@ sub _find_type
 
     foreach my $type (map { /^([^;]*)/ } # get only stuff before ;
                       split(',', $headers->header('Accept') || ''),
-                      $headers->content_type || '')
-
-    {
+                      $headers->content_type || '') {
         return $type if $types{$type} and $types{$type}->{encode};
     }
 
-    return $formats{$c->stash->{format} // 'json'};
+    my $format = $c->stash->{format} // 'json';
+    LOGDIE "No type associated with $format" unless $formats{$format};
+
+    return $formats{$format};
 }
 
 sub _autodata_renderer
@@ -117,6 +120,7 @@ sub _autodata_renderer
     my ($r, $c, $output, $data) = @_;
 
     my $type = _find_type($c);
+    LOGDIE "no encoder for $type" unless $types{$type}{encode};
     $$output = $types{$type}->{encode}->($c->stash("autodata"), $c);
 
     $c->tx->res->headers->content_type($type);
