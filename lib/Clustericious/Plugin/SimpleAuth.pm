@@ -154,7 +154,7 @@ sub authenticate {
     my $check;
     my $res;
     if($self_simple_auth) {
-        $check = SimpleAuth::Data->check_credentials($user, $pw) ? 200 : 401;
+        $check = $c->data->check_credentials($user, $pw) ? 200 : 401;
     } else {
         $tx = ref($c->app) eq 'SimpleAuth' ? $c->subdispatch(HEAD => $auth_url) : $ua->head($auth_url);
         $res = $tx->res;
