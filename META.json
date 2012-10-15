@@ -4,7 +4,7 @@
       "Brian Duggan <brian.duggan@nasa.gov>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.112621",
    "license" : [
       "perl_5"
    ],
@@ -18,26 +18,27 @@
          "requires" : {
             "Clustericious::Config" : "0.01",
             "Clustericious::Log" : "0.05",
-            "File::ShareDir" : "0",
-            "File::Slurp" : "0",
-            "Hash::Merge" : "0",
-            "IO::Prompt" : "0",
-            "IO::Scalar" : "0",
-            "JSON::XS" : "0",
-            "List::MoreUtils" : "0",
+            "File::HomeDir" : 0,
+            "File::ShareDir" : 0,
+            "File::Slurp" : 0,
+            "Hash::Merge" : 0,
+            "IO::Prompt" : 0,
+            "IO::Scalar" : 0,
+            "JSON::XS" : 0,
+            "List::MoreUtils" : 0,
             "Module::Build" : "0.36",
-            "MojoX::Log::Log4perl" : "0",
+            "MojoX::Log::Log4perl" : 0,
             "Mojolicious" : "3.09",
-            "Sub::Exporter" : "0",
-            "Sys::Hostname" : "0",
-            "Test::More" : "0",
-            "YAML::Syck" : "0",
-            "YAML::XS" : "0"
+            "Sub::Exporter" : 0,
+            "Sys::Hostname" : 0,
+            "Test::More" : 0,
+            "YAML::Syck" : 0,
+            "YAML::XS" : 0
          }
       },
       "configure" : {
          "requires" : {
-            "Module::Build" : "0.4"
+            "Module::Build" : "0.40"
          }
       },
       "runtime" : {
@@ -49,7 +50,7 @@
    "provides" : {
       "Clustericious" : {
          "file" : "lib/Clustericious.pm",
-         "version" : "0.9902"
+         "version" : "0.9903"
       },
       "Clustericious::App" : {
          "file" : "lib/Clustericious/App.pm",
@@ -162,5 +163,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.9902"
+   "version" : "0.9903"
 }

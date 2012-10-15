@@ -5,6 +5,7 @@ author:
 build_requires:
   Clustericious::Config: 0.01
   Clustericious::Log: 0.05
+  File::HomeDir: 0
   File::ShareDir: 0
   File::Slurp: 0
   Hash::Merge: 0
@@ -21,9 +22,9 @@ build_requires:
   YAML::Syck: 0
   YAML::XS: 0
 configure_requires:
-  Module::Build: 0.4
+  Module::Build: 0.40
 dynamic_config: 1
-generated_by: 'Module::Build version 0.4, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.112621'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -32,7 +33,7 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.9902
+    version: 0.9903
   Clustericious::App:
     file: lib/Clustericious/App.pm
     version: 0
@@ -115,4 +116,4 @@ requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.9902
+version: 0.9903
