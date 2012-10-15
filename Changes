@@ -5,3 +5,8 @@ Revision history for Clustericious
 
 0.9902    Fri Aug 17 13:58:46 EDT 2012
           'generate client' command
+
+0.9903    Mon Oct 15 15:26:40 EDT 2012
+          - simpleauth plugin enhancements (gollis)
+          - /api/:table (gollis)
+
