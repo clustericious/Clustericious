@@ -35,6 +35,8 @@ get '/:items' => "noop";
 
 package Rose::Planter;
 
+no warnings 'redefine';
+
 sub tables {
     qw/one two three/;
 }

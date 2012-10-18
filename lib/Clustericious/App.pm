@@ -30,6 +30,11 @@ use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
 use Clustericious::Commands;
 
+our $haveRose;
+BEGIN {
+    eval { use Rose::Planter; };
+    $haveRose = 1 unless $@;
+};
 
 
 has commands => sub {
@@ -172,14 +177,14 @@ sub dump_api {
         $pat->_compile;
         my %placeholders = map { $_ => "<$_>" } @{ $pat->placeholders };
         my $method = uc join ',', @{ $r->via || ["GET"] };
-        if ($placeholders{table}) {
+        if ($haveRose && $placeholders{table}) {
             for my $table (Rose::Planter->tables) {
                 $placeholders{table} = $table;
                 my $pat = $pat->pattern;
                 $pat =~ s/:table/$table/;
                 push @all, "$method $pat";
             }
-        } elsif ($placeholders{items}) {
+        } elsif ($haveRose && $placeholders{items}) {
             for my $plural (Rose::Planter->plurals) {
                 $placeholders{items} = $plural;
                 my $line = $pat->render(\%placeholders);
@@ -218,7 +223,8 @@ sub _dump_api_table_types
 sub dump_api_table
 {
     my($self, $table) = @_;
-    my $class = eval { Rose::Planter->find_class($table) };
+    return unless $haveRose;
+    my $class = Rose::Planter->find_class($table);
     return unless defined $class;
 
     return {
