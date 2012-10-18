@@ -10,3 +10,5 @@ Revision history for Clustericious
           - simpleauth plugin enhancements (gollis)
           - /api/:table (gollis)
 
+0.9904    Thu Oct 18 13:15:52 EDT 2012
+          - fixed /api when there is no Rose
