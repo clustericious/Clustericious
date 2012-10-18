@@ -68,8 +68,7 @@ $t->get_ok("/api")->json_content_is(
         "POST /one",
         "POST /three",
         "POST /two"
-    ]
-);
+]);
 
 $t->get_ok('/log/1')->content_is("logs not available");
 

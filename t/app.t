@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 12;
+use Test::More tests => 14;
 use Test::Mojo;
 
 package SomeService;
@@ -38,5 +38,8 @@ diag $@ if $@;
 # return 500 when Rose::Planter is not loaded.
 $t->get_ok('/api/bogus_table')
     ->status_is(404);
+
+$t->get_ok('/api')
+    ->status_is(200);
 
 1;
