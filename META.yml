@@ -6,6 +6,7 @@ build_requires:
   Clustericious::Config: 0.01
   Clustericious::Log: 0.05
   File::HomeDir: 0
+  File::HomeDir::Test: 0
   File::ShareDir: 0
   File::Slurp: 0
   Hash::Merge: 0
@@ -33,7 +34,7 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.9904
+    version: 0.9905
   Clustericious::App:
     file: lib/Clustericious/App.pm
     version: 0
@@ -116,4 +117,4 @@ requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.9904
+version: 0.9905

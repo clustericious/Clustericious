@@ -8,6 +8,7 @@ WriteMakefile
                    'Clustericious::Config' => '0.01',
                    'Clustericious::Log' => '0.05',
                    'File::HomeDir' => 0,
+                   'File::HomeDir::Test' => 0,
                    'File::ShareDir' => '1.00',
                    'File::Slurp' => 0,
                    'Hash::Merge' => 0,
