@@ -4,8 +4,8 @@ use File::HomeDir::Test;
 use Test::More;
 
 BEGIN {
-    plan skip_all => 'requires Rose::Planter and DBD::SQLite: ' 
-        unless eval q{ use Rose::Planter (); use DBD::SQLite (); 1 };
+    plan skip_all => 'requires Rose::Planter 0.34 and DBD::SQLite: '
+        unless eval q{ use Rose::Planter 0.34 (); use DBD::SQLite (); 1 };
 }
 
 package SomeService;
@@ -23,7 +23,6 @@ use File::HomeDir;
 use Test::More;
 
 BEGIN {
-
     my $home = File::HomeDir->my_home;
     my $db_filename = "$home/database.sqlite";
     my $dbh = DBI->connect("dbi:SQLite:dbname=$db_filename", '', '', { RaiseError => 1, AutoCommit => 1 });
