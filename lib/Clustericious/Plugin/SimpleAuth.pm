@@ -124,7 +124,7 @@ sub authenticate {
     my $userinfo = b($str)->b64_decode;
     my ($user,$pw) = split /:/, $userinfo;
 
-    my $self_simple_auth = ref($c->app) eq 'SimpleAuth';
+    my $self_simple_auth = ref($c->app) =~ /^(?:Simple|Plug)Auth$/;
 
     # VIP treatment for some hosts
     my $ip = $c->tx->remote_address;
@@ -195,7 +195,7 @@ sub authorize {
     $resource =~ s[^/][];
     my $url = Mojo::URL->new( join '/', $c->config->simple_auth->url,
         "authz/user", $user, $action, $resource );
-    my $code = (ref($c->app) eq 'SimpleAuth' ? $c->subdispatch(HEAD => $url) : Mojo::UserAgent->new->head($url))->res->code;
+    my $code = (ref($c->app) =~ /^(?:Simple|Plug)Auth$/ ? $c->subdispatch(HEAD => $url) : Mojo::UserAgent->new->head($url))->res->code;
     return 1 if $code && $code == 200;
     INFO "Unauthorized access by $user to $action $resource";
     if($code == 503) {
