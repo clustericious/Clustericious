@@ -93,8 +93,28 @@ sub register
     $app->renderer->add_handler('autodata' => \&_autodata_renderer);
 
     $app->plugins->on( parse_autodata => \&_autodata_parse);
+    $app->plugins->on( add_autodata_type => \&_autodata_add);
 
     $app->helper( parse_autodata => \&_autodata_parse );
+}
+
+sub _autodata_add
+{
+    my($plugins, $args) = @_;
+
+    LOGDIE "No extension provided" unless defined $args->{extension};
+    my $ext  = $args->{extension};
+    my $mime = $args->{mime_type} // 'application/x-' . $ext;
+
+    $formats{$ext} = $mime;
+    
+    if(defined $args->{encode}) {
+        $types{$mime}->{encode} = $args->{encode};
+    }
+    
+    if(defined $args->{decode}) {
+        $types{$mime}->{decode} = $args->{decode};
+    }
 }
 
 sub _find_type
