@@ -57,7 +57,7 @@ sub _build_proxy {
     my $destination   = $arg->{to};
     $destination = Clustericious::Config->new($arg->{app})->url if $arg->{app};
     die "Can't determine url for proxy route.\n" unless $destination;
-    my $dest_url      = Mojo::URL->new($destination);
+    my $dest_url = Mojo::URL->new($destination);
 
     return sub {
         my $self = shift;
@@ -78,6 +78,9 @@ sub _build_proxy {
                 last if $got eq $strip_prefix;
             }
             $url->path->parts([@parts]);
+        }
+        if (@{ $dest_url->path->parts } && $dest_url->scheme) {
+            unshift @{ $url->path->parts }, @{ $dest_url->path->parts };
         }
 
         LOGDIE "recursive proxy " if $self->req->url->to_abs eq $url->to_abs;
