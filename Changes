@@ -1,5 +1,8 @@
 Revision history for Clustericious
 
+0.9907    - Wed Nov 28 13:57:01 EST 2012
+          Improved proxy support
+
 0.9906    - Fri Oct 26 13:29:52 EDT 2012
           Support "PlugAuth" in SimpleAuth plugin (gollis)
 
