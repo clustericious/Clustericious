@@ -34,7 +34,7 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.9907
+    version: 0.9908
   Clustericious::App:
     file: lib/Clustericious/App.pm
     version: 0
@@ -46,6 +46,9 @@ provides:
     version: 0
   Clustericious::Command::generate:
     file: lib/Clustericious/Command/generate.pm
+    version: 0
+  Clustericious::Command::generate::app:
+    file: lib/Clustericious/Command/generate/app.pm
     version: 0
   Clustericious::Command::generate::client:
     file: lib/Clustericious/Command/generate/client.pm
@@ -117,4 +120,4 @@ requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.9907
+version: 0.9908
