@@ -1,7 +1,7 @@
 Revision history for Clustericious
 
 0.9908    - Thu Nov 29 12:51:20 EST 2012
-          Added generate app for non mbd apps.
+          Added 'generate app', fixed 'generate client'.
 
 0.9907    - Wed Nov 28 13:57:01 EST 2012
           Improved proxy support
