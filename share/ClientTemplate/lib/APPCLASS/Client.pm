@@ -3,7 +3,7 @@ package <%= $class %>::Client;
 
 =head1 NAME
 
-<%= $class %>::Client - $class Client
+<%= $class %>::Client - <%= $class %> Client
 
 =head1 SYNOPSIS
 
