@@ -90,8 +90,8 @@ sub register_plugin {
 }
 
 sub register {
-
-    1;
+    my ($self, $app, $conf) = @_;
+    $self;
 }
 
 =head1 METHODS
