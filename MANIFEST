@@ -24,7 +24,7 @@ lib/Clustericious/Commands.pm
 lib/Clustericious/Controller.pm
 lib/Clustericious/HelloWorld.pm
 lib/Clustericious/Plugin/AutodataHandler.pm
-lib/Clustericious/Plugin/SimpleAuth.pm
+lib/Clustericious/Plugin/PlugAuth.pm
 lib/Clustericious/Renderer.pm
 lib/Clustericious/RouteBuilder.pm
 lib/Clustericious/RouteBuilder/Common.pm
@@ -80,6 +80,7 @@ t/config.t
 t/crud.t
 t/generate.t
 t/plugin_datahandler.t
+t/plugin_plugauth.t
 t/plugin_simpleauth.t
 t/pod.t
 t/proxy.t

@@ -81,10 +81,10 @@ sub startup {
     my $auth_plugin;
     if(my $auth_config = $config->plug_auth(default => '')) {
         $self->log->info("Loading auth plugin plug_auth");
-        $auth_plugin = $self->plugin('simple_auth', plug_auth => $auth_config);
+        $auth_plugin = $self->plugin('plug_auth', plug_auth => $auth_config);
     } elsif($auth_config = $config->simple_auth(default => '')) {
         $self->log->info("Loading auth plugin simple_auth [deprecated]");
-        $auth_plugin = $self->plugin('simple_auth', plug_auth => $auth_config);
+        $auth_plugin = $self->plugin('plug_auth', plug_auth => $auth_config);
     } else {
         $self->log->info("No auth configured");
     }
