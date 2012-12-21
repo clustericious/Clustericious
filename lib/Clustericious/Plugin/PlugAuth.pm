@@ -94,7 +94,7 @@ sub register_plugin {
 sub register {
     my ($self, $app, $conf) = @_;
     eval { $self->config_url($conf->{plug_auth}->url(default => '')) };
-    WARN "unable to determine PlugAuth URL: $@";
+    WARN "unable to determine PlugAuth URL: $@" if $@ || !$self->config_url;
     $self;
 }
 
