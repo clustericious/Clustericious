@@ -83,18 +83,14 @@ Route class.
 
 has 'config_url';
 
-sub register_plugin {
-    my ($self, $app) = @_;
-
-    $app->hook(after_dispatch => sub { Clustericious::Plugin::PlugAuth->skip_auth(0) });
-
-    1;
-}
-
 sub register {
     my ($self, $app, $conf) = @_;
     eval { $self->config_url($conf->{plug_auth}->url(default => '')) };
-    WARN "unable to determine PlugAuth URL: $@" if $@ || !$self->config_url;
+    if ($@ || !$self->config_url) {
+        WARN "unable to determine PlugAuth URL: $@"
+        return $self;
+    }
+    $app->hook(after_dispatch => sub { Clustericious::Plugin::PlugAuth->skip_auth(0) });
     $self;
 }
 
