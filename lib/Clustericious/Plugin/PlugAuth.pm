@@ -87,7 +87,7 @@ sub register {
     my ($self, $app, $conf) = @_;
     eval { $self->config_url($conf->{plug_auth}->url(default => '')) };
     if ($@ || !$self->config_url) {
-        WARN "unable to determine PlugAuth URL: $@"
+        WARN "unable to determine PlugAuth URL: $@";
         return $self;
     }
     $app->hook(after_dispatch => sub { Clustericious::Plugin::PlugAuth->skip_auth(0) });
