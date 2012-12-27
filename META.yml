@@ -34,7 +34,7 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.9908
+    version: 0.9909
   Clustericious::App:
     file: lib/Clustericious/App.pm
     version: 0
@@ -89,8 +89,8 @@ provides:
   Clustericious::Plugin::AutodataHandler:
     file: lib/Clustericious/Plugin/AutodataHandler.pm
     version: 0
-  Clustericious::Plugin::SimpleAuth:
-    file: lib/Clustericious/Plugin/SimpleAuth.pm
+  Clustericious::Plugin::PlugAuth:
+    file: lib/Clustericious/Plugin/PlugAuth.pm
     version: 0.01
   Clustericious::Renderer:
     file: lib/Clustericious/Renderer.pm
@@ -120,4 +120,4 @@ requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.9908
+version: 0.9909

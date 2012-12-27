@@ -51,7 +51,7 @@
    "provides" : {
       "Clustericious" : {
          "file" : "lib/Clustericious.pm",
-         "version" : "0.9908"
+         "version" : "0.9909"
       },
       "Clustericious::App" : {
          "file" : "lib/Clustericious/App.pm",
@@ -125,8 +125,8 @@
          "file" : "lib/Clustericious/Plugin/AutodataHandler.pm",
          "version" : 0
       },
-      "Clustericious::Plugin::SimpleAuth" : {
-         "file" : "lib/Clustericious/Plugin/SimpleAuth.pm",
+      "Clustericious::Plugin::PlugAuth" : {
+         "file" : "lib/Clustericious/Plugin/PlugAuth.pm",
          "version" : "0.01"
       },
       "Clustericious::Renderer" : {
@@ -168,5 +168,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.9908"
+   "version" : "0.9909"
 }
