@@ -1,5 +1,8 @@
 Revision history for Clustericious
 
+0.9910    - Thu Feb  7 15:04:10 EST 2013
+          Mojolicious 3.84 compatibility
+
 0.9909    - Thu Dec 20 11:13:29 PST 2012
           Plugauth compatibility
 
