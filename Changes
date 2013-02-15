@@ -1,5 +1,8 @@
 Revision history for Clustericious
 
+0.9911    - Fri Feb 15 09:58:40 EST 2013
+          Fixed tests for mojo 3.85 compatibility
+
 0.9910    - Thu Feb  7 15:04:10 EST 2013
           Mojolicious 3.84 compatibility
 
