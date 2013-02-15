@@ -201,10 +201,7 @@ sub create_ok
         $object = $self->testdata($object) or return;
     }
 
-    $self->post_ok($url,
-                   { "Content-Type" => "application/json" },
-                   encode_json($object),
-                   "Create $url")
+    $self->post_ok($url, json => $object, "Create $url")
          ->status_is(200, "Created $url")
          ->decoded_body;
 }

@@ -59,9 +59,9 @@ my $default_encode = 'application/json';
 
 my $json_encoder = JSON::XS->new->allow_nonref->allow_blessed->convert_blessed;
 
-my %types = 
+my %types =
 (
-    'application/json' => 
+    'application/json' =>
     {
         encode => sub { $json_encoder->encode($_[0]) },
         decode => sub { $json_encoder->decode($_[0]) }

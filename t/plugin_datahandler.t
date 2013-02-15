@@ -38,7 +38,7 @@ package main;
 
 my $t = Test::Mojo->new("SomeService");
 
-$t->post_form_ok("/my_table", { foo => "bar" }, {}, "posted to create")
+$t->post_ok("/my_table", form => { foo => "bar" }, {}, "posted to create")
     ->status_is(200, "got 200")
     ->header_is('Content-Type' => 'application/json')
     ->json_content_is({foo => "bar"}, "got structure back");
@@ -79,8 +79,7 @@ $t->get_ok('/my_table/foo',
   ->content_is("---\nfoo: bar\n", "got structure back in YAML");
 
 $t->post_ok("/my_table",
-            { 'Content-Type' => 'application/json' },
-            '{"foo":"bar"}',
+            json => { foo => 'bar' },
             "Post json")
     ->status_is(200, "got 200")
     ->header_is('Content-Type' => 'application/json')
@@ -93,10 +92,9 @@ $t->get_ok('/my_table/foo',
   ->header_is('Content-Type' => 'text/x-yaml')
   ->content_is("---\nfoo: bar\n", "got structure back in YAML");
 
-$t->post_ok("/my_table",
+$t->post_ok("/my_table", json => { foo => 'bar' },
             { Accept => 'application/json',
               'Content-Type' => 'text/x-yaml' },
-            'foo: bar',
             "Post json")
     ->status_is(200, "got 200")
     ->header_is('Content-Type' => 'application/json')
