@@ -1,5 +1,8 @@
 Revision history for Clustericious
 
+0.9912    - Fri Feb 22 10:39:52 EST 2013
+          Fixed autodatahandler when charset is in content-type..
+
 0.9911    - Fri Feb 15 09:58:40 EST 2013
           Fixed tests for mojo 3.85 compatibility
 
