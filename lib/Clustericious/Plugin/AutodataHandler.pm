@@ -132,12 +132,14 @@ sub _autodata_parse
 {
     my ($c) = @_;
 
-    my $type = ($c->req->headers->content_type and
-                $types{$c->req->headers->content_type})
-               ? $c->req->headers->content_type
-               : $default_decode;
+    my $content_type = $c->req->headers->content_type || $default_decode;
+    if ($content_type =~ /^([^;]+);/) {
+        # strip charset
+        $content_type = $1;
+    }
+    my $entry = $types{$content_type} || $types{$default_decode};
 
-    $c->stash->{autodata} = $types{$type}->{decode}->($c->req->body, $c);
+    $c->stash->{autodata} = $entry->{decode}->($c->req->body, $c);
     return $c->stash->{autodata};
 }
 
