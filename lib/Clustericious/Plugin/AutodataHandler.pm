@@ -59,9 +59,9 @@ my $default_encode = 'application/json';
 
 my $json_encoder = JSON::XS->new->allow_nonref->allow_blessed->convert_blessed;
 
-my %types = 
+my %types =
 (
-    'application/json' => 
+    'application/json' =>
     {
         encode => sub { $json_encoder->encode($_[0]) },
         decode => sub { $json_encoder->decode($_[0]) }
@@ -152,12 +152,14 @@ sub _autodata_parse
 {
     my ($c) = @_;
 
-    my $type = ($c->req->headers->content_type and
-                $types{$c->req->headers->content_type})
-               ? $c->req->headers->content_type
-               : $default_decode;
+    my $content_type = $c->req->headers->content_type || $default_decode;
+    if ($content_type =~ /^([^;]+);/) {
+        # strip charset
+        $content_type = $1;
+    }
+    my $entry = $types{$content_type} || $types{$default_decode};
 
-    $c->stash->{autodata} = $types{$type}->{decode}->($c->req->body, $c);
+    $c->stash->{autodata} = $entry->{decode}->($c->req->body, $c);
     return $c->stash->{autodata};
 }
 

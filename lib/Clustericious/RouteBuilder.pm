@@ -99,6 +99,7 @@ sub import {
 sub add_routes {
     my $class = shift;
     my $app = shift;
+    my $auth_plugin = shift;
 
     my $stashed = $Routes{ ref $app }
       or Carp::confess("no routes stashed for $app");
@@ -114,15 +115,9 @@ sub add_routes {
          # authenticate, always connects to app->routes
          if (!ref $methods && $methods eq 'authenticate') {
              my $realm = $pattern || ref $app;
+             my $cb = defined $auth_plugin ? sub { $auth_plugin->authenticate(shift, $realm) } : sub { 1 };
              $head_route = $head_authenticated = $routes =
-             $app->routes->bridge->to( {
-                    cb => sub {
-                        my $c = shift;
-                        return 1 unless $c->config->simple_auth(default => '');
-                        $c->app->plugins->load_plugin('simple_auth')
-                            ->authenticate( $c, $realm );
-                      }
-                })->name("authenticated");
+             $app->routes->bridge->to( { cb => $cb } )->name("authenticated");
              next;
          }
 
@@ -131,19 +126,24 @@ sub add_routes {
             die "put authenticate before authorize" unless $head_authenticated;
             my $action = $pattern;
             my $resource = $name;
-            $head_route = $routes = $head_authenticated->bridge->to( {
-                    cb => sub {
-                        my $c = shift;
-                        return 1 unless $c->config->simple_auth(default => '');
-                        # Dynamically compute resource/action
-                        my ($d_resource,$d_action) = ($resource, $action);
-                        $d_resource =~ s/<path>/$c->req->url->path/e if $d_resource;
-                        $d_resource ||= $c->req->url->path;
-                        $d_action =~ s/<method>/$c->req->method/e if $d_action;
-                        $d_action ||= $c->req->method;
-                        $c->app->plugins->load_plugin('simple_auth')
-                            ->authorize( $c, $d_action, $d_resource );
-                      } });
+            if($auth_plugin)
+            {
+                $head_route = $routes = $head_authenticated->bridge->to( {
+                        cb => sub {
+                            my $c = shift;
+                            # Dynamically compute resource/action
+                            my ($d_resource,$d_action) = ($resource, $action);
+                            $d_resource =~ s/<path>/$c->req->url->path/e if $d_resource;
+                            $d_resource ||= $c->req->url->path;
+                            $d_action =~ s/<method>/$c->req->method/e if $d_action;
+                            $d_action ||= $c->req->method;
+                            $auth_plugin->authorize( $c, $d_action, $d_resource );
+                          } });
+            }
+            else
+            {
+                $head_route = $routes = $head_authenticated->bridge->to({ cb => sub { 1 } });
+            }
             next;
          }
 

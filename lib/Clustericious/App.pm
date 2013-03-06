@@ -76,14 +76,26 @@ sub startup {
     $self->init_logging();
     $self->secret( (ref $self || $self) );
 
+    $self->plugins->namespaces(['Mojolicious::Plugin','Clustericious::Plugin']);
+    my $config = Clustericious::Config->new(ref $self);
+    my $auth_plugin;
+    if(my $auth_config = $config->plug_auth(default => '')) {
+        $self->log->info("Loading auth plugin plug_auth");
+        $auth_plugin = $self->plugin('plug_auth', plug_auth => $auth_config);
+    } elsif($auth_config = $config->simple_auth(default => '')) {
+        $self->log->info("Loading auth plugin simple_auth [deprecated]");
+        $auth_plugin = $self->plugin('plug_auth', plug_auth => $auth_config);
+    } else {
+        $self->log->info("No auth configured");
+    }
+    
     my $r = $self->routes;
     # "Common" ones are not overrideable.
     Clustericious::RouteBuilder::Common->add_routes($self);
-    Clustericious::RouteBuilder->add_routes($self);
+    Clustericious::RouteBuilder->add_routes($self, $auth_plugin);
     # "default" ones are :
     # Clustericious::RouteBuilder::Default->add_routes($self);
 
-    $self->plugins->namespaces(['Mojolicious::Plugin','Clustericious::Plugin']);
     $self->plugin('AutodataHandler');
     $self->plugin('DefaultHelpers');
     $self->plugin('TagHelpers');
@@ -91,14 +103,6 @@ sub startup {
     $self->plugin('EPRenderer');
     $self->plugin('RequestTimer');
     $self->plugin('PoweredBy');
-
-    my $config = Clustericious::Config->new(ref $self);
-    if ($config->simple_auth(default => '')) {
-        $self->log->info("Loading auth plugin");
-        $self->plugin('simple_auth');
-    } else {
-        $self->log->info("No auth configured");
-    }
 
     # Helpers
     if (my $base = $config->url_base(default => '')) {

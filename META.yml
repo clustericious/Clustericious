@@ -16,7 +16,7 @@ build_requires:
   List::MoreUtils: 0
   Module::Build: 0.36
   MojoX::Log::Log4perl: 0
-  Mojolicious: 3.09
+  Mojolicious: 3.85
   Sub::Exporter: 0
   Sys::Hostname: 0
   Test::More: 0
@@ -34,7 +34,7 @@ name: Clustericious
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.9906
+    version: 0.9912
   Clustericious::App:
     file: lib/Clustericious/App.pm
     version: 0
@@ -46,6 +46,9 @@ provides:
     version: 0
   Clustericious::Command::generate:
     file: lib/Clustericious/Command/generate.pm
+    version: 0
+  Clustericious::Command::generate::app:
+    file: lib/Clustericious/Command/generate/app.pm
     version: 0
   Clustericious::Command::generate::client:
     file: lib/Clustericious/Command/generate/client.pm
@@ -86,8 +89,8 @@ provides:
   Clustericious::Plugin::AutodataHandler:
     file: lib/Clustericious/Plugin/AutodataHandler.pm
     version: 0
-  Clustericious::Plugin::SimpleAuth:
-    file: lib/Clustericious/Plugin/SimpleAuth.pm
+  Clustericious::Plugin::PlugAuth:
+    file: lib/Clustericious/Plugin/PlugAuth.pm
     version: 0.01
   Clustericious::Renderer:
     file: lib/Clustericious/Renderer.pm
@@ -117,4 +120,4 @@ requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.9906
+version: 0.9912

@@ -35,7 +35,7 @@ if ($auth_url) {
     Clustericious::Config->new("SomeService")
       ->simple_auth( default => { url => $auth_url } );
 } else {
-    Clustericious::Config->new("SomeService")->simple_auth(default => 1 );
+    Clustericious::Config->new("SomeService")->simple_auth(default => { url => 'file://dev/null' } );
 }
 
 my $t = Test::Mojo->new("SomeService");

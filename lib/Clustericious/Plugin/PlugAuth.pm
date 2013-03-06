@@ -1,4 +1,4 @@
-package Clustericious::Plugin::SimpleAuth;
+package Clustericious::Plugin::PlugAuth;
 
 use Clustericious::Log;
 use Mojo::ByteStream qw/b/;
@@ -13,7 +13,7 @@ use strict;
 
 =head1 NAME
 
-Clustericious::Plugin::SimpleAuth - Plugin for clustericious to use simpleauth.
+Clustericious::Plugin::PlugAuth - Plugin for clustericious to use PlugAuth.
 
 =head1 VERSION
 
@@ -27,7 +27,7 @@ our $VERSION = '0.01';
 
 SimpleApp.conf:
 
- {"simple_auth":{"url":"http://simpleauthserver:3000"}}
+ {"plug_auth":{"url":"http://plugauthserver:3000"}}
 
 Application:
 
@@ -39,7 +39,7 @@ Application:
    my $self = shift;
    $self->SUPER::startup(@_);
    # done by default for all clustericious applications.
-   #$self->plugin('simple_auth');
+   #$self->plugin('plug_auth');
  }
  
  package SimpleApp::Routes;
@@ -49,11 +49,11 @@ Application:
  # unprotected 
  get '/public' => 'unprotected';
  
- # requires simpleauth username/password
+ # require PlugAuth username/password
  authenticate; 
  get '/private1' => 'protected';
  
- # protected by simple auth using an explicit realm
+ # protected by PlugAuth an explicit realm
  autheticate 'realm';
  get '/private2' => 'realm protected';
  
@@ -81,17 +81,17 @@ Route class.
 
 =cut
 
-sub register_plugin {
-    my ($self, $app) = @_;
-
-    $app->hook(after_dispatch => sub { Clustericious::Plugin::SimpleAuth->skip_auth(0) });
-
-    1;
-}
+has 'config_url';
 
 sub register {
-
-    1;
+    my ($self, $app, $conf) = @_;
+    eval { $self->config_url($conf->{plug_auth}->url(default => '')) };
+    if ($@ || !$self->config_url) {
+        WARN "unable to determine PlugAuth URL: $@";
+        return $self;
+    }
+    $app->hook(after_dispatch => sub { Clustericious::Plugin::PlugAuth->skip_auth(0) });
+    $self;
 }
 
 =head1 METHODS
@@ -117,18 +117,18 @@ sub authenticate {
         return;
     };
 
-    my $config_url = $c->config->simple_auth->url;
+    my $config_url = $self->config_url;
     my $ua = Mojo::UserAgent->new;
 
     my ($method,$str) = split / /,$auth;
     my $userinfo = b($str)->b64_decode;
     my ($user,$pw) = split /:/, $userinfo;
 
-    my $self_simple_auth = ref($c->app) =~ /^(?:Simple|Plug)Auth$/;
+    my $self_plug_auth = ref($c->app) =~ /^(?:Simple|Plug)Auth$/;
 
     # VIP treatment for some hosts
     my $ip = $c->tx->remote_address;
-    my $tx = $self_simple_auth ? $c->subdispatch(GET => "$config_url/host/$ip/trusted") : $ua->get("$config_url/host/$ip/trusted");
+    my $tx = $self_plug_auth ? $c->subdispatch(GET => "$config_url/host/$ip/trusted") : $ua->get("$config_url/host/$ip/trusted");
     if ( my $res = $tx->success ) {
         if ( $res->code == 200 ) {
             TRACE "Host $ip is trusted, not authenticating";
@@ -136,14 +136,14 @@ sub authenticate {
             return 1;
         }
         else {
-            WARN "Simpleauth returned code " . $res->code;
+            WARN "PlugAuth returned code " . $res->code;
         }
     } else {
         my ( $message, $code ) = $tx->error;
         if ($code) {
             TRACE "Host $ip is not a VIP : code $code ($message)";
         } else {
-            WARN "Error connecting to simpleauth at $config_url : $message";
+            WARN "Error connecting to PlugAuth at $config_url : $message";
         }
     }
 
@@ -153,7 +153,7 @@ sub authenticate {
 
     my $check;
     my $res;
-    if($self_simple_auth) {
+    if($self_plug_auth) {
         $check = $c->data->check_credentials($user, $pw) ? 200 : 401;
     } else {
         $tx = $ua->head($auth_url);
@@ -162,7 +162,7 @@ sub authenticate {
     }
     if(!defined $check || $check == 503) {
         $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
-        WARN ("Error connecting to simpleauth at $config_url");
+        WARN ("Error connecting to PlugAuth at $config_url");
         $c->render(text => "auth server down", status => 503); # "Service unavailable"
         return 0;
     }
@@ -193,7 +193,7 @@ sub authorize {
     LOGDIE "missing action or resource in authorize()" unless @_==2;
     TRACE "Authorizing user $user, action $action, resource $resource";
     $resource =~ s[^/][];
-    my $url = Mojo::URL->new( join '/', $c->config->simple_auth->url,
+    my $url = Mojo::URL->new( join '/', $self->config_url,
         "authz/user", $user, $action, $resource );
     my $code = (ref($c->app) =~ /^(?:Simple|Plug)Auth$/ ? $c->subdispatch(HEAD => $url) : Mojo::UserAgent->new->head($url))->res->code;
     return 1 if $code && $code == 200;
@@ -208,7 +208,7 @@ sub authorize {
 
 =head2 skip_auth
 
- Clustericious::Plugin::SimpleAuth->skip_auth(1);
+ Clustericious::Plugin::PlugAuth->skip_auth(1);
 
 Set this global flag to bypass authentication and authorization, e.g. during
 a subequest.  This flag is reset at the end of the dispatch cycle.
@@ -225,7 +225,7 @@ sub skip_auth {
 
 =head1 SEE ALSO
 
-L<SimpleAuth>
+L<PlugAuth>
 
 =cut
 

@@ -11,4 +11,10 @@ has namespaces => sub { [qw/Clustericious::Command Mojolicious::Command/] };
 
 has app => sub { Mojo::Server->new->build_app('Clustericious::HelloWorld') };
 
+sub start {
+    my $self = shift;
+    return $self->start_app($ENV{MOJO_APP} => @_) if $ENV{MOJO_APP};
+    return $self->new->app->start(@_);
+}
+
 1;
