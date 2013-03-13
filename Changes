@@ -1,4 +1,6 @@
 Revision history for Clustericious
+0.9913    - Wed Mar 13 11:50:51 EDT 2013
+          Allow cross origin resource sharing by default.
 
 0.9912    - Fri Feb 22 10:39:52 EST 2013
           Fixed autodatahandler when charset is in content-type..
