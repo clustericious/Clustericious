@@ -13,10 +13,11 @@ This package adds routes that are common to all clustericious servers.
 These routes will be added first; they cannot be overridden.  The following
 routes are added :
 
-    /version
-    /status
-    /api
-    /log
+    GET /version
+    GET /status
+    GET /api
+    GET /log
+    OPTIONS /
 
 /log is not available unless the configuration option "export_logs" is set
 to a true value.
@@ -75,6 +76,14 @@ sub add_routes {
                 return $c->render_text('logs not available');
             }
             $c->render_text(Clustericious::Log->tail(lines => $lines || 10) || '** empty log **');
+        });
+
+    $app->routes->options('/*opturl' => { opturl => '' } =>
+        sub {
+            my $c = shift;
+            $c->res->headers->add( 'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS' );
+            # Allow-Origin and Allow-Headers added in after_dispatch hook.
+            $c->render_text('ok');
         });
 }
 

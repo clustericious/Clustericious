@@ -153,6 +153,7 @@ sub startup {
             after_dispatch => sub {
                 my $c = shift;
                 $c->res->headers->add( 'Access-Control-Allow-Origin' => '*' );
+                $c->res->headers->add( 'Access-Control-Allow-Headers' => 'Authorization' );
             }
         );
     }
