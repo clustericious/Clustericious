@@ -88,7 +88,7 @@ sub startup {
     } else {
         $self->log->info("No auth configured");
     }
-    
+
     my $r = $self->routes;
     # "Common" ones are not overrideable.
     Clustericious::RouteBuilder::Common->add_routes($self);
@@ -147,6 +147,16 @@ sub startup {
     $self->hook( before_dispatch => sub {
         Log::Log4perl::MDC->put(remote_ip => shift->tx->remote_address || 'unknown');
     });
+
+    if ( my $cors_allowed_origins = $config->cors_allowed_origins( default => '*' ) ) {
+        $self->hook(
+            after_dispatch => sub {
+                my $c = shift;
+                $c->res->headers->add( 'Access-Control-Allow-Origin' => '*' );
+            }
+        );
+    }
+
 }
 
 =head2 $app-E<gt>init_logging
