@@ -65,6 +65,7 @@ $t->get_ok("/api")->json_content_is(
         "GET /threes",
         "GET /twos",
         "GET /version",
+        "OPTIONS /*opturl",
         "POST /one",
         "POST /three",
         "POST /two"
