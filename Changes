@@ -1,4 +1,8 @@
 Revision history for Clustericious
+
+0.9914   - Tue Mar 26 08:03:44 EDT 2013
+          Avoid timeouts in test and use $c->ua in simpleauth plugin.
+
 0.9913    - Wed Mar 13 11:50:51 EDT 2013
           Allow cross origin resource sharing by default.
 
