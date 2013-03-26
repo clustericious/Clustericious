@@ -1,5 +1,8 @@
 Revision history for Clustericious
 
+0.9915   Tue Mar 26 08:17:59 EDT 2013
+         - plugin hook for autodata to add encodings
+
 0.9914   - Tue Mar 26 08:03:44 EDT 2013
           Avoid timeouts in test and use $c->ua in simpleauth plugin.
 
