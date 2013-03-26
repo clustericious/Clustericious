@@ -118,7 +118,7 @@ sub authenticate {
     };
 
     my $config_url = $self->config_url;
-    my $ua = Mojo::UserAgent->new;
+    my $ua = $c->ua;
 
     my ($method,$str) = split / /,$auth;
     my $userinfo = b($str)->b64_decode;
@@ -156,7 +156,14 @@ sub authenticate {
     if($self_plug_auth) {
         $check = $c->data->check_credentials($user, $pw) ? 200 : 401;
     } else {
-        $tx = $ua->head($auth_url);
+        if ($ENV{HARNESS_ACTIVE}) {
+            my $saved = $ua->inactivity_timeout;
+            $ua->inactivity_timeout(1);
+            $tx = $ua->head($auth_url);
+            $ua->inactivity_timeout($saved);
+        } else {
+            $tx = $ua->head($auth_url);
+        }
         $res = $tx->res;
         $check = $res->code();
     }
