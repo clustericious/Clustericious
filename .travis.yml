@@ -14,6 +14,7 @@ install:
   - cpanm -n File::Slurp
   - cpanm -n IO::Scalar
   - cpanm -n File::HomeDir
+  - cpanm -n PlugAuth::Lite
 before_script:
   - perl Build.PL
 script: HARNESS_IS_VERBOSE=1 prove -lvr t xt
