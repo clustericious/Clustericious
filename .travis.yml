@@ -1,0 +1,24 @@
+language: perl
+install:
+  - cpanm -n Clustericious::Config 
+  - cpanm -n IO::Prompt 
+  - cpanm -n Module::Build
+  - cpanm -n MojoX::Log::Log4perl
+  - cpanm -n Clustericious::Log
+  - cpanm -n Mojolicious
+  - cpanm -n Sub::Exporter
+  - cpanm -n YAML::Syck JSON::XS YAML::XS
+  - cpanm -n List::MoreUtils
+  - cpanm -n File::ShareDir
+  - cpanm -n Hash::Merge
+  - cpanm -n File::Slurp
+  - cpanm -n IO::Scalar
+  - cpanm -n File::HomeDir
+before_script:
+  - perl Build.PL
+script: HARNESS_IS_VERBOSE=1 prove -lvr t xt
+perl:
+  - "5.16"
+  - "5.14"
+  - "5.12"
+  - "5.10"

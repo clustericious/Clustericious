@@ -87,3 +87,5 @@ t/test.t
 t/testobject.yaml
 t/testremote.t
 xt/release/pod.t
+dist.ini
+.travis.yml
