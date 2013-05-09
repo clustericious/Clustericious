@@ -82,8 +82,8 @@ t/generate.t
 t/plugin_datahandler.t
 t/plugin_plugauth.t
 t/plugin_simpleauth.t
-t/pod.t
 t/proxy.t
 t/test.t
 t/testobject.yaml
 t/testremote.t
+xt/release/pod.t
