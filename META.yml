@@ -31,6 +31,9 @@ meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Clustericious
+no_index:
+  directory:
+    - share
 provides:
   Clustericious:
     file: lib/Clustericious.pm

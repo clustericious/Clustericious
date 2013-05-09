@@ -33,7 +33,8 @@ my $builder = Module::Build->new(
       },
     add_to_cleanup      => [ 'Clustericious-*' ],
     create_makefile_pl => 'traditional',
-    share_dir => 'share'
+    share_dir => 'share',
+    meta_add => { no_index => { directory => [ 'share' ], } },
 );
 
 $builder->create_build_script();

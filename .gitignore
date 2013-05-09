@@ -3,3 +3,4 @@ _build
 blib
 MYMETA.yml
 MYMETA.json
+/Clustericious-*
