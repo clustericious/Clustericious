@@ -20,6 +20,8 @@ use base 'Mojolicious::Command';
 use strict;
 use warnings;
 
+our $VERSION = '0.9917';
+
 __PACKAGE__->attr(description => <<'');
 Report the status of a daemon.
 

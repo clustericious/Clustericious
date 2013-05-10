@@ -7,6 +7,8 @@ use base 'Mojolicious::Controller';
 use strict;
 use warnings;
 
+our $VERSION = '0.9917';
+
 sub url_for {
     my $c = shift;
 

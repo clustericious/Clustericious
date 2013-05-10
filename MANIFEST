@@ -89,3 +89,4 @@ t/testremote.t
 xt/release/pod.t
 dist.ini
 .travis.yml
+util/perl-reversion
