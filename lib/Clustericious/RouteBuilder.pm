@@ -2,6 +2,8 @@ package Clustericious::RouteBuilder;
 use strict;
 use warnings;
 
+our $VERSION = '0.9918';
+
 our %Routes;
 
 # Much of the code below taken directly from Mojolicious::Lite.

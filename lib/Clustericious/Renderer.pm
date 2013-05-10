@@ -19,6 +19,8 @@ use base 'Mojolicious::Renderer';
 use strict;
 use warnings;
 
+our $VERSION = '0.9918';
+
 =item render
 
 Set the hander to "autodata" if there is some autodata

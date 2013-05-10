@@ -54,6 +54,8 @@ use YAML::XS qw/Dump Load/;
 
 use Clustericious::Log;
 
+our $VERSION = '0.9918';
+
 my $default_decode = 'application/x-www-form-urlencoded';
 my $default_encode = 'application/json';
 

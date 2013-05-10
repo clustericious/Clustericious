@@ -51,6 +51,8 @@ use Sub::Exporter -setup => {
     collectors => ['defaults'],
 };
 
+our $VERSION = '0.9918';
+
 sub _build_proxy {
     my ( $class, $name, $arg, $defaults ) = @_;
     my $strip_prefix  = $arg->{strip_prefix};

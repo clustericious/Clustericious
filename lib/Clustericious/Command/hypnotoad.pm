@@ -41,6 +41,8 @@ use base 'Mojolicious::Command';
 use strict;
 use warnings;
 
+our $VERSION = '0.9918';
+
 __PACKAGE__->attr(description => "Start a hypnotad web server.\n");
 
 __PACKAGE__->attr(usage => <<EOT);

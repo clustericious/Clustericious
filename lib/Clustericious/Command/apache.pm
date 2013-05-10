@@ -19,6 +19,8 @@ __PACKAGE__->attr(description => <<EOT);
 Start an apache web server.
 EOT
 
+our $VERSION = '0.9918';
+
 __PACKAGE__->attr(usage => <<EOT);
 Usage $0: apache -f <conf> [...other apache options]
 Starts an apache webserver.

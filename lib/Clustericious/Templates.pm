@@ -12,6 +12,8 @@ Anything on the filesystem (in templates/) will override these.
 
 package Clustericious::Templates;
 
+our $VERSION = '0.9918';
+
 1;
 
 __DATA__

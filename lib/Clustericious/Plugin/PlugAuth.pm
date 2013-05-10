@@ -11,17 +11,11 @@ use Mojo::Base 'Mojolicious::Plugin';
 use warnings;
 use strict;
 
+our $VERSION = '0.9918';
+
 =head1 NAME
 
 Clustericious::Plugin::PlugAuth - Plugin for clustericious to use PlugAuth.
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
