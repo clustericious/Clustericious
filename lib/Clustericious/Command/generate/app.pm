@@ -10,7 +10,7 @@ use File::Slurp 'slurp';
 use File::ShareDir 'dist_dir';
 use File::Basename qw/basename/;
 
-our $VERSION = '0.9917';
+our $VERSION = '0.9918';
 
 has description => <<'EOF';
 Generate Clustericious app.

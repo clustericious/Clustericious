@@ -49,7 +49,7 @@ use File::Slurp qw/slurp/;
 use strict;
 use warnings;
 
-our $VERSION = '0.9917';
+our $VERSION = '0.9918';
 
 __PACKAGE__->attr(description => <<EOT);
 Stop a running daemon.
