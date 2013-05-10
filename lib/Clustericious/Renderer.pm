@@ -19,7 +19,7 @@ use base 'Mojolicious::Renderer';
 use strict;
 use warnings;
 
-our $VERSION = '0.9918';
+our $VERSION = '0.9919';
 
 =item render
 

@@ -1,5 +1,8 @@
 Revision history for Clustericious
 
+0.9919   Fri May 10 19:27:40 EDT 2013
+         - fix meta data
+
 0.9915   Tue Mar 26 08:17:59 EDT 2013
          - plugin hook for autodata to add encodings
 
