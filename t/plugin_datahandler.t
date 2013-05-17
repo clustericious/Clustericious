@@ -41,28 +41,28 @@ my $t = Test::Mojo->new("SomeService");
 $t->post_ok("/my_table", form => { foo => "bar" }, {}, "posted to create")
     ->status_is(200, "got 200")
     ->header_is('Content-Type' => 'application/json')
-    ->json_content_is({foo => "bar"}, "got structure back");
+    ->json_is('', {foo => "bar"}, "got structure back");
 
 $t->get_ok('/my_table/foo',
            { Accept => 'application/json' },
            '', "get json")
   ->status_is(200, "got 200")
   ->header_is('Content-Type' => 'application/json')
-  ->json_content_is({foo => "bar"}, "got structure back in JSON");
+  ->json_is('', {foo => "bar"}, "got structure back in JSON");
 
 $t->get_ok('/my_table/foo',
            { Accept => 'application/bogus;q=0.8,application/json' },
            '', "ignore bogus accept, still get json")
   ->status_is(200, "got 200")
   ->header_is('Content-Type' => 'application/json')
-  ->json_content_is({foo => "bar"}, "got structure back in JSON");
+  ->json_is('', {foo => "bar"}, "got structure back in JSON");
 
 $t->get_ok('/my_table/foo',
            { Accept => 'application/bogus;q=0.8' },
            '', "ignore bogus accept, still get json by default")
   ->status_is(200, "got 200")
   ->header_is('Content-Type' => 'application/json')
-  ->json_content_is({foo => "bar"}, "got structure back in JSON");
+  ->json_is('', {foo => "bar"}, "got structure back in JSON");
 
 $t->get_ok('/my_table/foo',
            { Accept => 'text/x-yaml' },
@@ -83,7 +83,7 @@ $t->post_ok("/my_table",
             "Post json")
     ->status_is(200, "got 200")
     ->header_is('Content-Type' => 'application/json')
-    ->json_content_is({foo => "bar"}, "got structure back");
+    ->json_is('', {foo => "bar"}, "got structure back");
 
 
 $t->post_ok("/my_table",
@@ -92,7 +92,7 @@ $t->post_ok("/my_table",
             "Post json with charset")
     ->status_is(200, "got 200")
     ->header_is('Content-Type' => 'application/json')
-    ->json_content_is({foo => "bar"}, "got structure back");
+    ->json_is('', {foo => "bar"}, "got structure back");
 
 $t->get_ok('/my_table/foo',
            { Accept => 'text/x-yaml' },
@@ -107,12 +107,12 @@ $t->post_ok("/my_table", json => { foo => 'bar' },
             "Post json")
     ->status_is(200, "got 200")
     ->header_is('Content-Type' => 'application/json')
-    ->json_content_is({foo => "bar"}, "got structure back");
+    ->json_is('', {foo => "bar"}, "got structure back");
 
 $t->get_ok('/my_table/foo',
            '', "get json")
   ->status_is(200, "got 200")
   ->header_is('Content-Type' => 'application/json')
-  ->json_content_is({foo => "bar"}, "got structure back");
+  ->json_is('', {foo => "bar"}, "got structure back");
 
 1;

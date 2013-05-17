@@ -51,9 +51,9 @@ my $t = Test::Mojo->new("SomeService");
 
 $t->post_ok("/my_table", form => { foo => "bar" }, {}, "posted to create")
     ->status_is(200, "got 200")
-    ->json_content_is({foo => "bar"}, "got structure back");
+    ->json_is('', {foo => "bar"}, "got structure back");
 
-$t->get_ok("/api")->json_content_is(
+$t->get_ok("/api")->json_is('',
     [
         "GET /api",
         "GET /api/one",

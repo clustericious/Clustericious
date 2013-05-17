@@ -1,5 +1,7 @@
 Revision history for Clustericious
 
+         - Mojolicious 4.0 compatability
+
 0.9915   Tue Mar 26 08:17:59 EDT 2013
          - plugin hook for autodata to add encodings
 

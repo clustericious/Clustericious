@@ -68,5 +68,15 @@ sub render_not_found {
     $self->SUPER::render_not_found(@_);
 }
 
+if($Mojolicious::VERSION >= 4.0)
+{
+    foreach my $type (qw( text json )) {
+        eval qq{
+            sub render_$type { shift->render($type => \@_) };
+        };
+        die $@ if $@;
+    }
+}
+
 1;
 

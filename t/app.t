@@ -25,7 +25,7 @@ $t->get_ok("/")->status_is(200)->content_like(qr/hello/, "got content");
 
 $t->get_ok('/version')
     ->status_is(200,'GET /version')
-    ->json_content_is([$SomeService::VERSION], '/version is correct');
+    ->json_is('', [$SomeService::VERSION], '/version is correct');
 
 $t->get_ok('/version.yml')
     ->status_is(200, 'GET /version.yml')

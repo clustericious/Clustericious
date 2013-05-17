@@ -21,5 +21,5 @@ $t->post_ok('/clustericious', { "Content-Type" => "application/json" },
         ->status_is(200, "posted version");
 
 $t->get_ok('/clustericious/<%= $class %>')
-  ->json_content_is( { app => "<%= $class %>", version => $<%= $class %>::VERSION }, "DB version is $<%= $class %>::VERSION " );
+  ->json_is('', { app => "<%= $class %>", version => $<%= $class %>::VERSION }, "DB version is $<%= $class %>::VERSION " );
 
