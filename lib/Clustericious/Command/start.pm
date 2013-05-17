@@ -52,7 +52,7 @@ use Mojo::Base 'Mojolicious::Command';
 use strict;
 use warnings;
 
-our $VERSION = '0.9919';
+our $VERSION = '0.9920';
 
 has description => <<EOT;
 Start a daemon using the config file.

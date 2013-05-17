@@ -90,3 +90,4 @@ xt/release/pod.t
 dist.ini
 .travis.yml
 util/perl-reversion
+t/data/auth.passwd

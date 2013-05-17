@@ -2,7 +2,7 @@ package Clustericious::RouteBuilder;
 use strict;
 use warnings;
 
-our $VERSION = '0.9919';
+our $VERSION = '0.9920';
 
 our %Routes;
 
