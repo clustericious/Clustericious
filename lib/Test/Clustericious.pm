@@ -3,7 +3,7 @@ package Test::Clustericious;
 use strict;
 use warnings;
 
-our $VERSION = '0.9918';
+our $VERSION = '0.9919';
 
 =head1 NAME
 

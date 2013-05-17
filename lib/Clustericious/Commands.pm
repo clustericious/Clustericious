@@ -7,7 +7,7 @@ use Clustericious::Config;
 
 use Mojo::Base 'Mojolicious::Commands';
 
-our $VERSION = '0.9918';
+our $VERSION = '0.9919';
 
 has namespaces => sub { [qw/Clustericious::Command Mojolicious::Command/] };
 

@@ -18,7 +18,7 @@ use base 'Mojolicious::Command';
 use strict;
 use warnings;
 
-our $VERSION = '0.9918';
+our $VERSION = '0.9919';
 
 __PACKAGE__->attr(description => <<EOT);
 Start a lighttpd web server.
