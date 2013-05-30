@@ -22,7 +22,7 @@ use base 'Mojolicious::Command';
 use strict;
 use warnings;
 
-our $VERSION = '0.9920';
+our $VERSION = '0.9921';
 
 __PACKAGE__->attr(description => <<EOT);
 Start a plack server (see plackup)

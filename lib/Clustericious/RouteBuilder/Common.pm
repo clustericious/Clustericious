@@ -28,7 +28,7 @@ package Clustericious::RouteBuilder::Common;
 use Clustericious::Log;
 use Sys::Hostname qw/hostname/;
 
-our $VERSION = '0.9920';
+our $VERSION = '0.9921';
 
 use strict;
 use warnings;

@@ -4,7 +4,7 @@
       "Brian Duggan <brian.duggan@nasa.gov>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4005, CPAN::Meta::Converter version 2.130880",
+   "generated_by" : "Module::Build version 0.4002, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -29,7 +29,6 @@
             "File::ShareDir" : "0",
             "File::Slurp" : "0",
             "Hash::Merge" : "0",
-            "IO::Prompt" : "0",
             "IO::Scalar" : "0",
             "JSON::XS" : "0",
             "List::MoreUtils" : "0",
@@ -57,115 +56,115 @@
    "provides" : {
       "Clustericious" : {
          "file" : "lib/Clustericious.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::App" : {
          "file" : "lib/Clustericious/App.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command" : {
          "file" : "lib/Clustericious/Command.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::apache" : {
          "file" : "lib/Clustericious/Command/apache.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::generate" : {
          "file" : "lib/Clustericious/Command/generate.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::generate::app" : {
          "file" : "lib/Clustericious/Command/generate/app.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::generate::client" : {
          "file" : "lib/Clustericious/Command/generate/client.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::generate::mbd_app" : {
          "file" : "lib/Clustericious/Command/generate/mbd_app.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::hypnotoad" : {
          "file" : "lib/Clustericious/Command/hypnotoad.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::lighttpd" : {
          "file" : "lib/Clustericious/Command/lighttpd.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::nginx" : {
          "file" : "lib/Clustericious/Command/nginx.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::plackup" : {
          "file" : "lib/Clustericious/Command/plackup.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::start" : {
          "file" : "lib/Clustericious/Command/start.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::status" : {
          "file" : "lib/Clustericious/Command/status.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Command::stop" : {
          "file" : "lib/Clustericious/Command/stop.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Commands" : {
          "file" : "lib/Clustericious/Commands.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Controller" : {
          "file" : "lib/Clustericious/Controller.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::HelloWorld" : {
          "file" : "lib/Clustericious/HelloWorld.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Plugin::AutodataHandler" : {
          "file" : "lib/Clustericious/Plugin/AutodataHandler.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Plugin::PlugAuth" : {
          "file" : "lib/Clustericious/Plugin/PlugAuth.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Renderer" : {
          "file" : "lib/Clustericious/Renderer.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::RouteBuilder" : {
          "file" : "lib/Clustericious/RouteBuilder.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::RouteBuilder::CRUD" : {
          "file" : "lib/Clustericious/RouteBuilder/CRUD.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::RouteBuilder::Common" : {
          "file" : "lib/Clustericious/RouteBuilder/Common.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::RouteBuilder::Proxy" : {
          "file" : "lib/Clustericious/RouteBuilder/Proxy.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::RouteBuilder::Search" : {
          "file" : "lib/Clustericious/RouteBuilder/Search.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Clustericious::Templates" : {
          "file" : "lib/Clustericious/Templates.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       },
       "Test::Clustericious" : {
          "file" : "lib/Test/Clustericious.pm",
-         "version" : "0.9920"
+         "version" : "0.9921"
       }
    },
    "release_status" : "stable",
@@ -174,5 +173,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.9920"
+   "version" : "0.9921"
 }

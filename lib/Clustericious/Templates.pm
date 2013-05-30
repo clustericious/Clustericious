@@ -12,7 +12,7 @@ Anything on the filesystem (in templates/) will override these.
 
 package Clustericious::Templates;
 
-our $VERSION = '0.9920';
+our $VERSION = '0.9921';
 
 1;
 
