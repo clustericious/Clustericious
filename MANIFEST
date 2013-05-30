@@ -33,7 +33,6 @@ lib/Clustericious/RouteBuilder/Proxy.pm
 lib/Clustericious/RouteBuilder/Search.pm
 lib/Clustericious/Templates.pm
 lib/Test/Clustericious.pm
-Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.json

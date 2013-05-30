@@ -1,5 +1,9 @@
 Revision history for Clustericious
 
+         - support for MSWin32
+         - rm Makefile.PL
+
+0.9920
          - Mojolicious 4.0 compatability
 
 0.9919   Fri May 10 19:27:40 EDT 2013
