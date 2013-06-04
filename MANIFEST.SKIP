@@ -48,3 +48,5 @@
 \bClustericious-[\d\.\_]+
 ^MYMETA.yml$
 ^MYMETA\.json$
+
+util/perl-reversion

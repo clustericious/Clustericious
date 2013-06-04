@@ -1,5 +1,7 @@
 Revision history for Clustericious
 
+         - don't include utility in distribution
+
 0.9921
          - support for MSWin32
          - rm Makefile.PL
