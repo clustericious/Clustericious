@@ -1,6 +1,6 @@
 =head1 NAME
 
-Clustericious::Command::Plackup - Clustericious command to start plack server
+Clustericious::Command::plackup - Clustericious command to start plack server
 
 =head1 SYNOPSIS
 

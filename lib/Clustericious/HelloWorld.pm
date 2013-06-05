@@ -15,7 +15,7 @@ any '/*foo' => {foo => '', text => 'Clustericious is working!'};
 
 =head1 NAME
 
-Clustericious::HelloWorld
+Clustericious::HelloWorld - Clustericious hello world application
 
 =head1 SYNOPSIS
 

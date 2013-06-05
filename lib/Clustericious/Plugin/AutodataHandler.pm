@@ -2,7 +2,7 @@ package Clustericious::Plugin::AutodataHandler;
 
 =head1 NAME
 
-Clustericious::Plugin::DataHandler - Handle data types automatically
+Clustericious::Plugin::AutodataHandler - Handle data types automatically
 
 =head1 SYNOPSIS
 
