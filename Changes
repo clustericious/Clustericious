@@ -1,5 +1,7 @@
 Revision history for Clustericious
 
+        - fixed some documentation typos
+
 0.9922  Wed Jun  5 13:08:14 EDT 2013
         - documentation enhacements
         - don't include utility in distribution
