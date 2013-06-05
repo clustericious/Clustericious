@@ -25,7 +25,7 @@ L<Clustericious>, L<Mojolicious::Lite>
 
 =cut
 
-our $VERSION = '0.9921';
+our $VERSION = '0.9922';
 
 our %Routes;
 

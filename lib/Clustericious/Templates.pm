@@ -15,7 +15,7 @@ L<Clustericious>
 
 package Clustericious::Templates;
 
-our $VERSION = '0.9921';
+our $VERSION = '0.9922';
 
 1;
 

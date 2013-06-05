@@ -57,7 +57,7 @@ facilities for a variety of deployment options.
 
 =cut
 
-our $VERSION = '0.9921';
+our $VERSION = '0.9922';
 
 =head1 TODO
 
