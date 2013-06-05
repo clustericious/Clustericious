@@ -2,7 +2,7 @@ package Clustericious::RouteBuilder::CRUD;
 
 =head1 NAME
 
-Clustericious::RouteBuilder::CRUD -- build crud routes easily
+Clustericious::RouteBuilder::CRUD - build crud routes easily
 
 =head1 SYNOPSIS
 

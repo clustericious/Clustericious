@@ -1,7 +1,7 @@
 % my $class = shift;
 =head1 NAME
 
-<%= $class %>::DB -- Manage the database connection.
+<%= $class %>::DB - Manage the database connection.
 
 =head1 DESCRIPTION
 

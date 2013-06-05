@@ -3,7 +3,7 @@ package <%= $class %>::Routes;
 
 =head1 NAME
 
-<%= $class %>::Routes -- set up the routes for <%= $class %>.
+<%= $class %>::Routes - set up the routes for <%= $class %>.
 
 =head1 DESCRIPTION
 

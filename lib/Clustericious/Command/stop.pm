@@ -1,6 +1,10 @@
 =head1 NAME
 
-Clustericious::Command::stop
+Clustericious::Command::stop - Clustericious command to stop a Clustericious application
+
+=head1 SYNOPSIS
+
+ % yourapp stop
 
 =head1 DESCRIPTION
 
@@ -42,7 +46,7 @@ use Clustericious::App;
 use Mojo::URL;
 use File::Basename qw/dirname/;
 
-use base 'Mojolicious::Command';
+use base 'Clustericious::Command';
 use Clustericious::Config;
 use File::Slurp qw/slurp/;
 

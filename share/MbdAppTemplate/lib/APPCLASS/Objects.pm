@@ -1,7 +1,7 @@
 % my $class = shift;
 =head1 NAME
 
-<%= $class %>::Objects -- All model classes for <%= $class %>.
+<%= $class %>::Objects - All model classes for <%= $class %>.
 
 =head1 DESCRIPTION
 

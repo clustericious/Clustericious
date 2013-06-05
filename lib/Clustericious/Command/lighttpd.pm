@@ -1,10 +1,22 @@
 =head1 NAME
 
-Clustericious::Command::lighttpd
+Clustericious::Command::lighttpd - Clustericious command to stat lighttpd
+
+=head1 SYNOPSIS
+
+ % yourapp start
 
 =head1 DESCRIPTION
 
 Start a lighttpd web server.
+ 
+=head1 SUPER CLASS
+
+L<Clustericious::Command>
+
+=head1 SEE ALSO
+
+L<Clustericious>
 
 =cut
 
@@ -13,7 +25,7 @@ use Clustericious::Log;
 
 use Clustericious::App;
 use Clustericious::Config;
-use base 'Mojolicious::Command';
+use base 'Clustericious::Command';
 
 use strict;
 use warnings;

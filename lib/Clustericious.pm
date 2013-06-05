@@ -2,11 +2,11 @@ package Clustericious;
 
 =head1 NAME
 
-Clustericious -- A framework for RESTful processing systems.
+Clustericious - A framework for RESTful processing systems.
 
 =head1 SYNPOSIS
 
-    clustericious generate mbd_app Myapp --schema schema.sql
+ % clustericious generate mbd_app Myapp --schema schema.sql
 
 =head1 DESCRIPTION
 
@@ -19,23 +19,41 @@ processing cluster.
 
 Here are some of the distinctive aspects of Clustericious :
 
-- Provides a set of default routes (e.g. /status, /version, /api) for consistent
+=over 4
+
+=item *
+
+Provides a set of default routes (e.g. /status, /version, /api) for consistent
 interaction with L<Clustericious>-based processing nodes.
 
-- Introspects the routes available and publishes the api as /api.
+=item *
 
-- Interfaces with L<Clustericious::Client> to allow easy creation of
+Introspects the routes available and publishes the api as /api.
+
+=item *
+
+Interfaces with L<Clustericious::Client> to allow easy creation of
 clients.
 
-- Uses L<Clustericious::Config> for configuration.
+=item *
 
-- Uses L<Clustericious::Log> for logging.
+Uses L<Clustericious::Config> for configuration.
 
-- Integrates with L<Module::Build::Database> and L<Rose::Planter>
+=item *
+
+Uses L<Clustericious::Log> for logging.
+
+=item *
+
+Integrates with L<Module::Build::Database> and L<Rose::Planter>
 to provide a basic RESTful CRUD interface to a database.
 
-- Provides 'stop' and 'start' commands, and high-level configuration
+=item *
+
+Provides 'stop' and 'start' commands, and high-level configuration
 facilities for a variety of deployment options.
+
+=back
 
 =cut
 

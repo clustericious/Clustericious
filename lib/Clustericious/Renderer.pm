@@ -1,6 +1,6 @@
 =head1 NAME
 
-Clustericious::Renderer -- renderer for clustericious
+Clustericious::Renderer - renderer for clustericious
 
 =head1 DESCRIPTION
 

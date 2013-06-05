@@ -1,10 +1,22 @@
 =head1 NAME
 
-Clustericious::Command::apache
+Clustericious::Command::apache - Clustericious command to stat Apache
+
+=head1 SYNOPSIS
+
+ % yourapp start
 
 =head1 DESCRIPTION
 
 Start an apache web server.
+
+=head1 SUPER CLASS
+
+L<Clustericious::Command>
+
+=head1 SEE ALSO
+
+L<Clustericious>
 
 =cut
 
@@ -12,7 +24,7 @@ package Clustericious::Command::apache;
 use Clustericious::App;
 use Clustericious::Config;
 use File::Path qw/mkpath/;
-use base 'Mojolicious::Command';
+use base 'Clustericious::Command';
 
 use Clustericious::Log;
 __PACKAGE__->attr(description => <<EOT);

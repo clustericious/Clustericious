@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-Clustericious::Templates -- default templates for clustericious
+Clustericious::Templates - default templates for clustericious
 
 =head1 DESCRIPTION
 

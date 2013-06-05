@@ -10,6 +10,28 @@ use File::Slurp 'slurp';
 use File::ShareDir 'dist_dir';
 use File::Basename qw/basename/;
 
+=head1 NAME
+
+Clustericious::Command::generate::app - Clustericious command to generate a new Clustericious application
+
+=head1 SYNOPSIS
+
+ % clustericious generate app Myapp
+
+=head1 DESCRIPTION
+
+This command generates a new Clustericious application with the given name.
+
+=head1 SUPER CLASS
+
+L<Clustericious::Command>
+
+=head1 SEE ALSO
+
+L<Clustericious>
+
+=cut
+
 our $VERSION = '0.9921';
 
 has description => <<'EOF';

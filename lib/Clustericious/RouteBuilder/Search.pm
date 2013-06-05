@@ -1,6 +1,6 @@
 =head1 NAME
 
-Clustericious::RouteBuilder::Search -- build routes for searching for objects
+Clustericious::RouteBuilder::Search - build routes for searching for objects
 
 =head1 SYNOPSIS
 

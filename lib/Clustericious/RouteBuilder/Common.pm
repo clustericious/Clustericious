@@ -1,6 +1,6 @@
 =head1 NAME
 
-Clustericious::RouteBuilder::Common -- Routes common to all clustericious apps.
+Clustericious::RouteBuilder::Common - Routes common to all clustericious apps.
 
 =head1 SYNOPSIS
 

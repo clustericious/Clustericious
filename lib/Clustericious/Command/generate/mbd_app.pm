@@ -9,7 +9,30 @@ use File::Find;
 use File::Slurp 'slurp';
 use File::ShareDir 'dist_dir';
 use File::Basename qw/basename/;
-  
+
+=head1 NAME
+
+Clustericious::Command::generate::mbd_app - Clustericious command to generate a new Clustericious M::B::D application
+
+=head1 SYNOPSIS
+
+ % clustericious generate mbd_app Myapp --schema schema.sql
+
+=head1 DESCRIPTION
+
+This command generates a new Clustericious Module::Build::Database application with the given name and schema.
+
+=head1 SUPER CLASS
+
+L<Clustericious::Command>
+
+=head1 SEE ALSO
+
+L<Clustericious>
+
+=cut
+
+
 our $VERSION = '0.9921';
 
 has description => <<'EOF';

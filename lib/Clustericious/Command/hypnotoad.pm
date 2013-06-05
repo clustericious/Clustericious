@@ -1,6 +1,23 @@
 =head1 NAME
 
-Clustericious::Command::Hypnotoad
+Clustericious::Command::Hypnotoad - Clustericious command to stat Hypnotoad
+
+=head1 SYNOPSIS
+
+in your application configuration (C<~/etc/YourApp.conf>)
+
+ ---
+ start_mode : "hypnotoad"
+ hypnotoad:
+    workers : 1
+        listen :
+            - "http://*:3000"
+    inactivity_timeout : 50
+    pid_file : /tmp/minionrelay.pid
+
+then at the command line:
+
+ % yourapp start
 
 =head1 DESCRIPTION
 
@@ -10,20 +27,14 @@ Configuration for the server is taken directly from the
 "hypnotoad" entry in the config file, and turned into
 a config file for hypnotoad.
 
-=head1 EXAMPLE
+=head1 SUPER CLASS
 
- start_mode : "hypnotoad"
- hypnotoad:
-    workers : 1
-        listen :
-            - "http://*:3000"
-    inactivity_timeout : 50
-    pid_file : /tmp/minionrelay.pid
-
+L<Clustericious::Command>
 
 =head1 SEE ALSO
 
-L<Mojo::Server::Hypnotoad>
+L<Clustericious>
+L<Mojo::Server::Hypnotoad>,
 
 =cut
 
@@ -36,7 +47,7 @@ use Mojo::Server::Hypnotoad;
 use Data::Dumper;
 use File::Slurp qw/slurp/;
 use Cwd qw/getcwd abs_path/;
-use base 'Mojolicious::Command';
+use base 'Clustericious::Command';
 
 use strict;
 use warnings;

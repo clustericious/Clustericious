@@ -1,27 +1,32 @@
 =head1 NAME
 
-Clustericious::Command::start
+Clustericious::Command::start - Clustericious command to start a Clustericious application
+
+=head1 SYNOPSIS
+
+In your MyApp.conf:
+
+ ---
+ start_mode: hypnotoad
+ hypnotoad:
+   pid: /tmp/restmd.pid
+   [...]
+   env:
+     foo: bar
+
+Then on the command line
+
+ % myapp start
+
+Which is equivalent to
+
+ % foo=bar myapp hypnotoad --pid /tmp/restmd.pid [..]
 
 =head1 DESCRIPTION
 
 Start a daemon using the config file and the start_mode.
-
-=head1 EXAMPLE
-
-   ---
-   start_mode : hypnotoad
-   hypnotoad :
-      pid      : /tmp/restmd.pid
-      [...]
-      env      :
-        foo : bar
-
-The above configuration will will cause "myapp start"
-to be equivalent to
-
-  foo=bar myapp hypnotoad --pid /tmp/restmd.pid [..]
-
-In other words, keys and values in the configuration file become
+ 
+Keys and values in the configuration file become
 options preceded by double dashes.
 
 If a key has a single dash, it is sent as is (with no double dash).
@@ -32,8 +37,13 @@ command line option.
 The special label "env" is an optional hash of environment variables
 to set before starting the command.
 
+=head1 SUPER CLASS
+
+L<Clustericious::Command>
+
 =head1 SEE ALSO
 
+L<Clustericious>,
 L<Clustericious::Command::hypnotoad>
 
 =cut
@@ -47,7 +57,7 @@ use File::Basename qw/dirname/;
 
 use Clustericious::App;
 use Clustericious::Config;
-use Mojo::Base 'Mojolicious::Command';
+use Mojo::Base 'Clustericious::Command';
 
 use strict;
 use warnings;

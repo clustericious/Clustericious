@@ -2,7 +2,7 @@ package Clustericious::RouteBuilder::Proxy;
 
 =head1 NAME
 
-Clustericious::RouteBuilder::Proxy -- build proxy routes easily
+Clustericious::RouteBuilder::Proxy - build proxy routes easily
 
 =head1 SYNOPSIS
 
