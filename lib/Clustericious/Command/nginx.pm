@@ -31,7 +31,7 @@ __PACKAGE__->attr(description => <<EOT);
 Start an nginx web server.
 EOT
 
-our $VERSION = '0.9922';
+our $VERSION = '0.9923';
 
 __PACKAGE__->attr(usage => <<EOT);
 Usage $0: nginx -p <prefix> [...other nginx options]
