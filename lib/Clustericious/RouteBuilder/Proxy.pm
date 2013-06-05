@@ -34,9 +34,13 @@ This package provides routes for proxying.  It rewrites
 urls by stripping prefixes, and passes the rest on by
 prepending a given url to the incoming request.
 
-=head1 TODO
+=head1 SUPER CLASS
 
-more documentation
+none
+
+=head1 SEE ALSO
+
+L<Clustericious>
 
 =cut
 

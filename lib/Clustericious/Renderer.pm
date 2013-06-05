@@ -6,9 +6,11 @@ Clustericious::Renderer - renderer for clustericious
 
 Just inherits from Mojolicious::Renderer with some customizations.
 
-=head1 METHODS
+=head1 SUPER CLASS
 
-=over
+L<Mojolicious::Renderer>
+
+=head1 METHODS
 
 =cut
 
@@ -21,7 +23,7 @@ use warnings;
 
 our $VERSION = '0.9921';
 
-=item render
+=head2 render
 
 Set the hander to "autodata" if there is some autodata
 present in the stash.
@@ -46,3 +48,8 @@ sub root  {
 
 1;
 
+=head1 SEE ALSO
+
+L<Clustericious>
+
+=cut

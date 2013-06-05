@@ -3,6 +3,29 @@ package Clustericious::Commands;
 use strict;
 use warnings;
 
+=head1 NAME
+
+Clustericious::Commands - Clustericious command runner
+
+=head1 SYNOPSIS
+
+ % yourapp start
+
+=head1 DESCRIPTION
+
+This class is used by the L<clustericious> command to do its thing.
+See L<Clustericious::Command> for an overview of Clustericious commands.
+
+=head1 SUPER CLASS
+
+L<Mojolicious::Commands>
+
+=head1 SEE ALSO
+
+L<Clustericious::Command>
+
+=cut
+
 use Clustericious::Config;
 
 use Mojo::Base 'Mojolicious::Commands';

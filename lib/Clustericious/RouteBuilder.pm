@@ -2,6 +2,29 @@ package Clustericious::RouteBuilder;
 use strict;
 use warnings;
 
+=head1 NAME
+
+Clustericious::RouteBuilder - Route builder for Clustericious applications
+
+=head1 SYNOPSIS
+
+ use Clustericious::RouteBuilder;
+
+=head1 DESCRIPTION
+
+This class provides an interface for creating routes for Clustericious
+applications, which was forked from L<Mojolicious::Lite> some time ago.
+
+=head1 SUPER CLASS
+
+none
+
+=head1 SEE ALSO
+
+L<Clustericious>, L<Mojolicious::Lite>
+
+=cut
+
 our $VERSION = '0.9921';
 
 our %Routes;

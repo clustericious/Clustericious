@@ -6,6 +6,15 @@ Clustericious::Plugin::DataHandler - Handle data types automatically
 
 =head1 SYNOPSIS
 
+ package YourApp::Routes;
+ 
+ use Clustericious::RouteBuilder;
+ 
+ get '/some/route' => sub {
+   my $c = shift;
+   $c->{autodata} = { x => 1, y => 'hello, z => [1,2,3] };
+ };
+
 =head1 DESCRIPTION
 
 Adds a renderer that automatically serializes that "autodata" in the
@@ -18,7 +27,7 @@ application/x-www-form-urlencoded (in-bound only).
 
 When parse_autodata is called from within a route like this:
 
-    $self->parse_autodata;
+ $self->parse_autodata;
 
 POSTed data is parsed according to the type in the 'Content-Type'
 header with the data left in stash->{autodata}.  It is also

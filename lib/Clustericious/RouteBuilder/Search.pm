@@ -31,6 +31,14 @@ Additionally a "mode" parameters is suported, which just calls a
 search_$mode method within the manager class, and returns that
 resultset to the client.
 
+=head1 SUPER CLASS
+
+none
+
+=head1 SEE ALSO
+
+L<Clustericious>
+
 =cut
 
 package Clustericious::RouteBuilder::Search;

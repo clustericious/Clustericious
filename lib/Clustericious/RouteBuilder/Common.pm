@@ -22,6 +22,14 @@ routes are added :
 /log is not available unless the configuration option "export_logs" is set
 to a true value.
 
+=head1 SUPER CLASS
+
+none
+
+=head1 SEE ALSO
+
+L<Clustericious>
+
 =cut
 
 package Clustericious::RouteBuilder::Common;

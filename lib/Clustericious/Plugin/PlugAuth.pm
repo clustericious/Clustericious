@@ -226,7 +226,7 @@ sub skip_auth {
 
 =head1 SEE ALSO
 
-L<PlugAuth>
+L<PlugAuth>, L<Clustericious>
 
 =cut
 

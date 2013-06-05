@@ -1,4 +1,3 @@
-
 =head1 NAME
 
 Clustericious::Templates - default templates for clustericious
@@ -7,6 +6,10 @@ Clustericious::Templates - default templates for clustericious
 
 This package contains some default templates (inline) for clustericious.
 Anything on the filesystem (in templates/) will override these.
+
+=head1 SEE ALSO
+
+L<Clustericious>
 
 =cut
 
