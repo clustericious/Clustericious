@@ -54,7 +54,7 @@ use List::MoreUtils qw/uniq/;
 use Data::Dumper;
 use strict;
 
-our $VERSION = '0.9923';
+our $VERSION = '0.9924';
 
 use Sub::Exporter -setup => {
     exports => [

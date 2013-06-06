@@ -56,7 +56,7 @@ use Sub::Exporter -setup => {
     collectors => ['defaults'],
 };
 
-our $VERSION = '0.9923';
+our $VERSION = '0.9924';
 
 sub _build_create {
     my ($class, $name, $arg, $defaults) = @_;

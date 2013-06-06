@@ -10,6 +10,7 @@ my $builder = Module::Build->new(
     dist_author         => q{Brian Duggan <brian.duggan@nasa.gov>},
     dist_version_from   => 'lib/Clustericious.pm',
     dist_abstract       => 'Mojo and HTTP based cluster framework',
+    configure_requires => { 'Module::Build' => 0.40 },
     build_requires => {
         'Clustericious::Config' => '0.01',
         'Module::Build'        => '0.36',
