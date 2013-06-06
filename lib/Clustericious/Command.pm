@@ -36,15 +36,11 @@ L<start|Clustericious::Command::start>
 
 =item *
 
-L<start|Clustericious::Command::stop>
+L<stop|Clustericious::Command::stop>
 
 =item *
 
 L<start|Clustericious::Command::status>
-
-=item *
-
-L<start|Clustericious::Command::stop>
 
 =item *
 
