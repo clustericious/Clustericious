@@ -40,7 +40,7 @@ L<stop|Clustericious::Command::stop>
 
 =item *
 
-L<start|Clustericious::Command::status>
+L<status|Clustericious::Command::status>
 
 =item *
 
