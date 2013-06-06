@@ -22,7 +22,13 @@ This automates the creation of routes for searching for objects.
 
 Manager::Finder::Class must provide the following methods :
 
- - lookup_class : given the plural of a table, look up the name of the class
+=over 4
+
+=item lookup_class
+
+given the plural of a table, look up the name of the class
+
+=back
 
 The route that is created turns a JSON structure which is POSTed into
 parameters for Rose::DB::Object::Manager::get_objects.
