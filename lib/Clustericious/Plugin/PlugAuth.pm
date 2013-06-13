@@ -2,7 +2,6 @@ package Clustericious::Plugin::PlugAuth;
 
 use Clustericious::Log;
 use Mojo::ByteStream qw/b/;
-use Mojo::UserAgent;
 use Mojo::URL;
 
 use Clustericious::Config;
@@ -194,7 +193,7 @@ sub authorize {
     $resource =~ s[^/][];
     my $url = Mojo::URL->new( join '/', $self->config_url,
         "authz/user", $user, $action, $resource );
-    my $code = Mojo::UserAgent->new->head($url)->res->code;
+    my $code = $c->ua->head($url)->res->code;
     return 1 if $code && $code == 200;
     INFO "Unauthorized access by $user to $action $resource";
     if($code == 503) {

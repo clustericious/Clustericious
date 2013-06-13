@@ -30,6 +30,7 @@ my $builder = Module::Build->new(
         'IO::Scalar'           => 0,
         'File::HomeDir'        => 0,
         'File::HomeDir::Test'  => 0,
+        'PlugAuth::Lite'       => '0.03',
       },
     add_to_cleanup      => [ 'Clustericious-*' ],
     #create_makefile_pl => 'traditional',
