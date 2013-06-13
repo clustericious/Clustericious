@@ -118,11 +118,11 @@ sub authenticate {
     my $userinfo = b($str)->b64_decode;
     my ($user,$pw) = split /:/, $userinfo;
 
-    my $self_plug_auth = ref($c->app) =~ /^(?:Simple|Plug)Auth$/;
+    my $self_plug_auth = 0;
 
     # VIP treatment for some hosts
     my $ip = $c->tx->remote_address;
-    my $tx = $self_plug_auth ? $c->subdispatch(GET => "$config_url/host/$ip/trusted") : $ua->get("$config_url/host/$ip/trusted");
+    my $tx = $ua->get("$config_url/host/$ip/trusted");
     if ( my $res = $tx->success ) {
         if ( $res->code == 200 ) {
             TRACE "Host $ip is trusted, not authenticating";
@@ -147,20 +147,18 @@ sub authenticate {
 
     my $check;
     my $res;
-    if($self_plug_auth) {
-        $check = $c->data->check_credentials($user, $pw) ? 200 : 401;
+
+    if ($ENV{HARNESS_ACTIVE}) {
+        my $saved = $ua->inactivity_timeout;
+        $ua->inactivity_timeout(1);
+        $tx = $ua->head($auth_url);
+        $ua->inactivity_timeout($saved);
     } else {
-        if ($ENV{HARNESS_ACTIVE}) {
-            my $saved = $ua->inactivity_timeout;
-            $ua->inactivity_timeout(1);
-            $tx = $ua->head($auth_url);
-            $ua->inactivity_timeout($saved);
-        } else {
-            $tx = $ua->head($auth_url);
-        }
-        $res = $tx->res;
-        $check = $res->code();
+        $tx = $ua->head($auth_url);
     }
+    $res = $tx->res;
+    $check = $res->code();
+
     if(!defined $check || $check == 503) {
         $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
         WARN ("Error connecting to PlugAuth at $config_url");
@@ -196,7 +194,7 @@ sub authorize {
     $resource =~ s[^/][];
     my $url = Mojo::URL->new( join '/', $self->config_url,
         "authz/user", $user, $action, $resource );
-    my $code = (ref($c->app) =~ /^(?:Simple|Plug)Auth$/ ? $c->subdispatch(HEAD => $url) : Mojo::UserAgent->new->head($url))->res->code;
+    my $code = Mojo::UserAgent->new->head($url)->res->code;
     return 1 if $code && $code == 200;
     INFO "Unauthorized access by $user to $action $resource";
     if($code == 503) {
