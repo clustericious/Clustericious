@@ -7,10 +7,7 @@ use Test::Mojo;
 use File::HomeDir::Test;
 use File::HomeDir;
 use YAML::XS qw( DumpFile );
-use Mojo::URL;
-use Mojo::Message::Response;
 use PlugAuth::Lite;
-use Mojo::Server;
 
 $ENV{LOG_LEVEL} = "ERROR";
 
