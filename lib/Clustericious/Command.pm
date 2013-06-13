@@ -2,7 +2,7 @@ package Clustericious::Command;
 
 use Mojo::Base 'Mojolicious::Command';
 
-our $VERSION = '0.9924_01';
+our $VERSION = '0.9924_02';
 
 1;
 

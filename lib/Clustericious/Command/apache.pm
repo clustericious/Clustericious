@@ -31,7 +31,7 @@ __PACKAGE__->attr(description => <<EOT);
 Start an apache web server.
 EOT
 
-our $VERSION = '0.9924_01';
+our $VERSION = '0.9924_02';
 
 __PACKAGE__->attr(usage => <<EOT);
 Usage $0: apache -f <conf> [...other apache options]
