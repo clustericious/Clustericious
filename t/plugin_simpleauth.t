@@ -43,11 +43,13 @@ sub res { shift->{res} }
 
 package main;
 
+my $prefix = 'simple';
+
 my $home = File::HomeDir->my_home;
 mkdir "$home/etc";
 DumpFile("$home/etc/SomeService.conf", {
-  simple_auth => {
-    url => 'http://simpleauth.test:1234',
+  "${prefix}_auth" => {
+    url => "http://${prefix}auth.test:1234",
   },
 });
 
@@ -76,7 +78,7 @@ do {
   my $new_get = sub {
     my($self, $url, @rest) = @_;
     $url = Mojo::URL->new($url);
-    if($url->host eq 'simpleauth.test' && $url->path eq '/host/127.0.0.1/trusted') {
+    if($url->host eq "${prefix}auth.test" && $url->path eq '/host/127.0.0.1/trusted') {
       Fake::Tx->new($status->{trusted});
     } else {
       $old_get->(@_);
@@ -91,9 +93,9 @@ do {
   my $new_head = sub {
     my($self, $url, @rest) = @_;
     $url = Mojo::URL->new($url);
-    if($url->host eq 'simpleauth.test' && $url->path eq '/auth') {
+    if($url->host eq "${prefix}auth.test" && $url->path eq '/auth') {
       Fake::Tx->new($status->{auth});
-    } elsif($url->host eq 'simpleauth.test' && $url->path =~ m{^/authz}) {
+    } elsif($url->host eq "${prefix}auth.test" && $url->path =~ m{^/authz}) {
       Fake::Tx->new($status->{authz});
     } else {
       $old_head->(@_);
@@ -136,7 +138,7 @@ $t->get_ok("http://foo:bar\@localhost:$port/private")
   ->status_is(200)
   ->content_is('this is private');
 
-# not trusted, simpleauth returned 503
+# not trusted, PlugAuth returned 503
 $status = {
   trusted => 403,
   auth    => 503,
@@ -147,7 +149,7 @@ $t->get_ok("http://foo:bar\@localhost:$port/private")
   ->status_is(503)
   ->content_is('auth server down');
 
-# not trusted, authenticated, but simpleauth returned 503 for authz
+# not trusted, authenticated, but PlugAuth returned 503 for authz
 $status = {
   trusted => 403,
   auth    => 200,

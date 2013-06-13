@@ -43,11 +43,13 @@ sub res { shift->{res} }
 
 package main;
 
+my $prefix = 'plug';
+
 my $home = File::HomeDir->my_home;
 mkdir "$home/etc";
 DumpFile("$home/etc/SomeService.conf", {
-  plug_auth => {
-    url => 'http://plugauth.test:1234',
+  "${prefix}_auth" => {
+    url => "http://${prefix}auth.test:1234",
   },
 });
 
@@ -76,7 +78,7 @@ do {
   my $new_get = sub {
     my($self, $url, @rest) = @_;
     $url = Mojo::URL->new($url);
-    if($url->host eq 'plugauth.test' && $url->path eq '/host/127.0.0.1/trusted') {
+    if($url->host eq "${prefix}auth.test" && $url->path eq '/host/127.0.0.1/trusted') {
       Fake::Tx->new($status->{trusted});
     } else {
       $old_get->(@_);
@@ -91,9 +93,9 @@ do {
   my $new_head = sub {
     my($self, $url, @rest) = @_;
     $url = Mojo::URL->new($url);
-    if($url->host eq 'plugauth.test' && $url->path eq '/auth') {
+    if($url->host eq "${prefix}auth.test" && $url->path eq '/auth') {
       Fake::Tx->new($status->{auth});
-    } elsif($url->host eq 'plugauth.test' && $url->path =~ m{^/authz}) {
+    } elsif($url->host eq "${prefix}auth.test" && $url->path =~ m{^/authz}) {
       Fake::Tx->new($status->{authz});
     } else {
       $old_head->(@_);
