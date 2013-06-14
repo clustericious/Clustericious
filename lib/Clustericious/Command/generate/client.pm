@@ -32,7 +32,7 @@ L<Clustericious>, L<Clustericious::Client>
 
 =cut
 
-our $VERSION = '0.9924_05';
+our $VERSION = '0.9925';
 
 has description => <<'EOF';
 Generate Clustericious::Client-derived client.

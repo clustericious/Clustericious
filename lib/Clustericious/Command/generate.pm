@@ -29,7 +29,7 @@ use warnings;
 
 use Mojo::Base 'Mojolicious::Command::generate';
 
-our $VERSION = '0.9924_05';
+our $VERSION = '0.9925';
 
 has namespaces =>
       sub { [qw/Clustericious::Command::generate

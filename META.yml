@@ -38,90 +38,90 @@ no_index:
 provides:
   Clustericious:
     file: lib/Clustericious.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::App:
     file: lib/Clustericious/App.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command:
     file: lib/Clustericious/Command.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::apache:
     file: lib/Clustericious/Command/apache.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::generate:
     file: lib/Clustericious/Command/generate.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::generate::app:
     file: lib/Clustericious/Command/generate/app.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::generate::client:
     file: lib/Clustericious/Command/generate/client.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::generate::mbd_app:
     file: lib/Clustericious/Command/generate/mbd_app.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::hypnotoad:
     file: lib/Clustericious/Command/hypnotoad.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::lighttpd:
     file: lib/Clustericious/Command/lighttpd.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::nginx:
     file: lib/Clustericious/Command/nginx.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::plackup:
     file: lib/Clustericious/Command/plackup.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::start:
     file: lib/Clustericious/Command/start.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::status:
     file: lib/Clustericious/Command/status.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Command::stop:
     file: lib/Clustericious/Command/stop.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Commands:
     file: lib/Clustericious/Commands.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Controller:
     file: lib/Clustericious/Controller.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::HelloWorld:
     file: lib/Clustericious/HelloWorld.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Plugin::AutodataHandler:
     file: lib/Clustericious/Plugin/AutodataHandler.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Plugin::PlugAuth:
     file: lib/Clustericious/Plugin/PlugAuth.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Renderer:
     file: lib/Clustericious/Renderer.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::RouteBuilder:
     file: lib/Clustericious/RouteBuilder.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::RouteBuilder::CRUD:
     file: lib/Clustericious/RouteBuilder/CRUD.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::RouteBuilder::Common:
     file: lib/Clustericious/RouteBuilder/Common.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::RouteBuilder::Proxy:
     file: lib/Clustericious/RouteBuilder/Proxy.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::RouteBuilder::Search:
     file: lib/Clustericious/RouteBuilder/Search.pm
-    version: 0.9924_05
+    version: 0.9925
   Clustericious::Templates:
     file: lib/Clustericious/Templates.pm
-    version: 0.9924_05
+    version: 0.9925
   Test::Clustericious:
     file: lib/Test/Clustericious.pm
-    version: 0.9924_05
+    version: 0.9925
 requires:
   File::ShareDir: 1.00
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.9924_05
+version: 0.9925
