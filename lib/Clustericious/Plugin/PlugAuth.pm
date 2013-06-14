@@ -10,7 +10,7 @@ use Mojo::Base 'Mojolicious::Plugin';
 use warnings;
 use strict;
 
-our $VERSION = '0.9924_04';
+our $VERSION = '0.9924_05';
 
 =head1 NAME
 
