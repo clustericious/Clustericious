@@ -2,11 +2,9 @@ use strict;
 use warnings;
 use autodie;
 use v5.10;
-use Test::More tests => 30;
+use Test::Clustericious::Config;
+use Test::More tests => 31;
 use Test::Mojo;
-use File::HomeDir::Test;
-use File::HomeDir;
-use YAML::XS qw( DumpFile );
 use PlugAuth::Lite;
 
 $ENV{LOG_LEVEL} = "ERROR";
@@ -50,26 +48,17 @@ package main;
 
 my $prefix = 'simple';
 
-my $home = File::HomeDir->my_home;
 my $auth_url = $auth_ua->app_url->to_string;
 $auth_url =~ s{/$}{};
-mkdir "$home/etc";
-DumpFile("$home/etc/SomeService.conf", {
+
+create_config_ok SomeService => {
   "${prefix}_auth" => {
     url => $auth_url,
   },
-});
-
-note do {
-  local $/;
-  open my $fh, '<', "$home/etc/SomeService.conf";
-  my $data = <$fh>;
-  close $fh;
-  $data;
 };
 
-note "GET $auth_url/auth";
-note $auth_ua->get("$auth_url/auth")->res->to_string;
+#note "GET $auth_url/auth";
+#note $auth_ua->get("$auth_url/auth")->res->to_string;
 
 my $t = Test::Mojo->new("SomeService");
 

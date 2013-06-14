@@ -12,7 +12,7 @@ my $builder = Module::Build->new(
     dist_abstract       => 'Mojo and HTTP based cluster framework',
     configure_requires => { 'Module::Build' => 0.40 },
     build_requires => {
-        'Clustericious::Config' => '0.01',
+        'Clustericious::Config' => '0.17',
         'Module::Build'        => '0.36',
         'Test::More'           => 0,
         'MojoX::Log::Log4perl' => 0,
