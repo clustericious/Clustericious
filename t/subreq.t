@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use v5.10;
 use Test::Clustericious::Config;
 use Test::Clustericious;
 use Test::PlugAuth;
@@ -10,7 +11,12 @@ my $auth = Test::PlugAuth->new(auth => sub {
   return $user eq 'foo' && $pass eq 'bar';
 });
 
-create_config_ok MyApp => { plug_auth => $auth->url };
+create_config_ok MyApp => { 
+  plug_auth => {
+    url    => $auth->url,
+    plugin => 'PlugAuth2',
+  },
+};
 
 eval q{
   package MyApp;
@@ -27,10 +33,9 @@ eval q{
   get '/indirect' => sub {
     my($self) = @_;
     my $tx = $self->ua->transactor->tx( GET => '/private');
-    Clustericious::Plugin::PlugAuth->skip_auth(1);
+    $tx->{plug_auth_skip_auth} = 1;
     $self->app->handler($tx);
     my $res = $tx->success;
-    #Clustericious::Plugin::PlugAuth->skip_auth(0);
     $self->render( text => $res->body, status => $res->code );
   };
   
@@ -38,6 +43,21 @@ eval q{
   authorize;
   
   get '/private' => sub { shift->render_text('this is private') };
+  
+  package Clustericious::Plugin::PlugAuth2;
+  
+  use base qw( Clustericious::Plugin::PlugAuth );
+
+  sub authenticate {
+    return 1 if $_[1]->tx->{plug_auth_skip_auth};
+    return shift->SUPER::authenticate(@_);
+  };
+
+  sub authorize {
+    return 1 if $_[1]->tx->{plug_auth_skip_auth};
+    return shift->SUPER::authenticate(@_);
+  };
+
 };
 die $@ if $@;
 

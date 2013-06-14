@@ -83,7 +83,6 @@ sub register {
         WARN "unable to determine PlugAuth URL: $@";
         return $self;
     }
-    $app->hook(after_dispatch => sub { Clustericious::Plugin::PlugAuth->skip_auth(0) });
     $self;
 }
 
@@ -100,7 +99,6 @@ sub authenticate {
     my $self = shift;
     my $c = shift;
     my $realm = shift;
-    return 1 if $self->skip_auth;
 
     TRACE ("Authenticating for realm $realm");
     # Everyone needs to send an authorization header
@@ -185,7 +183,6 @@ the given action on the given resource.
 sub authorize {
     my $self = shift;
     my $c = shift;
-    return 1 if $self->skip_auth;
     my ($action,$resource) = @_;
     my $user = $c->stash("user") or LOGDIE "missing user in authorize()";
     LOGDIE "missing action or resource in authorize()" unless @_==2;
@@ -202,23 +199,6 @@ sub authorize {
         $c->render(text => "unauthorized", status => 403);
     }
     return 0;
-}
-
-=head2 skip_auth
-
- Clustericious::Plugin::PlugAuth->skip_auth(1);
-
-Set this global flag to bypass authentication and authorization, e.g. during
-a subequest.  This flag is reset at the end of the dispatch cycle.
-
-=cut
-
-sub skip_auth {
-    state $skip_auth = 0;
-    my $class = shift;
-    return $skip_auth unless @_;
-    $skip_auth = shift;
-    return $skip_auth;
 }
 
 =head1 SEE ALSO

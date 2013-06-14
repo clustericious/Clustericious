@@ -2,6 +2,8 @@ Revision history for Clustericious
 
         - Use PlugAuth::Lite for plugauth testing
         - requires Clustericious::Config 0.17 for Test::Clustericious::Config;
+        - rm Clustericious::Plugin::PlugAuth->skip_auth
+          see t/subreq.t for a different way to do this
 
 0.9924  Thu Jun  6 07:58:50 EDT 2013
         - documentation
