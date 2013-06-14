@@ -89,3 +89,5 @@ xt/release/pod.t
 dist.ini
 .travis.yml
 t/data/auth.passwd
+t/subreq.t
+t/multiple_apps.t
