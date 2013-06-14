@@ -138,6 +138,8 @@ sub startup {
         $url;
     });
 
+    $self->helper( auth_ua => sub { shift->ua } );
+
     $self->helper( render_moved => sub {
         my $c = shift;
         $c->res->code(301);

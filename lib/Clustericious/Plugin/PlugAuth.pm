@@ -111,7 +111,7 @@ sub authenticate {
     };
 
     my $config_url = $self->config_url;
-    my $ua = $c->ua;
+    my $ua = $c->auth_ua;
 
     my ($method,$str) = split / /,$auth;
     my $userinfo = b($str)->b64_decode;
@@ -193,7 +193,7 @@ sub authorize {
     $resource =~ s[^/][];
     my $url = Mojo::URL->new( join '/', $self->config_url,
         "authz/user", $user, $action, $resource );
-    my $code = $c->ua->head($url)->res->code;
+    my $code = $c->auth_ua->head($url)->res->code;
     return 1 if $code && $code == 200;
     INFO "Unauthorized access by $user to $action $resource";
     if($code == 503) {
