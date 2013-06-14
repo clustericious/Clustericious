@@ -31,7 +31,7 @@ sub startup
   my $self = shift;
   $self->SUPER::startup;
   $self->helper(auth_ua => sub { $auth_ua });
-};
+}
 
 package SomeService::Routes;
 
