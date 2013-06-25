@@ -35,7 +35,14 @@ my $builder = Module::Build->new(
     add_to_cleanup      => [ 'Clustericious-*' ],
     #create_makefile_pl => 'traditional',
     share_dir => 'share',
-    meta_add => { no_index => { directory => [ 'share', 'util' ], } },
+    meta_merge => {
+        no_index => { directory => [ 'share', 'util' ], },
+        resources => {
+            bugtracker => 'https://github.com/plicease/Clustericious/issues',
+            homepage   => "http://perl.wdlabs.com/Clustericious",
+            repository => 'git://github.com/plicease/Clustericious.git',
+        }
+    }
 );
 
 $builder->create_build_script();

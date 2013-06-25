@@ -123,5 +123,8 @@ provides:
 requires:
   File::ShareDir: 1.00
 resources:
+  bugtracker: https://github.com/plicease/Clustericious/issues
+  homepage: http://perl.wdlabs.com/Clustericious
   license: http://dev.perl.org/licenses/
+  repository: git://github.com/plicease/Clustericious.git
 version: 0.9925
