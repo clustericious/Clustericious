@@ -3,7 +3,7 @@ package Clustericious::HelloWorld;
 use Mojo::Base 'Clustericious::App';
 use Clustericious::RouteBuilder qw/Clustericious::HelloWorld/;
 
-our $VERSION = '0.9925';
+our $VERSION = '0.9926';
 
 BEGIN {
     $ENV{LOG_LEVEL} = 'FATAL';

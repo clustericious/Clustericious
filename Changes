@@ -1,5 +1,8 @@
 Revision history for Clustericious
 
+0.9926  Tue Jun 25 12:13:35 EDT 2013
+        - Update project metadata
+
 0.9925  Fri Jun 14 15:59:13 EDT 2013
         - Use PlugAuth::Lite for plugauth testing
         - requires Clustericious::Config 0.17 for Test::Clustericious::Config;

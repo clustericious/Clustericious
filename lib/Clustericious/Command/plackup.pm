@@ -30,7 +30,7 @@ use base 'Clustericious::Command';
 use strict;
 use warnings;
 
-our $VERSION = '0.9925';
+our $VERSION = '0.9926';
 
 __PACKAGE__->attr(description => <<EOT);
 Start a plack server (see plackup)
