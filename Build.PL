@@ -19,7 +19,6 @@ my $builder = Module::Build->new(
         'Clustericious::Log'   => '0.05',
         'Mojolicious'          => '3.85',
         'Sub::Exporter'        => 0,
-        'YAML::Syck'           => 0,
         'JSON::XS'             => 0,
         'YAML::XS'             => 0,
         'List::MoreUtils'      => 0,

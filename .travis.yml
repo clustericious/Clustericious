@@ -7,7 +7,8 @@ install:
   - cpanm -n Clustericious::Log
   - cpanm -n Mojolicious
   - cpanm -n Sub::Exporter
-  - cpanm -n YAML::Syck JSON::XS YAML::XS
+  - cpanm -n JSON::XS
+  - cpanm -n YAML::XS
   - cpanm -n List::MoreUtils
   - cpanm -n File::ShareDir
   - cpanm -n Hash::Merge

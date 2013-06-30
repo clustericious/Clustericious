@@ -3,7 +3,7 @@ abstract: 'Mojo and HTTP based cluster framework'
 author:
   - 'Brian Duggan <brian.duggan@nasa.gov>'
 build_requires:
-  Clustericious::Config: 0.01
+  Clustericious::Config: 0.17
   Clustericious::Log: 0.05
   File::HomeDir: 0
   File::HomeDir::Test: 0
@@ -16,16 +16,15 @@ build_requires:
   Module::Build: 0.36
   MojoX::Log::Log4perl: 0
   Mojolicious: 3.85
-  PlugAuth::Lite: 0.03
+  PlugAuth::Lite: 0.05
   Sub::Exporter: 0
   Sys::Hostname: 0
   Test::More: 0
-  YAML::Syck: 0
   YAML::XS: 0
 configure_requires:
   Module::Build: 0.4
 dynamic_config: 1
-generated_by: 'Module::Build version 0.4002, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
