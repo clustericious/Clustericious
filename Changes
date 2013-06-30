@@ -1,5 +1,6 @@
 Revision history for Clustericious
 
+0.9927  Sun Jun 30 18:20:31 EDT 2013
         - rm dep on YAML::Syck
 
 0.9926  Tue Jun 25 12:13:35 EDT 2013

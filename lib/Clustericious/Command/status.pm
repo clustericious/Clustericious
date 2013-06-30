@@ -32,7 +32,7 @@ use base 'Clustericious::Command';
 use strict;
 use warnings;
 
-our $VERSION = '0.9926';
+our $VERSION = '0.9927';
 
 __PACKAGE__->attr(description => <<'');
 Report the status of a daemon.

@@ -33,7 +33,7 @@ L<Clustericious>
 =cut
 
 
-our $VERSION = '0.9926';
+our $VERSION = '0.9927';
 
 has description => <<'EOF';
 Generate Clustericious app based on Module::Build::Database.
