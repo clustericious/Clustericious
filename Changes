@@ -1,5 +1,7 @@
 Revision history for Clustericious
 
+        - rm dep on YAML::Syck
+
 0.9926  Tue Jun 25 12:13:35 EDT 2013
         - Update project metadata
 
