@@ -25,7 +25,7 @@ L<Mojolicious::Controller>
 
 =cut
 
-our $VERSION = '0.9924_04';
+our $VERSION = '0.9926';
 
 =head1 METHODS
 
