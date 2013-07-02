@@ -50,14 +50,14 @@ require Test::More;
 
  my $t = Test::Clustericious->new(server => 'MyServer');
 
- Looks up the URL for the server in the config file for the
- specified server.
+Looks up the URL for the server in the config file for the
+specified server.
 
 =head2 C<server_url>
 
  my $t = Test::Clustericious->new(server_url => 'http://foo/');
 
- Explicitly define a server url to test against.
+Explicitly define a server url to test against.
 
 =cut
 
@@ -100,9 +100,9 @@ sub new
 
  my $object = $t->testdata('filename');
 
- Looks for filename, filename.json, filename.yaml in 't', 'data' or
- 't/data' directories.  Parses with json or yaml if appropriate, then
- returns the object.
+Looks for filename, filename.json, filename.yaml in 't', 'data' or
+'t/data' directories.  Parses with json or yaml if appropriate, then
+returns the object.
 
 =cut
 
@@ -139,11 +139,11 @@ sub _url
 
  $obj = $t->decoded_body;
 
- Returns the body from the last request, parsing with JSON if
- Content-Type is application/json.
+Returns the body from the last request, parsing with JSON if
+Content-Type is application/json.
 
- Returns undef if the parse fails or the last request wasn't status
- 2xx.
+Returns undef if the parse fails or the last request wasn't status
+2xx.
 
 =cut 
 
@@ -170,16 +170,16 @@ sub decoded_body
  $obj = $t->create_ok('/url', 'filename');
  $t->create_ok('/url', <many/files*>);
 
- if called with a filename, loads the object from the file as
- described in testdata().
+if called with a filename, loads the object from the file as
+described in testdata().
 
- Uses POST to the url to create the object, encoded with JSON.
- Checks for status 200 and returns the decoded body.
+Uses POST to the url to create the object, encoded with JSON.
+Checks for status 200 and returns the decoded body.
 
- You can also create multiple objects/files at once, but then there is
- no returned object.
+You can also create multiple objects/files at once, but then there is
+no returned object.
 
- This counts as 2 TAP tests.
+This counts as 2 TAP tests.
 
 =cut
 
@@ -220,9 +220,9 @@ sub update_ok { create_ok(@_) }
 
  $obj = $t->retrieve_ok('/url');
 
- GETs the url, checks for status 200, and returns the decoded body.
+GETs the url, checks for status 200, and returns the decoded body.
 
- This counts as 2 TAP tests.
+This counts as 2 TAP tests.
 
 =cut
 
@@ -243,10 +243,10 @@ sub retrieve_ok
 
  $t->remove_ok($url);
 
- DELETEs the url, checks for status 200 and content of 'ok'.  Then
- does a GET of the same url and checks for not found.
+DELETEs the url, checks for status 200 and content of 'ok'.  Then
+does a GET of the same url and checks for not found.
 
- This counts as 6 TAP tests.
+This counts as 6 TAP tests.
 
 =cut
 
@@ -267,10 +267,10 @@ sub remove_ok
 
  $t->notfound_ok($url[, $object]);
 
- GETs the url, or if $object specified, POSTs the encoded object
- and checks for a 404 response code and "not found" or "null".
+GETs the url, or if $object specified, POSTs the encoded object
+and checks for a 404 response code and "not found" or "null".
 
- This counts as 3 TAP tests.
+This counts as 3 TAP tests.
 
 =cut
 
@@ -299,8 +299,8 @@ sub notfound_ok
 
  $t->truncate_ok($url);
 
- GETs the URL, which should return a list of keys, then iterates
- over the list and delete_ok() each one.
+GETs the URL, which should return a list of keys, then iterates
+over the list and delete_ok() each one.
 
 =cut
 
