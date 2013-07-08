@@ -1,7 +1,7 @@
-#!perl
-
-package main;
-use Test::More;
+use strict;
+use warnings;
+eval q{ use Test::Clustericious::Log };
+use Test::More tests => 1;
 use IO::Scalar;
 use Clustericious::Commands;
 
@@ -21,5 +21,4 @@ my $c;
 
 like $c, qr/mbd_app/, 'help text has mbd_app';
 
-done_testing();
 
