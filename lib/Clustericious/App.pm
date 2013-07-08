@@ -36,6 +36,7 @@ use File::HomeDir ();
 
 use Clustericious::Controller;
 use Clustericious::Renderer;
+use Clustericious::RouteBuilder;
 use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
 use Clustericious::Commands;
