@@ -1,6 +1,8 @@
 package Clustericious::RouteBuilder;
 use strict;
 use warnings;
+use v5.10;
+use Log::Log4perl qw( :easy );
 
 =head1 NAME
 
@@ -126,8 +128,7 @@ sub add_routes {
     my $app = shift;
     my $auth_plugin = shift;
 
-    my $stashed = $Routes{ ref $app }
-      or Carp::confess("no routes stashed for $app");
+    my $stashed = $Routes{ ref $app } // do { WARN "no routes stashed for $app"; [] };
     my @stashed            = @$stashed;
     my $routes             = $app->routes;
     my $head_route         = $app->routes;
