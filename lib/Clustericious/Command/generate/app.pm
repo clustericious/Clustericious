@@ -32,7 +32,7 @@ L<Clustericious>
 
 =cut
 
-our $VERSION = '0.9927';
+our $VERSION = '0.9928';
 
 has description => <<'EOF';
 Generate Clustericious app.

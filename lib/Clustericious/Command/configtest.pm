@@ -5,7 +5,7 @@ use warnings;
 use v5.10;
 use Mojo::Base 'Clustericious::Command';
 
-our $VERSION = '0.9927';
+our $VERSION = '0.9928';
 
 has description => <<EOT;
 load configuration and test for errors
