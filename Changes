@@ -1,5 +1,7 @@
 Revision history for Clustericious
 
+        - added configtest command a la apache
+
 0.9927  Sun Jun 30 18:20:31 EDT 2013
         - rm dep on YAML::Syck
 

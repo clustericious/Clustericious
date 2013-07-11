@@ -77,6 +77,7 @@ EOT
 
 sub run {
     my $self     = shift;
+    exit 2 unless $self->app->sanity_check;
     my @args = @_ ? @_ : @ARGV;
     my $app  = $ENV{MOJO_APP};
     my $conf     = Clustericious::Config->new( $app );

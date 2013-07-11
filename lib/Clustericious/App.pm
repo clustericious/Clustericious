@@ -55,6 +55,7 @@ has commands => sub {
 
 use warnings;
 use strict;
+use v5.10;
 
 our @Confdirs = $ENV{TEST_HARNESS} ?
    ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
@@ -92,7 +93,12 @@ sub startup {
     $self->secret( (ref $self || $self) );
 
     $self->plugins->namespaces(['Mojolicious::Plugin','Clustericious::Plugin']);
-    my $config = Clustericious::Config->new(ref $self);
+    my $config = eval { Clustericious::Config->new(ref $self) };
+    if(my $error = $@)
+    {
+      $self->log->error("error loading config $error");
+      $config = Clustericious::Config->new({ clustericious_config_error => $error });
+    }
     my $auth_plugin;
     if(my $auth_config = $config->plug_auth(default => '')) {
         $self->log->info("Loading auth plugin plug_auth");
@@ -292,6 +298,20 @@ sub config {
     } else {
         $app->_clustericious_config(@_);
     }
+}
+
+sub sanity_check
+{
+    my($self) = @_;
+
+    my $sane = 1;
+    
+    if(my $error = $self->config->clustericious_config_error(default => '')) {
+        say "error loading configuration: $error";
+        $sane = 0;
+    }
+    
+    $sane;
 }
 
 1;
