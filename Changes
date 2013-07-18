@@ -1,5 +1,7 @@
 Revision history for Clustericious
 
+        - rm debug
+
 0.9928  Wed Jul 10 22:07:29 EDT 2013
         - added configtest command a la apache
         - allow for a null app
