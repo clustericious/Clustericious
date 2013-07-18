@@ -62,7 +62,7 @@ use Mojo::Base 'Clustericious::Command';
 use strict;
 use warnings;
 
-our $VERSION = '0.9928';
+our $VERSION = '0.9928_01';
 
 has description => <<EOT;
 Start a daemon using the config file.

@@ -21,7 +21,7 @@ use base 'Mojolicious::Renderer';
 use strict;
 use warnings;
 
-our $VERSION = '0.9928';
+our $VERSION = '0.9928_01';
 
 =head2 render
 

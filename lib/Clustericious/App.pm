@@ -41,7 +41,7 @@ use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
 use Clustericious::Commands;
 
-our $VERSION = '0.9928';
+our $VERSION = '0.9928_01';
 
 sub _have_rose {
     return 1 if Rose::Planter->can("tables");
