@@ -51,7 +51,7 @@ L<Clustericious>
 
 =cut
 
-our $VERSION = '0.9928_01';
+our $VERSION = '0.9929';
 
 has description => <<EOT;
 load configuration and test for errors

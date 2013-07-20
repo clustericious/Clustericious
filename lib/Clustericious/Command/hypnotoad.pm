@@ -52,7 +52,7 @@ use base 'Clustericious::Command';
 use strict;
 use warnings;
 
-our $VERSION = '0.9928_01';
+our $VERSION = '0.9929';
 
 __PACKAGE__->attr(description => "Start a hypnotad web server.\n");
 

@@ -1,6 +1,9 @@
 Revision history for Clustericious
 
-0.9928_01Thu Jul 18 16:47:43 EDT 2013
+0.9929  Sat Jul 20 09:22:26 EDT 2013
+	- require Clustericious::Log 0.14
+	
+0.9928_01 Thu Jul 18 16:47:43 EDT 2013
         - rm debug
 
 0.9928  Wed Jul 10 22:07:29 EDT 2013
