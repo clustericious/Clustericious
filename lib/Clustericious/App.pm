@@ -41,7 +41,7 @@ use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
 use Clustericious::Commands;
 
-our $VERSION = '0.9927';
+our $VERSION = '0.9928_01';
 
 sub _have_rose {
     return 1 if Rose::Planter->can("tables");
@@ -103,7 +103,6 @@ sub startup {
     if(my $auth_config = $config->plug_auth(default => '')) {
         $self->log->info("Loading auth plugin plug_auth");
         my $name = 'plug_auth';
-        $DB::single = 1;
         if(ref($auth_config) && $auth_config->{plugin})
         { $name = $auth_config->{plugin} }
         $auth_plugin = $self->plugin($name, plug_auth => $auth_config);
