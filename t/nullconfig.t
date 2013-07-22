@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+BEGIN { eval 'use EV' }
 use Test::More;
 BEGIN {
   delete $ENV{HARNESS_ACTIVE};

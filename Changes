@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - migrate to Dist::Zilla
 
 0.9929  Sat Jul 20 09:22:26 EDT 2013
 	- require Clustericious::Log 0.14

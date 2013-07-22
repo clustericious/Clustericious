@@ -2,6 +2,8 @@ use strict;
 use warnings;
 use Test::More tests => 29;
 
+BEGIN { eval 'use EV' }
+
 require_ok('Test::Clustericious');
 require_ok('Clustericious::RouteBuilder::Search');
 require_ok('Clustericious::RouteBuilder::Proxy');

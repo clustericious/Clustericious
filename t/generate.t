@@ -1,6 +1,7 @@
 use strict;
 use warnings;
-eval q{ use Test::Clustericious::Log };
+BEGIN { eval q{ use EV } }
+BEGIN { eval q{ use Test::Clustericious::Log } }
 use Test::More tests => 1;
 use IO::Scalar;
 use Clustericious::Commands;
