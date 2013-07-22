@@ -17,7 +17,7 @@ use Clustericious::Log;
 
 =head1 DESCRIPTION
 
-Start an apache web server.
+Start an Apache web server.
 
 =head1 SUPER CLASS
 
@@ -30,12 +30,12 @@ L<Clustericious>
 =cut
 
 __PACKAGE__->attr(description => <<EOT);
-Start an apache web server.
+Start an Apache web server.
 EOT
 
 __PACKAGE__->attr(usage => <<EOT);
-Usage $0: apache -f <conf> [...other apache options]
-Starts an apache webserver.
+Usage $0: Apache -f <conf> [...other Apache options]
+Starts an Apache webserver.
 Options are passed verbatim to the httpd executable.
 EOT
 
@@ -47,7 +47,7 @@ sub run {
 
     Clustericious::App->init_logging;
 
-    my $prefix = $args{-d} or INFO "no server root for apache";
+    my $prefix = $args{-d} or INFO "no server root for Apache";
     mkpath "$prefix/logs" if $prefix;
     my $apache = qx[which httpd] or LOGDIE "could not find httpd in $ENV{PATH}";
     chomp $apache;

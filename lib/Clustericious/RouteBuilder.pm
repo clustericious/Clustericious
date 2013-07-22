@@ -22,11 +22,11 @@ use Log::Log4perl qw( :easy );
 
 =head1 DESCRIPTION
 
-This module provides a simplified interface for creating routes for your
-L<Clustericious> application.  To use it, create a Routes.pm that lives
-directly under your application's namespace (for example above MyApp's
-route module is MyApp::Routes).  The interface is reminicent of L<Mojolicious::Lite>,
-because it was forked from there some time ago.
+This module provides a simplified interface for creating routes for your 
+L<Clustericious> application.  To use it, create a Routes.pm that lives 
+directly under your application's namespace (for example above MyApp's 
+route module is MyApp::Routes).  The interface is reminiscent of 
+L<Mojolicious::Lite>, because it was forked from there some time ago.
 
 =head1 SUPER CLASS
 

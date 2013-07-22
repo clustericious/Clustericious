@@ -33,7 +33,7 @@ then at the command line:
 
 =head1 DESCRIPTION
 
-Start a hypnotoad webserver.
+Start a hypnotoad web server.
 
 Configuration for the server is taken directly from the
 "hypnotoad" entry in the config file, and turned into

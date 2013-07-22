@@ -217,7 +217,8 @@ sub update_ok { create_ok(@_) }
 
  $obj = $t->retrieve_ok('/url');
 
-GETs the url, checks for status 200, and returns the decoded body.
+Makes a GET request on the url, checks for status 200, and returns the 
+decoded body.
 
 This counts as 2 TAP tests.
 
@@ -240,8 +241,8 @@ sub retrieve_ok
 
  $t->remove_ok($url);
 
-DELETEs the url, checks for status 200 and content of 'ok'.  Then
-does a GET of the same url and checks for not found.
+Makes a DELETE request on the url, checks for status 200 and content of 
+'ok'.  Then does a GET of the same url and checks for not found.
 
 This counts as 6 TAP tests.
 
@@ -264,8 +265,9 @@ sub remove_ok
 
  $t->notfound_ok($url[, $object]);
 
-GETs the url, or if $object specified, POSTs the encoded object
-and checks for a 404 response code and "not found" or "null".
+Makes a GET request on the url, or if $object specified, a POST request 
+the encoded object and checks for a 404 response code and "not found" or 
+"null".
 
 This counts as 3 TAP tests.
 
@@ -296,8 +298,8 @@ sub notfound_ok
 
  $t->truncate_ok($url);
 
-GETs the URL, which should return a list of keys, then iterates
-over the list and delete_ok() each one.
+Makes a GET request the URL, which should return a list of keys, then 
+iterates over the list and delete_ok() each one.
 
 =cut
 

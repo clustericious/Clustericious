@@ -8,19 +8,7 @@ Clustericious - A framework for RESTful processing systems.
 
 version 0.9929
 
-=head1 DESCRIPTION
-
-Clustericious is a web application framework designed to create HTTP/RESTful
-web services that operate on a cluster, where each service does one thing 
-and ideally does it well.  The design goal is to allow for easy deployment
-of applications.  Clustericious is based on the L<Mojolicious> and borrows
-some ideas from L<Mojolicious::Lite> (L<Clustericious::RouteBuilder> is 
-based on L<Mojolicious::Lite> routing).
-
-Two examples of Clustericious applications on CPAN are L<Yars> the archive
-server and L<PlugAuth> the authentication server.
-
-=head1 SYNPOSIS
+=head1 SYNOPSIS
 
 Generate a new Clustericious application:
 
@@ -66,6 +54,18 @@ Basic testing for Clustericious application:
  ---
  url: <%= cluster->url %>
 
+=head1 DESCRIPTION
+
+Clustericious is a web application framework designed to create HTTP/RESTful
+web services that operate on a cluster, where each service does one thing 
+and ideally does it well.  The design goal is to allow for easy deployment
+of applications.  Clustericious is based on the L<Mojolicious> and borrows
+some ideas from L<Mojolicious::Lite> (L<Clustericious::RouteBuilder> is 
+based on L<Mojolicious::Lite> routing).
+
+Two examples of Clustericious applications on CPAN are L<Yars> the archive
+server and L<PlugAuth> the authentication server.
+
 =head1 FEATURES
 
 Here are some of the distinctive aspects of Clustericious :
@@ -83,7 +83,7 @@ interaction with Clustericious services (see L<Clustericious::RouteBuilder::Comm
 
 =item *
 
-Introspects the routes available and publishes the api as /api.
+Introspects the routes available and publishes the API as /api.
 
 =item *
 

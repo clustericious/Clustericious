@@ -20,7 +20,7 @@ L<Mojolicious::Renderer>
 
 =head2 render
 
-Set the hander to "autodata" if there is some autodata
+Set the handler to "autodata" if there is some autodata
 present in the stash.
 
 =cut

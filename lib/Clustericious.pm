@@ -6,7 +6,7 @@ use warnings;
 # ABSTRACT: A framework for RESTful processing systems.
 # VERSION
 
-=head1 SYNPOSIS
+=head1 SYNOPSIS
 
 Generate a new Clustericious application:
 
@@ -81,7 +81,7 @@ interaction with Clustericious services (see L<Clustericious::RouteBuilder::Comm
 
 =item *
 
-Introspects the routes available and publishes the api as /api.
+Introspects the routes available and publishes the API as /api.
 
 =item *
 

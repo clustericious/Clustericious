@@ -36,7 +36,7 @@ When parse_autodata is called from within a route like this:
 
  $self->parse_autodata;
 
-POSTed data is parsed according to the type in the 'Content-Type'
+POST data is parsed according to the type in the 'Content-Type'
 header with the data left in stash->{autodata}.  It is also
 returned by the above call.
 

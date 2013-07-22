@@ -34,7 +34,7 @@ use Clustericious::Log;
 =head1 DESCRIPTION
 
 This package provides routes for proxying.  It rewrites
-urls by stripping prefixes, and passes the rest on by
+URLs by stripping prefixes, and passes the rest on by
 prepending a given url to the incoming request.
 
 =head1 SUPER CLASS

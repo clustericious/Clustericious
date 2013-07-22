@@ -46,7 +46,7 @@ sub url_for {
 =head2 redirect_to
 
 Copied from Mojolicious::Controller, but works around
-a limitation of apache's mod_proxy (namely: the ProxyPassReverse
+a limitation of Apache's mod_proxy (namely: the ProxyPassReverse
 directive doesn't handle authorization information in the
 Location header.)
 

@@ -13,13 +13,13 @@ use Mojo::Base 'Mojolicious::Plugin';
 
 =head1 SYNOPSIS
 
-SimpleApp.conf:
+MyApp.conf:
 
  {"plug_auth":{"url":"http://plugauthserver:3000"}}
 
 Application:
 
- package SimpleApp;
+ package MyApp;
  
  use base qw( Clustericious::App );
  
@@ -30,7 +30,7 @@ Application:
    #$self->plugin('plug_auth');
  }
  
- package SimpleApp::Routes;
+ package MyApp::Routes;
  
  use Clustericious::RouteBuilder;
 

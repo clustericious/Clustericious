@@ -47,10 +47,10 @@ options preceded by double dashes.
 
 If a key has a single dash, it is sent as is (with no double dash).
 
-The special value "null" means don't send an argument to the
+The special value C<null> means don't send an argument to the
 command line option.
 
-The special label "env" is an optional hash of environment variables
+The special label C<env> is an optional hash of environment variables
 to set before starting the command.
 
 =head1 SUPER CLASS

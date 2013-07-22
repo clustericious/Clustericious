@@ -75,7 +75,7 @@ The version of the application.
 
 =head2 /api
 
-Returns a list of API routes for the service.  This is similar to the infomration
+Returns a list of API routes for the service.  This is similar to the information
 provided by the L<Mojolicious::Command::routes|routes command>.
 
 =cut

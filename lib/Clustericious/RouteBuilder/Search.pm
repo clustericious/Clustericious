@@ -38,12 +38,12 @@ given the plural of a table, look up the name of the class
 
 =back
 
-The route that is created turns a JSON structure which is POSTed into
-parameters for Rose::DB::Object::Manager::get_objects.
+The route that is created turns a JSON structure which is input as POST
+data into parameters for Rose::DB::Object::Manager::get_objects.
 
-Additionally a "mode" parameters is suported, which just calls a
+Additionally a "mode" parameters is supported, which just calls a
 search_$mode method within the manager class, and returns that
-resultset to the client.
+result set to the client.
 
 =head1 SUPER CLASS
 
