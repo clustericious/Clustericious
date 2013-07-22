@@ -39,17 +39,6 @@ in the Accept header, the Content-Type header, or the default.  (By
 default, the default is application/json, but you can override that
 too).
 
-=head1 TODO
-
-more documentation
-
-handle XML with schemas
-
-handle RDF with templates
-
-Should I make this a 'helper' instead of a 'hook'?  Or just a normal
-function?
-
 =cut
 
 use strict;

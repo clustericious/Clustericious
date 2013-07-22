@@ -83,6 +83,11 @@ Introspects the routes available and publishes the api as /api.
 
 =item *
 
+Automatically handle different formats (YAML or JSON) depending on request 
+(see L<Clustericious::Plugin::AutodataHandler>).
+
+=item *
+
 Interfaces with L<Clustericious::Client> to allow easy creation of
 clients.
 
