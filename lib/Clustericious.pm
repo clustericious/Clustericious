@@ -22,6 +22,12 @@ Basic application layout:
  
  use Mojo::Base qw( Clustericious::App );
  
+ sub startup
+ {
+   my($self) = @_;
+   # just like Mojolicious startup()
+ }
+ 
  package MyApp::Routes;
  
  use Clustericious::RouteBuilder;
@@ -145,10 +151,6 @@ tool to generate part or all of a MyApp::Client from MyApp
 =item *
 
 documentation tutorial for clients (L<Clustericious::Client>)
-
-=item *
-
-Migrate to Dist::Zilla
 
 =back
 
