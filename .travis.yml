@@ -15,10 +15,9 @@ install:
   - cpanm -n IO::Scalar
   - cpanm -n File::HomeDir
   - cpanm -n PlugAuth::Lite
-before_script:
-  - perl Build.PL
 script: HARNESS_IS_VERBOSE=1 prove -lvr t xt
 perl:
+  - "5.18"
   - "5.16"
   - "5.14"
   - "5.12"
