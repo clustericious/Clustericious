@@ -2,14 +2,11 @@
 
 use strict;
 use warnings;
-
 use Clustericious::Commands;
 
-Clustericious::Commands->start;
-
-=head1 NAME
-
-clustericious - Clustericious command runner
+# PODNAME: clustericious
+# ABSTRACT: Clustericious command runner
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -29,3 +26,5 @@ commands, see L<Clustericious::Command>.
 L<Clustericious>, L<Clustericious::Command>
 
 =cut
+
+Clustericious::Commands->start;

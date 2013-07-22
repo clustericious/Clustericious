@@ -1,6 +1,14 @@
-=head1 NAME
+package Clustericious::Command::plackup;
 
-Clustericious::Command::plackup - Clustericious command to start plack server
+use strict;
+use warnings;
+use Clustericious::Log;
+use Clustericious::App;
+use Mojo::Server::PSGI;
+use base 'Clustericious::Command';
+
+# ABSTRACT: Clustericious command to start plack server
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -19,18 +27,6 @@ L<Clustericious::Command>
 L<Clustericious>, L<plackup>, L<Plack>
 
 =cut
-
-package Clustericious::Command::plackup;
-use Clustericious::Log;
-
-use Clustericious::App;
-use Mojo::Server::PSGI;
-use base 'Clustericious::Command';
-
-use strict;
-use warnings;
-
-our $VERSION = '0.9929';
 
 __PACKAGE__->attr(description => <<EOT);
 Start a plack server (see plackup)

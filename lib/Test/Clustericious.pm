@@ -3,11 +3,8 @@ package Test::Clustericious;
 use strict;
 use warnings;
 
-our $VERSION = '0.9929';
-
-=head1 NAME
-
-Test::Clustericious - Test Clustericious apps
+# ABSTRACT: Test Clustericious apps
+# VERSION
 
 =head1 SYNOPSIS
 

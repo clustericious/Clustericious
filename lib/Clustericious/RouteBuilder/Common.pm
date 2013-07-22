@@ -1,6 +1,12 @@
-=head1 NAME
+package Clustericious::RouteBuilder::Common;
 
-Clustericious::RouteBuilder::Common - Routes common to all clustericious apps.
+use strict;
+use warnings;
+use Clustericious::Log;
+use Sys::Hostname qw/hostname/;
+
+# ABSTRACT: Routes common to all clustericious apps.
+# VERSION
 
 =head1 DESCRIPTION
 
@@ -11,15 +17,6 @@ This package adds routes that are common to all clustericious servers.
 none
 
 =cut
-
-package Clustericious::RouteBuilder::Common;
-use Clustericious::Log;
-use Sys::Hostname qw/hostname/;
-
-our $VERSION = '0.9929';
-
-use strict;
-use warnings;
 
 sub add_routes {
     my $class = shift;

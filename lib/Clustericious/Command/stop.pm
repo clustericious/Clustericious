@@ -1,6 +1,17 @@
-=head1 NAME
+package Clustericious::Command::stop;
 
-Clustericious::Command::stop - Clustericious command to stop a Clustericious application
+use strict;
+use warnings;
+use Clustericious::Log;
+use Clustericious::App;
+use Mojo::URL;
+use File::Basename qw/dirname/;
+use base 'Clustericious::Command';
+use Clustericious::Config;
+use File::Slurp qw/slurp/;
+
+# ABSTRACT: Clustericious command to stop a Clustericious application
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -39,21 +50,6 @@ examples :
     }
 
 =cut
-
-package Clustericious::Command::stop;
-use Clustericious::Log;
-use Clustericious::App;
-use Mojo::URL;
-use File::Basename qw/dirname/;
-
-use base 'Clustericious::Command';
-use Clustericious::Config;
-use File::Slurp qw/slurp/;
-
-use strict;
-use warnings;
-
-our $VERSION = '0.9929';
 
 __PACKAGE__->attr(description => <<EOT);
 Stop a running daemon.

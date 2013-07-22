@@ -5,9 +5,8 @@ use warnings;
 use v5.10;
 use Log::Log4perl qw( :easy );
 
-=head1 NAME
-
-Clustericious::RouteBuilder - Route builder for Clustericious applications
+# ABSTRACT: Route builder for Clustericious applications
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -76,8 +75,6 @@ Require specific authorization for all subsequent routes.
 L<Clustericious>, L<Mojolicious::Lite>
 
 =cut
-
-our $VERSION = '0.9929';
 
 our %Routes;
 

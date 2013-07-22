@@ -1,8 +1,2 @@
-/Build
-/_build
-/blib
-/MYMETA.yml
-/MYMETA.json
 /Clustericious-*
-/Build.bat
-/pod2htmd.tmp
+/.build

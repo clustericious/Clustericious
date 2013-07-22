@@ -2,14 +2,15 @@ use strict;
 use warnings;
 use Test::More;
 BEGIN { 
-  plan skip_all => 'test requires Test::Pod' 
-    unless eval q{ use Test::Pod; 1 };
+  plan skip_all => 'test requires Test::CPAN::Changes' 
+    unless eval q{ use Test::CPAN::Changes; 1 };
 };
-use Test::Pod;
+use Test::CPAN::Changes;
 use FindBin;
 use File::Spec;
 
 chdir(File::Spec->catdir($FindBin::Bin, File::Spec->updir, File::Spec->updir));
 
-all_pod_files_ok( grep { -e $_ } qw( bin lib ));
+changes_file_ok;
 
+done_testing;

@@ -5,9 +5,8 @@ use warnings;
 use v5.10;
 use Mojo::Base 'Clustericious::Command';
 
-=head1 NAME
-
-Clustericious::Command::configtest - Test a Clustericious application's configuration
+# ABSTRACT: Test a Clustericious application's configuration
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -50,8 +49,6 @@ L<Clustericious::Command>
 L<Clustericious>
 
 =cut
-
-our $VERSION = '0.9929';
 
 has description => <<EOT;
 load configuration and test for errors

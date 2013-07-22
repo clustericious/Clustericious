@@ -11,7 +11,6 @@ install:
   - cpanm -n YAML::XS
   - cpanm -n List::MoreUtils
   - cpanm -n File::ShareDir
-  - cpanm -n Hash::Merge
   - cpanm -n File::Slurp
   - cpanm -n IO::Scalar
   - cpanm -n File::HomeDir

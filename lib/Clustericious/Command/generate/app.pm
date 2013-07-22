@@ -2,17 +2,14 @@ package Clustericious::Command::generate::app;
 
 use strict;
 use warnings;
-
 use Mojo::Base 'Clustericious::Command';
-
 use File::Find;
 use File::Slurp 'slurp';
 use File::ShareDir 'dist_dir';
 use File::Basename qw/basename/;
 
-=head1 NAME
-
-Clustericious::Command::generate::app - Clustericious command to generate a new Clustericious application
+# ABSTRACT: Clustericious command to generate a new Clustericious application
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -31,8 +28,6 @@ L<Clustericious::Command>
 L<Clustericious>
 
 =cut
-
-our $VERSION = '0.9929';
 
 has description => <<'EOF';
 Generate Clustericious app.

@@ -1,14 +1,11 @@
 package Clustericious::Command;
 
+use strict;
+use warnings;
 use Mojo::Base 'Mojolicious::Command';
 
-our $VERSION = '0.9929';
-
-1;
-
-=head1 NAME
-
-Clustericious::Command - Command base class
+# ABSTRACT: Command base class
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -68,3 +65,4 @@ L<Mojolicious::Command>
 =cut
 
 
+1;

@@ -1,6 +1,16 @@
-=head1 NAME
+package Clustericious::Command::status;
 
-Clustericious::Command::status - Clustericious command to report status of Clustericious application
+use strict;
+use warnings;
+use Clustericious::Log;
+use Mojo::UserAgent;
+use Clustericious::App;
+use Clustericious::Config;
+use File::Basename qw/dirname/;
+use base 'Clustericious::Command';
+
+# ABSTRACT: Clustericious command to report status of Clustericious application
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -19,20 +29,6 @@ L<Clustericious::Command>
 L<Clustericious>
 
 =cut
-
-package Clustericious::Command::status;
-use Clustericious::Log;
-use Mojo::UserAgent;
-
-use Clustericious::App;
-use Clustericious::Config;
-use File::Basename qw/dirname/;
-use base 'Clustericious::Command';
-
-use strict;
-use warnings;
-
-our $VERSION = '0.9929';
 
 __PACKAGE__->attr(description => <<'');
 Report the status of a daemon.

@@ -1,15 +1,13 @@
 package Clustericious::Controller;
-use Clustericious::Config;
-use Clustericious::Log;
-
-use base 'Mojolicious::Controller';
 
 use strict;
 use warnings;
+use Clustericious::Config;
+use Clustericious::Log;
+use base 'Mojolicious::Controller';
 
-=head1 NAME
-
-Clustericious::Controller - Clustericious controller base class
+# ABSTRACT: Clustericious controller base class
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -22,10 +20,6 @@ Base class for all controllers in Clustericious applications
 =head1 SUPER CLASS
 
 L<Mojolicious::Controller>
-
-=cut
-
-our $VERSION = '0.9929';
 
 =head1 METHODS
 

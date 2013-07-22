@@ -1,6 +1,12 @@
-=head1 NAME
+package Clustericious::Renderer;
 
-Clustericious::Renderer - renderer for clustericious
+use strict;
+use warnings;
+use Clustericious::Log;
+use base 'Mojolicious::Renderer';
+
+# ABSTRACT: renderer for clustericious
+# VERSION
 
 =head1 DESCRIPTION
 
@@ -11,17 +17,6 @@ Just inherits from Mojolicious::Renderer with some customizations.
 L<Mojolicious::Renderer>
 
 =head1 METHODS
-
-=cut
-
-package Clustericious::Renderer;
-
-use Clustericious::Log;
-use base 'Mojolicious::Renderer';
-use strict;
-use warnings;
-
-our $VERSION = '0.9929';
 
 =head2 render
 

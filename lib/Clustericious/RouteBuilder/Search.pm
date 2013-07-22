@@ -1,6 +1,14 @@
-=head1 NAME
+package Clustericious::RouteBuilder::Search;
 
-Clustericious::RouteBuilder::Search - build routes for searching for objects
+use strict;
+use warnings;
+use Mojo::JSON;
+use Clustericious::Log;
+use List::MoreUtils qw/uniq/;
+use Data::Dumper;
+
+# ABSTRACT: build routes for searching for objects
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -46,15 +54,6 @@ none
 L<Clustericious>
 
 =cut
-
-package Clustericious::RouteBuilder::Search;
-use Mojo::JSON;
-use Clustericious::Log;
-use List::MoreUtils qw/uniq/;
-use Data::Dumper;
-use strict;
-
-our $VERSION = '0.9929';
 
 use Sub::Exporter -setup => {
     exports => [

@@ -1,6 +1,18 @@
-=head1 NAME
+package Clustericious::Command::hypnotoad;
 
-Clustericious::Command::hypnotoad - Clustericious command to stat Hypnotoad
+use strict;
+use warnings;
+use Clustericious::Log;
+use Clustericious::App;
+use Clustericious::Config;
+use Mojo::Server::Hypnotoad;
+use Data::Dumper;
+use File::Slurp qw/slurp/;
+use Cwd qw/getcwd abs_path/;
+use base 'Clustericious::Command';
+
+# ABSTRACT: Clustericious command to stat Hypnotoad
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -37,22 +49,6 @@ L<Clustericious>
 L<Mojo::Server::Hypnotoad>,
 
 =cut
-
-package Clustericious::Command::hypnotoad;
-use Clustericious::Log;
-
-use Clustericious::App;
-use Clustericious::Config;
-use Mojo::Server::Hypnotoad;
-use Data::Dumper;
-use File::Slurp qw/slurp/;
-use Cwd qw/getcwd abs_path/;
-use base 'Clustericious::Command';
-
-use strict;
-use warnings;
-
-our $VERSION = '0.9929';
 
 __PACKAGE__->attr(description => "Start a hypnotad web server.\n");
 

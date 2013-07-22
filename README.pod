@@ -1,10 +1,24 @@
-package Clustericious;
+=pod
 
-use strict;
-use warnings;
+=head1 NAME
 
-# ABSTRACT: A framework for RESTful processing systems.
-# VERSION
+Clustericious - A framework for RESTful processing systems.
+
+=head1 VERSION
+
+version 0.9929
+
+=head1 DESCRIPTION
+
+Clustericious is a web application framework designed to create HTTP/RESTful
+web services that operate on a cluster, where each service does one thing 
+and ideally does it well.  The design goal is to allow for easy deployment
+of applications.  Clustericious is based on the L<Mojolicious> and borrows
+some ideas from L<Mojolicious::Lite> (L<Clustericious::RouteBuilder> is 
+based on L<Mojolicious::Lite> routing).
+
+Two examples of Clustericious applications on CPAN are L<Yars> the archive
+server and L<PlugAuth> the authentication server.
 
 =head1 SYNPOSIS
 
@@ -51,18 +65,6 @@ Basic testing for Clustericious application:
  @ etc/MyApp.conf
  ---
  url: <%= cluster->url %>
-
-=head1 DESCRIPTION
-
-Clustericious is a web application framework designed to create HTTP/RESTful
-web services that operate on a cluster, where each service does one thing 
-and ideally does it well.  The design goal is to allow for easy deployment
-of applications.  Clustericious is based on the L<Mojolicious> and borrows
-some ideas from L<Mojolicious::Lite> (L<Clustericious::RouteBuilder> is 
-based on L<Mojolicious::Lite> routing).
-
-Two examples of Clustericious applications on CPAN are L<Yars> the archive
-server and L<PlugAuth> the authentication server.
 
 =head1 FEATURES
 
@@ -158,22 +160,18 @@ This is a beta release.  The API is subject to change without notice.
 
 =head1 AUTHOR
 
-Graham Ollis <plicease@cpan.org>
+original author: Brian Duggan
 
-Brian Duggan
+current maintainer: Graham Ollis <plicease@cpan.org>
+
+contributors:
 
 Curt Tilmes
 
-=head1 SEE ALSO
+=head1 COPYRIGHT AND LICENSE
 
-L<Clustericious::App>,
-L<Clustericious>,
-L<Clustericious::RouteBuilder::CRUD>,
-L<Clustericious::RouteBuilder::Search>,
-L<Clustericious::RouteBuilder::Common>
-L<Clustericious::Command::start>
+This software is copyright (c) 2013 by NASA GSFC.
 
-=cut
-
-1;
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 

@@ -1,6 +1,14 @@
-=head1 NAME
+package Clustericious::Command::lighttpd;
 
-Clustericious::Command::lighttpd - Clustericious command to stat lighttpd
+use strict;
+use warnings;
+use Clustericious::Log;
+use Clustericious::App;
+use Clustericious::Config;
+use base 'Clustericious::Command';
+
+# ABSTRACT: Clustericious command to stat lighttpd
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -19,18 +27,6 @@ L<Clustericious::Command>
 L<Clustericious>
 
 =cut
-
-package Clustericious::Command::lighttpd;
-use Clustericious::Log;
-
-use Clustericious::App;
-use Clustericious::Config;
-use base 'Clustericious::Command';
-
-use strict;
-use warnings;
-
-our $VERSION = '0.9929';
 
 __PACKAGE__->attr(description => <<EOT);
 Start a lighttpd web server.

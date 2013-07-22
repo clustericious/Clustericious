@@ -1,3 +1,16 @@
+package Clustericious::Command::nginx;
+
+use strict;
+use warnings;
+use Clustericious::App;
+use Clustericious::Config;
+use File::Path qw/mkpath/;
+use base 'Clustericious::Command';
+use Clustericious::Log;
+
+# ABSTRACT: Clustericious command to stat nginx
+# VERSION
+
 =head1 NAME
 
 Clustericious::Command::nginx - Clustericious command to stat nginx
@@ -20,18 +33,9 @@ L<Clustericious>
 
 =cut
 
-package Clustericious::Command::nginx;
-use Clustericious::App;
-use Clustericious::Config;
-use File::Path qw/mkpath/;
-use base 'Clustericious::Command';
-
-use Clustericious::Log;
 __PACKAGE__->attr(description => <<EOT);
 Start an nginx web server.
 EOT
-
-our $VERSION = '0.9929';
 
 __PACKAGE__->attr(usage => <<EOT);
 Usage $0: nginx -p <prefix> [...other nginx options]

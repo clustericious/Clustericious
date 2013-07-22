@@ -1,6 +1,31 @@
-=head1 NAME
 
-Clustericious::App - Clustericious app base class
+package Clustericious::App;
+
+use strict;
+use warnings;
+use v5.10;
+use List::Util qw/first/;
+use List::MoreUtils qw/uniq/;
+use MojoX::Log::Log4perl;
+use Mojo::UserAgent;
+use Clustericious::Templates;
+use Mojo::ByteStream qw/b/;
+use Data::Dumper;
+use Clustericious::Log;
+use Mojo::URL;
+use JSON::XS;
+use Scalar::Util qw/weaken/;
+use Mojo::Base 'Mojolicious';
+use File::HomeDir ();
+use Clustericious::Controller;
+use Clustericious::Renderer;
+use Clustericious::RouteBuilder;
+use Clustericious::RouteBuilder::Common;
+use Clustericious::Config;
+use Clustericious::Commands;
+
+# ABSTRACT: Clustericious app base class
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -18,31 +43,6 @@ L<Mojolicious>
 
 =cut
 
-package Clustericious::App;
-
-use List::Util qw/first/;
-use List::MoreUtils qw/uniq/;
-use MojoX::Log::Log4perl;
-use Mojo::UserAgent;
-use Clustericious::Templates;
-use Mojo::ByteStream qw/b/;
-use Data::Dumper;
-use Clustericious::Log;
-use Mojo::URL;
-use JSON::XS;
-use Scalar::Util qw/weaken/;
-use Mojo::Base 'Mojolicious';
-use File::HomeDir ();
-
-use Clustericious::Controller;
-use Clustericious::Renderer;
-use Clustericious::RouteBuilder;
-use Clustericious::RouteBuilder::Common;
-use Clustericious::Config;
-use Clustericious::Commands;
-
-our $VERSION = '0.9929';
-
 sub _have_rose {
     return 1 if Rose::Planter->can("tables");
 }
@@ -52,10 +52,6 @@ has commands => sub {
     weaken $commands->{app};
     return $commands;
 };
-
-use warnings;
-use strict;
-use v5.10;
 
 our @Confdirs = $ENV{TEST_HARNESS} ?
    ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :

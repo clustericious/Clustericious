@@ -1,8 +1,11 @@
 package Clustericious::Command::generate;
 
-=head1 NAME
+use strict;
+use warnings;
+use Mojo::Base 'Mojolicious::Command::generate';
 
-Clustericious::Command::generate - Clustericious code generation commands.
+# ABSTRACT: Clustericious code generation commands.
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -23,13 +26,6 @@ L<Mojolicious::Command::generate>
 L<Clustericious>
 
 =cut
-
-use strict;
-use warnings;
-
-use Mojo::Base 'Mojolicious::Command::generate';
-
-our $VERSION = '0.9929';
 
 has namespaces =>
       sub { [qw/Clustericious::Command::generate

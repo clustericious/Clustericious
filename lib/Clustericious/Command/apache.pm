@@ -1,6 +1,15 @@
-=head1 NAME
+package Clustericious::Command::apache;
 
-Clustericious::Command::apache - Clustericious command to stat Apache
+use strict;
+use warnings;
+use Clustericious::App;
+use Clustericious::Config;
+use File::Path qw/mkpath/;
+use base 'Clustericious::Command';
+use Clustericious::Log;
+
+# ABSTRACT: Clustericious command to stat Apache
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -20,18 +29,9 @@ L<Clustericious>
 
 =cut
 
-package Clustericious::Command::apache;
-use Clustericious::App;
-use Clustericious::Config;
-use File::Path qw/mkpath/;
-use base 'Clustericious::Command';
-
-use Clustericious::Log;
 __PACKAGE__->attr(description => <<EOT);
 Start an apache web server.
 EOT
-
-our $VERSION = '0.9929';
 
 __PACKAGE__->attr(usage => <<EOT);
 Usage $0: apache -f <conf> [...other apache options]

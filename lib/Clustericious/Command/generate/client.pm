@@ -2,17 +2,14 @@ package Clustericious::Command::generate::client;
 
 use strict;
 use warnings;
-
 use Mojo::Base 'Clustericious::Command';
-
 use File::Find;
 use File::Slurp 'slurp';
 use File::ShareDir 'dist_dir';
 use File::Basename qw/basename/;
 
-=head1 NAME
-
-Clustericious::Command::generate::client - Clustericious command to generate a new Clustericious client
+# ABSTRACT: Clustericious command to generate a new Clustericious client
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -31,8 +28,6 @@ L<Clustericious::Command>
 L<Clustericious>, L<Clustericious::Client>
 
 =cut
-
-our $VERSION = '0.9929';
 
 has description => <<'EOF';
 Generate Clustericious::Client-derived client.

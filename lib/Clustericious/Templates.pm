@@ -1,6 +1,10 @@
-=head1 NAME
+package Clustericious::Templates;
 
-Clustericious::Templates - default templates for clustericious
+use strict;
+use warnings;
+
+# ABSTRACT: default templates for clustericious
+# VERSION
 
 =head1 DESCRIPTION
 
@@ -12,10 +16,6 @@ Anything on the filesystem (in templates/) will override these.
 L<Clustericious>
 
 =cut
-
-package Clustericious::Templates;
-
-our $VERSION = '0.9929';
 
 1;
 

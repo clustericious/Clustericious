@@ -2,10 +2,11 @@ package Clustericious::Commands;
 
 use strict;
 use warnings;
+use Clustericious::Config;
+use Mojo::Base 'Mojolicious::Commands';
 
-=head1 NAME
-
-Clustericious::Commands - Clustericious command runner
+# ABSTRACT: Clustericious command runner
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -25,12 +26,6 @@ L<Mojolicious::Commands>
 L<Clustericious::Command>
 
 =cut
-
-use Clustericious::Config;
-
-use Mojo::Base 'Mojolicious::Commands';
-
-our $VERSION = '0.9929';
 
 has namespaces => sub { [qw/Clustericious::Command Mojolicious::Command/] };
 

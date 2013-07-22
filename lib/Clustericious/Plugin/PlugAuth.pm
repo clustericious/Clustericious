@@ -1,20 +1,15 @@
 package Clustericious::Plugin::PlugAuth;
 
+use strict;
+use warnings;
 use Clustericious::Log;
 use Mojo::ByteStream qw/b/;
 use Mojo::URL;
-
 use Clustericious::Config;
 use Mojo::Base 'Mojolicious::Plugin';
 
-use warnings;
-use strict;
-
-our $VERSION = '0.9929';
-
-=head1 NAME
-
-Clustericious::Plugin::PlugAuth - Plugin for clustericious to use PlugAuth.
+# ABSTRACT: Plugin for clustericious to use PlugAuth.
+# VERSION
 
 =head1 SYNOPSIS
 

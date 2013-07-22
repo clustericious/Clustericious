@@ -1,8 +1,11 @@
 package Clustericious::RouteBuilder::Proxy;
 
-=head1 NAME
+use strict;
+use warnings;
+use Clustericious::Log;
 
-Clustericious::RouteBuilder::Proxy - build proxy routes easily
+# ABSTRACT: build proxy routes easily
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -44,9 +47,6 @@ L<Clustericious>
 
 =cut
 
-use Clustericious::Log;
-use strict;
-
 use Sub::Exporter -setup => {
     exports => [
         "proxy" => \&_build_proxy,
@@ -54,8 +54,6 @@ use Sub::Exporter -setup => {
     ],
     collectors => ['defaults'],
 };
-
-our $VERSION = '0.9929';
 
 sub _build_proxy {
     my ( $class, $name, $arg, $defaults ) = @_;

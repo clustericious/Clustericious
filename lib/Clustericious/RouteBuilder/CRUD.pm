@@ -1,8 +1,12 @@
 package Clustericious::RouteBuilder::CRUD;
 
-=head1 NAME
+use strict;
+use warnings;
+use Clustericious::Log;
+use Data::Dumper;
 
-Clustericious::RouteBuilder::CRUD - build crud routes easily
+# ABSTRACT: build crud routes easily
+# VERSION 
 
 =head1 SYNOPSIS
 
@@ -41,10 +45,6 @@ L<Clustericious>
 
 =cut
 
-use strict;
-use Clustericious::Log;
-use Data::Dumper;
-
 use Sub::Exporter -setup => {
     exports => [
         "create" => \&_build_create,
@@ -55,8 +55,6 @@ use Sub::Exporter -setup => {
     ],
     collectors => ['defaults'],
 };
-
-our $VERSION = '0.9929';
 
 sub _build_create {
     my ($class, $name, $arg, $defaults) = @_;

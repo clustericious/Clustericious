@@ -1,3 +1,19 @@
+package Clustericious::Command::start;
+
+use strict;
+use warnings;
+use Clustericious::Log;
+use File::Slurp qw/slurp/;
+use List::MoreUtils qw/mesh/;
+use File::Path qw/mkpath/;
+use File::Basename qw/dirname/;
+use Clustericious::App;
+use Clustericious::Config;
+use Mojo::Base 'Clustericious::Command';
+
+# ABSTRACT: Clustericious command to start a Clustericious application
+# VERSION 
+
 =head1 NAME
 
 Clustericious::Command::start - Clustericious command to start a Clustericious application
@@ -47,22 +63,6 @@ L<Clustericious>,
 L<Clustericious::Command::hypnotoad>
 
 =cut
-
-package Clustericious::Command::start;
-use Clustericious::Log;
-use File::Slurp qw/slurp/;
-use List::MoreUtils qw/mesh/;
-use File::Path qw/mkpath/;
-use File::Basename qw/dirname/;
-
-use Clustericious::App;
-use Clustericious::Config;
-use Mojo::Base 'Clustericious::Command';
-
-use strict;
-use warnings;
-
-our $VERSION = '0.9929';
 
 has description => <<EOT;
 Start a daemon using the config file.

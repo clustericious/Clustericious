@@ -1,0 +1,136 @@
+
+DESCRIPTION
+
+This is a framework based on Mojo, with easy syntax
+like Mojolicious::Lite, intended for making applications
+which are part of an HTTP-based cluster.
+
+When used with Rose::DB::Planter, Clustericious
+allows for the easy conversion of a database
+schema into a RESTful interface and a web
+frontend.
+
+EXAMPLE
+
+Let's turn a database schema below into a RESTful
+web service with a web front end.
+
+Step 1.  Make your schema :
+
+    create table artist (
+        id serial primary key,
+        name varchar
+    );
+
+    create table album (
+        id serial primary key,
+        artist integer references artist,
+        title varchar,
+        year integer
+    );
+
+    create table song (
+        id serial primary key,
+        album integer references album(id),
+        title varchar,
+        length integer
+    );
+
+    create table performance (
+        id serial primary key,
+        location varchar
+    );
+
+    create table song_performance (
+        song integer references song(id),
+        performance integer references performance (id),
+        primary key (song, performance)
+    );
+
+
+Note we have several 1-many relationships and one
+many-many relationship.
+
+Save the above as schema.sql.
+
+Step 2.
+
+    clustericious generate mbd_app Musicrest --schema schema.sql
+
+Now skip to step 7 if you just want to see it work.
+
+Step 4.  Try the test suite :
+
+    cd Musicrest
+    perl Build.PL
+    ./Build
+    ./Build test
+
+Step 5.  Add a test :
+
+    cat > t/002_music.t
+
+    #!/usr/bin/env perl
+
+    use Test::More;
+    use Test::Clustericious;
+    use Test::MBD '-autostart';
+
+    my $t = Test::Clustericious->new(app => 'Musicrest');
+    $t->create_ok( '/artist' => { name => 'Prince' } );
+    my $id = $t->tx->res->json->{id};
+    ok $id, "Added artist, id is $id";
+    $t->remove_ok( "/artist/$id" );
+    done_testing();
+
+Step 6.  Run ./Build test to see it work.
+
+Step 7.  Prepare to distribute your application and schema.
+
+    ./Build dbdist
+    ./Build manifest
+    ./Build dist
+    # (and commit and tag)
+
+Step 8.  Install and configure
+
+    ./Build fakeinstall
+    ./Build dbfakeinstall
+
+    ./Build install
+    ./Build dbinstall
+
+Check the db that was installed :
+    psql --list
+    psql musicrestserver
+    \dt
+
+Step 9.  Configure
+
+    mkdir ~/etc
+    cp eg/*.conf ~/etc
+
+Step 10. Start it up
+
+    musicrest start
+
+Step 11.  Try it :
+
+    curl -v http://localhost:3000
+
+Now for some sample REST calls :
+
+Note for testing, you can use the server
+as a client, e.g. :
+    musicrest get -v /status
+
+    add an artist
+    add an album
+    add some songs
+    add a performance
+
+    get a list of artists
+    get the songs for an artist
+    get the performances by an artist
+
+

@@ -1,8 +1,15 @@
 package Clustericious::Plugin::AutodataHandler;
 
-=head1 NAME
+use strict;
+use warnings;
+use base 'Mojolicious::Plugin';
+use Mojo::ByteStream 'b';
+use JSON::XS;
+use YAML::XS qw/Dump Load/;
+use Clustericious::Log;
 
-Clustericious::Plugin::AutodataHandler - Handle data types automatically
+# ABSTRACT: Handle data types automatically
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -40,19 +47,6 @@ default, the default is application/json, but you can override that
 too).
 
 =cut
-
-use strict;
-use warnings;
-
-use base 'Mojolicious::Plugin';
-
-use Mojo::ByteStream 'b';
-use JSON::XS;
-use YAML::XS qw/Dump Load/;
-
-use Clustericious::Log;
-
-our $VERSION = '0.9929';
 
 my $default_decode = 'application/x-www-form-urlencoded';
 my $default_encode = 'application/json';
