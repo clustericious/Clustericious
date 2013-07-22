@@ -1,4 +1,5 @@
 package Clustericious::RouteBuilder;
+
 use strict;
 use warnings;
 use v5.10;
@@ -10,16 +11,65 @@ Clustericious::RouteBuilder - Route builder for Clustericious applications
 
 =head1 SYNOPSIS
 
+ package MyApp;
+ 
+ use Mojo::Base qw( Clustericious::App );
+ 
+ package MyApp::Routes;
+
  use Clustericious::RouteBuilder;
+ 
+ get '/' => sub { shift->render(text => 'welcome to myapp') };
 
 =head1 DESCRIPTION
 
-This class provides an interface for creating routes for Clustericious
-applications, which was forked from L<Mojolicious::Lite> some time ago.
+This module provides a simplified interface for creating routes for your
+L<Clustericious> application.  To use it, create a Routes.pm that lives
+directly under your application's namespace (for example above MyApp's
+route module is MyApp::Routes).  The interface is reminicent of L<Mojolicious::Lite>,
+because it was forked from there some time ago.
 
 =head1 SUPER CLASS
 
 none
+
+=head1 METHODS
+
+=head2 any
+
+Define an HTTP route that matches any HTTP command verb.
+
+=head2 get
+
+Define an HTTP GET route
+
+=head2 head
+
+Define an HTTP HEAD route
+
+=head2 post
+
+Define an HTTP POST route
+
+=head2 put
+
+Define an HTTP PUT route
+
+=head2 del
+
+Define an HTTP DELETE route.
+
+=head2 websocket
+
+Define a Websocket route.
+
+=head2 authenticate
+
+Require authentication for all subsequent routes.
+
+=head2 authorize [ $action ]
+
+Require specific authorization for all subsequent routes.
 
 =head1 SEE ALSO
 

@@ -6,14 +6,61 @@ Clustericious - A framework for RESTful processing systems.
 
 =head1 SYNPOSIS
 
- % clustericious generate mbd_app Myapp --schema schema.sql
+Generate a new Clustericious application:
+
+ % clustericious generate app MyApp
+
+Generate a new Clustericious application database schema:
+
+ % clustericious generate mbd_app MyApp --schema schema.sql
+
+Basic application layout:
+
+ package MyApp;
+ 
+ use Mojo::Base qw( Clustericious::App );
+ 
+ package MyApp::Routes;
+ 
+ use Clustericious::RouteBuilder;
+ 
+ # Mojolicious::Lite style routing
+ get '/' => sub { shift->render(text => 'welcome to myapp') };
+
+Basic testing for Clustericious application:
+
+ use Test::Clustericious::Cluster;
+ use Test::More tests => 4;
+ 
+ # see Test::Clustericious::Cluster for more details
+ # and examples.
+ my $cluster = Test::Clustericious::Cluster->new;
+ $cluster->create_cluster_ok('MyApp');    # 1
+ 
+ my $url = $cluster->url;
+ my $t   = $cluster->t;   # Test::Mojo object
+ 
+ $t->get_ok("$url/")                      # 2
+   ->status_is(200)                       # 3
+   ->content_is('welcome to myapp');      # 4
+ 
+ __DATA__
+ 
+ @ etc/MyApp.conf
+ ---
+ url: <%= cluster->url %>
 
 =head1 DESCRIPTION
 
-Clustericious is a L<Mojo> based application framework, like (and inheriting
-much from) L<Mojolicious> and L<Mojolicious::Lite>.  Its design goal is to
-allow for easy development of applications which are part of an HTTP/RESTful
-processing cluster.
+Clustericious is a web application framework designed to create HTTP/RESTful
+web services that operate on a cluster, where each service does one thing 
+and ideally does it well.  The design goal is to allow for easy deployment
+of applications.  Clustericious is based on the L<Mojolicious> and borrows
+some ideas from L<Mojolicious::Lite> (L<Clustericious::RouteBuilder> is 
+based on L<Mojolicious::Lite> routing).
+
+Two examples of Clustericious applications on CPAN are L<Yars> the archive
+server and L<PlugAuth> the authentication server.
 
 =head1 FEATURES
 
@@ -23,8 +70,12 @@ Here are some of the distinctive aspects of Clustericious :
 
 =item *
 
+Simplified route builder based on L<Mojolicious::Lite> (see L<Clustericious::RouteBuilder>).
+
+=item *
+
 Provides a set of default routes (e.g. /status, /version, /api) for consistent
-interaction with L<Clustericious>-based processing nodes.
+interaction with Clustericious services (see L<Clustericious::RouteBuilder::Common>).
 
 =item *
 

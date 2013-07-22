@@ -95,3 +95,4 @@ lib/Clustericious/Command/configtest.pm
 t/badconfig.t
 t/nullapp.t
 t/nullconfig.t
+t/00-use.t

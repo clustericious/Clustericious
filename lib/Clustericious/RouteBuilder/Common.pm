@@ -2,33 +2,13 @@
 
 Clustericious::RouteBuilder::Common - Routes common to all clustericious apps.
 
-=head1 SYNOPSIS
-
- Clustericious::RouteBuilder::Common->add_routes($app);
-
 =head1 DESCRIPTION
 
 This package adds routes that are common to all clustericious servers.
 
-These routes will be added first; they cannot be overridden.  The following
-routes are added :
-
-    GET /version
-    GET /status
-    GET /api
-    GET /log
-    OPTIONS /
-
-/log is not available unless the configuration option "export_logs" is set
-to a true value.
-
 =head1 SUPER CLASS
 
 none
-
-=head1 SEE ALSO
-
-L<Clustericious>
 
 =cut
 
@@ -45,12 +25,45 @@ sub add_routes {
     my $class = shift;
     my $app = shift;
 
+=head2 /version
+
+Returns the version of the service as a single element list.
+
+=cut
+
     $app->routes->route('/version')->to(
         cb => sub {
             my $self = shift;
             $self->stash(autodata => [ $self->app->VERSION ]);
         }
     );
+
+=head2 /status
+
+Returns status information about the service.  This comes back
+as a hash that includes these key/value pairs:
+
+=over 4
+
+=item app_name
+
+The name of the application (example: "MyApp")
+
+=item server_hostname
+
+The server on which the service is running.
+
+=item server_url
+
+The URL to use for the service.
+
+=item server_version
+
+The version of the application.
+
+=back
+
+=cut
 
     $app->routes->route('/status')->to(
         cb => sub {
@@ -63,12 +76,27 @@ sub add_routes {
         }
     );
 
+=head2 /api
+
+Returns a list of API routes for the service.  This is similar to the infomration
+provided by the L<Mojolicious::Command::routes|routes command>.
+
+=cut
+
     $app->routes->route('/api')->to(
         cb => sub {
             my $self = shift;
             $self->render( autodata => [ $self->app->dump_api() ] );
             }
     );
+
+=head2 /api/:table
+
+If you are using L<Module::Build::Database> and L<Route::Planter> for a database
+back end to your L<Clustericious> application you can get the columns of each
+table using this route.
+
+=cut
 
     $app->routes->route('/api/:table')->to(
         cb => sub {
@@ -77,6 +105,20 @@ sub add_routes {
             $table ? $self->render( autodata => $table ) : $self->render_not_found;
         },
     );
+    
+=head2 /log/:lines
+
+Return the last several lines from the application log (number specified by :lines
+and defaults to 10 if not specified).
+
+Only available if you set export_logs to true in your application's server configuration.
+
+example C<~/etc/MyApp.conf>:
+
+ ---
+ export_logs: 1
+
+=cut
 
     $app->routes->get('/log/:lines' => [ lines => qr/\d+/ ] =>
         sub {
@@ -99,3 +141,8 @@ sub add_routes {
 
 1;
 
+=head1 SEE ALSO
+
+L<Clustericious>, L<Clustericious::RouteBuilder>
+
+=cut
