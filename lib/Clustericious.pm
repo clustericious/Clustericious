@@ -134,6 +134,14 @@ documentation tutorial for a L<Module::Build::Database> / L<Rose::Planter> app
 
 =item *
 
+use SQLite for above instead of Postgres
+
+=item *
+
+documentation tutorial for migrating SQLite app to Postgres
+
+=item *
+
 tool to generate part or all of a MyApp::Client from MyApp
 
 =item *
