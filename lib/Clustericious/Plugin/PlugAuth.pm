@@ -67,6 +67,12 @@ Application:
 This provides authenticate and authorize methods which can be called from your applications
 Route class.
 
+=head1 ATTRIBUTES
+
+=head2 config_url
+
+The URL of the PlugAuth server to authenticate against.
+
 =cut
 
 has 'config_url';

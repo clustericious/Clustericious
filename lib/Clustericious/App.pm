@@ -47,6 +47,14 @@ sub _have_rose {
     return 1 if Rose::Planter->can("tables");
 }
 
+=head1 ATTRIBUTES
+
+=head2 commands
+
+An instance of L<Clustericious::Commands> for use with this application.
+
+=cut
+
 has commands => sub {
   my $commands = Clustericious::Commands->new(app => shift);
     weaken $commands->{app};
@@ -111,10 +119,8 @@ sub startup {
 
     my $r = $self->routes;
     # "Common" ones are not overrideable.
-    Clustericious::RouteBuilder::Common->add_routes($self);
-    Clustericious::RouteBuilder->add_routes($self, $auth_plugin);
-    # "default" ones are :
-    # Clustericious::RouteBuilder::Default->add_routes($self);
+    Clustericious::RouteBuilder::Common->_add_routes($self);
+    Clustericious::RouteBuilder->_add_routes($self, $auth_plugin);
 
     $self->plugin('AutodataHandler');
     $self->plugin('DefaultHelpers');
@@ -294,6 +300,24 @@ sub config {
         $app->_clustericious_config(@_);
     }
 }
+
+=head2 $app-E<gt>sanity_check
+
+This method is executed after C<startup>, but before the application
+actually starts with the L<start|Clustericious::Command::start> command.
+If it returns 1 then the configuration is considered sane and the 
+application will start.  If it returns 0 then the configuration has
+problems and start will be aborted with an appropriate message to the user
+attempting start.
+
+By default this just checks that the application's configuration file
+(usually located in ~/etc/MyApp.conf) is correctly formatted as either
+YAML or JSON.
+
+You can override this in your application, but don't forget to call
+the base class's version of sanity_check before making your own checks.
+
+=cut
 
 sub sanity_check
 {

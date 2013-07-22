@@ -18,7 +18,7 @@ none
 
 =cut
 
-sub add_routes {
+sub _add_routes {
     my $class = shift;
     my $app = shift;
 

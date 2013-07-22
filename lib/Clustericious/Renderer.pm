@@ -33,14 +33,6 @@ sub render {
     $self->SUPER::render(@_);
 }
 
-sub root  {
-    my $self = shift;
-    if (my $arg = shift) {
-        $self->SUPER::paths([ $arg ]);
-    }
-    return $self;
-}
-
 1;
 
 =head1 SEE ALSO

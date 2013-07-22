@@ -170,7 +170,7 @@ sub import {
     *{"${caller}::authorize"}    = sub { $route_sub->('authorize',@_) };
 }
 
-sub add_routes {
+sub _add_routes {
     my $class = shift;
     my $app = shift;
     my $auth_plugin = shift;

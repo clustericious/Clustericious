@@ -38,13 +38,6 @@ has usage => <<"EOF";
 usage: $0 generate mbd_app [NAME]
 EOF
 
-sub get_data
-{
-    my ($self, $data, $class) = @_;
-
-    return slurp($data);
-}
-
 sub _installfile
 {
     my $self = shift;
