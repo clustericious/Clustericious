@@ -1,12 +1,8 @@
 use strict;
 use warnings;
 use File::HomeDir::Test;
-use Test::More;
-BEGIN {
-  plan skip_all => 'test requires Test::Clustericious::Cluster'
-    unless eval q{ use Test::Clustericious::Cluster; 1 };
-}
-plan tests => 1;
+use Test::More tests => 1;
+use Test::Clustericious::Cluster;
 
 my $cluster = Test::Clustericious::Cluster->new;
 $cluster->create_cluster_ok(qw( MyApp ));
