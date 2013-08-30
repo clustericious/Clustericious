@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use File::HomeDir::Test;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Clustericious::Cluster;
 use PlugAuth::Lite;
 use Clustericious;
@@ -37,19 +37,33 @@ $t->websocket_ok("$url/echo1")
 do {
   my($ua, $tx);
   my $ws = $t->ua->websocket(
-    url => "$url/echo2" => sub {
+    "$url/echo2" => sub {
       ($ua, $tx) = @_;
       Mojo::IOLoop->stop;
     }
   );
   Mojo::IOLoop->start;
-  isnt $tx->res->code, 101, 'access denied to websocket';
+  #note $tx->res->to_string;
+  is $tx->res->code, 401, 'code = 401';
 };
 
 $url->userinfo('foo:bar');
 
 $t->get_ok("$url/private")
   ->status_is(200);
+
+do {
+  my($ua, $tx);
+  my $ws = $t->ua->websocket(
+    "$url/echo2" => sub {
+      ($ua, $tx) = @_;
+      Mojo::IOLoop->stop;
+    }
+  );
+  Mojo::IOLoop->start;
+  #note $tx->res->to_string;
+  is $tx->res->code, 101, 'code = 101';
+};
 
 $t->websocket_ok("$url/echo2")
   ->send_ok('hello')
