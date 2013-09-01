@@ -1,0 +1,100 @@
+{
+   "abstract" : "A framework for RESTful processing systems.",
+   "author" : [
+      "Graham Ollis <plicease@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.300021, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Clustericious",
+   "no_index" : {
+      "directory" : [
+         "share",
+         "example"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Carp" : "0",
+            "Clustericious::Config" : "0.25",
+            "Clustericious::Log" : "0.14",
+            "Cwd" : "0",
+            "Data::Dumper" : "0",
+            "File::Basename" : "0",
+            "File::Find" : "0",
+            "File::HomeDir" : "0",
+            "File::Path" : "0",
+            "File::ShareDir" : "0",
+            "File::Slurp" : "0",
+            "JSON::XS" : "0",
+            "List::MoreUtils" : "0",
+            "List::Util" : "0",
+            "Log::Log4perl" : "0",
+            "Mojo::Base" : "0",
+            "Mojo::ByteStream" : "0",
+            "Mojo::JSON" : "0",
+            "Mojo::Server::Hypnotoad" : "0",
+            "Mojo::Server::PSGI" : "0",
+            "Mojo::URL" : "0",
+            "Mojo::UserAgent" : "0",
+            "MojoX::Log::Log4perl" : "0",
+            "Mojolicious" : "3.85",
+            "Mojolicious::Controller" : "0",
+            "Mojolicious::Plugin" : "0",
+            "Mojolicious::Renderer" : "0",
+            "Path::Class" : "0",
+            "PlugAuth::Lite" : "0.05",
+            "Scalar::Util" : "0",
+            "Sub::Exporter" : "0",
+            "Sys::Hostname" : "0",
+            "Test::Mojo" : "0",
+            "Test::More" : "0",
+            "YAML::XS" : "0",
+            "perl" : "v5.10.0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "File::HomeDir::Test" : "0",
+            "File::Temp" : "0",
+            "IO::Scalar" : "0",
+            "PlugAuth::Lite" : "0",
+            "Test::Clustericious::Cluster" : "0.09",
+            "Test::Clustericious::Config" : "0",
+            "Test::PlugAuth" : "0",
+            "autodie" : "0"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/plicease/clustericious/issues"
+      },
+      "homepage" : "http://perl.wdlabs.com/Clustericious/",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/plicease/clustericious.git",
+         "web" : "https://github.com/plicease/clustericious"
+      }
+   },
+   "version" : "0.9930"
+}
+

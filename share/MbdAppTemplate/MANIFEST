@@ -1,0 +1,15 @@
+% my $class = shift;
+% my $name = lc $class;
+Build.PL
+MANIFEST
+bin/<%= $name %>
+db/patches/0010_start.sql
+eg/<%= $class %>.conf
+lib/<%= $class %>.pm
+lib/<%= $class %>/DB.pm
+lib/<%= $class %>/Objects.pm
+lib/<%= $class %>/Routes.pm
+t/001_basic.t
+t/999_pod.t
+t/999_pod_coverage.t
+t/999_stop_db.t

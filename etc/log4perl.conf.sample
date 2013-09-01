@@ -1,0 +1,21 @@
+
+log4perl.rootLogger=TRACE, LOGFILE
+
+# Silence "Caching template"
+log4perl.logger.Mojolicious.Plugin.EpRenderer=WARN, LOGFILE
+
+# Silence "Dispatching callback"
+log4perl.logger.MojoX.Dispatcher.Routes=WARN, LOGFILE
+
+# Makes the above replace noisy log messages, not add new ones.
+log4perl.additivity.Mojolicious=0
+log4perl.additivity.Mojolicious.Plugin.EpRenderer=0
+log4perl.additivity.logger.MojoX.Dispatcher.Routes=0
+
+log4perl.appender.LOGFILE=Log::Log4perl::Appender::File
+log4perl.appender.LOGFILE.filename=/tmp/clustericious.log
+log4perl.appender.LOGFILE.mode=append
+log4perl.appender.LOGFILE.layout=PatternLayout
+log4perl.appender.LOGFILE.layout.ConversionPattern=[%d{HH:mm:ss}] [%7Z] %5p: %m%n
+
+

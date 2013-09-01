@@ -1,0 +1,62 @@
+---
+pod_spelling_system:
+  # list of words that are spelled correctly
+  # (regardless of what spell check thinks)
+  stopwords:
+    - Clustericious
+    - Duggan
+    - GSFC
+    - Tilmes
+    - autodata
+    - renderer
+    - PlugAuth
+    - plackup
+    - plack
+    - hypnotoad
+    - Hypnotoad
+    - MyApp
+    - myapp
+    - lighttpd
+    - JSON
+    - del
+    - namespace
+    - websocket
+    - MyApp's
+    - ProxyPassReverse
+    - clustericious
+    - nginx
+    - apache
+    - conf
+    - proxying
+    - url
+    - URLs
+    - filename
+    - ok
+    - json
+    - Apache's
+    - customizations
+    - ramping
+    - api
+    - YAML
+    - yaml
+    - CPAN
+    - Postgres
+    - README
+    - RESTful
+    - SQLite
+    - TODO
+
+pod_coverage:
+  # format is "Class#method" or "Class", regex allowed
+  # for either Class or method.
+  private:
+    - Clustericious::Command::.*#description
+    - Clustericious::Command::.*#usage
+    - Clustericious::Command::.*#run
+    - Clustericious::Command::generate#namespace
+    - Clustericious::Commands#namespace
+    - Clustericious::Plugin::.*#register
+    - Clustericious::Commands#app
+    - Clustericious::Commands#namespace
+    - Clustericious::Commands#start
+    
