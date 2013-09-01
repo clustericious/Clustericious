@@ -27,10 +27,10 @@ Your app:
             ['var', 'run' ]
         ],
         files => { 'YourApp.conf' => <<<CUT }
----
-required_key   : default_value
-something_else : <%= $ENV{HOME} %>
-CUT
+ ---
+ required_key   : default_value
+ something_else : <%= $ENV{HOME} %>
+ CUT
    };
  }
  
