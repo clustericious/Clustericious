@@ -1,12 +1,10 @@
-=pod
-
 =head1 NAME
 
 Clustericious - A framework for RESTful processing systems.
 
 =head1 VERSION
 
-version 0.9929
+version 0.9930
 
 =head1 SYNOPSIS
 
