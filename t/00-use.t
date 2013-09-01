@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 29;
+use Test::More tests => 30;
 
 BEGIN { eval 'use EV' }
 
@@ -13,6 +13,7 @@ require_ok('Clustericious::Commands');
 require_ok('Clustericious::Plugin::AutodataHandler');
 require_ok('Clustericious::Plugin::PlugAuth');
 require_ok('Clustericious::App');
+require_ok('Clustericious::Command::configure');
 require_ok('Clustericious::Command::configtest');
 require_ok('Clustericious::Command::plackup');
 require_ok('Clustericious::Command::hypnotoad');
