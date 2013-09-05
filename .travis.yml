@@ -16,6 +16,8 @@ install:
   - cpanm -n File::HomeDir
   - cpanm -n PlugAuth::Lite
   - cpanm -n Test::Clustericious::Cluster
+  - cpanm -n Test::Pod::Coverage
+  - cpanm -n Pod::Coverage
 script: HARNESS_IS_VERBOSE=1 prove -lvr t xt
 perl:
   - "5.18"
