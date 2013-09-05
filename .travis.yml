@@ -15,6 +15,7 @@ install:
   - cpanm -n IO::Scalar
   - cpanm -n File::HomeDir
   - cpanm -n PlugAuth::Lite
+  - cpanm -n Test::Clustericious::Cluster
 script: HARNESS_IS_VERBOSE=1 prove -lvr t xt
 perl:
   - "5.18"
