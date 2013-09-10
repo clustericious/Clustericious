@@ -21,6 +21,7 @@ install:
 before_script: perlbrew list
 script: HARNESS_IS_VERBOSE=1 prove -lvr t xt
 perl:
+  - "5.19"
   - "5.18"
   - "5.16"
   - "5.14"
