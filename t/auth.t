@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use v5.10;
 
 use Test::More qw/no_plan/;
 use Test::Mojo;
@@ -42,7 +43,7 @@ my $t = Test::Mojo->new("SomeService");
 
 $t->get_ok("/")->status_is(200)->content_like(qr/unprotected/, "got unprotected content");
 
-my $port = $t->ua->app_url->port;
+my $port = eval { $t->ua->server->url->port } // $t->ua->app_url->port;
 
 $t->get_ok("/sensitive")->status_is(401);
 

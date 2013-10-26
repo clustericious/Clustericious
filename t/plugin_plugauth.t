@@ -62,7 +62,7 @@ $t->get_ok('/private')
   ->status_is(401)
   ->content_is('auth required');
 
-my $port = $t->ua->app_url->port;
+my $port = eval { $t->ua->server->url->port; } // $t->ua->app_url->port;
 
 note ' request 03 ';
 
