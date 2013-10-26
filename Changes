@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Mojo 4.50 deprecation compatability (compat with both >= 4.50 and < 4.50 without warnings)
 
 0.9930    2013-08-31 20:36:02 America/New_York
   - added 'clustericious configure' command
