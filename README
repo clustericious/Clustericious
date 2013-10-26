@@ -2,7 +2,7 @@ NAME
     Clustericious - A framework for RESTful processing systems.
 
 VERSION
-    version 0.9930
+    version 0.9931
 
 SYNOPSIS
     Generate a new Clustericious application:

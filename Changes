@@ -1,6 +1,10 @@
 Revision history for Clustericious
 
+0.9931    2013-10-26 08:53:17 America/New_York
+  - Mojo 4.50 deprecation compatability (compat with both >= 4.50 and < 4.50 without warnings)
+
 0.9930    2013-08-31 20:36:02 America/New_York
+  - added 'clustericious configure' command
   - migrate to Dist::Zilla
 
 0.9929  Sat Jul 20 09:22:26 EDT 2013

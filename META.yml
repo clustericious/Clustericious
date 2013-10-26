@@ -41,24 +41,13 @@ requires:
   List::MoreUtils: 0
   List::Util: 0
   Log::Log4perl: 0
-  Mojo::Base: 0
-  Mojo::ByteStream: 0
-  Mojo::JSON: 0
-  Mojo::Server::Hypnotoad: 0
-  Mojo::Server::PSGI: 0
-  Mojo::URL: 0
-  Mojo::UserAgent: 0
   MojoX::Log::Log4perl: 0
   Mojolicious: 3.85
-  Mojolicious::Controller: 0
-  Mojolicious::Plugin: 0
-  Mojolicious::Renderer: 0
   Path::Class: 0
-  PlugAuth::Lite: 0.05
+  PlugAuth::Lite: 0.06
   Scalar::Util: 0
   Sub::Exporter: 0
   Sys::Hostname: 0
-  Test::Mojo: 0
   Test::More: 0
   YAML::XS: 0
   perl: v5.10.0
@@ -66,4 +55,4 @@ resources:
   bugtracker: https://github.com/plicease/clustericious/issues
   homepage: http://perl.wdlabs.com/Clustericious/
   repository: git://github.com/plicease/clustericious.git
-version: 0.9930
+version: 0.9931

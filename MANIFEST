@@ -76,7 +76,9 @@ share/MbdAppTemplate/t/001_basic.t
 share/MbdAppTemplate/t/999_pod.t
 share/MbdAppTemplate/t/999_pod_coverage.t
 share/MbdAppTemplate/t/999_stop_db.t
-t/00-use.t
+t/00_diag.t
+t/00_diag.txt
+t/01_use.t
 t/api_table.t
 t/app.t
 t/auth.t
@@ -109,3 +111,4 @@ xt/release/pod_spelling_common.t
 xt/release/pod_spelling_system.t
 xt/release/release.yml
 xt/release/strict.t
+xt/release/version.t

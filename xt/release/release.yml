@@ -53,8 +53,8 @@ pod_coverage:
     - Clustericious::Command::.*#description
     - Clustericious::Command::.*#usage
     - Clustericious::Command::.*#run
-    - Clustericious::Command::generate#namespace
-    - Clustericious::Commands#namespace
+    - Clustericious::Commands#namespaces
+    - Clustericious::Command::generate#namespaces
     - Clustericious::Plugin::.*#register
     - Clustericious::Commands#app
     - Clustericious::Commands#namespace

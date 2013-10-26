@@ -70,7 +70,7 @@ $t->get_ok('/')
 $t->get_ok('/private')
   ->status_is(401);
 
-my $port = $t->ua->app_url->port;
+my $port = eval { $t->ua->server->url->port } // $t->ua->app_url->port;
 
 $t->get_ok("http://foo:bar\@localhost:$port/private")
   ->status_is(200);

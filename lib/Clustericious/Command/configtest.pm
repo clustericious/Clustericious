@@ -6,7 +6,7 @@ use v5.10;
 use Mojo::Base 'Clustericious::Command';
 
 # ABSTRACT: Test a Clustericious application's configuration
-our $VERSION = '0.9930'; # VERSION
+our $VERSION = '0.9931'; # VERSION
 
 
 has description => <<EOT;
@@ -42,7 +42,7 @@ Clustericious::Command::configtest - Test a Clustericious application's configur
 
 =head1 VERSION
 
-version 0.9930
+version 0.9931
 
 =head1 SYNOPSIS
 
