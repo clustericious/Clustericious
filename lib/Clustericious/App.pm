@@ -100,8 +100,8 @@ sub startup {
     my $config = eval { Clustericious::Config->new(ref $self) };
     if(my $error = $@)
     {
-      $self->log->error("error loading config $error");
-      $config = Clustericious::Config->new({ clustericious_config_error => $error });
+        $self->log->error("error loading config $error");
+        $config = Clustericious::Config->new({ clustericious_config_error => $error });
     }
     my $auth_plugin;
     if(my $auth_config = $config->plug_auth(default => '')) {
