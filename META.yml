@@ -7,7 +7,7 @@ build_requires:
   File::Temp: 0
   IO::Scalar: 0
   Module::Build: 0.3601
-  PlugAuth::Lite: 0
+  PlugAuth::Lite: 0.06
   Test::Clustericious::Cluster: 0.09
   Test::Clustericious::Config: 0
   Test::PlugAuth: 0
@@ -15,7 +15,7 @@ build_requires:
 configure_requires:
   Module::Build: 0.3601
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300021, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Dist::Zilla version 5.006, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -55,4 +55,4 @@ resources:
   bugtracker: https://github.com/plicease/clustericious/issues
   homepage: http://perl.wdlabs.com/Clustericious/
   repository: git://github.com/plicease/clustericious.git
-version: 0.9931
+version: 0.9932

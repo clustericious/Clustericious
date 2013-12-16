@@ -25,7 +25,7 @@ use Clustericious::Config;
 use Clustericious::Commands;
 
 # ABSTRACT: Clustericious app base class
-our $VERSION = '0.9931'; # VERSION
+our $VERSION = '0.9932'; # VERSION
 
 
 sub _have_rose {
@@ -70,8 +70,8 @@ sub startup {
     my $config = eval { Clustericious::Config->new(ref $self) };
     if(my $error = $@)
     {
-      $self->log->error("error loading config $error");
-      $config = Clustericious::Config->new({ clustericious_config_error => $error });
+        $self->log->error("error loading config $error");
+        $config = Clustericious::Config->new({ clustericious_config_error => $error });
     }
     my $auth_plugin;
     if(my $auth_config = $config->plug_auth(default => '')) {
@@ -167,7 +167,8 @@ sub init_logging {
 
     my $logger = Clustericious::Log->init_logging(ref $self || $self);
 
-    $self->log( $logger );
+    # Can no longer use log as a class method
+    $self->log( $logger ) if ref $self;
 }
 
 
@@ -278,7 +279,7 @@ Clustericious::App - Clustericious app base class
 
 =head1 VERSION
 
-version 0.9931
+version 0.9932
 
 =head1 SYNOPSIS
 

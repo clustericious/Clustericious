@@ -1,5 +1,8 @@
 Revision history for Clustericious
 
+0.9932    2013-12-16 12:15:29 America/New_York
+  - don't call log as a class method for compatibility with recent Mojos
+
 0.9931    2013-10-26 08:53:17 America/New_York
   - Mojo 4.50 deprecation compatability (compat with both >= 4.50 and < 4.50 without warnings)
 

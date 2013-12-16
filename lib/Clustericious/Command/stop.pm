@@ -11,7 +11,7 @@ use Clustericious::Config;
 use File::Slurp qw/slurp/;
 
 # ABSTRACT: Clustericious command to stop a Clustericious application
-our $VERSION = '0.9931'; # VERSION
+our $VERSION = '0.9932'; # VERSION
 
 
 __PACKAGE__->attr(description => <<EOT);
@@ -120,7 +120,7 @@ Clustericious::Command::stop - Clustericious command to stop a Clustericious app
 
 =head1 VERSION
 
-version 0.9931
+version 0.9932
 
 =head1 SYNOPSIS
 

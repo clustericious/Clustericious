@@ -7,15 +7,7 @@ use Module::Build 0.3601;
 
 my %module_build_args = (
   "build_requires" => {
-    "File::HomeDir::Test" => 0,
-    "File::Temp" => 0,
-    "IO::Scalar" => 0,
-    "Module::Build" => "0.3601",
-    "PlugAuth::Lite" => 0,
-    "Test::Clustericious::Cluster" => "0.09",
-    "Test::Clustericious::Config" => 0,
-    "Test::PlugAuth" => 0,
-    "autodie" => 0
+    "Module::Build" => "0.3601"
   },
   "configure_requires" => {
     "Module::Build" => "0.3601"
@@ -25,7 +17,7 @@ my %module_build_args = (
     "Graham Ollis <plicease\@cpan.org>"
   ],
   "dist_name" => "Clustericious",
-  "dist_version" => "0.9931",
+  "dist_version" => "0.9932",
   "license" => "perl",
   "module_name" => "Clustericious",
   "recommends" => {},
@@ -59,9 +51,37 @@ my %module_build_args = (
   },
   "script_files" => [
     "bin/clustericious"
-  ]
+  ],
+  "test_requires" => {
+    "File::HomeDir::Test" => 0,
+    "File::Temp" => 0,
+    "IO::Scalar" => 0,
+    "PlugAuth::Lite" => "0.06",
+    "Test::Clustericious::Cluster" => "0.09",
+    "Test::Clustericious::Config" => 0,
+    "Test::PlugAuth" => 0,
+    "autodie" => 0
+  }
 );
 
+
+my %fallback_build_requires = (
+  "File::HomeDir::Test" => 0,
+  "File::Temp" => 0,
+  "IO::Scalar" => 0,
+  "Module::Build" => "0.3601",
+  "PlugAuth::Lite" => "0.06",
+  "Test::Clustericious::Cluster" => "0.09",
+  "Test::Clustericious::Config" => 0,
+  "Test::PlugAuth" => 0,
+  "autodie" => 0
+);
+
+
+unless ( eval { Module::Build->VERSION(0.4004) } ) {
+  delete $module_build_args{test_requires};
+  $module_build_args{build_requires} = \%fallback_build_requires;
+}
 
 my $build = Module::Build->new(%module_build_args);
 
