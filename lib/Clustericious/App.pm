@@ -202,7 +202,8 @@ sub init_logging {
 
     my $logger = Clustericious::Log->init_logging(ref $self || $self);
 
-    $self->log( $logger );
+    # Can no longer use log as a class method
+    $self->log( $logger ) if ref $self;
 }
 
 =head2 $app-E<gt>dump_api
