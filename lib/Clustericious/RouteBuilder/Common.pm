@@ -6,7 +6,7 @@ use Clustericious::Log;
 use Sys::Hostname qw/hostname/;
 
 # ABSTRACT: Routes common to all clustericious apps.
-our $VERSION = '0.9932'; # VERSION
+our $VERSION = '0.9933'; # VERSION
 
 
 sub _add_routes {
@@ -82,7 +82,7 @@ Clustericious::RouteBuilder::Common - Routes common to all clustericious apps.
 
 =head1 VERSION
 
-version 0.9932
+version 0.9933
 
 =head1 DESCRIPTION
 

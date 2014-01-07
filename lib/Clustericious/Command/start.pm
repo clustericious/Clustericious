@@ -12,7 +12,7 @@ use Clustericious::Config;
 use Mojo::Base 'Clustericious::Command';
 
 # ABSTRACT: Clustericious command to start a Clustericious application
-our $VERSION = '0.9932'; # VERSION 
+our $VERSION = '0.9933'; # VERSION 
 
 
 has description => <<EOT;
@@ -91,7 +91,7 @@ Clustericious::Command::start - Clustericious command to start a Clustericious a
 
 =head1 VERSION
 
-version 0.9932
+version 0.9933
 
 =head1 SYNOPSIS
 
