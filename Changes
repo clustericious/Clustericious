@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.9934    2014-01-07 17:16:24 America/New_York
   - updates for this week's round of Mojolicious deprecations
 
 0.9932    2013-12-16 12:15:29 America/New_York
