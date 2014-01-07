@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use autodie;
 use v5.10;
+use Test::Clustericious::Log;
 use Test::Clustericious::Config;
 use Test::More tests => 31;
 use Test::Mojo;
@@ -49,6 +50,7 @@ create_config_ok SomeService => {
 
 my $t = Test::Mojo->new("SomeService");
 $auth->apply_to_client_app($t->app);
+$t->app->auth_ua->inactivity_timeout(1);
 
 note ' request 01 ';
 
