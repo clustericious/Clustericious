@@ -2,166 +2,193 @@ use strict;
 use warnings;
 use autodie;
 use v5.10;
-use Test::Clustericious::Config;
-use Test::More tests => 31;
-use Test::Mojo;
-use Test::PlugAuth;
+use Test::More tests => 10;
+use Test::Clustericious::Cluster;
 
 $ENV{LOG_LEVEL} = "ERROR";
 
-my $status = {};
+$Clustericious::VERSION //= 0.9925;
 
-my $auth = Test::PlugAuth->new(
-  auth  => sub { $status->{auth}  // die },
-  authz => sub { $status->{authz} // die },
-  host  => sub { $status->{host}  // die },
-);
+my $cluster = Test::Clustericious::Cluster->new;
 
-eval q{
-  package SomeService;
+our $status = {};
 
-  our $VERSION = '1.1';
-  use base 'Clustericious::App';
+subtest 'prep' => sub {
+  plan tests => 2;
 
-  package SomeService::Routes;
+  $cluster->create_plugauth_lite_ok(
+    auth  => sub { $status->{auth}     // die },
+    authz => sub { $status->{authz}    // die },
+    host  => sub { $status->{trusted}  // die },
+  );
 
-  use Clustericious::RouteBuilder;
+  $cluster->create_cluster_ok(qw( SomeService ));
 
-  get '/' => sub { shift->render_text('hello'); };
+  note "urls = " . join(', ', map { $_ . '' } @{ $cluster->urls });
+  note "apps = " . join(', ', map { ref } @{ $cluster->apps });
 
-  authenticate;
-  authorize;
-
-  get '/private' => sub { shift->render_text('this is private'); };
-};
-die $@ if $@;
-
-my $prefix = 'plug';
-
-create_config_ok SomeService => {
-  "${prefix}_auth" => {
-    url => $auth->url,
-  },
 };
 
-#note "GET $auth_url/auth";
-#note $auth_ua->get("$auth_url/auth")->res->to_string;
+my $t = $cluster->t;
+$cluster->apps->[0]->auth_ua->inactivity_timeout(1);
 
-my $t = Test::Mojo->new("SomeService");
-$auth->apply_to_client_app($t->app);
+subtest 'simple get without authentication' => sub {
+  plan tests => 3;
+  my $url = $cluster->url->clone;
 
-note ' request 01 ';
+  $t->get_ok($url)
+    ->status_is(200)
+    ->content_is('hello');
+};
 
-$t->get_ok('/')
-  ->status_is(200)
-  ->content_is('hello');
+subtest 'request private url without authentication' => sub {
+  plan tests => 3;
+  my $url = $cluster->url->clone;
 
-note ' request 02 ';
+  $t->get_ok("$url/private")
+    ->status_is(401)
+    ->content_is('auth required');
+};
+
+subtest 'test against an auth server that appears to be down, or spewing internal errors' => sub {
+  plan tests => 3;
+  my $url = $cluster->url->clone;  
+  $url->userinfo('foo:bar');
+
+  $t->get_ok("$url/private")
+    ->status_is(503)
+    ->content_is('auth server down');
+};
+
+subtest 'non VIP host making request, authentication credentials are ok and user is authorized' => sub {
+  plan tests => 3;
+  my $url = $cluster->url->clone;
+  $url->userinfo('foo:bar');
+
+  local $status = { 
+    trusted => 0,
+    auth    => 1,
+    authz   => 1,
+  };
+
+  $t->get_ok("$url/private")
+    ->status_is(200)
+    ->content_is('this is private');    
+};
+
+subtest "host is trusted, credentials wouldn't check out, but users is authorized" => sub {
+  plan tests => 3;
+  my $url = $cluster->url->clone;
+  $url->userinfo('foo:bar');
   
-$t->get_ok('/private')
-  ->status_is(401)
-  ->content_is('auth required');
-
-my $port = eval { $t->ua->server->url->port; } // $t->ua->app_url->port;
-
-note ' request 03 ';
-
-$t->get_ok("http://foo:bar\@localhost:$port/private")
-  ->status_is(503)
-  ->content_is('auth server down');
-
-# not trusted, auth good and authorized.
-$status = { 
-  trusted => 0,
-  auth    => 1,
-  authz   => 1,
-};
-
-note ' request 04 ';
-
-$t->get_ok("http://foo:bar\@localhost:$port/private")
-  ->status_is(200)
-  ->content_is('this is private');
-
-SKIP: {
-  skip 'skip broken tests', 6;
-  # trusted, auth bad, and authorized
-  $status = {
+  local $status = {
     trusted => 1,
     auth    => 0,
     authz   => 1,
   };
 
-  note ' request 05 ';
-
-  $t->get_ok("http://foo:bar\@localhost:$port/private")
+  $t->get_ok("$url/private")
     ->status_is(200)
     ->content_is('this is private');
+};
 
-  # trusted, auth bad, and authorized
-  $status = {
-    trusted => 1,
+subtest 'non VIP host making request with bad credentials, user is authorized' => sub {
+  plan tests => 3;
+  my $url = $cluster->url->clone;
+  $url->userinfo('foo:bar');
+
+  local $status = {
+    trusted => 0,
+    auth    => undef,
+    authz   => 1,
+  };
+
+  $t->get_ok("$url/private")
+    ->status_is(503)
+    ->content_is('auth server down');
+};
+
+subtest 'non VIP host making request with good credentials, authz server is DOWN' => sub {
+  plan tests => 3;
+  my $url = $cluster->url->clone;
+  $url->userinfo('foo:bar');
+
+  local $status = {
+    trusted => 0,
+    auth    => 1,
+    authz   => undef,
+  };
+
+  $t->get_ok("$url/private")
+    ->status_is(503)
+    ->content_is('auth server down');
+
+};
+
+subtest 'non VIP host making request with good credentials, but user is not authorized' => sub {
+  plan tests => 3;
+  my $url = $cluster->url->clone;
+  $url->userinfo('foo:bar');
+
+  local $status = {
+    trusted => 0,
+    auth    => 1,
+    authz   => 0,
+  };
+
+  $t->get_ok("$url/private")
+    ->status_is(403)
+    ->content_is('unauthorized');
+};
+
+
+subtest 'non VIP host making request with bad credentials, but user IS authorized' => sub {
+  plan tests => 3;
+  my $url = $cluster->url->clone;
+  $url->userinfo('foo:bar');
+
+  local $status = {
+    trusted => 0,
     auth    => 0,
     authz   => 1,
   };
 
-  note ' request 06 ';
-
-  $t->get_ok("http://foo:bar\@localhost:$port/private")
-    ->status_is(200)
-    ->content_is('this is private');
-}
-
-# not trusted, PlugAuth returned 503
-$status = {
-  trusted => 0,
-  auth    => undef,
-  authz   => 1,
+  $t->get_ok("$url/private")
+    ->status_is(401)
+    ->content_is('authentication failure');
 };
 
-note ' request 07 ';
+__DATA__
 
-$t->get_ok("http://foo:bar\@localhost:$port/private")
-  ->status_is(503)
-  ->content_is('auth server down');
+@@ etc/SomeService.conf
+---
+url: <%= cluster->url %>
+plug_auth:
+  url: <%= cluster->auth_url %>
 
-# not trusted, authenticated, but PlugAuth returned 503 for authz
-$status = {
-  trusted => 0,
-  auth    => 1,
-  authz   => undef,
-};
 
-note ' request 08 ';
+@@ lib/SomeService.pm
+package SomeService;
 
-$t->get_ok("http://foo:bar\@localhost:$port/private")
-  ->status_is(503)
-  ->content_is('auth server down');
+use strict;
+use warnings;
+our $VERSION = '1.1';
+use base 'Clustericious::App';
+use SomeService::Routes;
 
-# not trusted, authenticated, but not authorized
-$status = {
-  trusted => 0,
-  auth    => 1,
-  authz   => 0,
-};
+1;
 
-note ' request 09 ';
 
-$t->get_ok("http://foo:bar\@localhost:$port/private")
-  ->status_is(403)
-  ->content_is('unauthorized');
+@@ lib/SomeService/Routes.pm
+package SomeService::Routes;
 
-# not trusted, auth returned 403
-$status = {
-  trusted => 0,
-  auth    => 0,
-  authz   => 1,
-};
+use Clustericious::RouteBuilder;
 
-note ' request 10 ';
+get '/' => sub { shift->render_text('hello'); };
 
-$t->get_ok("http://foo:bar\@localhost:$port/private")
-  ->status_is(401)
-  ->content_is('authentication failure');
+authenticate;
+authorize;
+
+get '/private' => sub { shift->render_text('this is private'); };
 
 1;

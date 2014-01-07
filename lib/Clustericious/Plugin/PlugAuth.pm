@@ -9,7 +9,7 @@ use Clustericious::Config;
 use Mojo::Base 'Mojolicious::Plugin';
 
 # ABSTRACT: Plugin for clustericious to use PlugAuth.
-our $VERSION = '0.9933'; # VERSION
+our $VERSION = '0.9934'; # VERSION
 
 
 has 'config_url';
@@ -39,7 +39,6 @@ sub authenticate {
     };
 
     my $config_url = $self->config_url;
-    my $ua = $c->auth_ua;
 
     my ($method,$str) = split / /,$auth;
     my $userinfo = b($str)->b64_decode;
@@ -49,58 +48,70 @@ sub authenticate {
 
     # VIP treatment for some hosts
     my $ip = $c->tx->remote_address;
-    my $tx = $ua->get("$config_url/host/$ip/trusted");
-    if ( my $res = $tx->success ) {
-        if ( $res->code == 200 ) {
-            TRACE "Host $ip is trusted, not authenticating";
-            $c->stash( user => $user );
-            return 1;
-        }
-        else {
-            WARN "PlugAuth returned code " . $res->code;
-        }
-    } else {
-        my ( $message, $code ) = $tx->error;
-        if ($code) {
-            TRACE "Host $ip is not a VIP : code $code ($message)";
-        } else {
-            WARN "Error connecting to PlugAuth at $config_url : $message";
-        }
-    }
+    $c->auth_ua->get("$config_url/host/$ip/trusted", sub {
+        my $ua = shift;
+    
+        do {
+            my $tx = shift;
+            if ( my $res = $tx->success ) {
+                if ( $res->code == 200 ) {
+                    TRACE "Host $ip is trusted, not authenticating";
+                    $c->stash( user => $user );
+                    $c->continue;
+                    return;
+                }
+                else {
+                    WARN "PlugAuth returned code " . $res->code;
+                }
+            } else {
+                my ( $message, $code ) = $tx->error;
+                if ($code) {
+                    TRACE "Not VIP $config_url/host/$ip/trusted : $code $message";
+                } else {
+                    WARN "Error connecting to PlugAuth at $config_url/host/$ip/trusted : $message";
+                }
+            }
+        };
 
-    # Everyone else get in line
-    my $auth_url = Mojo::URL->new("$config_url/auth");
-    $auth_url->userinfo($userinfo);
+        # Everyone else get in line
+        my $auth_url = Mojo::URL->new("$config_url/auth");
+        $auth_url->userinfo($userinfo);
 
-    my $check;
-    my $res;
+        my $check;
+        my $res;
 
-    if ($ENV{HARNESS_ACTIVE}) {
-        my $saved = $ua->inactivity_timeout;
-        $ua->inactivity_timeout(1);
-        $tx = $ua->head($auth_url);
-        $ua->inactivity_timeout($saved);
-    } else {
-        $tx = $ua->head($auth_url);
-    }
-    $res = $tx->res;
-    $check = $res->code();
+        $ua->head($auth_url, sub {
+ 
+            my($ua, $tx) = @_;
 
-    if(!defined $check || $check == 503) {
-        $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
-        WARN ("Error connecting to PlugAuth at $config_url");
-        $c->render(text => "auth server down", status => 503); # "Service unavailable"
-        return 0;
-    }
-    if ($check == 200) {
-        $c->stash(user => $user);
-        return 1;
-    }
-    INFO "Authentication denied for $user, status code : ".$check;
-    TRACE "Response was ".$res->to_string if defined $res;
-    $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
-    $c->render(text => "authentication failure", status => 401);
-    return 0;
+            $res = $tx->res;
+            $check = $res->code();
+
+            if(!defined $check || $check == 503) {
+                $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
+                my ( $message, $code ) = $tx->error;
+                if ($code) {
+                    WARN "Error connecting to PlugAuth at $auth_url : $code $message";
+                } else {
+                    WARN "Error connecting to PlugAuth at $auth_url : $message";
+                }
+                $c->render(text => "auth server down", status => 503); # "Service unavailable"
+                return;
+            }
+            if ($check == 200) {
+                $c->stash(user => $user);
+                $c->continue;
+                return;
+            }
+            INFO "Authentication denied for $user, status code : ".$check;
+            TRACE "Response was ".$res->to_string if defined $res;
+            $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
+            $c->render(text => "authentication failure", status => 401);
+        });
+    
+    });
+
+    return undef;
 }
 
 
@@ -111,18 +122,31 @@ sub authorize {
     my $user = $c->stash("user") or LOGDIE "missing user in authorize()";
     LOGDIE "missing action or resource in authorize()" unless @_==2;
     TRACE "Authorizing user $user, action $action, resource $resource";
+
     $resource =~ s[^/][];
-    my $url = Mojo::URL->new( join '/', $self->config_url,
-        "authz/user", $user, $action, $resource );
-    my $code = $c->auth_ua->head($url)->res->code;
-    return 1 if $code && $code == 200;
-    INFO "Unauthorized access by $user to $action $resource";
-    if($code == 503) {
-        $c->render(text => "auth server down", status => 503); # "Service unavailable"
-    } else {
-        $c->render(text => "unauthorized", status => 403);
-    }
-    return 0;
+
+    my $url = Mojo::URL->new( join '/', $self->config_url, "authz/user", $user, $action, $resource );
+
+    my $tx = $c->auth_ua->build_tx(HEAD => $url);
+    
+    $c->auth_ua->start($tx, sub {
+        my($ua, $tx) = @_;
+        
+        my $code = $tx->res->code;
+        if($code && $code == 200) {
+            $c->continue;
+            return;
+        }
+        
+        INFO "Unauthorized access by $user to $action $resource";
+        if($code == 503) {
+            $c->render(text => "auth server down", status => 503); # "Service unavailable"
+        } else {
+            $c->render(text => "unauthorized", status => 403);
+        }
+    });
+
+    return undef;
 }
 
 
@@ -137,7 +161,7 @@ Clustericious::Plugin::PlugAuth - Plugin for clustericious to use PlugAuth.
 
 =head1 VERSION
 
-version 0.9933
+version 0.9934
 
 =head1 SYNOPSIS
 

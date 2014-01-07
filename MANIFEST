@@ -82,6 +82,7 @@ t/01_use.t
 t/api_table.t
 t/app.t
 t/auth.t
+t/auth2.t
 t/badconfig.t
 t/basic.t
 t/config.t
@@ -93,7 +94,6 @@ t/nullapp.t
 t/nullconfig.t
 t/plugin_datahandler.t
 t/plugin_plugauth.t
-t/plugin_simpleauth.t
 t/proxy.t
 t/subreq.t
 t/test.t

@@ -25,7 +25,7 @@ use Clustericious::Config;
 use Clustericious::Commands;
 
 # ABSTRACT: Clustericious app base class
-our $VERSION = '0.9933'; # VERSION
+our $VERSION = '0.9934'; # VERSION
 
 
 sub _have_rose {
@@ -64,7 +64,14 @@ sub startup {
     $self->renderer->paths([ $home->rel_dir('templates') ]);
 
     $self->init_logging();
-    $self->secret( (ref $self || $self) );
+    if($self->can('secrets'))
+    {
+      $self->secrets( [ ref $self || $self ] );
+    }
+    else
+    {
+      $self->secret( (ref $self || $self) );
+    }
 
     $self->plugins->namespaces(['Mojolicious::Plugin','Clustericious::Plugin']);
     my $config = eval { Clustericious::Config->new(ref $self) };
@@ -279,7 +286,7 @@ Clustericious::App - Clustericious app base class
 
 =head1 VERSION
 
-version 0.9933
+version 0.9934
 
 =head1 SYNOPSIS
 

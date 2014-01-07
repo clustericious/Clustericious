@@ -1,83 +1,138 @@
 use strict;
 use warnings;
 use v5.10;
-use Test::Clustericious::Config;
-use Test::Clustericious;
-use Test::PlugAuth;
-use Test::More tests => 12;
+use Test::More tests => 4;
+use Test::Clustericious::Cluster;
 
-my $auth = Test::PlugAuth->new(auth => sub {
-  my($user, $pass) = @_;
-  return $user eq 'foo' && $pass eq 'bar';
-});
+$Clustericious::VERSION //= 0.9925;
 
-create_config_ok MyApp => { 
-  plug_auth => {
-    url    => $auth->url,
-    plugin => 'PlugAuth2',
-  },
-};
+my $cluster = Test::Clustericious::Cluster->new;
 
-eval q{
-  package MyApp;
+subtest 'prep' => sub {
+  plan tests => 2;
 
-  use base qw( Clustericious::App );
-  our $VERSION = 0.01;
+  $cluster->create_plugauth_lite_ok(
+    auth => sub {
+      my($user, $pass) = @_;
+      return $user eq 'foo' && $pass eq 'bar';
+    },
+  );
 
-  package MyApp::Routes;
-  
-  use Clustericious::RouteBuilder;
-  
-  get '/' => sub { shift->render_text('hello') };
-  
-  get '/indirect' => sub {
-    my($self) = @_;
-    my $tx = $self->ua->transactor->tx( GET => '/private');
-    $tx->{plug_auth_skip_auth} = 1;
-    $self->app->handler($tx);
-    my $res = $tx->success;
-    $self->render( text => $res->body, status => $res->code );
-  };
-  
-  authenticate;
-  authorize;
-  
-  get '/private' => sub { shift->render_text('this is private') };
-  
-  package Clustericious::Plugin::PlugAuth2;
-  
-  use base qw( Clustericious::Plugin::PlugAuth );
+  $cluster->create_cluster_ok(qw( MyApp ));
 
-  sub authenticate {
-    return 1 if $_[1]->tx->{plug_auth_skip_auth};
-    return shift->SUPER::authenticate(@_);
-  };
-
-  sub authorize {
-    return 1 if $_[1]->tx->{plug_auth_skip_auth};
-    return shift->SUPER::authenticate(@_);
-  };
+  note "urls = " . join(', ', map { $_ . '' } @{ $cluster->urls });
+  note "apps = " . join(', ', map { ref } @{ $cluster->apps });
 
 };
-die $@ if $@;
 
-my $t = Test::Clustericious->new('MyApp');
-$auth->apply_to_client_app($t->app);
+note "urls = " . join(', ', map { $_ . '' } @{ $cluster->urls });
+note "apps = " . join(', ', map { ref } @{ $cluster->apps });
 
-$t->get_ok('/')
-  ->status_is(200);
+my $t   = $cluster->t;
 
-$t->get_ok('/private')
-  ->status_is(401);
+subtest 'unauthenticated' => sub {
+  plan tests => 4;
 
-my $port = eval { $t->ua->server->url->port } // $t->ua->app_url->port;
+  my $url = $cluster->url->clone;
 
-$t->get_ok("http://foo:bar\@localhost:$port/private")
-  ->status_is(200);
+  $t->get_ok("$url/")
+    ->status_is(200);
+ 
+  $t->get_ok("$url/private")
+    ->status_is(401);
+};
 
-$t->get_ok("http://foo1:ba1r\@localhost:$port/private")
-  ->status_is(401);
+subtest 'auth with foo:bar' => sub {
 
-$t->get_ok("/indirect")
-  ->status_is(200)
-  ->content_is('this is private');
+  plan tests => 2;
+
+  my $url = $cluster->url->clone;
+  $url->userinfo('foo:bar');
+
+  $t->get_ok("$url/private")
+    ->status_is(200);
+
+};
+
+subtest 'subrequest avoids auth' => sub {
+  plan tests => 5;
+
+  my $url = $cluster->url->clone;
+  $url->userinfo('foo1:ba1r');
+
+  $t->get_ok("$url/private")
+    ->status_is(401);
+
+  $url = $cluster->url->clone;
+
+  $t->get_ok("$url/indirect")
+    ->status_is(200)
+    ->content_is('this is private');
+};
+
+__DATA__
+
+@@ etc/MyApp.conf
+---
+url: <%= cluster->url %>
+plug_auth:
+  url: <%= cluster->auth_url %>
+  plugin: PlugAuth2
+
+
+@@ lib/MyApp.pm
+package MyApp;
+
+use strict;
+use warnings;
+use Mojo::Base qw( Clustericious::App );
+use MyApp::Routes;
+our $VERSION = '1.00';
+
+1;
+
+
+@@ lib/MyApp/Routes.pm
+package MyApp::Routes;
+
+use strict;
+use warnings;
+use Clustericious::RouteBuilder;
+
+get '/' => sub { shift->render_text('hello') };
+
+get '/indirect' => sub {
+  my($self) = @_;
+  my $tx = $self->ua->transactor->tx( GET => '/private');
+  $tx->{plug_auth_skip_auth} = 1;
+  $self->app->handler($tx);
+  my $res = $tx->success;
+  $self->render( text => $res->body, status => $res->code );
+};
+
+authenticate;
+authorize;
+
+get '/private' => sub { shift->render_text('this is private') };
+
+1;
+
+
+@@ lib/Clustericious/Plugin/PlugAuth2.pm
+package Clustericious::Plugin::PlugAuth2;
+
+use strict;
+use warnings;
+use base qw( Clustericious::Plugin::PlugAuth );
+
+sub authenticate {
+  return 1 if $_[1]->tx->{plug_auth_skip_auth};
+  return shift->SUPER::authenticate(@_);
+};
+
+sub authorize {
+  return 1 if $_[1]->tx->{plug_auth_skip_auth};
+  return shift->SUPER::authenticate(@_);
+};
+
+1;

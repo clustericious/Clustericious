@@ -17,7 +17,7 @@ my %module_build_args = (
     "Graham Ollis <plicease\@cpan.org>"
   ],
   "dist_name" => "Clustericious",
-  "dist_version" => "0.9933",
+  "dist_version" => "0.9934",
   "license" => "perl",
   "module_name" => "Clustericious",
   "recommends" => {},
@@ -59,7 +59,6 @@ my %module_build_args = (
     "PlugAuth::Lite" => "0.06",
     "Test::Clustericious::Cluster" => "0.09",
     "Test::Clustericious::Config" => 0,
-    "Test::PlugAuth" => 0,
     "autodie" => 0
   }
 );
@@ -73,7 +72,6 @@ my %fallback_build_requires = (
   "PlugAuth::Lite" => "0.06",
   "Test::Clustericious::Cluster" => "0.09",
   "Test::Clustericious::Config" => 0,
-  "Test::PlugAuth" => 0,
   "autodie" => 0
 );
 

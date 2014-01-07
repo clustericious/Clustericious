@@ -27,6 +27,5 @@ Sys::Hostname
 Test::Clustericious::Cluster
 Test::Clustericious::Config
 Test::More
-Test::PlugAuth
 YAML::XS
 autodie
