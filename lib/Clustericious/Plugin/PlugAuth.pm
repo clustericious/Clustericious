@@ -137,9 +137,9 @@ sub authenticate {
             } else {
                 my ( $message, $code ) = $tx->error;
                 if ($code) {
-                    TRACE "Host $ip is not a VIP : code $code ($message)";
+                    TRACE "Not VIP $config_url/host/$ip/trusted : $code $message";
                 } else {
-                    WARN "Error connecting to PlugAuth at $config_url : $message";
+                    WARN "Error connecting to PlugAuth at $config_url/host/$ip/trusted : $message";
                 }
             }
         };
@@ -160,7 +160,12 @@ sub authenticate {
 
             if(!defined $check || $check == 503) {
                 $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
-                WARN ("Error connecting to PlugAuth at $config_url");
+                my ( $message, $code ) = $tx->error;
+                if ($code) {
+                    WARN "Error connecting to PlugAuth at $auth_url : $code $message";
+                } else {
+                    WARN "Error connecting to PlugAuth at $auth_url : $message";
+                }
                 $c->render(text => "auth server down", status => 503); # "Service unavailable"
                 return;
             }
