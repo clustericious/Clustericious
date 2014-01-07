@@ -33,6 +33,9 @@ subtest 'prep' => sub {
 
   $cluster->create_cluster_ok(qw( MyApp ));
 
+  note "urls = " . join(', ', map { $_ . '' } @{ $cluster->urls });
+  note "apps = " . join(', ', map { ref } @{ $cluster->apps });
+
 };
 
 my $t   = $cluster->t;
@@ -120,6 +123,7 @@ url: <%= cluster->url %>
 plug_auth:
   url: <%= cluster->auth_url %>
 
+
 @@ lib/MyApp.pm
 package MyApp;
 
@@ -130,6 +134,7 @@ use MyApp::Routes;
 our $VERSION = '1.00';
 
 1;
+
 
 @@ lib/MyApp/Routes.pm
 package MyApp::Routes;
