@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - updates for this week's round of Mojolicious deprecations
 
 0.9932    2013-12-16 12:15:29 America/New_York
   - don't call log as a class method for compatibility with recent Mojos

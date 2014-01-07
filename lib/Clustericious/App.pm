@@ -94,7 +94,14 @@ sub startup {
     $self->renderer->paths([ $home->rel_dir('templates') ]);
 
     $self->init_logging();
-    $self->secret( (ref $self || $self) );
+    if($self->can('secrets'))
+    {
+      $self->secrets( [ ref $self || $self ] );
+    }
+    else
+    {
+      $self->secret( (ref $self || $self) );
+    }
 
     $self->plugins->namespaces(['Mojolicious::Plugin','Clustericious::Plugin']);
     my $config = eval { Clustericious::Config->new(ref $self) };
