@@ -7,7 +7,7 @@ use Clustericious::Log;
 use base 'Mojolicious::Controller';
 
 # ABSTRACT: Clustericious controller base class
-our $VERSION = '0.9934'; # VERSION
+our $VERSION = '0.9935'; # VERSION
 
 
 sub url_for {
@@ -59,15 +59,8 @@ sub render_not_found {
 }
 
 
-if($Mojolicious::VERSION >= 4.0)
-{
-    foreach my $type (qw( text json )) {
-        eval qq{
-            sub render_$type { shift->render($type => \@_) };
-        };
-        die $@ if $@;
-    }
-}
+sub render_text { shift->render( text => @_ ) };
+sub render_json { shift->render( json => @_ ) };
 
 1;
 
@@ -81,7 +74,7 @@ Clustericious::Controller - Clustericious controller base class
 
 =head1 VERSION
 
-version 0.9934
+version 0.9935
 
 =head1 SYNOPSIS
 
@@ -118,13 +111,13 @@ Clustericious version of this method usually provided by Mojolicious.
 
 =head2 $c-E<gt>render_text
 
-Only provided when Mojolicious < 4.0.  Previous versions of Mojolicious included this
+Previous versions of Mojolicious included this
 method, and it was added here to ease the transition.  This method should be considered
 deprecated and may be removed in the future.
 
 =head2 $c-E<gt>render_json
 
-Only provided when Mojolicious < 4.0.  Previous versions of Mojolicious included this
+Previous versions of Mojolicious included this
 method, and it was added here to ease the transition.  This method should be considered
 deprecated and may be removed in the future.
 

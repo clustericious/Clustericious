@@ -25,7 +25,7 @@ use Clustericious::Config;
 use Clustericious::Commands;
 
 # ABSTRACT: Clustericious app base class
-our $VERSION = '0.9934'; # VERSION
+our $VERSION = '0.9935'; # VERSION
 
 
 sub _have_rose {
@@ -104,11 +104,6 @@ sub startup {
     $self->plugin('TagHelpers');
     $self->plugin('EPLRenderer');
     $self->plugin('EPRenderer');
-    if($Mojolicious::VERSION < 4.0) {
-        # removed from mojo 4.0
-        $self->plugin('RequestTimer');
-        $self->plugin('PoweredBy');
-    }
 
     # Helpers
     if (my $base = $config->url_base(default => '')) {
@@ -286,7 +281,7 @@ Clustericious::App - Clustericious app base class
 
 =head1 VERSION
 
-version 0.9934
+version 0.9935
 
 =head1 SYNOPSIS
 

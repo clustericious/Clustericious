@@ -8,7 +8,7 @@ use Mojo::Server::PSGI;
 use base 'Clustericious::Command';
 
 # ABSTRACT: Clustericious command to start plack server
-our $VERSION = '0.9934'; # VERSION
+our $VERSION = '0.9935'; # VERSION
 
 
 __PACKAGE__->attr(description => <<EOT);
@@ -50,7 +50,7 @@ Clustericious::Command::plackup - Clustericious command to start plack server
 
 =head1 VERSION
 
-version 0.9934
+version 0.9935
 
 =head1 SYNOPSIS
 
