@@ -134,11 +134,6 @@ sub startup {
     $self->plugin('TagHelpers');
     $self->plugin('EPLRenderer');
     $self->plugin('EPRenderer');
-    if($Mojolicious::VERSION < 4.0) {
-        # removed from mojo 4.0
-        $self->plugin('RequestTimer');
-        $self->plugin('PoweredBy');
-    }
 
     # Helpers
     if (my $base = $config->url_base(default => '')) {
