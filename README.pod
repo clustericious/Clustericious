@@ -1,3 +1,5 @@
+=pod
+
 =head1 NAME
 
 Clustericious - A framework for RESTful processing systems.
@@ -146,11 +148,11 @@ documentation tutorial for migrating SQLite app to Postgres
 
 =item *
 
-tool to generate part or all of a MyApp::Client from MyApp
+documentation tutorial for clients (L<Clustericious::Client>)
 
 =item *
 
-documentation tutorial for clients (L<Clustericious::Client>)
+remove C<TEST_HARNESS> detection / dependency (see GH#8)
 
 =back
 
@@ -175,3 +177,4 @@ This software is copyright (c) 2013 by NASA GSFC.
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
+=cut

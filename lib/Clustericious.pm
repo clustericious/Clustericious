@@ -146,11 +146,11 @@ documentation tutorial for migrating SQLite app to Postgres
 
 =item *
 
-tool to generate part or all of a MyApp::Client from MyApp
+documentation tutorial for clients (L<Clustericious::Client>)
 
 =item *
 
-documentation tutorial for clients (L<Clustericious::Client>)
+remove C<TEST_HARNESS> detection / dependency (see GH#8)
 
 =back
 
