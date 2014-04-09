@@ -17,6 +17,7 @@ use JSON::XS;
 use Scalar::Util qw/weaken/;
 use Mojo::Base 'Mojolicious';
 use File::HomeDir ();
+use Carp qw( cluck );
 use Clustericious::Controller;
 use Clustericious::Renderer;
 use Clustericious::RouteBuilder;
@@ -61,9 +62,13 @@ has commands => sub {
     return $commands;
 };
 
-our @Confdirs = $ENV{TEST_HARNESS} ?
-   ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
-   (File::HomeDir->my_home, File::HomeDir->my_home . "/etc", "/util/etc", "/etc" );
+our @Confdirs = (File::HomeDir->my_home, File::HomeDir->my_home . "/etc", "/util/etc", "/etc" );
+
+if($ENV{TEST_HARNESS} && $ENV{CLUSTERICIOUS_TEST_CONF_DIR})
+{
+  cluck 'Instead of using CLUSTERICIOUS_TEST_CONF_DIR environment variable, ' .
+        'try Test::Clustericious::Config or Test::Clustericious::Cluster';
+}
 
 {
 no warnings 'redefine';
@@ -140,7 +145,7 @@ sub startup {
         $self->helper( base_tag => sub { b( qq[<base href="$base" />] ) } );
     }
     my $url = $config->url(default => '') or do {
-        $self->log->warn("Configuration file should contain 'url'.") unless $ENV{HARNESS_ACTIVE};
+        $self->log->warn("Configuration file should contain 'url'.");
     };
 
     $self->helper( _clustericious_config => sub { $config } );
