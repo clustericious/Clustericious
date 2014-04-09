@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.9936    2014-04-09 12:12:52 America/New_York
   - remove test harness detection
 
 0.9935    2014-01-09 15:31:55 America/New_York
