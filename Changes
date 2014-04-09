@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - remove test harness detection
 
 0.9935    2014-01-09 15:31:55 America/New_York
   - explicitly require Mojolicious 4.31 (required for non-blocking authentication)
