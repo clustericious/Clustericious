@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 # ABSTRACT: A framework for RESTful processing systems.
-our $VERSION = '0.9935'; # VERSION
+our $VERSION = '0.9936'; # VERSION
 
 
 1;
@@ -19,7 +19,7 @@ Clustericious - A framework for RESTful processing systems.
 
 =head1 VERSION
 
-version 0.9935
+version 0.9936
 
 =head1 SYNOPSIS
 
@@ -161,11 +161,11 @@ documentation tutorial for migrating SQLite app to Postgres
 
 =item *
 
-tool to generate part or all of a MyApp::Client from MyApp
+documentation tutorial for clients (L<Clustericious::Client>)
 
 =item *
 
-documentation tutorial for clients (L<Clustericious::Client>)
+remove C<TEST_HARNESS> detection / dependency (see GH#8)
 
 =back
 

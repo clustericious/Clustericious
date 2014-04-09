@@ -1,5 +1,8 @@
 Revision history for Clustericious
 
+0.9936    2014-04-09 12:12:52 America/New_York
+  - remove test harness detection
+
 0.9935    2014-01-09 15:31:55 America/New_York
   - explicitly require Mojolicious 4.31 (required for non-blocking authentication)
   - remove support for Mojo 3.x

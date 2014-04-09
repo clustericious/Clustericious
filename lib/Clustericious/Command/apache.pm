@@ -9,7 +9,7 @@ use base 'Clustericious::Command';
 use Clustericious::Log;
 
 # ABSTRACT: Clustericious command to stat Apache
-our $VERSION = '0.9935'; # VERSION
+our $VERSION = '0.9936'; # VERSION
 
 
 __PACKAGE__->attr(description => <<EOT);
@@ -52,7 +52,7 @@ Clustericious::Command::apache - Clustericious command to stat Apache
 
 =head1 VERSION
 
-version 0.9935
+version 0.9936
 
 =head1 SYNOPSIS
 

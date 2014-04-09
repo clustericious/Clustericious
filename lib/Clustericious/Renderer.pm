@@ -6,7 +6,7 @@ use Clustericious::Log;
 use base 'Mojolicious::Renderer';
 
 # ABSTRACT: renderer for clustericious
-our $VERSION = '0.9935'; # VERSION
+our $VERSION = '0.9936'; # VERSION
 
 
 sub render {
@@ -29,7 +29,7 @@ Clustericious::Renderer - renderer for clustericious
 
 =head1 VERSION
 
-version 0.9935
+version 0.9936
 
 =head1 DESCRIPTION
 
