@@ -21,6 +21,8 @@ install:
   - cpanm -n Test::Clustericious::Cluster
   - cpanm -n Test::Pod::Coverage
   - cpanm -n Pod::Coverage
+  - cpanm -n Rose::Planter
+  - cpanm -n DBD::SQLite
   - cpanm -n Test::CPAN::Changes Test::EOL Test::Fixme Test::NoTabs Test::Pod::Spelling::CommonMistakes Test::Spelling Test::Strict Test::Version || true
 
 script: dzil test -v
