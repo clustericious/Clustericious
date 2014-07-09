@@ -5,7 +5,7 @@ use warnings;
 use Clustericious::Log;
 
 # ABSTRACT: build proxy routes easily
-our $VERSION = '0.9936'; # VERSION
+our $VERSION = '0.9937'; # VERSION
 
 
 use Sub::Exporter -setup => {
@@ -116,7 +116,7 @@ Clustericious::RouteBuilder::Proxy - build proxy routes easily
 
 =head1 VERSION
 
-version 0.9936
+version 0.9937
 
 =head1 SYNOPSIS
 

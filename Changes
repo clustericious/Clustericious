@@ -1,5 +1,8 @@
 Revision history for Clustericious
 
+0.9937    2014-07-09 11:19:14 America/New_York
+  - fix installer bug where templates where application templates were not being installed
+
 0.9936    2014-04-09 12:12:52 America/New_York
   - remove test harness detection
 

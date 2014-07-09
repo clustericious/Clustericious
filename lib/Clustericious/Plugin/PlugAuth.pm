@@ -9,7 +9,7 @@ use Clustericious::Config;
 use Mojo::Base 'Mojolicious::Plugin';
 
 # ABSTRACT: Plugin for clustericious to use PlugAuth.
-our $VERSION = '0.9936'; # VERSION
+our $VERSION = '0.9937'; # VERSION
 
 
 has 'config_url';
@@ -161,7 +161,7 @@ Clustericious::Plugin::PlugAuth - Plugin for clustericious to use PlugAuth.
 
 =head1 VERSION
 
-version 0.9936
+version 0.9937
 
 =head1 SYNOPSIS
 
