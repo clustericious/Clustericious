@@ -59,4 +59,7 @@ pod_coverage:
     - Clustericious::Commands#app
     - Clustericious::Commands#namespace
     - Clustericious::Commands#start
+    - auto::.*
     
+version:
+  dir: lib
