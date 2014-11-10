@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010;
 
 use Test::More qw/no_plan/;
 use Test::Mojo;

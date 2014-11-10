@@ -2,7 +2,7 @@ package Clustericious::RouteBuilder;
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010;
 use Log::Log4perl qw( :easy );
 
 # ABSTRACT: Route builder for Clustericious applications

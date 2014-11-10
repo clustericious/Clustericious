@@ -3,7 +3,7 @@ package Clustericious::App;
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010;
 use List::Util qw/first/;
 use List::MoreUtils qw/uniq/;
 use MojoX::Log::Log4perl;

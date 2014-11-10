@@ -2,7 +2,7 @@ package Clustericious::Command::configtest;
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010;
 use Mojo::Base 'Clustericious::Command';
 
 # ABSTRACT: Test a Clustericious application's configuration

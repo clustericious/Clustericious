@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use autodie;
-use v5.10;
+use 5.010;
 use Test::More tests => 10;
 use Test::Clustericious::Cluster;
 
