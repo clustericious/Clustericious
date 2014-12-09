@@ -91,8 +91,16 @@ Clustericious version of this method usually provided by Mojolicious.
 sub render_not_found {
     my $self = shift;
     undef $self->stash->{autodata} if exists($self->stash->{autodata});
-    $self->SUPER::render_not_found(@_);
+    $self->helpers->reply->not_found
 }
+
+=head2 $c-E<gt>render_exception($message)
+
+Clustericious version of this method usually provided by Mojolicious.
+
+=cut
+
+sub render_exception { shift->helpers->reply->exception(@_) }
 
 =head2 $c-E<gt>render_text
 
