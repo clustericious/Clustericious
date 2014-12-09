@@ -1,5 +1,9 @@
 Revision history for Clustericious
 
+0.9939    2014-12-09 13:04:49 America/New_York
+  - make render_not_found and render_exception (hopefully) future proof for
+    Mojolicious 6.x
+
 0.9938    2014-12-09 10:36:39 America/New_York
   - do not implicitly use Mojo::JSON
     if you need it in your app make sure you use it yourself

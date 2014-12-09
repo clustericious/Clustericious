@@ -5,7 +5,7 @@ use warnings;
 use Mojo::Base 'Mojolicious::Command::generate';
 
 # ABSTRACT: Clustericious code generation commands.
-our $VERSION = '0.9938'; # VERSION
+our $VERSION = '0.9939'; # VERSION
 
 
 has namespaces =>
@@ -24,7 +24,7 @@ Clustericious::Command::generate - Clustericious code generation commands.
 
 =head1 VERSION
 
-version 0.9938
+version 0.9939
 
 =head1 SYNOPSIS
 

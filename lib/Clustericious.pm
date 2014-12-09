@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 # ABSTRACT: A framework for RESTful processing systems.
-our $VERSION = '0.9938'; # VERSION
+our $VERSION = '0.9939'; # VERSION
 
 
 1;
@@ -19,7 +19,7 @@ Clustericious - A framework for RESTful processing systems.
 
 =head1 VERSION
 
-version 0.9938
+version 0.9939
 
 =head1 SYNOPSIS
 
