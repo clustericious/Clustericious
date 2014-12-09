@@ -2,7 +2,6 @@ package Clustericious::RouteBuilder::Search;
 
 use strict;
 use warnings;
-use Mojo::JSON;
 use Clustericious::Log;
 use List::MoreUtils qw/uniq/;
 use Data::Dumper;
