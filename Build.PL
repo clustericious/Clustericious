@@ -1,3 +1,9 @@
+BEGIN {
+  unless(eval q{ use 5.010; 1}) {
+    print "Perl 5.010 or better required\n";
+    exit;
+  }
+}
 
 use strict;
 use warnings;
@@ -17,7 +23,7 @@ my %module_build_args = (
     "Graham Ollis <plicease\@cpan.org>"
   ],
   "dist_name" => "Clustericious",
-  "dist_version" => "0.9937",
+  "dist_version" => "0.9938",
   "license" => "perl",
   "module_name" => "Clustericious",
   "recommends" => {},
@@ -38,7 +44,7 @@ my %module_build_args = (
     "Sub::Exporter" => 0,
     "Test::More" => 0,
     "YAML::XS" => 0,
-    "perl" => "v5.10.0"
+    "perl" => "5.010"
   },
   "script_files" => [
     "bin/clustericious"

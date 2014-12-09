@@ -3,44 +3,44 @@ abstract: 'A framework for RESTful processing systems.'
 author:
   - 'Graham Ollis <plicease@cpan.org>'
 build_requires:
-  IO::Scalar: 0
-  Module::Build: 0.3601
-  PlugAuth::Lite: 0.06
-  Test::Clustericious::Cluster: 0.09
-  Test::Clustericious::Config: 0
-  autodie: 0
+  IO::Scalar: '0'
+  Module::Build: '0.3601'
+  PlugAuth::Lite: '0.06'
+  Test::Clustericious::Cluster: '0.09'
+  Test::Clustericious::Config: '0'
+  autodie: '0'
 configure_requires:
-  Module::Build: 0.3601
+  Module::Build: '0.3601'
 dynamic_config: 0
 generated_by: 'Dist::Zilla version 5.006, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+  version: '1.4'
 name: Clustericious
 no_index:
   directory:
     - share
     - example
 requires:
-  Clustericious::Config: 0.28
-  Clustericious::Log: 0.15
-  File::HomeDir: 0.91
-  File::ShareDir: 0
-  File::Slurp: 0
-  JSON::XS: 0
-  List::MoreUtils: 0
-  Log::Log4perl: 0
-  MojoX::Log::Log4perl: 0
-  Mojolicious: 4.31
-  Path::Class: 0
-  PlugAuth::Lite: 0.06
-  Sub::Exporter: 0
-  Test::More: 0
-  YAML::XS: 0
-  perl: v5.10.0
+  Clustericious::Config: '0.28'
+  Clustericious::Log: '0.15'
+  File::HomeDir: '0.91'
+  File::ShareDir: '0'
+  File::Slurp: '0'
+  JSON::XS: '0'
+  List::MoreUtils: '0'
+  Log::Log4perl: '0'
+  MojoX::Log::Log4perl: '0'
+  Mojolicious: '4.31'
+  Path::Class: '0'
+  PlugAuth::Lite: '0.06'
+  Sub::Exporter: '0'
+  Test::More: '0'
+  YAML::XS: '0'
+  perl: '5.010'
 resources:
   bugtracker: https://github.com/plicease/clustericious/issues
   homepage: http://perl.wdlabs.com/Clustericious/
   repository: git://github.com/plicease/clustericious.git
-version: 0.9937
+version: '0.9938'

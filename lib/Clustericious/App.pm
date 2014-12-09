@@ -3,7 +3,7 @@ package Clustericious::App;
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010;
 use List::Util qw/first/;
 use List::MoreUtils qw/uniq/;
 use MojoX::Log::Log4perl;
@@ -26,7 +26,7 @@ use Clustericious::Config;
 use Clustericious::Commands;
 
 # ABSTRACT: Clustericious app base class
-our $VERSION = '0.9937'; # VERSION
+our $VERSION = '0.9938'; # VERSION
 
 
 sub _have_rose {
@@ -286,7 +286,7 @@ Clustericious::App - Clustericious app base class
 
 =head1 VERSION
 
-version 0.9937
+version 0.9938
 
 =head1 SYNOPSIS
 

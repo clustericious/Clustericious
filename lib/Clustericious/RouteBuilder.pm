@@ -2,11 +2,11 @@ package Clustericious::RouteBuilder;
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010;
 use Log::Log4perl qw( :easy );
 
 # ABSTRACT: Route builder for Clustericious applications
-our $VERSION = '0.9937'; # VERSION
+our $VERSION = '0.9938'; # VERSION
 
 
 our %Routes;
@@ -187,7 +187,7 @@ Clustericious::RouteBuilder - Route builder for Clustericious applications
 
 =head1 VERSION
 
-version 0.9937
+version 0.9938
 
 =head1 SYNOPSIS
 

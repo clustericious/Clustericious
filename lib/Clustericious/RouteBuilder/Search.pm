@@ -2,13 +2,12 @@ package Clustericious::RouteBuilder::Search;
 
 use strict;
 use warnings;
-use Mojo::JSON;
 use Clustericious::Log;
 use List::MoreUtils qw/uniq/;
 use Data::Dumper;
 
 # ABSTRACT: build routes for searching for objects
-our $VERSION = '0.9937'; # VERSION
+our $VERSION = '0.9938'; # VERSION
 
 
 use Sub::Exporter -setup => {
@@ -92,7 +91,7 @@ Clustericious::RouteBuilder::Search - build routes for searching for objects
 
 =head1 VERSION
 
-version 0.9937
+version 0.9938
 
 =head1 SYNOPSIS
 

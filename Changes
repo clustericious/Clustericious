@@ -1,7 +1,11 @@
 Revision history for Clustericious
 
+0.9938    2014-12-09 10:36:39 America/New_York
+  - do not implicitly use Mojo::JSON
+    if you need it in your app make sure you use it yourself
+
 0.9937    2014-07-09 11:19:14 America/New_York
-  - fix installer bug where templates where application templates were not being installed
+  - fix installer bug where application templates were not being installed
 
 0.9936    2014-04-09 12:12:52 America/New_York
   - remove test harness detection

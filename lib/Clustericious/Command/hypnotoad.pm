@@ -12,7 +12,7 @@ use Cwd qw/getcwd abs_path/;
 use base 'Clustericious::Command';
 
 # ABSTRACT: Clustericious command to stat Hypnotoad
-our $VERSION = '0.9937'; # VERSION
+our $VERSION = '0.9938'; # VERSION
 
 
 __PACKAGE__->attr(description => "Start a hypnotad web server.\n");
@@ -75,7 +75,7 @@ Clustericious::Command::hypnotoad - Clustericious command to stat Hypnotoad
 
 =head1 VERSION
 
-version 0.9937
+version 0.9938
 
 =head1 SYNOPSIS
 

@@ -47,7 +47,7 @@
             "Sub::Exporter" : "0",
             "Test::More" : "0",
             "YAML::XS" : "0",
-            "perl" : "v5.10.0"
+            "perl" : "5.010"
          }
       },
       "test" : {
@@ -72,6 +72,6 @@
          "web" : "https://github.com/plicease/clustericious"
       }
    },
-   "version" : "0.9937"
+   "version" : "0.9938"
 }
 
