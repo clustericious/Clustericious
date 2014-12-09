@@ -1,7 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
-  - make render_not_found and render_exception (hopefully) future proof for Mojolicious 6.x
+  - make render_not_found and render_exception (hopefully) future proof for
+    Mojolicious 6.x
 
 0.9938    2014-12-09 10:36:39 America/New_York
   - do not implicitly use Mojo::JSON
