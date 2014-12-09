@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.9938    2014-12-09 10:36:39 America/New_York
   - do not implicitly use Mojo::JSON
     if you need it in your app make sure you use it yourself
 
