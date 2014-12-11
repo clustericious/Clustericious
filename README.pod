@@ -6,7 +6,7 @@ Clustericious - A framework for RESTful processing systems.
 
 =head1 VERSION
 
-version 0.9939
+version 0.9940
 
 =head1 SYNOPSIS
 

@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.9940    2014-12-11 10:18:51 America/New_York
   - fixed hypnotoad incompatability introduced in recent version of mojo
 
 0.9939    2014-12-09 13:04:49 America/New_York
