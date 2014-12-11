@@ -85,6 +85,9 @@ t/auth.t
 t/auth2.t
 t/badconfig.t
 t/basic.t
+t/cluster_basic.t
+t/cluster_render_exception.t
+t/cluster_render_not_found.t
 t/config.t
 t/crud.t
 t/data/auth.passwd

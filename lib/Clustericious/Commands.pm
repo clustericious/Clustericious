@@ -6,7 +6,7 @@ use Clustericious::Config;
 use Mojo::Base 'Mojolicious::Commands';
 
 # ABSTRACT: Clustericious command runner
-our $VERSION = '0.9939'; # VERSION
+our $VERSION = '0.9940'; # VERSION
 
 
 has namespaces => sub { [qw/Clustericious::Command Mojolicious::Command/] };
@@ -15,6 +15,11 @@ has app => sub { Mojo::Server->new->build_app('Clustericious::HelloWorld') };
 
 sub start {
     my $self = shift;
+
+    if($ENV{CLUSTERICIOUS_COMMAND_NAME} && @_ == 0) {
+        @_ = ($ENV{CLUSTERICIOUS_COMMAND_NAME});
+    }
+
     return $self->start_app($ENV{MOJO_APP} => @_) if $ENV{MOJO_APP};
     return $self->new->app->start(@_);
 }
@@ -30,7 +35,7 @@ Clustericious::Commands - Clustericious command runner
 
 =head1 VERSION
 
-version 0.9939
+version 0.9940
 
 =head1 SYNOPSIS
 
