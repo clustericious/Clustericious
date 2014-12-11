@@ -33,6 +33,11 @@ has app => sub { Mojo::Server->new->build_app('Clustericious::HelloWorld') };
 
 sub start {
     my $self = shift;
+
+    if($ENV{CLUSTERICIOUS_COMMAND_NAME} && @_ == 0) {
+        @_ = ($ENV{CLUSTERICIOUS_COMMAND_NAME});
+    }
+
     return $self->start_app($ENV{MOJO_APP} => @_) if $ENV{MOJO_APP};
     return $self->new->app->start(@_);
 }

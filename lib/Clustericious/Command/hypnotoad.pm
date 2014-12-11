@@ -66,7 +66,7 @@ sub run {
     DEBUG "Config : $conf_string";
     my $exe = $0;
     DEBUG "Running hypnotoad : $exe";
-    $ENV{HYPNOTOAD_EXE} = "$0 hypnotoad";
+    $ENV{HYPNOTOAD_EXE} = "$0";
     my $sentinel = '/no/such/file/because/these/are/deprecated';
     if ( $ENV{HYPNOTOAD_CONFIG} && $ENV{HYPNOTOAD_CONFIG} ne $sentinel ) {
         WARN "HYPNOTOAD_CONFIG value $ENV{HYPNOTOAD_CONFIG} will be ignored";
@@ -90,6 +90,7 @@ sub run {
             }
         }
         my $toad = Mojo::Server::Hypnotoad->new;
+        $ENV{CLUSTERICIOUS_COMMAND_NAME} = 'hypnotoad';
         $toad->run($exe);
         WARN "hypnotoad exited";
         exit;
