@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.9940_01 2014-12-19 15:11:37 America/New_York
   - merge Clustericious::Client into this distro
   - merge Clustericious::Log into this distro
   - merge Clustericious::Config into this distro
