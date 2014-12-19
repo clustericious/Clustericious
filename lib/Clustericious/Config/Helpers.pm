@@ -2,7 +2,7 @@ package Clustericious::Config::Helpers;
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010001;
 use Hash::Merge qw/merge/;
 use Data::Dumper;
 use Carp qw( croak );
@@ -10,7 +10,7 @@ use base qw( Exporter );
 use JSON::XS qw( encode_json );
 
 # ABSTRACT: Helpers for clustericious config files.
-our $VERSION = '0.9940_01'; # VERSION
+our $VERSION = '0.9940_02'; # VERSION
 
 
 our @mergeStack;
@@ -125,7 +125,7 @@ Clustericious::Config::Helpers - Helpers for clustericious config files.
 
 =head1 VERSION
 
-version 0.9940_01
+version 0.9940_02
 
 =head1 SYNOPSIS
 

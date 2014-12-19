@@ -2,7 +2,7 @@ package Test::Clustericious::Log;
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010001;
 
 BEGIN {
   unless($INC{'File/HomeDir/Test.pm'})
@@ -18,7 +18,7 @@ use Clustericious::Log ();
 use Carp qw( carp );
 
 # ABSTRACT: Clustericious logging in tests.
-our $VERSION = '0.9940_01'; # VERSION
+our $VERSION = '0.9940_02'; # VERSION
 
 
 # TRACE DEBUG INFO WARN ERROR FATAL
@@ -155,7 +155,7 @@ Test::Clustericious::Log - Clustericious logging in tests.
 
 =head1 VERSION
 
-version 0.9940_01
+version 0.9940_02
 
 =head1 SYNOPSIS
 

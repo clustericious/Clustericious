@@ -2,13 +2,13 @@ package Clustericious::Command::configdebug;
  
 use strict;
 use warnings;
-use v5.10;
+use 5.010001;
 use Mojo::Base 'Clustericious::Command';
 use Clustericious::Config;
 use YAML::XS qw( Dump );
 
 # ABSTRACT: Debug a clustericious configuration file
-our $VERSION = '0.9940_01'; # VERSION
+our $VERSION = '0.9940_02'; # VERSION
 
 
 has description => <<EOT;
@@ -80,7 +80,7 @@ Clustericious::Command::configdebug - Debug a clustericious configuration file
 
 =head1 VERSION
 
-version 0.9940_01
+version 0.9940_02
 
 =head1 SYNOPSIS
 

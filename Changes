@@ -1,5 +1,9 @@
 Revision history for Clustericious
 
+0.9940_02 2014-12-19 16:30:07 America/New_York
+  - make Log::Log4perl::Appender::TAP a dep
+    (needed for Test::Clustericious::Log)
+
 0.9940_01 2014-12-19 15:11:37 America/New_York
   - merge Clustericious::Client into this distro
   - merge Clustericious::Log into this distro

@@ -10,6 +10,7 @@ IO::Scalar
 JSON::XS
 List::MoreUtils
 Log::Log4perl
+Log::Log4perl::Appender::TAP
 Module::Build
 MojoX::Log::Log4perl
 Mojolicious

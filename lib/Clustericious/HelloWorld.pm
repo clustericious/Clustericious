@@ -6,7 +6,7 @@ use Mojo::Base 'Clustericious::App';
 use Clustericious::RouteBuilder qw/Clustericious::HelloWorld/;
 
 # ABSTRACT: Clustericious hello world application
-our $VERSION = '0.9940_01'; # VERSION
+our $VERSION = '0.9940_02'; # VERSION
 
 
 BEGIN {
@@ -26,7 +26,7 @@ Clustericious::HelloWorld - Clustericious hello world application
 
 =head1 VERSION
 
-version 0.9940_01
+version 0.9940_02
 
 =head1 SYNOPSIS
 

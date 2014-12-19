@@ -2,7 +2,7 @@ package Test::Clustericious::Config;
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010001;
 
 BEGIN {
   unless($INC{'File/HomeDir/Test.pm'})
@@ -38,7 +38,7 @@ sub _init
 BEGIN { _init() }
 
 # ABSTRACT: Test Clustericious::Config
-our $VERSION = '0.9940_01'; # VERSION
+our $VERSION = '0.9940_02'; # VERSION
 
 
 sub create_config_ok ($;$$)
@@ -156,7 +156,7 @@ Test::Clustericious::Config - Test Clustericious::Config
 
 =head1 VERSION
 
-version 0.9940_01
+version 0.9940_02
 
 =head1 SYNOPSIS
 

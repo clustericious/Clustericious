@@ -1,6 +1,6 @@
 BEGIN {
-  unless(eval q{ use 5.010; 1}) {
-    print "Perl 5.010 or better required\n";
+  unless(eval q{ use 5.010001; 1}) {
+    print "Perl 5.010001 or better required\n";
     exit;
   }
 }
@@ -23,7 +23,7 @@ my %module_build_args = (
     "Graham Ollis <plicease\@cpan.org>"
   ],
   "dist_name" => "Clustericious",
-  "dist_version" => "0.9940_01",
+  "dist_version" => "0.9940_02",
   "license" => "perl",
   "module_name" => "Clustericious",
   "recommends" => {},
@@ -40,6 +40,7 @@ my %module_build_args = (
     "JSON::XS" => 0,
     "List::MoreUtils" => 0,
     "Log::Log4perl" => 0,
+    "Log::Log4perl::Appender::TAP" => "0.02",
     "Module::Build" => "0.3601",
     "MojoX::Log::Log4perl" => 0,
     "Mojolicious" => "4.31",
@@ -49,7 +50,7 @@ my %module_build_args = (
     "Test::Builder::Module" => 0,
     "Test::More" => 0,
     "YAML::XS" => 0,
-    "perl" => "5.010"
+    "perl" => "5.010001"
   },
   "script_files" => [
     "bin/clustericious"
