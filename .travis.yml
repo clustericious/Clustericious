@@ -3,11 +3,9 @@ language: perl
 install:
   - cpanm -n Dist::Zilla
   - dzil authordeps --missing | cpanm -n
-  - cpanm -n Clustericious::Config 
   - cpanm -n IO::Prompt 
   - cpanm -n Module::Build
   - cpanm -n MojoX::Log::Log4perl
-  - cpanm -n Clustericious::Log
   - cpanm -n Mojolicious
   - cpanm -n Sub::Exporter
   - cpanm -n JSON::XS
