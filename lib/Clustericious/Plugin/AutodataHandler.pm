@@ -9,7 +9,7 @@ use YAML::XS qw/Dump Load/;
 use Clustericious::Log;
 
 # ABSTRACT: Handle data types automatically
-our $VERSION = '0.9940'; # VERSION
+our $VERSION = '0.9940_01'; # VERSION
 
 
 my $default_decode = 'application/x-www-form-urlencoded';
@@ -132,7 +132,7 @@ Clustericious::Plugin::AutodataHandler - Handle data types automatically
 
 =head1 VERSION
 
-version 0.9940
+version 0.9940_01
 
 =head1 SYNOPSIS
 

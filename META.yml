@@ -5,9 +5,8 @@ author:
 build_requires:
   IO::Scalar: '0'
   Module::Build: '0.3601'
-  PlugAuth::Lite: '0.06'
-  Test::Clustericious::Cluster: '0.09'
-  Test::Clustericious::Config: '0'
+  PlugAuth::Lite: '0'
+  Test::Clustericious::Cluster: '0.17'
   autodie: '0'
 configure_requires:
   Module::Build: '0.3601'
@@ -23,19 +22,24 @@ no_index:
     - share
     - example
 requires:
-  Clustericious::Config: '0.28'
-  Clustericious::Log: '0.15'
+  Data::Rmap: '0'
+  DateTime::Format::DateParse: '0'
+  DateTime::Format::ISO8601: '0'
   File::HomeDir: '0.91'
+  File::ReadBackwards: '0'
   File::ShareDir: '0'
   File::Slurp: '0'
+  Hash::Merge: '0'
   JSON::XS: '0'
   List::MoreUtils: '0'
   Log::Log4perl: '0'
+  Module::Build: '0.3601'
   MojoX::Log::Log4perl: '0'
   Mojolicious: '4.31'
   Path::Class: '0'
-  PlugAuth::Lite: '0.06'
   Sub::Exporter: '0'
+  Term::Prompt: '0'
+  Test::Builder::Module: '0'
   Test::More: '0'
   YAML::XS: '0'
   perl: '5.010'
@@ -43,4 +47,4 @@ resources:
   bugtracker: https://github.com/plicease/clustericious/issues
   homepage: http://perl.wdlabs.com/Clustericious/
   repository: git://github.com/plicease/clustericious.git
-version: '0.9940'
+version: 0.9940_01

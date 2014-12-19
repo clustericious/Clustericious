@@ -23,25 +23,30 @@ my %module_build_args = (
     "Graham Ollis <plicease\@cpan.org>"
   ],
   "dist_name" => "Clustericious",
-  "dist_version" => "0.9940",
+  "dist_version" => "0.9940_01",
   "license" => "perl",
   "module_name" => "Clustericious",
   "recommends" => {},
   "recursive_test_files" => 1,
   "requires" => {
-    "Clustericious::Config" => "0.28",
-    "Clustericious::Log" => "0.15",
+    "Data::Rmap" => 0,
+    "DateTime::Format::DateParse" => 0,
+    "DateTime::Format::ISO8601" => 0,
     "File::HomeDir" => "0.91",
+    "File::ReadBackwards" => 0,
     "File::ShareDir" => 0,
     "File::Slurp" => 0,
+    "Hash::Merge" => 0,
     "JSON::XS" => 0,
     "List::MoreUtils" => 0,
     "Log::Log4perl" => 0,
+    "Module::Build" => "0.3601",
     "MojoX::Log::Log4perl" => 0,
     "Mojolicious" => "4.31",
     "Path::Class" => 0,
-    "PlugAuth::Lite" => "0.06",
     "Sub::Exporter" => 0,
+    "Term::Prompt" => 0,
+    "Test::Builder::Module" => 0,
     "Test::More" => 0,
     "YAML::XS" => 0,
     "perl" => "5.010"
@@ -54,9 +59,8 @@ my %module_build_args = (
   },
   "test_requires" => {
     "IO::Scalar" => 0,
-    "PlugAuth::Lite" => "0.06",
-    "Test::Clustericious::Cluster" => "0.09",
-    "Test::Clustericious::Config" => 0,
+    "PlugAuth::Lite" => 0,
+    "Test::Clustericious::Cluster" => "0.17",
     "autodie" => 0
   }
 );
@@ -65,9 +69,8 @@ my %module_build_args = (
 my %fallback_build_requires = (
   "IO::Scalar" => 0,
   "Module::Build" => "0.3601",
-  "PlugAuth::Lite" => "0.06",
-  "Test::Clustericious::Cluster" => "0.09",
-  "Test::Clustericious::Config" => 0,
+  "PlugAuth::Lite" => 0,
+  "Test::Clustericious::Cluster" => "0.17",
   "autodie" => 0
 );
 
