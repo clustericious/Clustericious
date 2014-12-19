@@ -1,0 +1,11 @@
+% extends_config 'common',
+%     app => 'MyApp',
+%     url => 'http://localhost:9010';
+{
+   "databases" : {
+        "dev" : {
+            "database" : "metadataserver",
+            "schema"   : "mds"
+        }
+   }
+}

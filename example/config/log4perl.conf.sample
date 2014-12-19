@@ -1,0 +1,52 @@
+
+#
+# I set up one root logger, and another one that truncates
+# long messages, since the request message include the
+# user agent string by default, which is kind of long.
+#
+
+log4perl.rootLogger=TRACE, LOGFILE
+log4perl.logger.Mojolicious=TRACE, LOGFILE_TRUNC
+
+# Silence "Caching template"
+log4perl.logger.Mojolicious.Plugin.EpRenderer=WARN, LOGFILE
+
+# Silence "Dispatching callback"
+log4perl.logger.MojoX.Dispatcher.Routes=WARN, LOGFILE
+
+# Makes the above replace noisy log messages, not add new ones.
+log4perl.additivity.Mojolicious=0
+log4perl.additivity.Mojolicious.Plugin.EpRenderer=0
+log4perl.additivity.logger.MojoX.Dispatcher.Routes=0
+
+#
+# Default logger
+#
+log4perl.appender.LOGFILE=Log::Log4perl::Appender::File
+log4perl.appender.LOGFILE.filename=/tmp/clustericious.log
+log4perl.appender.LOGFILE.mode=append
+log4perl.appender.LOGFILE.layout=PatternLayout
+log4perl.appender.LOGFILE.layout.ConversionPattern=[%d{HH:mm:ss}] [%7Z] %5p: %m%n
+
+
+#
+# Logger that truncates long messages
+#
+log4perl.appender.LOGFILE_TRUNC=Log::Log4perl::Appender::File
+log4perl.appender.LOGFILE_TRUNC.filename=/tmp/clustericious.log
+log4perl.appender.LOGFILE_TRUNC.mode=append
+log4perl.appender.LOGFILE_TRUNC.layout=PatternLayout
+log4perl.appender.LOGFILE_TRUNC.layout.ConversionPattern=[%d{HH:mm:ss}] [%7Z] %5p: %.120m|%n
+
+#
+# Other tidbits:
+#
+# include hostname, pid :
+#       log4perl.appender.LOGFILE.layout.ConversionPattern=[%d{HH:mm:ss}] [%Z %H %P] %5p: %m%n
+#
+# %c is the category (useful for tweaking this file)
+#
+# log4perl.logger.Mojolicious.Plugin.RequestTimer
+# Log::Log4perl::Appender::ScreenColoredLevel
+#
+

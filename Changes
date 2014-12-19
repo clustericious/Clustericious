@@ -3,6 +3,7 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
   - merge Clustericious::Client into this distro
   - merge Clustericious::Log into this distro
+  - merge Clustericious::Config into this distro
 
 0.9940    2014-12-11 10:18:51 America/New_York
   - fixed hypnotoad incompatability introduced in recent version of mojo

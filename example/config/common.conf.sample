@@ -1,0 +1,35 @@
+
+% my $fcgi_socket = "/tmp/$app.sock";
+% my ($port) = $url =~ /:(\d+)$/;
+% $port ||= 80;
+
+{
+   "url"        : "<%= $url %>",
+   "start_mode" : [ "plackup", "lighttpd" ],
+   "daemon_prefork" : {
+      "listen"    : "<%= $url %>",
+      "pid"       : "/tmp/<%= $app %>.pid",
+      "lock"      : "/tmp/<%= $app %>.lock",
+      "maxspare"  : "2",
+      "start"     : "2",
+      "daemonize" : "null"
+   },
+   "plackup" : {
+      "server"    : "FCGI",
+      "listen"    : "<%= $fcgi_socket %>",
+      "app"       : "<%= $ENV{HOME} %>/some/location/<%= $app =%>.psgi",
+      "daemonize" : "null"
+   },
+   "lighttpd" : {
+      "env" : {
+          "lighttpd_socket" : "<%= $fcgi_socket %>",
+          "lighttpd_port"   : "<%= $port %>"
+      },
+      "-f" : "<%= $ENV{HOME} %>/etc/lighttpd.conf"
+   },
+   "databases" : {
+      "dev"  : {},
+      "live" : {}
+   }
+}
+
