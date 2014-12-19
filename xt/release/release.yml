@@ -60,6 +60,13 @@ pod_coverage:
     - Clustericious::Commands#namespace
     - Clustericious::Commands#start
     - auto::.*
+    - Clustericious::Config#pre_rendered
+    - Clustericious::Config#rendered
+    - Clustericious::Command::configdebug#description
+    - Clustericious::Command::configdebug#run
+    - Clustericious::Command::configdebug#usage
+    - Clustericious::Config::Password#.*
+    - Clustericious::Config::Helpers#cluster
     
 version:
   dir: lib
