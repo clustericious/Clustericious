@@ -1,5 +1,8 @@
 Clustericious::Config
 Clustericious::Log
+Data::Rmap
+DateTime::Format::DateParse
+DateTime::Format::ISO8601
 File::HomeDir
 File::ShareDir
 File::Slurp
@@ -13,6 +16,7 @@ Mojolicious
 Path::Class
 PlugAuth::Lite
 Sub::Exporter
+Term::Prompt
 Test::Clustericious::Cluster
 Test::Clustericious::Config
 Test::More
