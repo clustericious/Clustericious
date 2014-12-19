@@ -2,7 +2,7 @@ package Clustericious::Config::Helpers;
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010001;
 use Hash::Merge qw/merge/;
 use Data::Dumper;
 use Carp qw( croak );

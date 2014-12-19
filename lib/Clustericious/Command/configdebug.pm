@@ -2,7 +2,7 @@ package Clustericious::Command::configdebug;
  
 use strict;
 use warnings;
-use v5.10;
+use 5.010001;
 use Mojo::Base 'Clustericious::Command';
 use Clustericious::Config;
 use YAML::XS qw( Dump );

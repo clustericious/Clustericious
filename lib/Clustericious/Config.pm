@@ -2,7 +2,7 @@ package Clustericious::Config;
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010001;
 
 # ABSTRACT: Configuration files for Clustericious nodes.
 # VERSION

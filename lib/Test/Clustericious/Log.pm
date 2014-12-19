@@ -2,7 +2,7 @@ package Test::Clustericious::Log;
 
 use strict;
 use warnings;
-use v5.10;
+use 5.010001;
 
 BEGIN {
   unless($INC{'File/HomeDir/Test.pm'})
