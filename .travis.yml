@@ -23,6 +23,8 @@ install:
   - cpanm -n Pod::Coverage
   - cpanm -n Rose::Planter
   - cpanm -n DBD::SQLite
+  - cpanm -n DateTime::Format::DateParse
+  - cpanm -n DateTime::Format::ISO8601
   - cpanm -n Test::CPAN::Changes Test::EOL Test::Fixme Test::NoTabs Test::Pod::Spelling::CommonMistakes Test::Spelling Test::Strict Test::Version || true
 
 script: dzil test -v
