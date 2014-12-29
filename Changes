@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - require Mojolicious 5.40 (fixes GH#11)
+    typo'd this version in the last version
 
 0.9940_03 2014-12-28 21:48:53 America/New_York
   - require Mojolicious 5.40 (fixes GH#11)
