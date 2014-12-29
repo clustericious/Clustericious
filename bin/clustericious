@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 
 use strict;
 use warnings;
@@ -6,7 +6,7 @@ use Clustericious::Commands;
 
 # PODNAME: clustericious
 # ABSTRACT: Clustericious command runner
-our $VERSION = '0.9940_03'; # VERSION
+our $VERSION = '0.9940_04'; # VERSION
 
 
 Clustericious::Commands->start;
@@ -20,7 +20,7 @@ clustericious - Clustericious command runner
 
 =head1 VERSION
 
-version 0.9940_03
+version 0.9940_04
 
 =head1 SYNOPSIS
 

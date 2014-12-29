@@ -1,9 +1,6 @@
 % my $class = shift;
-#!/usr/bin/env perl
-
 use strict;
 use warnings;
-
 use Test::MBD '-autostart';
 use Test::More tests => 9;
 use Test::Mojo;

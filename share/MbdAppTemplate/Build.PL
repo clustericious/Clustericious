@@ -1,7 +1,5 @@
 % my $class = shift;
 % my $name = lc $class;
-#!/usr/bin/env perl
-
 use strict;
 use warnings;
 use Module::Build::Database;

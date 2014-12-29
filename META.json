@@ -46,7 +46,7 @@
             "Log::Log4perl::Appender::TAP" : "0.02",
             "Module::Build" : "0.3601",
             "MojoX::Log::Log4perl" : "0",
-            "Mojolicious" : "4.40",
+            "Mojolicious" : "5.40",
             "Path::Class" : "0",
             "Sub::Exporter" : "0",
             "Term::Prompt" : "0",
@@ -77,6 +77,6 @@
          "web" : "https://github.com/plicease/clustericious"
       }
    },
-   "version" : "0.9940_03"
+   "version" : "0.9940_04"
 }
 

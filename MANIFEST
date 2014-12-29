@@ -105,7 +105,6 @@ t/badconfig.t
 t/basic.t
 t/client.t
 t/client_args.t
-t/client_basic.t
 t/client_datetime.t
 t/client_object.t
 t/client_object_array.t

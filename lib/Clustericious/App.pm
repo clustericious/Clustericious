@@ -26,7 +26,7 @@ use Clustericious::Config;
 use Clustericious::Commands;
 
 # ABSTRACT: Clustericious app base class
-our $VERSION = '0.9940_03'; # VERSION
+our $VERSION = '0.9940_04'; # VERSION
 
 
 sub _have_rose {
@@ -286,7 +286,7 @@ Clustericious::App - Clustericious app base class
 
 =head1 VERSION
 
-version 0.9940_03
+version 0.9940_04
 
 =head1 SYNOPSIS
 

@@ -1,8 +1,6 @@
-#!/usr/bin/env perl
-
 use strict;
 use warnings;
-
+use Test::Clustericious::Log;
 use Test::More tests => 7;
 use Test::Mojo;
 

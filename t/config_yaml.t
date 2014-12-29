@@ -1,8 +1,5 @@
-#!/usr/bin/env perl
-
 use strict;
 use warnings;
-
 use Test::More qw/no_plan/;
 use Clustericious::Config;
 

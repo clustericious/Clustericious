@@ -1,10 +1,9 @@
-#!/usr/bin/env perl
 #
 # Yes.  This is the test for the test...
 #
 use strict;
 use warnings;
-
+use Test::Clustericious::Log;
 use Test::More tests => 22;
 use Test::Clustericious;
 

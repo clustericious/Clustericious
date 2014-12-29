@@ -1,7 +1,6 @@
-#!/usr/bin/env perl
-
 use strict;
 use warnings;
+use Test::Clustericious::Log;
 
 package SomeService;
 use base 'Clustericious::App';

@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 # ABSTRACT: Construct command line and perl clients for RESTful services.
-our $VERSION = '0.9940_03'; # VERSION
+our $VERSION = '0.9940_04'; # VERSION
 
 
 use Mojo::Base qw/-base/;
@@ -576,7 +576,7 @@ Clustericious::Client - Construct command line and perl clients for RESTful serv
 
 =head1 VERSION
 
-version 0.9940_03
+version 0.9940_04
 
 =head1 SYNOPSIS
 
@@ -608,8 +608,6 @@ tracks.pm :
 
 tracks.pl :
 
-    #!/usr/bin/env perl
-
     use lib '.';
     use Log::Log4perl qw/:easy/;
     Log::Log4perl->easy_init($TRACE);
@@ -624,8 +622,6 @@ tracks.pl :
     print "Mix : $_->{name}\n" for @{ $mixes->{mixes} };
 
 tracks_cli :
-
-    #!/usr/bin/env perl
 
     use lib '.';
     use Clustericious::Client::Command;

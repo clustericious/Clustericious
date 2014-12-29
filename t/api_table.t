@@ -45,6 +45,7 @@ BEGIN {
     undef $dbh;
     mkdir "$home/etc";
     DumpFile("$home/etc/SomeService.conf", {
+        url => "http://localhost:1234/",
         db => {
             database => $db_filename,
             driver   => 'SQLite',

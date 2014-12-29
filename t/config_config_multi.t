@@ -1,8 +1,5 @@
-#!/usr/bin/env perl
-
 use strict;
 use warnings;
-
 use Test::More tests => 6;
 use Clustericious::Config;
 

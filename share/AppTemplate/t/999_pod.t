@@ -1,8 +1,5 @@
-#!usr/bin/env/perl -T
-
 use strict;
 use warnings;
-
 use Test::More;
 
 # Ensure a recent version of Test::Pod

@@ -5,7 +5,7 @@ use warnings;
 use 5.010001;
 
 # ABSTRACT: Configuration files for Clustericious nodes.
-our $VERSION = '0.9940_03'; # VERSION
+our $VERSION = '0.9940_04'; # VERSION
 
 
 use Clustericious::Config::Password;
@@ -229,7 +229,7 @@ Clustericious::Config - Configuration files for Clustericious nodes.
 
 =head1 VERSION
 
-version 0.9940_03
+version 0.9940_04
 
 =head1 SYNOPSIS
 

@@ -7,7 +7,7 @@ use Clustericious::Log;
 use base 'Mojolicious::Controller';
 
 # ABSTRACT: Clustericious controller base class
-our $VERSION = '0.9940_03'; # VERSION
+our $VERSION = '0.9940_04'; # VERSION
 
 
 sub url_for {
@@ -77,7 +77,7 @@ Clustericious::Controller - Clustericious controller base class
 
 =head1 VERSION
 
-version 0.9940_03
+version 0.9940_04
 
 =head1 SYNOPSIS
 
