@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-
+use Test::Clustericious::Log;
 use Test::More tests => 14;
 use Test::Mojo;
 

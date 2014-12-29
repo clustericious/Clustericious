@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use 5.010;
-
+use Test::Clustericious::Log;
 use Test::More qw/no_plan/;
 use Test::Mojo;
 

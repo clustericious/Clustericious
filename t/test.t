@@ -4,7 +4,7 @@
 #
 use strict;
 use warnings;
-
+use Test::Clustericious::Log;
 use Test::More tests => 22;
 use Test::Clustericious;
 
