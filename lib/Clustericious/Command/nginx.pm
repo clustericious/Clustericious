@@ -9,7 +9,7 @@ use base 'Clustericious::Command';
 use Clustericious::Log;
 
 # ABSTRACT: Clustericious command to stat nginx
-our $VERSION = '0.9940_02'; # VERSION
+our $VERSION = '0.9940_03'; # VERSION
 
 
 __PACKAGE__->attr(description => <<EOT);
@@ -53,7 +53,7 @@ Clustericious::Command::nginx - Clustericious command to stat nginx
 
 =head1 VERSION
 
-version 0.9940_02
+version 0.9940_03
 
 =head1 SYNOPSIS
 

@@ -36,7 +36,7 @@ requires:
   Log::Log4perl::Appender::TAP: '0.02'
   Module::Build: '0.3601'
   MojoX::Log::Log4perl: '0'
-  Mojolicious: '4.31'
+  Mojolicious: '4.40'
   Path::Class: '0'
   Sub::Exporter: '0'
   Term::Prompt: '0'
@@ -48,4 +48,4 @@ resources:
   bugtracker: https://github.com/plicease/clustericious/issues
   homepage: http://perl.wdlabs.com/Clustericious/
   repository: git://github.com/plicease/clustericious.git
-version: 0.9940_02
+version: 0.9940_03

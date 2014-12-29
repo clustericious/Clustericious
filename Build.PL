@@ -23,7 +23,7 @@ my %module_build_args = (
     "Graham Ollis <plicease\@cpan.org>"
   ],
   "dist_name" => "Clustericious",
-  "dist_version" => "0.9940_02",
+  "dist_version" => "0.9940_03",
   "license" => "perl",
   "module_name" => "Clustericious",
   "recommends" => {},
@@ -43,7 +43,7 @@ my %module_build_args = (
     "Log::Log4perl::Appender::TAP" => "0.02",
     "Module::Build" => "0.3601",
     "MojoX::Log::Log4perl" => 0,
-    "Mojolicious" => "4.31",
+    "Mojolicious" => "4.40",
     "Path::Class" => 0,
     "Sub::Exporter" => 0,
     "Term::Prompt" => 0,
