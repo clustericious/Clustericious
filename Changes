@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.9940_04 2014-12-29 11:35:15 America/New_York
   - require Mojolicious 5.40 (fixes GH#11)
     typo'd this version in the last version
   - test suite now uses Test::Clustericious::Log in some places
