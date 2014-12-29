@@ -1,9 +1,6 @@
 % my $class = shift;
-#!/usr/bin/env perl
-
 use strict;
 use warnings;
-
 use Test::More tests => 5;
 use Test::Mojo;
 

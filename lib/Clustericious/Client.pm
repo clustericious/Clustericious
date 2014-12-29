@@ -36,8 +36,6 @@ tracks.pm :
 
 tracks.pl :
 
-    #!/usr/bin/env perl
-
     use lib '.';
     use Log::Log4perl qw/:easy/;
     Log::Log4perl->easy_init($TRACE);
@@ -52,8 +50,6 @@ tracks.pl :
     print "Mix : $_->{name}\n" for @{ $mixes->{mixes} };
 
 tracks_cli :
-
-    #!/usr/bin/env perl
 
     use lib '.';
     use Clustericious::Client::Command;

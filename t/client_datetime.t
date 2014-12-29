@@ -1,8 +1,5 @@
-#!/usr/bin/env perl
-
 use strict;
 use warnings;
-
 use Test::More tests => 3;
 
 use_ok('Clustericious::Client::Object::DateTime');

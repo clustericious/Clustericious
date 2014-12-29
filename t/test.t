@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 #
 # Yes.  This is the test for the test...
 #

@@ -1,9 +1,8 @@
 % my $class = shift;
 % my $name = lc $class;
-#!/usr/bin/env perl
-use Module::Build;
 use strict;
 use warnings;
+use Module::Build;
 
 my $builder = Module::Build->new(
     module_name         => '<%= $class %>',

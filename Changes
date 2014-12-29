@@ -5,6 +5,10 @@ Revision history for {{$dist->name}}
     typo'd this version in the last version
   - test suite now uses Test::Clustericious::Log in some places
     to avoid paluting production logs/your screeen
+  - remove the use of #!/usr/bin/env perl
+    as it can confuse some environments with multiple
+    perls.  If you need to run clustericious from its source
+    base use "perl -Ilib bin/clustericious" instead
 
 0.9940_03 2014-12-28 21:48:53 America/New_York
   - require Mojolicious 5.40 (fixes GH#11)
