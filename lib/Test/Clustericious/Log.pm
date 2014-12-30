@@ -18,7 +18,7 @@ use Clustericious::Log ();
 use Carp qw( carp );
 
 # ABSTRACT: Clustericious logging in tests.
-our $VERSION = '0.9940_04'; # VERSION
+our $VERSION = '0.9941'; # VERSION
 
 
 # TRACE DEBUG INFO WARN ERROR FATAL
@@ -155,7 +155,7 @@ Test::Clustericious::Log - Clustericious logging in tests.
 
 =head1 VERSION
 
-version 0.9940_04
+version 0.9941
 
 =head1 SYNOPSIS
 

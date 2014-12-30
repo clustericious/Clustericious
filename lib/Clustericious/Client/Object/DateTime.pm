@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 # ABSTRACT: Clustericious DateTime object
-our $VERSION = '0.9940_04'; # VERSION
+our $VERSION = '0.9941'; # VERSION
 
 
 use DateTime::Format::ISO8601;
@@ -29,7 +29,7 @@ Clustericious::Client::Object::DateTime - Clustericious DateTime object
 
 =head1 VERSION
 
-version 0.9940_04
+version 0.9941
 
 =head1 SYNOPSIS
 

@@ -48,4 +48,4 @@ resources:
   bugtracker: https://github.com/plicease/clustericious/issues
   homepage: http://perl.wdlabs.com/Clustericious/
   repository: git://github.com/plicease/clustericious.git
-version: 0.9940_04
+version: '0.9941'
