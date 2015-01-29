@@ -169,7 +169,6 @@ sub new {
     ($arg = caller) =~ s/:.*$// unless $arg; # Determine from caller's class
     return $Singletons{$arg} if exists($Singletons{$arg});
 
-$DB::single = 1;    
     my $we_are_testing_this_module = 0;
     if(__PACKAGE__->_testing) {
         $we_are_testing_this_module = 0;
