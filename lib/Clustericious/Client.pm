@@ -706,8 +706,8 @@ sub _doit {
             push @{ $url->path->parts }, $arg;
         }
     }
-    $url = $url->to_abs unless $url->is_abs;
-    WARN "url $url is not absolute" unless $url =~ /^http/i || $ENV{HARNESS_ACTIVE};
+    $url = $url->to_abs unless $url->is_abs || $self->{app};
+    WARN "url $url is not absolute" unless $url =~ /^http/i;
 
     $url->userinfo($self->userinfo) if $self->userinfo;
 
