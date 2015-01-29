@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 # ABSTRACT: default templates for clustericious
-our $VERSION = '0.9941'; # VERSION
+our $VERSION = '0.9942'; # VERSION
 
 
 1;
@@ -19,7 +19,7 @@ Clustericious::Templates - default templates for clustericious
 
 =head1 VERSION
 
-version 0.9941
+version 0.9942
 
 =head1 DESCRIPTION
 

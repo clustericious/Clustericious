@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 # ABSTRACT: Construct command line and perl clients for RESTful services.
-our $VERSION = '0.9941'; # VERSION
+our $VERSION = '0.9942'; # VERSION
 
 
 use Mojo::Base qw/-base/;
@@ -347,8 +347,8 @@ sub _doit {
             push @{ $url->path->parts }, $arg;
         }
     }
-    $url = $url->to_abs unless $url->is_abs;
-    WARN "url $url is not absolute" unless $url =~ /^http/i || $ENV{HARNESS_ACTIVE};
+    $url = $url->to_abs unless $url->is_abs || $self->{app};
+    WARN "url $url is not absolute" unless $url =~ /^http/i;
 
     $url->userinfo($self->userinfo) if $self->userinfo;
 
@@ -576,7 +576,7 @@ Clustericious::Client - Construct command line and perl clients for RESTful serv
 
 =head1 VERSION
 
-version 0.9941
+version 0.9942
 
 =head1 SYNOPSIS
 

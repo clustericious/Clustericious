@@ -5,7 +5,7 @@ use warnings;
 use 5.010001;
 
 # ABSTRACT: Configuration files for Clustericious nodes.
-our $VERSION = '0.9941'; # VERSION
+our $VERSION = '0.9942'; # VERSION
 
 
 use Clustericious::Config::Password;
@@ -56,7 +56,6 @@ sub new {
     ($arg = caller) =~ s/:.*$// unless $arg; # Determine from caller's class
     return $Singletons{$arg} if exists($Singletons{$arg});
 
-$DB::single = 1;    
     my $we_are_testing_this_module = 0;
     if(__PACKAGE__->_testing) {
         $we_are_testing_this_module = 0;
@@ -229,7 +228,7 @@ Clustericious::Config - Configuration files for Clustericious nodes.
 
 =head1 VERSION
 
-version 0.9941
+version 0.9942
 
 =head1 SYNOPSIS
 

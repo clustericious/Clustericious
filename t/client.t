@@ -23,7 +23,7 @@ sub as_hash { return shift->{got} };
 package Fake::Object;
 
 sub find_class  {  return "Fake::Object::Thing";     }
-sub find_object {  return $persist or Fake::Object::Thing->new() }
+sub find_object {  return $persist || Fake::Object::Thing->new() }
 
 package SomeService;
 

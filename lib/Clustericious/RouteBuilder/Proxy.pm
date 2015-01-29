@@ -5,7 +5,7 @@ use warnings;
 use Clustericious::Log;
 
 # ABSTRACT: build proxy routes easily
-our $VERSION = '0.9941'; # VERSION
+our $VERSION = '0.9942'; # VERSION
 
 
 use Sub::Exporter -setup => {
@@ -48,12 +48,12 @@ sub _build_proxy {
             unshift @{ $url->path->parts }, @{ $dest_url->path->parts };
         }
 
-        LOGDIE "recursive proxy " if $self->req->url->to_abs eq $url->to_abs;
+        #LOGDIE "recursive proxy " if $self->req->url->to_abs eq $url->to_abs;
 
         my $remote = $self->tx->remote_address;
-        TRACE "proxying (from $remote) " . $self->req->method . ' ' .
-              _sanitize_url($self->req->url->to_abs) . " to " .
-              _sanitize_url($url->to_abs);
+        #TRACE "proxying (from $remote) " . $self->req->method . ' ' .
+        #      _sanitize_url($self->req->url->to_abs) . " to " .
+        #      _sanitize_url($url->to_abs);
 
         my $tx = Mojo::Transaction::HTTP->new;
         my $req = $tx->req;
@@ -116,7 +116,7 @@ Clustericious::RouteBuilder::Proxy - build proxy routes easily
 
 =head1 VERSION
 
-version 0.9941
+version 0.9942
 
 =head1 SYNOPSIS
 

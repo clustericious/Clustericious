@@ -1,6 +1,14 @@
 Revision history for Clustericious
 
+0.9942    2015-01-29 12:31:45 America/New_York
+  - Remove render_not_found and render_exception compat methods
+    in Clustericious::Controller.  It was causing infinite loop
+    when using recent versions of Mojolicious
+  - Fixed a number of warnings that are revealed in newer versions
+    of Perl and Mojolicious
+
 0.9941    2014-12-30 12:26:40 America/New_York
+  - Production release identical to 0.9940_04
 
 0.9940_04 2014-12-29 11:35:15 America/New_York
   - require Mojolicious 5.40 (fixes GH#11)

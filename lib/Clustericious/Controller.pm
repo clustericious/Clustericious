@@ -7,7 +7,7 @@ use Clustericious::Log;
 use base 'Mojolicious::Controller';
 
 # ABSTRACT: Clustericious controller base class
-our $VERSION = '0.9941'; # VERSION
+our $VERSION = '0.9942'; # VERSION
 
 
 sub url_for {
@@ -52,16 +52,6 @@ sub redirect_to {
 }
 
 
-sub render_not_found {
-    my $self = shift;
-    undef $self->stash->{autodata} if exists($self->stash->{autodata});
-    $self->helpers->reply->not_found
-}
-
-
-sub render_exception { shift->helpers->reply->exception(@_) }
-
-
 sub render_text { shift->render( text => @_ ) };
 sub render_json { shift->render( json => @_ ) };
 
@@ -77,7 +67,7 @@ Clustericious::Controller - Clustericious controller base class
 
 =head1 VERSION
 
-version 0.9941
+version 0.9942
 
 =head1 SYNOPSIS
 
@@ -107,14 +97,6 @@ Location header.)
 It does this by explicitly using the url_base from the
 Clustericious config file for the app as the base for
 the location header.
-
-=head2 $c-E<gt>render_not_found
-
-Clustericious version of this method usually provided by Mojolicious.
-
-=head2 $c-E<gt>render_exception($message)
-
-Clustericious version of this method usually provided by Mojolicious.
 
 =head2 $c-E<gt>render_text
 

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::Clustericious::Log;
-use Test::More tests => 14;
+use Test::More tests => 21;
 use Test::Mojo;
 
 package SomeService;
@@ -12,6 +12,14 @@ use base 'Clustericious::App';
 use Clustericious::RouteBuilder;
 
 get '/' => sub { shift->render_text("hello"); };
+
+get '/autotest' => sub { shift->stash->{autodata} = { a => 1, b => 2 } };
+
+get '/autotest_not_found' => sub {
+  my($self) = shift;
+  $self->stash->{autodata} = [1,2,3];
+  $self->reply->not_found;
+};
 
 package main;
 
@@ -41,3 +49,16 @@ $t->get_ok('/api')
     ->status_is(200);
 
 1;
+
+
+$t->get_ok('/autotest')
+  ->status_is(200)
+  ->json_is({ a => 1, b => 2 });
+
+$t->get_ok('/autotest.yml')
+  ->status_is(200);
+note $t->tx->res->text;
+
+$t->get_ok('/autotest_not_found')
+  ->status_is(404);
+note $t->tx->res->text;

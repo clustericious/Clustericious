@@ -60,7 +60,7 @@ use warnings;
 use Clustericious::RouteBuilder;
 
 get '/public' => sub {
-  shift->render_exception('FOO Bar baz');
+  shift->reply->exception('FOO Bar baz');
 };
 
 1;

@@ -38,7 +38,7 @@ sub _init
 BEGIN { _init() }
 
 # ABSTRACT: Test Clustericious::Config
-our $VERSION = '0.9941'; # VERSION
+our $VERSION = '0.9942'; # VERSION
 
 
 sub create_config_ok ($;$$)
@@ -156,7 +156,7 @@ Test::Clustericious::Config - Test Clustericious::Config
 
 =head1 VERSION
 
-version 0.9941
+version 0.9942
 
 =head1 SYNOPSIS
 
