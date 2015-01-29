@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.9942    2015-01-29 12:31:45 America/New_York
   - Remove render_not_found and render_exception compat methods
     in Clustericious::Controller.  It was causing infinite loop
     when using recent versions of Mojolicious
