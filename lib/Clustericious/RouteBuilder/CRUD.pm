@@ -90,7 +90,7 @@ sub _build_read {
         my @keys = split /\//, $self->stash->{key};
         TRACE "read $table (@keys)";
         my $obj   = $finder->find_object($table,@keys)
-            or return $self->render_not_found( join '/',$table,@keys );
+            or return $self->reply->not_found( join '/',$table,@keys );
         $self->app->log->debug("Viewing $table @keys");
 
         $self->stash(autodata => $obj->as_hash);
@@ -108,7 +108,7 @@ sub _build_delete {
         my @keys = split /\//, $self->stash->{key};
         TRACE "delete $table (@keys)";
         my $obj   = $finder->find_object($table,@keys)
-            or return $self->render_not_found( join '/',$table,@keys );
+            or return $self->reply->not_found( join '/',$table,@keys );
         $self->app->log->debug("Deleting $table @keys");
 
         $obj->delete or LOGDIE($obj->errors);
@@ -130,7 +130,7 @@ sub _build_update {
         my @keys = split /\//, $self->stash->{key};
 
         my $obj = $finder->find_object($table, @keys)
-            or return $self->render_not_found( join '/',$table,@keys );
+            or return $self->reply->not_found( join '/',$table,@keys );
 
         TRACE "Updating $table @keys";
         $self->parse_autodata;
@@ -183,7 +183,7 @@ sub _build_list {
 
         $self->app->log->debug("Listing $table");
         my $object_class = $finder->find_class($table)
-            or return $self->render_not_found( $table );
+            or return $self->reply->not_found( $table );
         my $pkey = $object_class->meta->primary_key;
         my $manager = $object_class . '::Manager';
 

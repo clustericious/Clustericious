@@ -99,7 +99,7 @@ table using this route.
         cb => sub {
             my($self) = @_;
             my $table = $self->app->dump_api_table($self->stash('table'));
-            $table ? $self->render( autodata => $table ) : $self->render_not_found;
+            $table ? $self->render( autodata => $table ) : $self->reply->not_found;
         },
     );
     

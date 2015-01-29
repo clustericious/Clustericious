@@ -59,7 +59,7 @@ use warnings;
 use Clustericious::RouteBuilder;
 
 get '/public' => sub {
-  shift->render_not_found;
+  shift->reply->not_found;
 };
 
 1;
