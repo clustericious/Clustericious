@@ -82,26 +82,6 @@ sub redirect_to {
     return $self;
 }
 
-=head2 $c-E<gt>render_not_found
-
-Clustericious version of this method usually provided by Mojolicious.
-
-=cut
-
-sub render_not_found {
-    my $self = shift;
-    undef $self->stash->{autodata} if exists($self->stash->{autodata});
-    $self->helpers->reply->not_found
-}
-
-=head2 $c-E<gt>render_exception($message)
-
-Clustericious version of this method usually provided by Mojolicious.
-
-=cut
-
-sub render_exception { shift->helpers->reply->exception(@_) }
-
 =head2 $c-E<gt>render_text
 
 Previous versions of Mojolicious included this
