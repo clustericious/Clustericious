@@ -89,7 +89,12 @@ sub _stop_pid {
     while (kill 0, $pid) {
         INFO "waiting for $pid";
         sleep $nap++;
-        LOGDIE "pid $pid did not die" if $nap > 10;
+        if($nap > 5)
+        {
+            INFO "pid $pid did not die on request, killing with signal 9";
+            kill 9, $pid;
+            last;
+        }
     }
 }
 
