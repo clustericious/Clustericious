@@ -26,7 +26,7 @@ use Clustericious::Config;
 use Clustericious::Commands;
 
 # ABSTRACT: Clustericious app base class
-our $VERSION = '0.9942'; # VERSION
+our $VERSION = '0.9943'; # VERSION
 
 
 sub _have_rose {
@@ -191,7 +191,7 @@ sub dump_api {
         if (_have_rose() && $placeholders{table}) {
             for my $table (Rose::Planter->tables) {
                 $placeholders{table} = $table;
-                my $pat = $pat->pattern;
+                my $pat = $pat->unparsed;
                 $pat =~ s/:table/$table/;
                 push @all, "$method $pat";
             }
@@ -201,8 +201,8 @@ sub dump_api {
                 my $line = $pat->render(\%placeholders);
                 push @all, "$method $line";
             }
-        } elsif (defined($pat->pattern)) {
-            push @all, join ' ', $method, $pat->pattern;
+        } elsif (defined($pat->unparsed)) {
+            push @all, join ' ', $method, $pat->unparsed;
         } else {
             push @all, $self->dump_api($r->children);
         }
@@ -286,7 +286,7 @@ Clustericious::App - Clustericious app base class
 
 =head1 VERSION
 
-version 0.9942
+version 0.9943
 
 =head1 SYNOPSIS
 

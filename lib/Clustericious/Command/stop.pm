@@ -11,7 +11,7 @@ use Clustericious::Config;
 use File::Slurp qw/slurp/;
 
 # ABSTRACT: Clustericious command to stop a Clustericious application
-our $VERSION = '0.9942'; # VERSION
+our $VERSION = '0.9943'; # VERSION
 
 
 __PACKAGE__->attr(description => <<EOT);
@@ -52,7 +52,12 @@ sub _stop_pid {
     while (kill 0, $pid) {
         INFO "waiting for $pid";
         sleep $nap++;
-        LOGDIE "pid $pid did not die" if $nap > 10;
+        if($nap > 5)
+        {
+            INFO "pid $pid did not die on request, killing with signal 9";
+            kill 9, $pid;
+            last;
+        }
     }
 }
 
@@ -120,7 +125,7 @@ Clustericious::Command::stop - Clustericious command to stop a Clustericious app
 
 =head1 VERSION
 
-version 0.9942
+version 0.9943
 
 =head1 SYNOPSIS
 
