@@ -138,10 +138,9 @@ sub create_config_ok ($;$$)
   
   unless(defined $config)
   {
-    my $loader = Mojo::Loader->new;
     my $caller = caller;
-    $loader->load($caller);
-    $config = $loader->data($caller, "etc/$fn");
+    Mojo::Loader::load_class($caller);
+    $config = Mojo::Loader::data_section($caller, "etc/$fn");
   }
   
   my $tb = __PACKAGE__->builder;  

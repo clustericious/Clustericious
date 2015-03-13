@@ -190,7 +190,7 @@ sub _add_routes {
              my $realm = $pattern || ref $app;
              my $cb = defined $auth_plugin ? sub { $auth_plugin->authenticate(shift, $realm) } : sub { 1 };
              $head_route = $head_authenticated = $routes =
-             $app->routes->bridge->to( { cb => $cb } )->name("authenticated");
+             $app->routes->under->to( { cb => $cb } )->name("authenticated");
              next;
          }
 
@@ -201,7 +201,7 @@ sub _add_routes {
             my $resource = $name;
             if($auth_plugin)
             {
-                $head_route = $routes = $head_authenticated->bridge->to( {
+                $head_route = $routes = $head_authenticated->under->to( {
                         cb => sub {
                             my $c = shift;
                             # Dynamically compute resource/action
@@ -215,7 +215,7 @@ sub _add_routes {
             }
             else
             {
-                $head_route = $routes = $head_authenticated->bridge->to({ cb => sub { 1 } });
+                $head_route = $routes = $head_authenticated->under->to({ cb => sub { 1 } });
             }
             next;
          }
@@ -223,7 +223,7 @@ sub _add_routes {
          # ladders don't replace previous ladders
          if (!ref $methods && $methods eq 'ladder') {
               die "constraints not handled in ladders" if $constraints && @$constraints;
-              $routes = $routes->bridge( $pattern )->over($conditions)
+              $routes = $routes->under( $pattern )->over($conditions)
                   ->to($defaults)->name($name);
               next;
          }
