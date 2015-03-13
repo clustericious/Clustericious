@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.9943    2015-03-13 03:45:58 America/New_York
   - Clustericious 6.x comptability
 
 0.9942    2015-01-29 12:31:45 America/New_York
