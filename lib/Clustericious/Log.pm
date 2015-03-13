@@ -9,7 +9,7 @@ use File::ReadBackwards;
 use File::HomeDir;
 
 # ABSTRACT: A Log::Log4perl wrapper for use with Clustericious.
-our $VERSION = '0.9943'; # VERSION
+our $VERSION = '0.9944'; # VERSION
 
 
 sub import {
@@ -110,7 +110,7 @@ Clustericious::Log - A Log::Log4perl wrapper for use with Clustericious.
 
 =head1 VERSION
 
-version 0.9943
+version 0.9944
 
 =head1 SYNOPSIS
 

@@ -9,7 +9,7 @@ use File::ShareDir 'dist_dir';
 use File::Basename qw/basename/;
 
 # ABSTRACT: Clustericious command to generate a new Clustericious application
-our $VERSION = '0.9943'; # VERSION
+our $VERSION = '0.9944'; # VERSION
 
 
 has description => <<'EOF';
@@ -67,7 +67,7 @@ Clustericious::Command::generate::app - Clustericious command to generate a new 
 
 =head1 VERSION
 
-version 0.9943
+version 0.9944
 
 =head1 SYNOPSIS
 

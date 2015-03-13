@@ -6,7 +6,7 @@ use Clustericious::Config;
 use Mojo::Base 'Mojolicious::Commands';
 
 # ABSTRACT: Clustericious command runner
-our $VERSION = '0.9943'; # VERSION
+our $VERSION = '0.9944'; # VERSION
 
 
 has namespaces => sub { [qw/Clustericious::Command Mojolicious::Command/] };
@@ -35,7 +35,7 @@ Clustericious::Commands - Clustericious command runner
 
 =head1 VERSION
 
-version 0.9943
+version 0.9944
 
 =head1 SYNOPSIS
 
