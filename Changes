@@ -1,9 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Require Mojolicious 6.x or better
 
 0.9943    2015-03-13 03:45:58 America/New_York
-  - Clustericious 6.x comptability
+  - Mojolicious 6.x comptability
 
 0.9942    2015-01-29 12:31:45 America/New_York
   - Remove render_not_found and render_exception compat methods
