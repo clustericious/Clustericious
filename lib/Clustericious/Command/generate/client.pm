@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use Mojo::Base 'Clustericious::Command';
 use File::Find;
-use File::Slurp 'slurp';
 use File::ShareDir 'dist_dir';
 use File::Basename qw/basename/;
 

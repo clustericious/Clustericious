@@ -34,7 +34,6 @@ use base 'Test::Mojo';
 
 use JSON::XS;
 use YAML::XS;
-use File::Slurp qw/slurp/;
 use Carp;
 use List::Util qw(first);
 use Clustericious::Config;
@@ -113,7 +112,13 @@ sub testdata
                 map { $_, "t/$_", "data/$_", "t/data/$_" }
                 $filename;
 
-    my $content = slurp($filename) or croak "Missing $filename";
+    my $content;
+    do {
+        use autodie;
+        open my $fh, '<', $filename;
+        $content = <$fh>;
+        close $fh;
+    };
 
     return decode_json($content) if $filename =~ /json$/;
 

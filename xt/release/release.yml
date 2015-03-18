@@ -70,6 +70,7 @@ pod_coverage:
     - Clustericious::Command::configdebug#usage
     - Clustericious::Config::Password#.*
     - Clustericious::Config::Helpers#cluster
+    - Clustericious::Util#.*
     
 version:
   dir: lib
