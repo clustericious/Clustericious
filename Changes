@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Remove dep on File::Slurp which is considered broken
 
 0.9944    2015-03-13 03:51:13 America/New_York
   - Require Mojolicious 6.x or better
