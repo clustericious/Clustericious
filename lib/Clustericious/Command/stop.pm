@@ -8,10 +8,10 @@ use Mojo::URL;
 use File::Basename qw/dirname/;
 use base 'Clustericious::Command';
 use Clustericious::Config;
-use File::Slurp qw/slurp/;
+use Clustericious::Util qw( slurp_pid );
 
 # ABSTRACT: Clustericious command to stop a Clustericious application
-our $VERSION = '0.9944'; # VERSION
+our $VERSION = '0.9945'; # VERSION
 
 
 __PACKAGE__->attr(description => <<EOT);
@@ -29,7 +29,7 @@ sub _stop_pidfile {
     my $pid_file = shift;
     -e $pid_file or do { WARN "No pid file $pid_file\n"; return; };
     TRACE "pid_file : $pid_file";
-    my $pid = slurp $pid_file; # dies automatically
+    my $pid = slurp_pid $pid_file; # dies automatically
     chomp $pid;
     TRACE "file $pid_file has pid $pid";
     _stop_pid($pid,@_);
@@ -125,7 +125,7 @@ Clustericious::Command::stop - Clustericious command to stop a Clustericious app
 
 =head1 VERSION
 
-version 0.9944
+version 0.9945
 
 =head1 SYNOPSIS
 

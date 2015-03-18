@@ -58,6 +58,7 @@ lib/Clustericious/RouteBuilder/Common.pm
 lib/Clustericious/RouteBuilder/Proxy.pm
 lib/Clustericious/RouteBuilder/Search.pm
 lib/Clustericious/Templates.pm
+lib/Clustericious/Util.pm
 lib/Test/Clustericious.pm
 lib/Test/Clustericious/Config.pm
 lib/Test/Clustericious/Log.pm
@@ -144,6 +145,8 @@ t/subreq.t
 t/test.t
 t/testobject.yaml
 t/testremote.t
+t/util.pid
+t/util.t
 t/websocketauth.t
 xt/release/build_environment.t
 xt/release/changes.t

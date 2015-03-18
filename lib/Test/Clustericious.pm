@@ -4,14 +4,13 @@ use strict;
 use warnings;
 
 # ABSTRACT: Test Clustericious apps
-our $VERSION = '0.9944'; # VERSION
+our $VERSION = '0.9945'; # VERSION
 
 
 use base 'Test::Mojo';
 
 use JSON::XS;
 use YAML::XS;
-use File::Slurp qw/slurp/;
 use Carp;
 use List::Util qw(first);
 use Clustericious::Config;
@@ -56,7 +55,13 @@ sub testdata
                 map { $_, "t/$_", "data/$_", "t/data/$_" }
                 $filename;
 
-    my $content = slurp($filename) or croak "Missing $filename";
+    my $content;
+    do {
+        use autodie;
+        open my $fh, '<', $filename;
+        $content = <$fh>;
+        close $fh;
+    };
 
     return decode_json($content) if $filename =~ /json$/;
 
@@ -206,7 +211,7 @@ Test::Clustericious - Test Clustericious apps
 
 =head1 VERSION
 
-version 0.9944
+version 0.9945
 
 =head1 SYNOPSIS
 

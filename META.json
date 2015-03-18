@@ -38,7 +38,6 @@
             "File::HomeDir" : "0.91",
             "File::ReadBackwards" : "0",
             "File::ShareDir" : "0",
-            "File::Slurp" : "0",
             "Hash::Merge" : "0",
             "JSON::XS" : "0",
             "List::MoreUtils" : "0",
@@ -53,6 +52,7 @@
             "Test::Builder::Module" : "0",
             "Test::More" : "0",
             "YAML::XS" : "0",
+            "autodie" : "0",
             "perl" : "5.010001"
          }
       },
@@ -60,8 +60,7 @@
          "requires" : {
             "IO::Scalar" : "0",
             "PlugAuth::Lite" : "0",
-            "Test::Clustericious::Cluster" : "0.17",
-            "autodie" : "0"
+            "Test::Clustericious::Cluster" : "0.17"
          }
       }
    },
@@ -77,6 +76,6 @@
          "web" : "https://github.com/plicease/clustericious"
       }
    },
-   "version" : "0.9944"
+   "version" : "0.9945"
 }
 

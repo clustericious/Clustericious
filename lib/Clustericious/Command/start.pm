@@ -3,7 +3,6 @@ package Clustericious::Command::start;
 use strict;
 use warnings;
 use Clustericious::Log;
-use File::Slurp qw/slurp/;
 use List::MoreUtils qw/mesh/;
 use File::Path qw/mkpath/;
 use File::Basename qw/dirname/;
@@ -12,7 +11,7 @@ use Clustericious::Config;
 use Mojo::Base 'Clustericious::Command';
 
 # ABSTRACT: Clustericious command to start a Clustericious application
-our $VERSION = '0.9944'; # VERSION 
+our $VERSION = '0.9945'; # VERSION 
 
 
 has description => <<EOT;
@@ -91,7 +90,7 @@ Clustericious::Command::start - Clustericious command to start a Clustericious a
 
 =head1 VERSION
 
-version 0.9944
+version 0.9945
 
 =head1 SYNOPSIS
 

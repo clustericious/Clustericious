@@ -4,12 +4,11 @@ use strict;
 use warnings;
 use Mojo::Base 'Clustericious::Command';
 use File::Find;
-use File::Slurp 'slurp';
 use File::ShareDir 'dist_dir';
 use File::Basename qw/basename/;
 
 # ABSTRACT: Clustericious command to generate a new Clustericious M::B::D application
-our $VERSION = '0.9944'; # VERSION
+our $VERSION = '0.9945'; # VERSION
 
 
 
@@ -56,7 +55,10 @@ sub run
           no_chdir => 1}, $templatedir);
 
     if (my $schema = $args{'--schema'}) {
-        my $content = slurp $schema;
+        use autodie;
+        open my $fh, '<', $schema;
+        my $content = <$fh>;
+        close $fh;
         my $base = basename $schema;
         $self->write_file("$class/db/patches/0020_$base", $content);
     }
@@ -73,7 +75,7 @@ Clustericious::Command::generate::mbd_app - Clustericious command to generate a 
 
 =head1 VERSION
 
-version 0.9944
+version 0.9945
 
 =head1 SYNOPSIS
 

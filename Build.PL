@@ -23,7 +23,7 @@ my %module_build_args = (
     "Graham Ollis <plicease\@cpan.org>"
   ],
   "dist_name" => "Clustericious",
-  "dist_version" => "0.9944",
+  "dist_version" => "0.9945",
   "license" => "perl",
   "module_name" => "Clustericious",
   "recommends" => {},
@@ -35,7 +35,6 @@ my %module_build_args = (
     "File::HomeDir" => "0.91",
     "File::ReadBackwards" => 0,
     "File::ShareDir" => 0,
-    "File::Slurp" => 0,
     "Hash::Merge" => 0,
     "JSON::XS" => 0,
     "List::MoreUtils" => 0,
@@ -50,6 +49,7 @@ my %module_build_args = (
     "Test::Builder::Module" => 0,
     "Test::More" => 0,
     "YAML::XS" => 0,
+    "autodie" => 0,
     "perl" => "5.010001"
   },
   "script_files" => [
@@ -61,8 +61,7 @@ my %module_build_args = (
   "test_requires" => {
     "IO::Scalar" => 0,
     "PlugAuth::Lite" => 0,
-    "Test::Clustericious::Cluster" => "0.17",
-    "autodie" => 0
+    "Test::Clustericious::Cluster" => "0.17"
   }
 );
 
@@ -71,8 +70,7 @@ my %fallback_build_requires = (
   "IO::Scalar" => 0,
   "Module::Build" => "0.3601",
   "PlugAuth::Lite" => 0,
-  "Test::Clustericious::Cluster" => "0.17",
-  "autodie" => 0
+  "Test::Clustericious::Cluster" => "0.17"
 );
 
 

@@ -4,12 +4,11 @@ use strict;
 use warnings;
 use Mojo::Base 'Clustericious::Command';
 use File::Find;
-use File::Slurp 'slurp';
 use File::ShareDir 'dist_dir';
 use File::Basename qw/basename/;
 
 # ABSTRACT: Clustericious command to generate a new Clustericious application
-our $VERSION = '0.9944'; # VERSION
+our $VERSION = '0.9945'; # VERSION
 
 
 has description => <<'EOF';
@@ -67,7 +66,7 @@ Clustericious::Command::generate::app - Clustericious command to generate a new 
 
 =head1 VERSION
 
-version 0.9944
+version 0.9945
 
 =head1 SYNOPSIS
 

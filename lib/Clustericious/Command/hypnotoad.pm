@@ -7,12 +7,12 @@ use Clustericious::App;
 use Clustericious::Config;
 use Mojo::Server::Hypnotoad;
 use Data::Dumper;
-use File::Slurp qw/slurp/;
+use Clustericious::Util qw( slurp_pid );
 use Cwd qw/getcwd abs_path/;
 use base 'Clustericious::Command';
 
 # ABSTRACT: Clustericious command to stat Hypnotoad
-our $VERSION = '0.9944'; # VERSION
+our $VERSION = '0.9945'; # VERSION
 
 
 __PACKAGE__->attr(description => "Start a hypnotad web server.\n");
@@ -48,7 +48,7 @@ sub run {
         local $ENV{HYPNOTOAD_CONFIG} = $sentinel;
         my $pid_file = $conf->{pid_file};
         if (-e $pid_file) {
-            chomp (my $pid = slurp $pid_file);
+            chomp (my $pid = slurp_pid $pid_file);
             if (!kill 0, $pid) {
                 WARN "removing old pid file $pid_file";
                 unlink $pid_file or WARN "Could not remove $pid_file : $!";
@@ -76,7 +76,7 @@ Clustericious::Command::hypnotoad - Clustericious command to stat Hypnotoad
 
 =head1 VERSION
 
-version 0.9944
+version 0.9945
 
 =head1 SYNOPSIS
 
