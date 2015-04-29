@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 # ABSTRACT: Test Clustericious apps
-our $VERSION = '0.9945'; # VERSION
+our $VERSION = '0.9946'; # VERSION
 
 
 use base 'Test::Mojo';
@@ -90,7 +90,7 @@ sub decoded_body
     my $body = $res->body;
 
     if ($res->headers->content_type and
-        $res->headers->content_type eq 'application/json')
+        $res->headers->content_type =~ /^application\/json(;.*)?$/)
     {
         $body = decode_json($body);
     }
@@ -211,7 +211,7 @@ Test::Clustericious - Test Clustericious apps
 
 =head1 VERSION
 
-version 0.9945
+version 0.9946
 
 =head1 SYNOPSIS
 

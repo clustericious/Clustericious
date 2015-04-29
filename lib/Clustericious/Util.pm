@@ -7,7 +7,7 @@ use base qw( Exporter );
 our @EXPORT_OK = qw( slurp_pid );
 
 # ABSTRACT: Utility functions used by Clustericious
-our $VERSION = '0.9945'; # VERSION
+our $VERSION = '0.9946'; # VERSION
 
 
 sub slurp_pid ($)
@@ -32,7 +32,7 @@ Clustericious::Util - Utility functions used by Clustericious
 
 =head1 VERSION
 
-version 0.9945
+version 0.9946
 
 =head1 DESCRIPTION
 

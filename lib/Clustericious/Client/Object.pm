@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 # ABSTRACT: default object returned from client methods
-our $VERSION = '0.9945'; # VERSION
+our $VERSION = '0.9946'; # VERSION
 
 
 sub new
@@ -101,7 +101,7 @@ Clustericious::Client::Object - default object returned from client methods
 
 =head1 VERSION
 
-version 0.9945
+version 0.9946
 
 =head1 SYNOPSIS
 
