@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.9946    2015-04-29 03:59:58 America/New_York
   - Test::Clustericious now recognizes JSON with a charset
     (needed for Mojo 6.08+ compat)
 
