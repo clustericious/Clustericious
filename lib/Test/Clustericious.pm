@@ -158,7 +158,7 @@ sub decoded_body
     my $body = $res->body;
 
     if ($res->headers->content_type and
-        $res->headers->content_type eq 'application/json')
+        $res->headers->content_type =~ /^application\/json(;.*)?$/)
     {
         $body = decode_json($body);
     }

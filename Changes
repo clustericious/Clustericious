@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Test::Clustericious now recognizes JSON with a charset
+    (needed for Mojo 6.08+ compat)
 
 0.9945    2015-03-18 01:38:01 America/New_York
   - Remove dep on File::Slurp which is considered broken
