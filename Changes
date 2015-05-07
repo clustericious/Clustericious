@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Documentation updates.
 
 0.9946    2015-04-29 03:59:58 America/New_York
   - Test::Clustericious now recognizes JSON with a charset
