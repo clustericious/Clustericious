@@ -168,12 +168,31 @@ Curt Tilmes
 
 =head1 SEE ALSO
 
-L<Clustericious::App>,
-L<Clustericious>,
-L<Clustericious::RouteBuilder::CRUD>,
-L<Clustericious::RouteBuilder::Search>,
-L<Clustericious::RouteBuilder::Common>
-L<Clustericious::Command::start>
+=over 4
+
+=item L<Raisin>
+
+REST API framework based on Plack.  Development is more active than Clustericious at this time.
+
+=item L<Clustericious::App>
+
+Base class for Clustericious applications.
+
+=item L<Clustericious::RouteBuilder::CRUD>
+
+Create Remove Update Delete builder for Clustericious.
+
+=item L<Clustericious::RouteBuilder::Search>
+
+Build routes for searching for objects.
+
+=item L<Clustericious::RouteBuilder::Common>
+
+Common routes for all Clustericious applications.
+
+=item L<Clustericious::Command::start>
+
+Command to start a Clustericious application.
 
 =cut
 
