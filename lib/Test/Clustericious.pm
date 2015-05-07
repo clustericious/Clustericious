@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 # ABSTRACT: Test Clustericious apps
-our $VERSION = '0.9946'; # VERSION
+our $VERSION = '1.00'; # VERSION
 
 
 use base 'Test::Mojo';
@@ -211,7 +211,7 @@ Test::Clustericious - Test Clustericious apps
 
 =head1 VERSION
 
-version 0.9946
+version 1.00
 
 =head1 SYNOPSIS
 

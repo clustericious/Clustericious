@@ -6,7 +6,7 @@ use 5.010;
 use Log::Log4perl qw( :easy );
 
 # ABSTRACT: Route builder for Clustericious applications
-our $VERSION = '0.9946'; # VERSION
+our $VERSION = '1.00'; # VERSION
 
 
 our %Routes;
@@ -187,7 +187,7 @@ Clustericious::RouteBuilder - Route builder for Clustericious applications
 
 =head1 VERSION
 
-version 0.9946
+version 1.00
 
 =head1 SYNOPSIS
 

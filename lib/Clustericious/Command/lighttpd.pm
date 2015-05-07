@@ -8,7 +8,7 @@ use Clustericious::Config;
 use base 'Clustericious::Command';
 
 # ABSTRACT: Clustericious command to stat lighttpd
-our $VERSION = '0.9946'; # VERSION
+our $VERSION = '1.00'; # VERSION
 
 
 __PACKAGE__->attr(description => <<EOT);
@@ -49,7 +49,7 @@ Clustericious::Command::lighttpd - Clustericious command to stat lighttpd
 
 =head1 VERSION
 
-version 0.9946
+version 1.00
 
 =head1 SYNOPSIS
 

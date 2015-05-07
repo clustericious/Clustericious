@@ -11,7 +11,7 @@ use Clustericious::Config;
 use Clustericious::Util qw( slurp_pid );
 
 # ABSTRACT: Clustericious command to stop a Clustericious application
-our $VERSION = '0.9946'; # VERSION
+our $VERSION = '1.00'; # VERSION
 
 
 __PACKAGE__->attr(description => <<EOT);
@@ -125,7 +125,7 @@ Clustericious::Command::stop - Clustericious command to stop a Clustericious app
 
 =head1 VERSION
 
-version 0.9946
+version 1.00
 
 =head1 SYNOPSIS
 

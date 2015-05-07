@@ -7,7 +7,7 @@ use List::MoreUtils qw/uniq/;
 use Data::Dumper;
 
 # ABSTRACT: build routes for searching for objects
-our $VERSION = '0.9946'; # VERSION
+our $VERSION = '1.00'; # VERSION
 
 
 use Sub::Exporter -setup => {
@@ -91,7 +91,7 @@ Clustericious::RouteBuilder::Search - build routes for searching for objects
 
 =head1 VERSION
 
-version 0.9946
+version 1.00
 
 =head1 SYNOPSIS
 
