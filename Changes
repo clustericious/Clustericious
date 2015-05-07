@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.00      2015-05-07 07:29:55 America/New_York
   - Documentation updates.
 
 0.9946    2015-04-29 03:59:58 America/New_York
