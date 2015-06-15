@@ -194,6 +194,11 @@ sub new
 
     $self->client->inactivity_timeout($ENV{CLUSTERICIOUS_KEEP_ALIVE_TIMEOUT} || 300);
 
+    if(eval { require Clustericious::Client::Local; })
+    {
+        Clustericious::Client::Local->local($self);
+    }
+
     return $self;
 }
 
