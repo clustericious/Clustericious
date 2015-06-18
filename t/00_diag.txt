@@ -1,9 +1,12 @@
 Data::Rmap
 DateTime::Format::DateParse
 DateTime::Format::ISO8601
+EV
+ExtUtils::MakeMaker
 File::HomeDir
 File::ReadBackwards
 File::ShareDir
+File::ShareDir::Install
 Hash::Merge
 IO::Scalar
 JSON::XS
