@@ -65,7 +65,7 @@ object methods to further interact with the REST server.
 
 =head1 METHODS
 
-=head2 C<new>
+=head2 new
 
  my $obj = Clustericious::Client::Object->new({ some => 'stuff'});
 
@@ -129,7 +129,7 @@ sub new
 {
     my %clientcache;
 
-=head2 C<_client>
+=head2 _client
 
 my $obj->_client->do_something();
 
@@ -191,16 +191,28 @@ __END__
 
 These are also interesting:
 
- Data::AsObject
- Data::Autowrap
- Hash::AsObject
- Class::Builtin::Hash
- Hash::AutoHash
- Hash::Inflator
- Data::OpenStruct::Deep
- Object::AutoAccessor
+=over 4
 
- Mojo::Base
- Clustericious::Config
+=item L<Data::AsObject>
+
+=item L<Data::Autowrap>
+
+=item L<Hash::AsObject>
+
+=item L<Class::Builtin::Hash>
+
+=item L<Hash::AutoHash>
+
+=item L<Hash::Inflator>
+
+=item L<Data::OpenStruct::Deep>
+
+=item L<Object::AutoAccessor>
+
+=item L<Mojo::Base>
+
+=item L<Clustericious::Config>
+
+=back
 
 =cut

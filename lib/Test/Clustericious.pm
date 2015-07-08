@@ -42,14 +42,14 @@ require Test::More;
 
 =head1 ATTRIBUTES
 
-=head2 C<server>
+=head2 server
 
  my $t = Test::Clustericious->new(server => 'MyServer');
 
 Looks up the URL for the server in the config file for the
 specified server.
 
-=head2 C<server_url>
+=head2 server_url
 
  my $t = Test::Clustericious->new(server_url => 'http://foo/');
 
@@ -62,7 +62,7 @@ __PACKAGE__->attr('server_url');
 
 =head1 METHODS
 
-=head2 C<new>
+=head2 new
 
  my $t = Test::Clustericious(app => 'SomeMojoApp');
  my $t = Test::Clustericious(server => 'myapp');
@@ -92,7 +92,7 @@ sub new
     return $self;
 }
 
-=head2 C<testdata>
+=head2 testdata
 
  my $object = $t->testdata('filename');
 
@@ -137,7 +137,7 @@ sub _url
     return $server_url . $url;
 }
 
-=head2 C<decoded_body>
+=head2 decoded_body
 
  $obj = $t->decoded_body;
 
@@ -166,7 +166,7 @@ sub decoded_body
     return $res->is_status_class(200) ? $body : undef;
 }
 
-=head2 C<create_ok>
+=head2 create_ok
 
  $obj = $t->create_ok('/url', { some => 'object' });
  $obj = $t->create_ok('/url', 'filename');
@@ -210,7 +210,7 @@ sub create_ok
          ->decoded_body;
 }
 
-=head2 C<update_ok>
+=head2 update_ok
 
  update_ok is really just an alias for create_ok
 
@@ -218,7 +218,7 @@ sub create_ok
 
 sub update_ok { create_ok(@_) }
 
-=head2 C<retrieve_ok>
+=head2 retrieve_ok
 
  $obj = $t->retrieve_ok('/url');
 
@@ -242,7 +242,7 @@ sub retrieve_ok
     return $self->decoded_body;
 }
 
-=head2 C<remove_ok>
+=head2 remove_ok
 
  $t->remove_ok($url);
 
@@ -266,7 +266,7 @@ sub remove_ok
          ->notfound_ok($url);
 }
 
-=head2 C<notfound_ok>
+=head2 notfound_ok
 
  $t->notfound_ok($url[, $object]);
 
@@ -299,7 +299,7 @@ sub notfound_ok
          ->content_like(qr/(Not found|null)/i, "$url content is null or Not Found");
 }
 
-=head2 C<truncate_ok>
+=head2 truncate_ok
 
  $t->truncate_ok($url);
 

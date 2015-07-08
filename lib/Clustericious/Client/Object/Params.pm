@@ -27,7 +27,7 @@ transforms it into a single flattened hash of name => value.
 
 =head1 METHODS
 
-=head2 C<new>
+=head2 new
 
  my $obj = Clustericious::Client::Object::Params->new($data);
 

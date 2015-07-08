@@ -25,7 +25,7 @@ use DateTime::Format::ISO8601;
 
 =head1 METHODS
 
-=head2 C<new>
+=head2 new
 
  my $obj = Clustericious::Client::Object::DateTime->new('2000-01-01');
 

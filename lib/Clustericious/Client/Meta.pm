@@ -18,9 +18,16 @@ our @CommonRoutes = ( [ "version" => '' ], [ "status" => '' ], [ "api" => '' ], 
 Add or replace documentation about a route.
 
 Parameters :
-    - the name of the client class
-    - the name of the route
-    - documentation about the route's arguments
+
+=over 4
+
+=item the name of the client class
+
+=item the name of the route
+
+=item documentation about the route's arguments
+
+=back
 
 =cut
 
@@ -39,9 +46,10 @@ sub add_route { # Keep track of routes that have are added.
 
 =head2 get_route_doc
 
+ $meta->get_route_doc($class,$route_name);
+
 Get documentation for a route.
 
-    $meta->get_route_doc($class,$route_name);
 
 =cut
 
@@ -59,16 +67,23 @@ Add an attribute for a route.
 
 Parameters :
 
-    - the name of the attribute
-    - the value of the attribute.
+=over 4
+
+=item the name of the attribute
+
+=item the value of the attribute.
+
+=back
 
 Recognized attributes :
 
-    - dont_read_files : if set, no attempt will be made to treat
-        arguments as yaml files.
-    - auto_failover : if set, when a connection fails and does not
-        return a status code, each url in the list of configured
-        failover_url's will be tried in turn.
+=over 4
+
+=item dont_read_files : if set, no attempt will be made to treat arguments as yaml files.
+
+=item auto_failover : if set, when a connection fails and does not return a status code, each url in the list of configured failover_url's will be tried in turn.
+
+=back
 
 =cut
 
@@ -97,12 +112,19 @@ sub get_route_attribute {
 
 =head2 add_object
 
-Add an object>
+Add an object.
 
 Parameters :
-    - the name of the client class
-    - the name of the object
-    - documentation about the object.
+
+=over 4
+
+=item the name of the client class
+
+=item the name of the object
+
+=item documentation about the object.
+
+=back
 
 =cut
 
