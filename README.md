@@ -105,11 +105,11 @@ This is a beta release.  The API is subject to change without notice.
 
 # AUTHOR
 
-original author: Brian Duggan
+Original author: Brian Duggan
 
-current maintainer: Graham Ollis <plicease@cpan.org>
+Current maintainer: Graham Ollis <plicease@cpan.org>
 
-contributors:
+Contributors:
 
 Curt Tilmes
 
