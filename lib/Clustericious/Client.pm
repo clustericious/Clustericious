@@ -2,6 +2,7 @@ package Clustericious::Client;
 
 use strict;
 use warnings;
+use 5.010;
 
 # ABSTRACT: Construct command line and perl clients for RESTful services.
 # VERSION
@@ -302,7 +303,7 @@ sub errorstring {
     }
     else
     {
-        return $error->{message};
+        return $error->{message} // '';
     }
 }
 
