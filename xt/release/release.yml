@@ -48,6 +48,16 @@ pod_spelling_system:
     - RESTful
     - SQLite
     - TODO
+    - testdata
+    - auth
+    - errorstring
+    - getopt
+    - logtail
+    - xt
+    - yamldoc
+    - preprocess
+    - tx
+    - fooclient
 
 pod_coverage:
   # format is "Class#method" or "Class", regex allowed

@@ -91,7 +91,7 @@ from any configurations you may have in your C<~/etc>.  Keep
 in mind that this means that C<$HOME> and friends will be in
 a temporary directory and removed after the test runs.  It also
 means that the caveats for L<File::HomeDir::Test> apply when
-using this module as well (ie. this should be the first module
+using this module as well (specifically this should be the first module
 that you use in your test after C<use strict> and C<use warnings>).
 
 =head1 FUNCTIONS
