@@ -167,6 +167,14 @@ be used as the default url (first case above).
 
 =cut
 
+sub _mojo_user_agent_factory
+{
+  my($class, $new) = @_;
+  state $factory = sub { Mojo::UserAgent->new };
+  $factory = $new if $new;
+  defined wantarray ? $factory->() : ();
+}
+
 sub new
 {
     my $self = shift->SUPER::new(@_);
@@ -176,7 +184,7 @@ sub new
     {
         my $app = $self->{app};
         $app = $app->new() unless ref($app);
-        my $client = Mojo::UserAgent->new;
+        my $client = $self->_mojo_user_agent_factory();
         return undef unless $client;
         eval { $client->server->app($app) } // $client->app($app);
 
@@ -184,7 +192,7 @@ sub new
     }
     else
     {
-        $self->client(Mojo::UserAgent->new);
+        $self->client($self->_mojo_user_agent_factory());
         if (not length $self->server_url)
         {
             my $url = $self->_config->url;
@@ -193,7 +201,9 @@ sub new
         }
     }
 
-    $self->client->inactivity_timeout($ENV{CLUSTERICIOUS_KEEP_ALIVE_TIMEOUT} || 300);
+    my $client = $self->client;
+    $client->transactor->name($self->user_agent_string);
+    $client->inactivity_timeout($ENV{CLUSTERICIOUS_KEEP_ALIVE_TIMEOUT} || 300);
 
     if(eval { require Clustericious::Client::Local; })
     {
@@ -321,6 +331,25 @@ sub has_error {
     return 0;
 }
 
+=head2 user_agent_string
+
+Returns the user agent string for use in HTTP transactions.
+By default this includes the clustericious and service
+version numbers, but you can override it to be whatever
+you want.
+
+=cut
+
+sub user_agent_string {
+    my($self) = @_;
+    my $class = ref($self);
+    my $version1 = $Clustericious::Client::VERSION // 'dev';
+    my $version2 = do {
+      no strict 'refs';
+      ${"${class}::VERSION"};
+    } // 'dev';
+    "Clustericious::Client/$version1 $class/$version2";
+}
 
 =head1 FUNCTIONS
 
