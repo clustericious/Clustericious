@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Re-release of Clustericious 1.01 due to errors in
+    the release process
   - Better integration with Test::Clustericious::Cluster
     allows you to test with Clustericious::Client objects
     without replacing their Mojo::UserAgent objects.
@@ -14,8 +16,6 @@ Revision history for {{$dist->name}}
      Clustericious::Client::Locak->local($client)
     this change is experimental (and otherwise undocumented)
     and may be removed refactored in the future.
-
-1.01      2015-11-03 12:55:42 -0500
 
 1.00      2015-05-07 07:29:55 America/New_York
   - Documentation updates.
