@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.02      2015-11-03 13:01:00 -0500
   - Re-release of Clustericious 1.01 due to errors in
     the release process
   - Better integration with Test::Clustericious::Cluster
