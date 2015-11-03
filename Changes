@@ -1,6 +1,19 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Better integration with Test::Clustericious::Cluster
+    allows you to test with Clustericious::Client objects
+    without replacing their Mojo::UserAgent objects.
+  - Clustericious::Client user agent string will now include the
+    Clustericious and App versions so that they can be easier
+    to identify in logs.  Example for Yars:
+    "Clustericious::Client/1.01 Yars/1.11"
+  - A number of small Mojolicious compatability fixes
+  - You can now customize client objects as they are created
+    for local needs by creating class method
+     Clustericious::Client::Locak->local($client)
+    this change is experimental (and otherwise undocumented)
+    and may be removed refactored in the future.
 
 1.00      2015-05-07 07:29:55 America/New_York
   - Documentation updates.
