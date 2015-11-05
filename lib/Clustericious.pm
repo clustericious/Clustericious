@@ -119,45 +119,6 @@ facilities for a variety of deployment options.
 
 =back
 
-=head1 TODO
-
-I am ramping up to a release candidate and a final release for 1.00.
-Specific things that need to be completed for this task include
-(but are not limited to):
-
-=over 4
-
-=item *
-
-documentation tutorial for a non database app
-
-=item *
-
-documentation tutorial for a L<Module::Build::Database> / L<Rose::Planter> app 
-(replacement for the existing README, which is broken)
-
-=item *
-
-use SQLite for above instead of Postgres
-
-=item *
-
-documentation tutorial for migrating SQLite app to Postgres
-
-=item *
-
-documentation tutorial for clients (L<Clustericious::Client>)
-
-=item *
-
-remove C<TEST_HARNESS> detection / dependency (see GH#8)
-
-=back
-
-=head1 NOTES
-
-This is a beta release.  The API is subject to change without notice.
-
 =head1 AUTHOR
 
 Graham Ollis <plicease@cpan.org>
