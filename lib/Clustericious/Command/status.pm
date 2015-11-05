@@ -86,7 +86,7 @@ sub run {
 
     my $exe = $0;
     # webserver
-    for ($conf->start_mode) {
+    for ($self->app->_start_mode) {
         push @status, { name => $_,
          (
            /hypnotoad/ ? _check_pidfile($conf->hypnotoad->pid_file(default => dirname($exe).'/hypnotoad.pid'))

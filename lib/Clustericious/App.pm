@@ -17,6 +17,7 @@ use JSON::XS;
 use Scalar::Util qw/weaken/;
 use Mojo::Base 'Mojolicious';
 use File::HomeDir ();
+use File::Spec;
 use Carp qw( cluck );
 use Clustericious::Controller;
 use Clustericious::Renderer;
@@ -24,6 +25,7 @@ use Clustericious::RouteBuilder;
 use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
 use Clustericious::Commands;
+use URI;
 
 # ABSTRACT: Clustericious app base class
 # VERSION
@@ -339,6 +341,23 @@ sub sanity_check
     }
     
     $sane;
+}
+
+sub _start_mode
+{
+  my($self) = @_;
+  $self->config->start_mode(default => sub {
+    $self->config->hypnotoad(default => sub {
+      my $url = URI->new($self->config->url);
+      {
+        pid_file => File::Spec->catfile( File::HomeDir->my_dist_config("Clustericious", { create => 1 } ), 'hypnotoad-' . $url->port . '-' . $url->host . '.pid' ),
+        listen => [
+          $url->as_string,
+        ],
+      }
+    });
+    [ 'hypnotoad' ];
+  });
 }
 
 1;

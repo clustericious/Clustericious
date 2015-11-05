@@ -137,7 +137,7 @@ sub run {
     Clustericious::App->init_logging();
 
     my $exe = $0;
-    for (reverse $conf->start_mode) {
+    for (reverse $self->app->_start_mode) {
         DEBUG "Stopping $_ server";
         /hypnotoad/ and _stop_pidfile($conf->hypnotoad->pid_file(default => dirname($exe).'/hypnotoad.pid' ));
         /plackup/   and _stop_pidfile($conf->plackup->pidfile);

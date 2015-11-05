@@ -89,7 +89,7 @@ sub run {
 
     Clustericious::App->init_logging;
 
-    for my $mode ($conf->start_mode) {
+    for my $mode ($self->app->_start_mode) {
         #  local %ENV = %ENV;
         INFO "Starting $mode";
         my %conf = $conf->$mode;

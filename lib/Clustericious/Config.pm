@@ -299,7 +299,7 @@ sub AUTOLOAD {
     my $called = $AUTOLOAD;
     $called =~ s/.*:://g;
     if ($default_exists && !exists($self->{$called})) {
-        $self->{$called} = $args{default};
+        $self->{$called} = ref $default eq 'CODE' ? $args{default}->() : $args{default};
     }
     Carp::cluck "config element '$called' not found for ".(ref $self)." (".(join ',',keys(%$self)).")"
         if $called =~ /^_/ || !exists($self->{$called});
