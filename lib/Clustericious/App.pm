@@ -25,7 +25,7 @@ use Clustericious::RouteBuilder;
 use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
 use Clustericious::Commands;
-use URI;
+use Mojo::URL;
 
 # ABSTRACT: Clustericious app base class
 # VERSION
@@ -348,11 +348,11 @@ sub _start_mode
   my($self) = @_;
   $self->config->start_mode(default => sub {
     $self->config->hypnotoad(default => sub {
-      my $url = URI->new($self->config->url);
+      my $url = Mojo::URL->new($self->config->url);
       {
         pid_file => File::Spec->catfile( File::HomeDir->my_dist_config("Clustericious", { create => 1 } ), 'hypnotoad-' . $url->port . '-' . $url->host . '.pid' ),
         listen => [
-          $url->as_string,
+          $url->to_string,
         ],
       }
     });
