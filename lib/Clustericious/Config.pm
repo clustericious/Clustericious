@@ -52,7 +52,12 @@ From a L<Clustericious::App>:
    my $config = $c; # $config isa Clustericious::Config
    
    # returns the value if it is defined, foo otherwise
-   my $value = $config->arbitrary_key(default => 'foo');
+   my $value1 = $config->arbitrary_key1(default => 'foo');
+   
+   # returns the value if it is defined, bar otherwise
+   # code reference is only called if the value is NOT
+   # defined
+   my $value2 = $config->arbitrary_key2(default => sub { 'bar' });
  };
 
 From a script:

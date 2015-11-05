@@ -1,6 +1,12 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - By default use a sane "hypnotoad" configuration
+    for start_mode, if it isn't specified.
+  - Clustericious::Config default values can be a
+    code reference.  The code reference will be
+    evaluated to determine the default value if it
+    isn't provided by the configuration file.
 
 1.02      2015-11-03 13:01:00 -0500
   - Re-release of Clustericious 1.01 due to errors in
