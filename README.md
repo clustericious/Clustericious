@@ -85,29 +85,11 @@ to provide a basic RESTful CRUD interface to a database.
 - Provides 'stop' and 'start' commands, and high-level configuration
 facilities for a variety of deployment options.
 
-# TODO
-
-I am ramping up to a release candidate and a final release for 1.00.
-Specific things that need to be completed for this task include
-(but are not limited to):
-
-- documentation tutorial for a non database app
-- documentation tutorial for a [Module::Build::Database](https://metacpan.org/pod/Module::Build::Database) / [Rose::Planter](https://metacpan.org/pod/Rose::Planter) app 
-(replacement for the existing README, which is broken)
-- use SQLite for above instead of Postgres
-- documentation tutorial for migrating SQLite app to Postgres
-- documentation tutorial for clients ([Clustericious::Client](https://metacpan.org/pod/Clustericious::Client))
-- remove `TEST_HARNESS` detection / dependency (see GH#8)
-
-# NOTES
-
-This is a beta release.  The API is subject to change without notice.
-
 # AUTHOR
 
 Original author: Brian Duggan
 
-Current maintainer: Graham Ollis <plicease@cpan.org>
+Current maintainer: Graham Ollis &lt;plicease@cpan.org>
 
 Contributors:
 

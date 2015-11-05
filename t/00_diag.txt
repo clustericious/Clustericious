@@ -23,5 +23,6 @@ Term::Prompt
 Test::Builder::Module
 Test::Clustericious::Cluster
 Test::More
+URI
 YAML::XS
 autodie
