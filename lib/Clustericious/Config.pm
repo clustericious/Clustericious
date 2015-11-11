@@ -130,6 +130,8 @@ use Data::Dumper;
 use Cwd ();
 use Module::Build;
 use File::HomeDir ();
+use Mojo::URL;
+use File::Spec;
 
 our %Singletons;
 
@@ -245,7 +247,6 @@ sub new {
     }
     $conf_data ||= {};
     Clustericious::Config::Helpers->_do_merges($conf_data);
-    _add_heuristics($filename,$conf_data);
     # Use derived classes so that AUTOLOADING keeps namespaces separate
     # for various apps.
     if ($class eq __PACKAGE__) {
@@ -292,7 +293,7 @@ sub AUTOLOAD {
     my $called = $AUTOLOAD;
     $called =~ s/.*:://g;
     if ($default_exists && !exists($self->{$called})) {
-        $self->{$called} = ref $default eq 'CODE' ? $args{default}->() : $args{default};
+        $self->{$called} = ref $default eq 'CODE' ? $default->() : $default;
     }
     Carp::cluck "config element '$called' not found for ".(ref $self)." (".(join ',',keys(%$self)).")"
         if $called =~ /^_/ || !exists($self->{$called});
@@ -305,7 +306,7 @@ sub AUTOLOAD {
     no strict 'refs';
     *{ $invocant . "::$called" } = sub {
           my $self = shift;
-          $self->{$called} = $default if $default_exists && !exists($self->{$called});
+          $self->{$called} = ref $default eq 'CODE' ? $default->() : $default if $default_exists && !exists($self->{$called});
           die "'$called' not found in ".join ',',keys(%$self)
               unless exists($self->{$called});
           my $value = $self->{$called};
@@ -333,6 +334,22 @@ sub set_singleton {
     my $obj = shift;
     our %Singletons;
     $Singletons{$app} = $obj;
+}
+
+sub _default_start_mode {
+  my $self = shift;
+  $self->start_mode(default => sub {
+    $self->hypnotoad(default => sub {
+      my $url = Mojo::URL->new($self->url);
+      {
+        pid_file => File::Spec->catfile( File::HomeDir->my_dist_data("Clustericious", { create => 1 } ), 'hypnotoad-' . $url->port . '-' . $url->host . '.pid' ),
+        listen => [
+          $url->to_string,
+        ],
+      }
+    });
+    [ 'hypnotoad' ];
+  });
 }
 
 =head1 CAVEATS

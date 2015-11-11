@@ -17,7 +17,6 @@ use JSON::XS;
 use Scalar::Util qw/weaken/;
 use Mojo::Base 'Mojolicious';
 use File::HomeDir ();
-use File::Spec;
 use Carp qw( cluck );
 use Clustericious::Controller;
 use Clustericious::Renderer;
@@ -25,7 +24,6 @@ use Clustericious::RouteBuilder;
 use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
 use Clustericious::Commands;
-use Mojo::URL;
 
 # ABSTRACT: Clustericious app base class
 # VERSION
@@ -116,6 +114,16 @@ sub startup {
     {
         $self->log->error("error loading config $error");
         $config = Clustericious::Config->new({ clustericious_config_error => $error });
+    }
+    else
+    {
+        if($config->{url})
+        {
+            # populate start mode and hypntoad with defaults if
+            # they are not specified in the configuration
+            $config->_default_start_mode;
+            $config->hypnotoad if $config->{start_mode}->[0] eq 'hypnotoad';
+        }
     }
     my $auth_plugin;
     if(my $auth_config = $config->plug_auth(default => '')) {
@@ -345,19 +353,7 @@ sub sanity_check
 
 sub _start_mode
 {
-  my($self) = @_;
-  $self->config->start_mode(default => sub {
-    $self->config->hypnotoad(default => sub {
-      my $url = Mojo::URL->new($self->config->url);
-      {
-        pid_file => File::Spec->catfile( File::HomeDir->my_dist_config("Clustericious", { create => 1 } ), 'hypnotoad-' . $url->port . '-' . $url->host . '.pid' ),
-        listen => [
-          $url->to_string,
-        ],
-      }
-    });
-    [ 'hypnotoad' ];
-  });
+  shift->config->_default_start_mode;
 }
 
 1;

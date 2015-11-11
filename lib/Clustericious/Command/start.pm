@@ -80,6 +80,7 @@ sub run {
     my @args = @_ ? @_ : @ARGV;
     my $app  = $ENV{MOJO_APP};
     my $conf     = Clustericious::Config->new( $app );
+    $conf->_default_start_mode;
 
     local $SIG{__DIE__} = \&Carp::confess;
     eval "use $app;";

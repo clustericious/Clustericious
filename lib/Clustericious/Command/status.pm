@@ -78,6 +78,7 @@ sub run {
     my @args = @_ ? @_ : @ARGV;
     my $app  = $ENV{MOJO_APP};
     my $conf = Clustericious::Config->new($app);
+    $conf->_default_start_mode;
 
     eval "require $app";
     die "Could not load $app : \n$@\n" if $@;

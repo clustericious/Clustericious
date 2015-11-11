@@ -133,6 +133,7 @@ sub run {
     my $self     = shift;
     exit 2 unless $self->app->sanity_check;
     my $conf     = Clustericious::Config->new( $ENV{MOJO_APP} );
+    $conf->_default_start_mode;
 
     Clustericious::App->init_logging();
 
