@@ -58,7 +58,7 @@ sub import {
 =item init_logging
 
 Start logging.  Looks for log4perl.conf or $app.log4perl.conf
-in ~/etc, /util/etc and /etc.
+in ~/etc and /etc.
 
 =cut
 
@@ -73,7 +73,7 @@ sub init_logging {
     $initPid = $$;
 
     my $home = File::HomeDir->my_home;
-    my @Confdirs = ($home, "$home/etc", "/util/etc", "/etc" );
+    my @Confdirs = ($home, "$home/etc", "/etc" );
 
     # Logging
     $ENV{LOG_LEVEL} ||= 'WARN';
