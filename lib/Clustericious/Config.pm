@@ -98,7 +98,6 @@ Config files are looked for in the following places (in order, where
 
     $CLUSTERICIOUS_CONF_DIR/MyApp.conf
     $HOME/etc/MyApp.conf
-    /util/etc/MyApp.conf
     /etc/MyApp.conf
 
 The helper "extends_config" may be used to read default settings
@@ -219,7 +218,7 @@ sub new {
 
         @conf_dirs = $ENV{CLUSTERICIOUS_CONF_DIR} if defined( $ENV{CLUSTERICIOUS_CONF_DIR} );
 
-        push @conf_dirs, ( File::HomeDir->my_home . "/etc", "/util/etc", "/etc" ) unless $we_are_testing_this_module || __PACKAGE__->_testing;
+        push @conf_dirs, ( File::HomeDir->my_home . "/etc", "/etc" ) unless $we_are_testing_this_module || __PACKAGE__->_testing;
         my $conf_file = "$arg.conf";
         $conf_file =~ s/::/-/g;
         my ($dir) = List::Util::first { -e "$_/$conf_file" } @conf_dirs;
