@@ -262,18 +262,6 @@ sub new {
     bless $conf_data, $class;
 }
 
-sub _add_heuristics {
-    my $filename = shift;
-    # Account for some mojo api changes
-    my $conf_data = shift;
-    if ($conf_data->{hypnotoad} && !ref($conf_data->{hypnotoad}{listen})) {
-        warn "# hypnotoad->listen should be an arrayref in $filename\n";
-        $conf_data->{hypnotoad}{listen} = [ $conf_data->{hypnotoad}{listen} ];
-    }
-
-
-}
-
 =head1 METHODS
 
 =head2 $config-E<gt>dump_as_yaml
