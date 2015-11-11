@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.03      2015-11-11 07:07:52 -0500
   - By default use a sane "hypnotoad" configuration
     for start_mode, if it isn't specified.
   - Clustericious::Config default values can be a
