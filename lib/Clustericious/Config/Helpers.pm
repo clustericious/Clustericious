@@ -27,7 +27,7 @@ using L<Clustericious::Config>.
 =cut
 
 our @mergeStack;
-our @EXPORT = qw( extends_config get_password home file dir hostname hostname_full json yaml );
+our @EXPORT = qw( extends_config get_password home file dir hostname hostname_full json yaml address public_address interface );
 
 =head2 extends_config $config_name, %arguments
 
@@ -172,6 +172,78 @@ sub yaml ($)
   my $str = YAML::XS::Dump($_[0]);
   $str =~ s{^---\n}{};
   $str;
+}
+
+=head2 address( [ $interface ] )
+
+Returns a list of IP addresses.  Requires L<Sys::HostAddr> to be installed.
+C<$interfaces>, if specified may be either a string or regular expression.
+For example you can do C<address qr{^en[0-9]+$}> on Linux to get only ethernet
+interfaces.
+
+By default does not return loop back interfaces.
+
+Only returns IPv4 addresses.
+
+=cut
+
+# TODO: for now the filtering of loop back only works on Linux
+# and any system where the loopback interface is lo
+
+sub address (;$)
+{
+  my($if) = @_;
+  
+  require Sys::HostAddr;
+  
+  my $filter = sub { !/^lo$/ };
+  
+  if(defined $if)
+  {
+    if(ref $if eq 'Regexp')
+    {
+      $filter = sub { $_ =~ $if };
+    }
+    elsif(ref $if eq 'ARRAY')
+    {
+      my %if = map { $_ => 1 } @$if;
+      $filter = sub { $if{$_} }
+    }
+    else
+    {
+      $filter = sub { $_ eq $if };
+    }
+  }
+
+  my @if = grep { $filter->() } @{ Sys::HostAddr->new(ipv=>4)->interfaces };
+  map { @{ $_->addresses } } map { Sys::HostAddr->new(ipv => 4, interface => $_) } @if;
+}
+
+=head2 public_address
+
+Returns the public IPv4 address.  May not be an address on your host, if you
+are behind a firewall.  Requires L<Sys::HostAddr> to be installed.
+
+=cut
+
+sub public_address ()
+{
+  require Sys::HostAddr;
+  Sys::HostAddr->new(ipv=>4)->public;
+}
+
+=head2 interface
+
+Returns a list of network interfaces.  Requires L<Sys::HostAddr> to be installed.
+
+By default does not return loop back interfaces.
+
+=cut
+
+sub interface ()
+{
+  require Sys::HostAddr;
+  grep !/^lo$/, @{ Sys::HostAddr->new(ipv=>4)->interfaces };
 }
 
 =head1 SEE ALSO
