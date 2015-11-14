@@ -58,6 +58,7 @@ pod_spelling_system:
     - preprocess
     - tx
     - fooclient
+    - ethernet
 
 pod_coverage:
   # format is "Class#method" or "Class", regex allowed

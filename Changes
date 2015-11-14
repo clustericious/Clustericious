@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Remove /util/etc from configuration search paths.
+    This was specific to our usage, and as it turned
+    out we wern't even using it.
+  - Added config helpers 'address', 'public_address'
+    and 'interface'.  See Clustericious::Config::Helpers.
 
 1.03      2015-11-11 07:07:52 -0500
   - By default use a sane "hypnotoad" configuration
