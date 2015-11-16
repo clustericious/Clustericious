@@ -91,8 +91,10 @@ sub import
   delete $options{loglevel};
 }
 
+no warnings;
 INIT
 {
+  use warnings;
   return if $init{noinit};
 
   if (defined $init{logconfig} and -f $init{logconfig} and -r _)
@@ -122,6 +124,7 @@ INIT
 
   handlelogoptions();
 }
+use warnings;
 
 sub handlelogoptions
 {
