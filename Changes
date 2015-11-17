@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Fixed bug where using a single string as start_mode
+    (instead of a list) would crash the configuration.
   - Remove /util/etc from configuration search paths.
     This was specific to our usage, and as it turned
     out we wern't even using it.

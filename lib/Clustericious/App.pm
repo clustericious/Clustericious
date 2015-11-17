@@ -122,7 +122,10 @@ sub startup {
             # populate start mode and hypntoad with defaults if
             # they are not specified in the configuration
             $config->_default_start_mode;
-            $config->hypnotoad if $config->{start_mode}->[0] eq 'hypnotoad';
+            $config->hypnotoad 
+              if ref $config->{start_mode} eq 'ARRAY'
+              && @{ $config->{start_mode} } == 1
+              && $config->{start_mode}->[0] eq 'hypnotoad';
         }
     }
     my $auth_plugin;
