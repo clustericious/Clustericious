@@ -153,10 +153,6 @@ The following variables affect logging :
  LOG_FILE
  MOJO_APP
 
-=head1 NOTES
-
-This is a beta release, the API may change without notice.
-
 =head1 SEE ALSO
 
 L<Log::Log4perl>, L<Clustericious>

@@ -38,10 +38,6 @@ is a filename (i.e. is it a YAML file that should be parsed and send
 as a hashref, or a filename that should be PUT?  Should STDIN be
 used?).  These need to be formalized and documented.
 
-=head1 NOTES
-
-This is a beta release, the API is subject to change without notice.
-
 =cut
 
 use File::Basename qw/basename/;

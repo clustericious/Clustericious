@@ -85,8 +85,6 @@ From the command line :
 
 =head1 DESCRIPTION
 
-This is a beta release.  The API is subject to changes without notice.
-
 Clustericious::Client is library for construction clients for RESTful
 services.  It provides a mapping between command line arguments, method
 arguments, and URLs.

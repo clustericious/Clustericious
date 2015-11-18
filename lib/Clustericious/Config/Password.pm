@@ -12,12 +12,6 @@ use 5.010;
 This module provides the machinery for handling passwords used by
 L<Clustericious::Config> and L<Clustericious::Config::Helpers>.
 
-=head1 AUTHORS
-
-Brian Duggan
-
-Graham Ollis <gollis@sesda3.com>
-
 =head1 SEE ALSO
 
 L<Clustericious::Config>, L<Clustericious>
