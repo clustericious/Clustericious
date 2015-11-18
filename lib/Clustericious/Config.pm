@@ -376,5 +376,36 @@ L<Mojo::Template>, L<Hash::Merge>, L<Clustericious>, L<Clustericious::Client>, L
 
 =cut
 
+package Clustericious::Config::Callback;
+
+use JSON::MaybeXS qw( encode_json );
+
+sub new
+{
+  my($class, @args) = @_;
+  bless [@args], $class;
+}
+
+sub args { @{ shift() } }
+
+sub execute { '' }
+
+sub to_yaml
+{
+  my($self) = @_;
+  "!!perl/array:@{[ ref $self ]} @{[ encode_json [@$self] ]}";
+}
+
+package Clustericious::Config::Callback::Password;
+
+use base qw( Clustericious::Config::Callback );
+
+sub execute
+{
+  state $pass;
+  $pass //= do { require Term::Prompt; Term::Prompt::prompt('p', 'Password:', '', '') };
+  $pass;
+}
+
 1;
 
