@@ -16,9 +16,6 @@ delete $methods{$_} for qw( dump_as_yaml set_singleton );
 
 ## eventually I'd like to move/remove these as well.
 
-## for testing:
-delete $methods{$_} for qw( _uncache );
-
 ## internal
 delete $methods{$_} for qw( _default_start_mode );
 

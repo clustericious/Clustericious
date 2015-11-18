@@ -134,7 +134,7 @@ for details.
 our %singletons;
 
 our $class_suffix = {};
-sub _uncache {
+sub Clustericious::_config_uncache {
   my($class, $name) = @_;
   delete $singletons{$name};
   $class_suffix->{$name} //= 1;

@@ -184,5 +184,9 @@ sub _config_path
     );
 }
 
+# Note sub _config_uncache also gets placed
+# in this package, but it is defined in
+# Clustericious::Config.
+
 1;
 

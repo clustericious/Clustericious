@@ -3,7 +3,6 @@ package Test::Clustericious::Config;
 use strict;
 use warnings;
 use 5.010001;
-use Clustericious;
 
 BEGIN {
   unless($INC{'File/HomeDir/Test.pm'})
@@ -18,7 +17,7 @@ use YAML::XS qw( DumpFile );
 use File::Path qw( mkpath );
 use Clustericious::Config;
 use Mojo::Loader;
-
+use Clustericious;
 use base qw( Test::Builder::Module Exporter );
 
 our @EXPORT = qw( create_config_ok create_directory_ok home_directory_ok create_config_helper_ok );
@@ -176,7 +175,7 @@ sub create_config_ok ($;$$)
   $test_name //= "create config for $config_name at $config_filename";
   
   # remove any cached copy if necessary
-  Clustericious::Config->_uncache($config_name);
+  Clustericious->_config_uncache($config_name);
 
   $tb->ok($ok, $test_name);
   return $config_filename;
