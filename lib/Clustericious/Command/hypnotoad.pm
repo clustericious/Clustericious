@@ -2,12 +2,12 @@ package Clustericious::Command::hypnotoad;
 
 use strict;
 use warnings;
+use Clustericious;
 use Clustericious::Log;
 use Clustericious::App;
 use Clustericious::Config;
 use Mojo::Server::Hypnotoad;
 use Data::Dumper;
-use Clustericious::Util qw( slurp_pid );
 use Cwd qw/getcwd abs_path/;
 use base 'Clustericious::Command';
 
@@ -89,7 +89,7 @@ sub run {
         local $ENV{HYPNOTOAD_CONFIG} = $sentinel;
         my $pid_file = $conf->{pid_file};
         if (-e $pid_file) {
-            chomp (my $pid = slurp_pid $pid_file);
+            chomp (my $pid = Clustericious::_slurp_pid $pid_file);
             if (!kill 0, $pid) {
                 WARN "removing old pid file $pid_file";
                 unlink $pid_file or WARN "Could not remove $pid_file : $!";

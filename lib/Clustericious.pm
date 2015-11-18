@@ -175,12 +175,23 @@ sub _config_path
     grep { defined $_->[0] }
     (
       [ $ENV{CLUSTERICIOUS_CONF_DIR} ],
-      (!_testing ? (
+      (!_testing) ? (
         [ File::HomeDir->my_home, 'etc' ],
         [ File::HomeDir->my_dist_config('Clustericious') ],
         [ '', 'etc' ],
-      ) : ()),
+      ) : (),
     );
+}
+
+sub _slurp_pid ($)
+{
+  use autodie;
+  my($fn) = @_;
+  open my $fh, '<', $fn;
+  my $pid = <$fh>;
+  close $fh;
+  chomp $pid;
+  $pid;
 }
 
 # Note sub _config_uncache also gets placed
