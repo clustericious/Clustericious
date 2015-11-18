@@ -32,7 +32,7 @@ In your ~/etc/MyApp.conf file:
  url : http://localhost:9999
  start_mode : hypnotoad
  hypnotoad :
-    - heartbeat_timeout : 500
+   - heartbeat_timeout : 500
  
  arbitrary_key: value
 
@@ -44,12 +44,12 @@ In your ~/etc/globa.conf file:
 In your ~/etc/hypnotoad.conf:
 
  listen :
-    - <%= $url %>
+   - <%= $url %>
  # home uses File::HomeDir to find the calling users'
  # home directory
  pid_file : <%= home %>/<%= $app %>/hypnotoad.pid
  env :
-    MOJO_HOME : <%= home %>/<%= $app %>
+   MOJO_HOME : <%= home %>/<%= $app %>
 
 From a L<Clustericious::App>:
 
@@ -110,9 +110,9 @@ object may be called using method calls or treated as hashes.
 Config files are looked for in the following places (in order, where
 "MyApp" is the name of the app) :
 
-    $CLUSTERICIOUS_CONF_DIR/MyApp.conf
-    $HOME/etc/MyApp.conf
-    /etc/MyApp.conf
+ $CLUSTERICIOUS_CONF_DIR/MyApp.conf
+ $HOME/etc/MyApp.conf
+ /etc/MyApp.conf
 
 The helper "extends_config" may be used to read default settings
 from another config file.  The first argument to extends_config is the
