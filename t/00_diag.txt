@@ -25,5 +25,6 @@ Term::Prompt
 Test::Builder::Module
 Test::Clustericious::Cluster
 Test::More
+Test::Warn
 YAML::XS
 autodie

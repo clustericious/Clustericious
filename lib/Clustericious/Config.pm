@@ -191,25 +191,20 @@ sub new {
   my $mt = Mojo::Template->new(namespace => $namespace)->auto_escape(0);
   $mt->prepend( join "\n", map " my \$$_ = q{$t_args{$_}};", sort keys %t_args );
 
-  my $filename;
-  
   if(ref $arg eq 'HASH')
   {
     $conf_data = Storable::dclone $arg;
   }
   else
   {
-    my $rendered;
-    my $conf_file;
-    my $dir;
-    
+    my $filename;
+  
     if (ref $arg eq 'SCALAR')
     {
       Carp::carp("string scalar configuration is deprecated");
+      $filename = File::Spec->catfile(File::Temp::tempdir(CLEANUP => 1), "Scalar@{[int $arg]}.conf");
       my $fh;
-      $dir = File::Temp::tempdir(CLEANUP => 1);
-      $conf_file = "Scalar@{[int $arg]}.conf";
-      open($fh, '>', File::Spec->catfile($dir, $conf_file));
+      open($fh, '>', $filename);
       print $fh $$arg;
       close $fh;
     }
@@ -218,14 +213,21 @@ sub new {
       my @conf_dirs;
       @conf_dirs = $ENV{CLUSTERICIOUS_CONF_DIR} if defined( $ENV{CLUSTERICIOUS_CONF_DIR} );
       push @conf_dirs, ( File::HomeDir->my_home . "/etc", "/etc" ) unless __PACKAGE__->_testing;
-      $conf_file = "$arg.conf";
-      $conf_file =~ s/::/-/g;
-      ($dir) = List::Util::first { -e "$_/$conf_file" } @conf_dirs;
+
+      my $name = $arg;
+      $name =~ s/::/-/g;      
+
+      ($filename) = List::Util::first { -f $_ } map { File::Spec->catfile($_, "$name.conf") } @conf_dirs;
+      
+      unless($filename)
+      {
+        $logger->trace("could not find $name file.") if $logger->is_trace;
+        $conf_data = {};
+      }
     }
     
-    if ($dir) {
-      $logger->trace("reading from config file $dir/$conf_file") if $logger->is_trace;
-      $filename = File::Spec->catfile($dir, $conf_file); 
+    if ($filename) {
+      $logger->trace("reading from config file $filename") if $logger->is_trace;
       $callback->(pre_rendered => $filename);
       my $rendered = $mt->render_file($filename);
       $callback->(rendered => $filename => $rendered);
@@ -239,12 +241,6 @@ sub new {
         ? eval { YAML::XS::Load($rendered) }
         : eval { JSON::MaybeXS::decode_json $rendered };
       $logger->logdie("Could not parse $type\n-------\n$rendered\n---------\n$@\n") if $@;
-    }
-    else
-    {
-      $logger->trace("could not find $conf_file file.")
-        if $logger->is_trace && !$dir;
-      $conf_data = {};
     }
   }
 
