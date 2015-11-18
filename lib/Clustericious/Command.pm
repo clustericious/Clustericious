@@ -64,5 +64,4 @@ L<Mojolicious::Command>
 
 =cut
 
-
 1;
