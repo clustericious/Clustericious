@@ -5,7 +5,6 @@ use warnings;
 use 5.010;
 use File::Spec;
 use File::HomeDir;
-use PerlX::Maybe qw( provided );
 
 # ABSTRACT: A framework for RESTful processing systems.
 # VERSION

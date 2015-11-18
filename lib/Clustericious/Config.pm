@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use 5.010;
 use Clustericious;
-use Clustericious::Config::Password;
 use List::Util ();
 use JSON::MaybeXS ();
 use YAML::XS ();
@@ -315,14 +314,16 @@ sub AUTOLOAD {
     {
       Carp::croak "'$called' configuration item not found.  Values present: @{[keys %$self]}";
     }
-          
+
     if(wantarray)
     {
       return %$value if ref $value eq 'HASH';
       return @$value if ref $value eq 'ARRAY'; 
     }
     return $obj if $obj;
-    return Clustericious::Config::Password->is_sentinel($value) ? Clustericious::Config::Password->get : $value;
+    
+    $value = $value->execute if ref $value && eval { $value->can('execute') };
+    $value;
   };
   do { no strict 'refs'; *{ $invocant . "::$called" } = $sub };
   $sub->($self);

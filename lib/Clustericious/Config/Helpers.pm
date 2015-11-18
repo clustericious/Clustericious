@@ -8,6 +8,7 @@ use Data::Dumper;
 use Carp qw( croak );
 use base qw( Exporter );
 use JSON::MaybeXS qw( encode_json );
+use Clustericious::Config;
 
 # ABSTRACT: Helpers for clustericious config files.
 # VERSION
@@ -74,7 +75,7 @@ encountered for a password.
 
 sub get_password
 {
-  return Clustericious::Config::Password->sentinel;
+  return Clustericious::Config::Callback::Password->new->to_yaml;
 }
 
 =head2 home( [ $user ] )
