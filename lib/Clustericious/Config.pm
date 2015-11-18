@@ -194,6 +194,10 @@ sub new {
       print $fh $$arg;
       close $fh;
     }
+    elsif($arg =~ /\.(conf|yml)$/)
+    {
+      $filename = $arg;
+    }
     else
     {
       my $name = $arg;
@@ -235,10 +239,18 @@ sub new {
   # for various apps.
   if ($class eq __PACKAGE__)
   {
-    if (ref $arg)
+    if(ref $arg)
     {
       $arg = "$arg";
       $arg =~ tr/a-zA-Z0-9//cd;
+    }
+    elsif($arg =~ s/\.(conf|yml)$//)
+    {
+      # NOTE: may revisit this later.
+      $arg = "cwd::$arg" unless $arg =~ s{^/+}{root::};
+      $arg =~ s{[\\/]}{::}g;
+      $arg =~ s{\.\.::}{__up__::}g;
+      $arg =~ tr/a-zA-Z0-0_://cd;
     }
     $class = join '::', $class, 'App', $arg;
     $class .= $class_suffix->{$arg} if $class_suffix->{$arg};

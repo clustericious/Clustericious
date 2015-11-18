@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Loading configuration from a relative or absolute pathname
+    is now supported, so long as the filename ends in .conf
+    or .yml.
   - Loading a configuration from a scalar and JSON configuration
     files are deprecated and will be removed on or after January 31, 2016
     (ie Clustericious::Config->new(\"{'a':1}")
