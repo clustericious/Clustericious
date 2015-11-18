@@ -5,6 +5,7 @@ Revision history for {{$dist->name}}
     now deprecated and will issue a warning when used.  They will be
     removed but not before January 31, 2016.
   - Migrate from JSON::XS to JSON::MaybeXS
+  - Much less pollution of Clustericious::Config.
 
 1.04      2015-11-17 10:36:15 -0500
   - Fixed bug where using a single string as start_mode

@@ -8,7 +8,7 @@ use List::Util ();
 use JSON::MaybeXS ();
 use YAML::XS ();
 use Mojo::Template;
-use Log::Log4perl ();
+use Log::Log4perl qw( :nowarn );
 use Storable ();
 use Clustericious::Config::Helpers ();
 use Cwd ();

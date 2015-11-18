@@ -7,6 +7,9 @@ use_ok 'Clustericious::Config';
 
 my %methods = map { $_ => 1 } grep { Clustericious::Config->can($_) } keys %Clustericious::Config::;
 
+## we seem to get this once $VERSION is added to the .pm
+delete $methods{$_} for qw( VERSION );
+
 ## deprecated;
 ## to be removed January 31 2016
 delete $methods{$_} for qw( _is_subdir dump_as_yaml set_singleton );
