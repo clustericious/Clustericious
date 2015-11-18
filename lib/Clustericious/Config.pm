@@ -3,6 +3,20 @@ package Clustericious::Config;
 use strict;
 use warnings;
 use 5.010001;
+use Clustericious::Config::Password;
+use List::Util;
+use JSON::XS;
+use YAML::XS ();
+use Mojo::Template;
+use Log::Log4perl qw/:easy/;
+use Storable;
+use Clustericious::Config::Helpers ();
+use Data::Dumper;
+use Cwd ();
+use Module::Build;
+use File::HomeDir ();
+use Mojo::URL;
+use File::Spec;
 
 # ABSTRACT: Configuration files for Clustericious nodes.
 # VERSION
@@ -117,28 +131,14 @@ for details.
 
 =cut
 
-use Clustericious::Config::Password;
-use List::Util;
-use JSON::XS;
-use YAML::XS ();
-use Mojo::Template;
-use Log::Log4perl qw/:easy/;
-use Storable;
-use Clustericious::Config::Helpers ();
-use Data::Dumper;
-use Cwd ();
-use Module::Build;
-use File::HomeDir ();
-use Mojo::URL;
-use File::Spec;
-
 our %singletons;
 
 sub _is_subdir {
-    my ($child,$parent) = @_;
-    my $p = Cwd::abs_path($parent);
-    my $c = Cwd::abs_path($child);
-    return ($c =~ m[^\Q$p\E]) ? 1 : 0;
+  Carp::carp "Clustericious::Config#_is_subdir is deprecated";
+  my ($child,$parent) = @_;
+  my $p = Cwd::abs_path($parent);
+  my $c = Cwd::abs_path($child);
+  return ($c =~ m[^\Q$p\E]) ? 1 : 0;
 }
 
 my $is_test = 0;
@@ -150,10 +150,10 @@ sub _testing {
 
 our $class_suffix = {};
 sub _uncache {
-    my($class, $name) = @_;
-    delete $singletons{$name};
-    $class_suffix->{$name} //= 1;
-    $class_suffix->{$name}++;
+  my($class, $name) = @_;
+  delete $singletons{$name};
+  $class_suffix->{$name} //= 1;
+  $class_suffix->{$name}++;
 }
 
 sub pre_rendered { }
@@ -252,62 +252,76 @@ sub new {
 
 =head1 METHODS
 
-=head2 $config-E<gt>dump_as_yaml
+=head2 dump_as_yaml
+
+B<DEPRECATED>
+
+ my $yaml_string = $config->dump_as_yaml;
 
 Returns a string with the configuration encoded as YAML.
 
 =cut
 
 sub dump_as_yaml {
-    my $c = shift;
-    return YAML::XS::Dump($c);
+  Carp::carp "Clustericious::Config#dump_as_yaml is deprecated";
+  my($self) = @_;
+  return YAML::XS::Dump($self);
 }
 
-sub _stringify {
-    my $self = shift;
-    return join ' ', map { ($_, $self->{$_}) } sort keys %$self;
-}
-
+# defined so that AUTOLOAD doesn't get called
+# when config falls out of scope.
 sub DESTROY {
 }
 
 sub AUTOLOAD {
+  my($self, %args) = @_;
+  
+  # NOTE: I hope to deprecated and later remove defining defaults in this way in the near future.
+  my $default = $args{default};
+  my $default_exists = exists $args{default};
+
+  our $AUTOLOAD;
+  my $called = $AUTOLOAD;
+  $called =~ s/.*:://g;
+
+  my $value = $self->{$called};
+  my $invocant = ref $self;
+  my $obj = ref $value eq 'HASH' ? $invocant->new($value) : undef;
+
+  my $sub = sub {
     my $self = shift;
-    my %args = @_;
-    my $default = $args{default};
-    my $default_exists = exists $args{default};
-    our $AUTOLOAD;
-    my $called = $AUTOLOAD;
-    $called =~ s/.*:://g;
-    if ($default_exists && !exists($self->{$called})) {
-        $self->{$called} = ref $default eq 'CODE' ? $default->() : $default;
+    my $value;
+          
+    if(exists $self->{$called})
+    {
+      $value = $self->{$called};
     }
-    Carp::cluck "config element '$called' not found for ".(ref $self)." (".(join ',',keys(%$self)).")"
-        if $called =~ /^_/ || !exists($self->{$called});
-    my $value = $self->{$called};
-    my $obj;
-    my $invocant = ref $self;
-    if (ref $value eq 'HASH') {
-        $obj = $invocant->new($value);
+    elsif($default_exists)
+    {
+      $value = $self->{$called} = ref $default eq 'CODE' ? $default->() : $default;
     }
-    no strict 'refs';
-    *{ $invocant . "::$called" } = sub {
-          my $self = shift;
-          $self->{$called} = ref $default eq 'CODE' ? $default->() : $default if $default_exists && !exists($self->{$called});
-          die "'$called' not found in ".join ',',keys(%$self)
-              unless exists($self->{$called});
-          my $value = $self->{$called};
-          return wantarray && (ref $value eq 'HASH' ) ? %$value
-          : wantarray && (ref $value eq 'ARRAY') ? @$value
-          :                       defined($obj)  ? $obj
-          : Clustericious::Config::Password->is_sentinel($value) ? Clustericious::Config::Password->get
-          :                                        $value;
-    };
-    use strict 'refs';
-    $self->$called;
+    else
+    {
+      Carp::croak "'$called' configuration item not found.  Values present: @{[keys %$self]}";
+    }
+          
+    if(wantarray)
+    {
+      return %$value if ref $value eq 'HASH';
+      return @$value if ref $value eq 'ARRAY'; 
+    }
+    return $obj if $obj;
+    return Clustericious::Config::Password->is_sentinel($value) ? Clustericious::Config::Password->get : $value;
+  };
+  do { no strict 'refs'; *{ $invocant . "::$called" } = $sub };
+  $sub->($self);
 }
 
-=head2 Clustericious::Config->set_singleton
+=head2 set_singleton
+
+B<DEPRECATED>
+
+ Clustericious::Config->set_singleton;
 
 Cache a config object to be returned by the constructor.  Usage:
 
@@ -316,11 +330,9 @@ Cache a config object to be returned by the constructor.  Usage:
 =cut
 
 sub set_singleton {
-    my $class = shift;
-    my $app = shift;
-    my $obj = shift;
-    our %singletons;
-    $singletons{$app} = $obj;
+  Carp::carp "Clustericious::Config#set_singleton is deprecated";
+  my($class, $app, $obj) = @_;
+  $singletons{$app} = $obj;
 }
 
 sub _default_start_mode {
@@ -346,10 +358,6 @@ Some filesystems do not support filenames with a colon
 in them (for example L<Clustericious::HelloWorld>),
 a single dash character will be substituted for the name
 (for example C<Clustericious-HelloWorld.conf>).
-
-=head1 NOTES
-
-This is a beta release. The API may change without notice.
 
 =head1 SEE ALSO
 

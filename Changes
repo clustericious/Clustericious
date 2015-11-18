@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Clustericious::Config methods set_singleton and dump_as_yaml are
+    now deprecated and will issue a warning when used.  They will be
+    removed but not before January 31, 2016.
 
 1.04      2015-11-17 10:36:15 -0500
   - Fixed bug where using a single string as start_mode

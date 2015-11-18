@@ -28,13 +28,16 @@ do {
   local *Carp::cluck = sub { };
 
   eval { $confa->missing };
-  like $@, qr/'missing' not found/, "missing a value";
+  like $@, qr/'missing' configuration item not found/, "missing a value";
+  note $@;
 
   eval { $confb->missing };
-  like $@, qr/'missing' not found/, "missing a value";
+  like $@, qr/'missing' configuration item not found/, "missing a value";
+  note $@;
 
   eval { $confb->b };
-  like $@, qr/'b' not found/, "no autovivivication in other classes";
+  like $@, qr/'b' configuration item not found/, "no autovivivication in other classes";
+  note $@;
 
 };
 
