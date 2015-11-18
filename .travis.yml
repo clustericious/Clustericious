@@ -8,7 +8,7 @@ install:
   - cpanm -n MojoX::Log::Log4perl
   - cpanm -n Mojolicious
   - cpanm -n Sub::Exporter
-  - cpanm -n JSON::XS
+  - cpanm -n JSON::MaybeXS
   - cpanm -n YAML::XS
   - cpanm -n List::MoreUtils
   - cpanm -n File::ShareDir

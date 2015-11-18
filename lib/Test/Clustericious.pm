@@ -2,6 +2,12 @@ package Test::Clustericious;
 
 use strict;
 use warnings;
+use base 'Test::Mojo';
+use JSON::MaybeXS qw( encode_json decode_json );
+use YAML::XS;
+use Carp;
+use List::Util qw(first);
+use Clustericious::Config;
 
 # ABSTRACT: Test Clustericious apps
 # VERSION
@@ -29,14 +35,6 @@ developing L<Clustericious> applications.  It inherits from
 L<Test::Mojo>, and add the following new attributes and methods.
 
 =cut
-
-use base 'Test::Mojo';
-
-use JSON::XS;
-use YAML::XS;
-use Carp;
-use List::Util qw(first);
-use Clustericious::Config;
 
 require Test::More;
 

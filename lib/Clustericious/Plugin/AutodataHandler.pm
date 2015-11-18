@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use base 'Mojolicious::Plugin';
 use Mojo::ByteStream 'b';
-use JSON::XS;
+use JSON::MaybeXS;
 use YAML::XS qw/Dump Load/;
 use Clustericious::Log;
 
@@ -51,7 +51,7 @@ too).
 my $default_decode = 'application/x-www-form-urlencoded';
 my $default_encode = 'application/json';
 
-my $json_encoder = JSON::XS->new->allow_nonref->allow_blessed->convert_blessed;
+my $json_encoder = JSON::MaybeXS->new->allow_nonref->allow_blessed->convert_blessed;
 
 my %types =
 (

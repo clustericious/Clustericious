@@ -3,6 +3,18 @@ package Clustericious::Client;
 use strict;
 use warnings;
 use 5.010;
+use Mojo::Base qw/-base/;
+use Mojo::UserAgent;
+use Mojo::ByteStream qw/b/;
+use Mojo::Parameters;
+use Clustericious::Config;
+use Clustericious::Client::Object;
+use Clustericious::Client::Meta;
+use Clustericious::Client::Meta::Route;
+use MojoX::Log::Log4perl;
+use Log::Log4perl qw/:easy/;
+use File::Temp;
+use JSON::MaybeXS qw( encode_json decode_json );
 
 # ABSTRACT: Construct command line and perl clients for RESTful services.
 # VERSION
@@ -83,22 +95,6 @@ The builder functions add methods to the client object that translate
 into basic REST functions.  All of the 'built' methods return undef on
 failure of the REST/HTTP call, and auto-decode the returned body into
 a data structure if it is application/json.
-
-=cut
-
-use Mojo::Base qw/-base/;
-
-use Mojo::UserAgent;
-use Mojo::ByteStream qw/b/;
-use Mojo::Parameters;
-use JSON::XS;
-use Clustericious::Config;
-use Clustericious::Client::Object;
-use Clustericious::Client::Meta;
-use Clustericious::Client::Meta::Route;
-use MojoX::Log::Log4perl;
-use Log::Log4perl qw/:easy/;
-use File::Temp;
 
 =head1 ATTRIBUTES
 

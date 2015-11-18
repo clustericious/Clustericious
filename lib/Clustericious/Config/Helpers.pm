@@ -7,7 +7,7 @@ use Hash::Merge qw/merge/;
 use Data::Dumper;
 use Carp qw( croak );
 use base qw( Exporter );
-use JSON::XS qw( encode_json );
+use JSON::MaybeXS qw( encode_json );
 
 # ABSTRACT: Helpers for clustericious config files.
 # VERSION

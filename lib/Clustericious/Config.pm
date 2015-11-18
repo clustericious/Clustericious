@@ -2,10 +2,10 @@ package Clustericious::Config;
 
 use strict;
 use warnings;
-use 5.010001;
+use 5.010;
 use Clustericious::Config::Password;
-use List::Util;
-use JSON::XS;
+use List::Util ();
+use JSON::MaybeXS qw( decode_json );
 use YAML::XS ();
 use Mojo::Template;
 use Log::Log4perl qw/:easy/;
@@ -181,8 +181,6 @@ sub new {
 
   my $conf_data;
 
-  my $json = JSON::XS->new;
-    
   state $package_counter = 0;
   my $namespace = "Clustericious::Config::TemplatePackage::Package$package_counter";
   eval qq{ package $namespace; use Clustericious::Config::Helpers; };
@@ -202,7 +200,7 @@ sub new {
     my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
     $conf_data = $type eq 'yaml'
       ? eval { YAML::XS::Load( $rendered ); }
-      : eval { $json->decode( $rendered ); };
+      : eval { decode_json $rendered; };
     LOGDIE "Could not parse $type \n-------\n$rendered\n---------\n$@\n" if $@;
   }
   elsif (ref $arg eq 'HASH')
@@ -234,7 +232,7 @@ sub new {
       }
       $conf_data =$type eq 'yaml'
         ? eval { YAML::XS::Load($rendered) }
-        : eval { $json->decode($rendered) };
+        : eval { decode_json $rendered };
       LOGDIE "Could not parse $type\n-------\n$rendered\n---------\n$@\n" if $@;
     }
     else

@@ -13,7 +13,6 @@ use Mojo::ByteStream qw/b/;
 use Data::Dumper;
 use Clustericious::Log;
 use Mojo::URL;
-use JSON::XS;
 use Scalar::Util qw/weaken/;
 use Mojo::Base 'Mojolicious';
 use File::HomeDir ();
