@@ -315,14 +315,17 @@ sub AUTOLOAD {
       Carp::croak "'$called' configuration item not found.  Values present: @{[keys %$self]}";
     }
 
-    if(wantarray)
+    my $ref = ref $value;
+    if($ref)
     {
-      return %$value if ref $value eq 'HASH';
-      return @$value if ref $value eq 'ARRAY'; 
+      if(wantarray)
+      {
+        return %$value if $ref eq 'HASH';
+        return @$value if $ref eq 'ARRAY'; 
+      }
+      return $obj if $obj;
+      $value = $value->execute if eval { $value->can('execute') };
     }
-    return $obj if $obj;
-    
-    $value = $value->execute if ref $value && eval { $value->can('execute') };
     $value;
   };
   do { no strict 'refs'; *{ $invocant . "::$called" } = $sub };
