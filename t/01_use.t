@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 31;
+use Test::More tests => 34;
 
 BEGIN { eval 'use EV' }
 
@@ -35,3 +35,7 @@ require_ok('Clustericious::Controller');
 require_ok('Clustericious::HelloWorld');
 require_ok('Clustericious');
 require_ok('Clustericious::Client');
+
+use_ok 'Clustericious::Config';
+use_ok 'Clustericious::Config::Helpers';
+use_ok 'Test::Clustericious::Config';
