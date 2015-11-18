@@ -132,7 +132,7 @@ use File::HomeDir ();
 use Mojo::URL;
 use File::Spec;
 
-our %Singletons;
+our %singletons;
 
 sub _is_subdir {
     my ($child,$parent) = @_;
@@ -151,7 +151,7 @@ sub _testing {
 our $class_suffix = {};
 sub _uncache {
     my($class, $name) = @_;
-    delete $Clustericious::Config::Singletons{$name};
+    delete $singletons{$name};
     $class_suffix->{$name} //= 1;
     $class_suffix->{$name}++;
 }
@@ -173,12 +173,7 @@ sub new {
     my %t_args = (ref $_[-1] eq 'ARRAY' ? @{( pop )} : () );
     my $arg = $_[0];
     ($arg = caller) =~ s/:.*$// unless $arg; # Determine from caller's class
-    return $Singletons{$arg} if exists($Singletons{$arg});
-
-    my $we_are_testing_this_module = 0;
-    if(__PACKAGE__->_testing) {
-        $we_are_testing_this_module = 0;
-    }
+    return $singletons{$arg} if exists($singletons{$arg});
 
     my $conf_data;
 
@@ -206,19 +201,12 @@ sub new {
         LOGDIE "Could not parse $type \n-------\n$rendered\n---------\n$@\n" if $@;
     } elsif (ref $arg eq 'HASH') {
         $conf_data = Storable::dclone $arg;
-    } elsif (
-          $we_are_testing_this_module
-          && !(
-              $ENV{CLUSTERICIOUS_CONF_DIR}
-              && _is_subdir( $ENV{CLUSTERICIOUS_CONF_DIR}, Cwd::getcwd() )
-          )) {
-          $conf_data = {};
     } else {
         my @conf_dirs;
 
         @conf_dirs = $ENV{CLUSTERICIOUS_CONF_DIR} if defined( $ENV{CLUSTERICIOUS_CONF_DIR} );
 
-        push @conf_dirs, ( File::HomeDir->my_home . "/etc", "/etc" ) unless $we_are_testing_this_module || __PACKAGE__->_testing;
+        push @conf_dirs, ( File::HomeDir->my_home . "/etc", "/etc" ) unless __PACKAGE__->_testing;
         my $conf_file = "$arg.conf";
         $conf_file =~ s/::/-/g;
         my ($dir) = List::Util::first { -e "$_/$conf_file" } @conf_dirs;
@@ -331,8 +319,8 @@ sub set_singleton {
     my $class = shift;
     my $app = shift;
     my $obj = shift;
-    our %Singletons;
-    $Singletons{$app} = $obj;
+    our %singletons;
+    $singletons{$app} = $obj;
 }
 
 sub _default_start_mode {
