@@ -166,92 +166,101 @@ possible invocations.
 =cut
 
 sub new {
-    my $class = shift;
+  my $class = shift;
 
-    # (undocumented; for now)
-    # callback is used by the configdebug command;
-    # may be used elsewise at a later time
-    my $callback = ref $_[-1] eq 'CODE' ? pop : sub {};
+  # (undocumented; for now)
+  # callback is used by the configdebug command;
+  # may be used elsewise at a later time
+  my $callback = ref $_[-1] eq 'CODE' ? pop : sub {};
 
-    my %t_args = (ref $_[-1] eq 'ARRAY' ? @{( pop )} : () );
+  my %t_args = (ref $_[-1] eq 'ARRAY' ? @{( pop )} : () );
 
-    my $arg = $_[0];
-    ($arg = caller) =~ s/:.*$// unless $arg; # Determine from caller's class
-    return $singletons{$arg} if exists($singletons{$arg});
+  my $arg = $_[0];
+  ($arg = caller) =~ s/:.*$// unless $arg; # Determine from caller's class
+  return $singletons{$arg} if exists($singletons{$arg});
 
-    my $conf_data;
+  my $conf_data;
 
-    my $json = JSON::XS->new;
+  my $json = JSON::XS->new;
     
-    state $package_counter = 0;
-    my $namespace = "Clustericious::Config::TemplatePackage::Package$package_counter";
-    eval qq{ package $namespace; use Clustericious::Config::Helpers; };
-    die $@ if $@;
-    $package_counter++;
+  state $package_counter = 0;
+  my $namespace = "Clustericious::Config::TemplatePackage::Package$package_counter";
+  eval qq{ package $namespace; use Clustericious::Config::Helpers; };
+  die $@ if $@;
+  $package_counter++;
     
-    my $mt = Mojo::Template->new(namespace => $namespace)->auto_escape(0);
-    $mt->prepend( join "\n", map " my \$$_ = q{$t_args{$_}};", sort keys %t_args );
+  my $mt = Mojo::Template->new(namespace => $namespace)->auto_escape(0);
+  $mt->prepend( join "\n", map " my \$$_ = q{$t_args{$_}};", sort keys %t_args );
 
-    my $filename;
-    if (ref $arg eq 'SCALAR') {
-        $callback->(pre_rendered => $$arg);
-        my $rendered = $mt->render($$arg);
-        $callback->(rendered => SCALAR => $rendered);
-        die $rendered if ( (ref($rendered)) =~ /Exception/ );
-        my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
-        $conf_data = $type eq 'yaml' ?
-           eval { YAML::XS::Load( $rendered ); }
-         : eval { $json->decode( $rendered ); };
-        LOGDIE "Could not parse $type \n-------\n$rendered\n---------\n$@\n" if $@;
-    } elsif (ref $arg eq 'HASH') {
-        $conf_data = Storable::dclone $arg;
-    } else {
-        my @conf_dirs;
+  my $filename;
+  if (ref $arg eq 'SCALAR')
+  {
+    $callback->(pre_rendered => $$arg);
+    my $rendered = $mt->render($$arg);
+    $callback->(rendered => SCALAR => $rendered);
+    die $rendered if ( (ref($rendered)) =~ /Exception/ );
+    my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
+    $conf_data = $type eq 'yaml'
+      ? eval { YAML::XS::Load( $rendered ); }
+      : eval { $json->decode( $rendered ); };
+    LOGDIE "Could not parse $type \n-------\n$rendered\n---------\n$@\n" if $@;
+  }
+  elsif (ref $arg eq 'HASH')
+  {
+    $conf_data = Storable::dclone $arg;
+  }
+  else
+  {
+    my @conf_dirs;
 
-        @conf_dirs = $ENV{CLUSTERICIOUS_CONF_DIR} if defined( $ENV{CLUSTERICIOUS_CONF_DIR} );
+    @conf_dirs = $ENV{CLUSTERICIOUS_CONF_DIR} if defined( $ENV{CLUSTERICIOUS_CONF_DIR} );
 
-        push @conf_dirs, ( File::HomeDir->my_home . "/etc", "/etc" ) unless __PACKAGE__->_testing;
-        my $conf_file = "$arg.conf";
-        $conf_file =~ s/::/-/g;
-        my ($dir) = List::Util::first { -e "$_/$conf_file" } @conf_dirs;
-        if ($dir) {
-            TRACE "reading from config file $dir/$conf_file";
-            $filename = "$dir/$conf_file";
-            $callback->(pre_rendered => $filename);
-            my $rendered = $mt->render_file($filename);
-            $callback->(rendered => $filename => $rendered);
-            die $rendered if ( (ref $rendered) =~ /Exception/ );
-            my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
-            if ($ENV{CL_CONF_TRACE}) {
-                warn "configuration ($type) : \n";
-                warn $rendered;
-            }
-            $conf_data =
-              $type eq 'yaml'
-              ? eval { YAML::XS::Load($rendered) }
-              : eval { $json->decode($rendered) };
-            LOGDIE "Could not parse $type\n-------\n$rendered\n---------\n$@\n" if $@;
-        } else {
-            TRACE "could not find $conf_file file in: @conf_dirs" unless $dir;
-            $conf_data = {};
-        }
+    push @conf_dirs, ( File::HomeDir->my_home . "/etc", "/etc" ) unless __PACKAGE__->_testing;
+    my $conf_file = "$arg.conf";
+    $conf_file =~ s/::/-/g;
+    my ($dir) = List::Util::first { -e "$_/$conf_file" } @conf_dirs;
+    if ($dir) {
+      TRACE "reading from config file $dir/$conf_file";
+      $filename = "$dir/$conf_file";
+      $callback->(pre_rendered => $filename);
+      my $rendered = $mt->render_file($filename);
+      $callback->(rendered => $filename => $rendered);
+      die $rendered if ( (ref $rendered) =~ /Exception/ );
+      my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
+      if ($ENV{CL_CONF_TRACE})
+      {
+        warn "configuration ($type) : \n";
+        warn $rendered;
+      }
+      $conf_data =$type eq 'yaml'
+        ? eval { YAML::XS::Load($rendered) }
+        : eval { $json->decode($rendered) };
+      LOGDIE "Could not parse $type\n-------\n$rendered\n---------\n$@\n" if $@;
     }
-    $conf_data ||= {};
-    Clustericious::Config::Helpers->_do_merges($conf_data);
-    # Use derived classes so that AUTOLOADING keeps namespaces separate
-    # for various apps.
-    if ($class eq __PACKAGE__) {
-        if (ref $arg) {
-            $arg = "$arg";
-            $arg =~ tr/a-zA-Z0-9//cd;
-        }
-        $class = join '::', $class, 'App', $arg;
-        $class .= $class_suffix->{$arg} if $class_suffix->{$arg};
-        my $dome = '@'."$class"."::ISA = ('".__PACKAGE__. "')";
-        eval $dome;
-        die "error setting ISA : $@" if $@;
+    else
+    {
+      TRACE "could not find $conf_file file in: @conf_dirs" unless $dir;
+      $conf_data = {};
     }
-    bless $conf_data, $class;
+  }
+  $conf_data ||= {};
+  Clustericious::Config::Helpers->_do_merges($conf_data);
+  # Use derived classes so that AUTOLOADING keeps namespaces separate
+  # for various apps.
+  if ($class eq __PACKAGE__)
+  {
+    if (ref $arg)
+    {
+      $arg = "$arg";
+      $arg =~ tr/a-zA-Z0-9//cd;
+    }
+    $class = join '::', $class, 'App', $arg;
+    $class .= $class_suffix->{$arg} if $class_suffix->{$arg};
+    my $dome = '@'."$class"."::ISA = ('".__PACKAGE__. "')";
+    eval $dome;
+    die "error setting ISA : $@" if $@;
+  }
+  bless $conf_data, $class;
 }
 
 =head1 METHODS
