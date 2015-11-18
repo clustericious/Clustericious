@@ -29,7 +29,7 @@ Your app:
         files => { 'YourApp.conf' => <<<CUT }
  ---
  required_key   : default_value
- something_else : <%= $ENV{HOME} %>
+ something_else : <%= home %>
  CUT
    };
  }
@@ -88,4 +88,3 @@ sub run
 }
 
 1;
-
