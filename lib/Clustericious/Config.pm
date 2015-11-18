@@ -156,9 +156,6 @@ sub _uncache {
   $class_suffix->{$name}++;
 }
 
-sub pre_rendered { }
-sub rendered { }
-
 =head1 CONSTRUCTOR
 
 =head2 new
@@ -170,7 +167,14 @@ possible invocations.
 
 sub new {
     my $class = shift;
+
+    # (undocumented; for now)
+    # callback is used by the configdebug command;
+    # may be used elsewise at a later time
+    my $callback = ref $_[-1] eq 'CODE' ? pop : sub {};
+
     my %t_args = (ref $_[-1] eq 'ARRAY' ? @{( pop )} : () );
+
     my $arg = $_[0];
     ($arg = caller) =~ s/:.*$// unless $arg; # Determine from caller's class
     return $singletons{$arg} if exists($singletons{$arg});
@@ -190,9 +194,9 @@ sub new {
 
     my $filename;
     if (ref $arg eq 'SCALAR') {
-        $class->pre_rendered( $$arg );
+        $callback->(pre_rendered => $$arg);
         my $rendered = $mt->render($$arg);
-        $class->rendered( SCALAR => $rendered );
+        $callback->(rendered => SCALAR => $rendered);
         die $rendered if ( (ref($rendered)) =~ /Exception/ );
         my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
         $conf_data = $type eq 'yaml' ?
@@ -213,9 +217,9 @@ sub new {
         if ($dir) {
             TRACE "reading from config file $dir/$conf_file";
             $filename = "$dir/$conf_file";
-            $class->pre_rendered( $filename );
+            $callback->(pre_rendered => $filename);
             my $rendered = $mt->render_file($filename);
-            $class->rendered( $filename => $rendered );
+            $callback->(rendered => $filename => $rendered);
             die $rendered if ( (ref $rendered) =~ /Exception/ );
             my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
             if ($ENV{CL_CONF_TRACE}) {
