@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Loading a configuration from a scalar and JSON configuration
+    files are deprecated and will be removed on or after January 31, 2016
+    (ie Clustericious::Config->new(\"{'a':1}")
   - Clustericious::Config methods set_singleton and dump_as_yaml are
     now deprecated and will issue a warning when used.  They will be
     removed but not before January 31, 2016.

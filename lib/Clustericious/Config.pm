@@ -15,6 +15,8 @@ use Cwd ();
 use File::HomeDir ();
 use Mojo::URL;
 use File::Spec;
+use File::Temp ();
+use Carp ();
 
 # ABSTRACT: Configuration files for Clustericious nodes.
 # VERSION
@@ -77,7 +79,6 @@ From a script:
  use Clustericious::Config;
  
  my $c = Clustericious::Config->new("MyApp");
- my $c = Clustericious::Config->new( \$config_string );
  my $c = Clustericious::Config->new( \%config_data_structure );
 
  print $c->url;
@@ -191,44 +192,49 @@ sub new {
   $mt->prepend( join "\n", map " my \$$_ = q{$t_args{$_}};", sort keys %t_args );
 
   my $filename;
-  if (ref $arg eq 'SCALAR')
-  {
-    # TODO 1:  what does this do, and is it actually used?
-    # if not deprecate and remove
-    $callback->(pre_rendered => $$arg);
-    my $rendered = $mt->render($$arg);
-    $callback->(rendered => SCALAR => $rendered);
-    die $rendered if ( (ref($rendered)) =~ /Exception/ );
-    my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
-    $conf_data = $type eq 'yaml'
-      ? eval { YAML::XS::Load( $rendered ); }
-      : eval { JSON::MaybeXS::decode_json $rendered; };
-    $logger->logdie("Could not parse $type \n-------\n$rendered\n---------\n$@\n") if $@;
-  }
-  elsif (ref $arg eq 'HASH')
+  
+  if(ref $arg eq 'HASH')
   {
     $conf_data = Storable::dclone $arg;
   }
   else
   {
-    my @conf_dirs;
-
-    @conf_dirs = $ENV{CLUSTERICIOUS_CONF_DIR} if defined( $ENV{CLUSTERICIOUS_CONF_DIR} );
-
-    push @conf_dirs, ( File::HomeDir->my_home . "/etc", "/etc" ) unless __PACKAGE__->_testing;
-    my $conf_file = "$arg.conf";
-    $conf_file =~ s/::/-/g;
-    my ($dir) = List::Util::first { -e "$_/$conf_file" } @conf_dirs;
+    my $rendered;
+    my $conf_file;
+    my $dir;
+    
+    if (ref $arg eq 'SCALAR')
+    {
+      Carp::carp("string scalar configuration is deprecated");
+      my $fh;
+      $dir = File::Temp::tempdir(CLEANUP => 1);
+      $conf_file = "Scalar@{[int $arg]}.conf";
+      open($fh, '>', File::Spec->catfile($dir, $conf_file));
+      print $fh $$arg;
+      close $fh;
+    }
+    else
+    {
+      my @conf_dirs;
+      @conf_dirs = $ENV{CLUSTERICIOUS_CONF_DIR} if defined( $ENV{CLUSTERICIOUS_CONF_DIR} );
+      push @conf_dirs, ( File::HomeDir->my_home . "/etc", "/etc" ) unless __PACKAGE__->_testing;
+      $conf_file = "$arg.conf";
+      $conf_file =~ s/::/-/g;
+      ($dir) = List::Util::first { -e "$_/$conf_file" } @conf_dirs;
+    }
+    
     if ($dir) {
       $logger->trace("reading from config file $dir/$conf_file") if $logger->is_trace;
-      $filename = "$dir/$conf_file";
+      $filename = File::Spec->catfile($dir, $conf_file); 
       $callback->(pre_rendered => $filename);
       my $rendered = $mt->render_file($filename);
       $callback->(rendered => $filename => $rendered);
+
       die $rendered if ( (ref $rendered) =~ /Exception/ );
       my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
-      # TODO 2: deprecate and remove json config files.
-      # note same for the duplicate code above
+
+      Carp::carp("JSON configuration file is deprecated") if $type eq 'json';
+
       $conf_data =$type eq 'yaml'
         ? eval { YAML::XS::Load($rendered) }
         : eval { JSON::MaybeXS::decode_json $rendered };
@@ -236,13 +242,15 @@ sub new {
     }
     else
     {
-      $logger->trace("could not find $conf_file file in: @conf_dirs")
+      $logger->trace("could not find $conf_file file.")
         if $logger->is_trace && !$dir;
       $conf_data = {};
     }
   }
+
   $conf_data ||= {};
   Clustericious::Config::Helpers->_do_merges($conf_data);
+
   # Use derived classes so that AUTOLOADING keeps namespaces separate
   # for various apps.
   if ($class eq __PACKAGE__)

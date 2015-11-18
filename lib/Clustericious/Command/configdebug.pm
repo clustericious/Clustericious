@@ -64,7 +64,6 @@ sub run
   $ENV{MOJO_TEMPLATE_DEBUG} = 1;
 
   my $config = Clustericious::Config->new($app_name, sub {
-    $DB::single = 1;
     my $type = shift;
     
     if($type eq 'pre_rendered')

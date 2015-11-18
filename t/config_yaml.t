@@ -1,9 +1,10 @@
 use strict;
 use warnings;
-use Test::More qw/no_plan/;
+use Test::Clustericious::Config;
+use Test::More tests => 5;
 use Clustericious::Config;
 
-my $c = Clustericious::Config->new(\(my $a = <<'EOT'));
+create_config_ok Foo => <<'EOF';
 ---
 something : {
       hello : there,
@@ -17,8 +18,9 @@ four : {
       <%= "score" =%> : and,
       seven : [ "years", "ago" ],
 }
+EOF
 
-EOT
+my $c = Clustericious::Config->new('Foo');
 
 ok defined( $c->something );
 is $c->something->hello,   'there', 'yaml key';

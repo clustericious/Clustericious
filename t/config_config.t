@@ -1,62 +1,41 @@
 use strict;
 use warnings;
-use Test::More qw/no_plan/;
-use File::Temp qw/tempdir/;
+use Test::Clustericious::Config;
+use Test::More tests => 14;
+use File::Temp qw( tempdir );
 use Clustericious::Config;
-use Test::Clustericious::Log;
 
-my $dir = tempdir( CLEANUP => 1 );
-$ENV{CLUSTERICIOUS_CONF_DIR} = $dir;
+create_config_ok common => <<'EOF1';
+---
+override_me: 9
+url: <%= $url %>
+daemon_prefork:
+  listen: <%= $url %>
+  pid: /tmp/<%= $app %>.pid
+EOF1
 
-#
-# Make a common config file called common.conf
-#
+create_config_ok special => <<'EOF2';
+---
+specialvalue: 123
+override_me: 10
+EOF2
 
-open my $fh, '>', "$dir/common.conf";
-print $fh <<'EOT';
-{
-   "override_me" : 9,
-   "url"        : "<%= $url %>",
-   "daemon_prefork" : {
-      "listen"   : "<%= $url %>",
-      "pid"      : "/tmp/<%= $app %>.pid"
-   }
-}
-EOT
-$fh->close;
-
-#
-# Make a special config file called special.conf
-#
-
-open $fh, '>', "$dir/special.conf";
-print $fh <<'EOT';
-{
-   "specialvalue"  : 123,
-   "override_me"   : 10
-}
-EOT
-$fh->close;
-
-
-#
-# Make another config file that references the first one,
-# and also has a_remote_app, which has no config file.
-#
-
-my $c = Clustericious::Config->new(\(my $a = <<'EOT'));
+create_config_ok Foo => <<'EOF3';
+---
 % extends_config 'common', url => 'http://localhost:9999', app => 'my_app';
 % extends_config 'special';
-{
-   "override_me" : 11,
-   "start_mode" : "daemon_prefork",
-   "daemon_prefork" : {
-      "lock"     : "/tmp/my_app.lock",
-      "maxspare" : 2,
-      "start"    : 2
-   }
-}
-EOT
+override_me: 11
+start_mode: daemon_prefork
+daemon_prefork:
+  lock: /tmp/my_app.lock
+  maxspare: 2
+  start: 2
+EOF3
+
+# Make another config file that references the first one,
+# and also has a_remote_app, which has no config file.
+
+my $c = Clustericious::Config->new('Foo');
 
 #
 # Some actual tests.
@@ -79,6 +58,8 @@ is $c->override_me, 11, "override a config variable";
 
 is ( (Clustericious::Config->new("SomeTestService")->flooble(default => "frog")), 'frog', 'set a default');
 is ( (Clustericious::Config->new("SomeTestService")->flooble), 'frog', 'get a default');
+
+pass 'forteenth';
 
 1;
 

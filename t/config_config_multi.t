@@ -1,23 +1,25 @@
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::Clustericious::Config;
+use Test::More tests => 8;
 use Clustericious::Config;
 
-my $confa = Clustericious::Config->new(\(my $a = <<'EOT'));
-{
-   "a" : "valuea",
-   "b" : "valueb",
-   "c" : {
-        "x" : "y"
-         }
-}
-EOT
+create_config_ok confa => <<'EOF1';
+---
+a: valuea
+b: valueb
+c:
+  x: y
+EOF1
 
-my $confb = Clustericious::Config->new(\(my $b = <<'EOT'));
-{
-   "a" : "valuea"
-}
-EOT
+my $confa = Clustericious::Config->new('confa');
+
+create_config_ok confb => <<'EOF2';
+---
+a: valuea
+EOF2
+
+my $confb = Clustericious::Config->new('confb');
 
 is $confa->a, 'valuea', "value a set";
 is $confa->b, 'valueb', "value b set";
