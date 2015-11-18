@@ -218,7 +218,7 @@ sub new {
     $conf_file =~ s/::/-/g;
     my ($dir) = List::Util::first { -e "$_/$conf_file" } @conf_dirs;
     if ($dir) {
-      $logger->trace("reading from config file $dir/$conf_file");
+      $logger->trace("reading from config file $dir/$conf_file") if $logger->is_trace;
       $filename = "$dir/$conf_file";
       $callback->(pre_rendered => $filename);
       my $rendered = $mt->render_file($filename);
@@ -237,7 +237,8 @@ sub new {
     }
     else
     {
-      $logger->trace("could not find $conf_file file in: @conf_dirs") unless $dir;
+      $logger->trace("could not find $conf_file file in: @conf_dirs")
+        if $logger->is_trace && !$dir;
       $conf_data = {};
     }
   }
