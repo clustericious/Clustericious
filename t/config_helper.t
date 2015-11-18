@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use Test::More tests => 3;
 use Test::Clustericious::Config;
+use Test::Clustericious::Log;
 
 my $counter = 1;
 create_config_helper_ok foo => sub { $counter++ };

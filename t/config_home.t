@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::Clustericious::Config;
+use Test::Clustericious::Log;
 use Clustericious::Config;
 use Test::More tests => 3;
 use File::Temp qw( tempdir );

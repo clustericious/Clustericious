@@ -5,10 +5,10 @@ use warnings;
 use 5.010;
 use Clustericious::Config::Password;
 use List::Util ();
-use JSON::MaybeXS qw( decode_json );
+use JSON::MaybeXS ();
 use YAML::XS ();
 use Mojo::Template;
-use Log::Log4perl qw/:easy/;
+use Log::Log4perl ();
 use Storable ();
 use Clustericious::Config::Helpers ();
 use Cwd ();
@@ -166,6 +166,8 @@ possible invocations.
 sub new {
   my $class = shift;
 
+  my $logger = Log::Log4perl->get_logger(__PACKAGE__);
+
   # (undocumented; for now)
   # callback is used by the configdebug command;
   # may be used elsewise at a later time
@@ -198,8 +200,8 @@ sub new {
     my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
     $conf_data = $type eq 'yaml'
       ? eval { YAML::XS::Load( $rendered ); }
-      : eval { decode_json $rendered; };
-    LOGDIE "Could not parse $type \n-------\n$rendered\n---------\n$@\n" if $@;
+      : eval { JSON::MaybeXS::decode_json $rendered; };
+    $logger->logdie("Could not parse $type \n-------\n$rendered\n---------\n$@\n") if $@;
   }
   elsif (ref $arg eq 'HASH')
   {
@@ -216,7 +218,7 @@ sub new {
     $conf_file =~ s/::/-/g;
     my ($dir) = List::Util::first { -e "$_/$conf_file" } @conf_dirs;
     if ($dir) {
-      TRACE "reading from config file $dir/$conf_file";
+      $logger->trace("reading from config file $dir/$conf_file");
       $filename = "$dir/$conf_file";
       $callback->(pre_rendered => $filename);
       my $rendered = $mt->render_file($filename);
@@ -230,12 +232,12 @@ sub new {
       }
       $conf_data =$type eq 'yaml'
         ? eval { YAML::XS::Load($rendered) }
-        : eval { decode_json $rendered };
-      LOGDIE "Could not parse $type\n-------\n$rendered\n---------\n$@\n" if $@;
+        : eval { JSON::MaybeXS::decode_json $rendered };
+      $logger->logdie("Could not parse $type\n-------\n$rendered\n---------\n$@\n") if $@;
     }
     else
     {
-      TRACE "could not find $conf_file file in: @conf_dirs" unless $dir;
+      $logger->trace("could not find $conf_file file in: @conf_dirs") unless $dir;
       $conf_data = {};
     }
   }

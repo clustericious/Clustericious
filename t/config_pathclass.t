@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::Clustericious::Config;
+use Test::Clustericious::Log;
 use Test::More;
 BEGIN {
   plan skip_all => 'test requires Path::Class'

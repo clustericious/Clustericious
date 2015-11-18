@@ -3,6 +3,7 @@ use warnings;
 use Test::More qw/no_plan/;
 use File::Temp qw/tempdir/;
 use Clustericious::Config;
+use Test::Clustericious::Log;
 
 my $dir = tempdir( CLEANUP => 1 );
 $ENV{CLUSTERICIOUS_CONF_DIR} = $dir;

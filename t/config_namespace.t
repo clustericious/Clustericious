@@ -1,9 +1,10 @@
 use strict;
 use warnings;
-use Test::More tests => 9;
 use File::HomeDir::Test;
-use File::HomeDir;
+use Test::Clustericious::Log;
+use Test::More tests => 9;
 use Clustericious::Config;
+use File::HomeDir;
 
 delete $ENV{CLUSTERICIOUS_CONF_DIR};
 
