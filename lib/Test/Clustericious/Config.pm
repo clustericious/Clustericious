@@ -3,6 +3,7 @@ package Test::Clustericious::Config;
 use strict;
 use warnings;
 use 5.010001;
+use Clustericious;
 
 BEGIN {
   unless($INC{'File/HomeDir/Test.pm'})
@@ -32,7 +33,7 @@ sub _init
   mkdir $config_dir;
 
   $ENV{CLUSTERICIOUS_CONF_DIR} = $config_dir;
-  Clustericious::Config->_testing(1);
+  Clustericious->_testing(1);
 }
 
 BEGIN { _init() }

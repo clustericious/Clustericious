@@ -2,6 +2,10 @@ package Clustericious;
 
 use strict;
 use warnings;
+use 5.010;
+use File::Spec;
+use File::HomeDir;
+use PerlX::Maybe qw( provided );
 
 # ABSTRACT: A framework for RESTful processing systems.
 # VERSION
@@ -156,6 +160,29 @@ Common routes for all Clustericious applications.
 Command to start a Clustericious application.
 
 =cut
+
+sub _testing
+{
+  state $test = 0;
+  my($class, $new) = @_;
+  $test = $new if defined $new;
+  $test;
+}
+
+sub _config_path
+{
+  grep { -d $_ }
+    map { File::Spec->catdir(@$_) } 
+    grep { defined $_->[0] }
+    (
+      [ $ENV{CLUSTERICIOUS_CONF_DIR} ],
+      (!_testing ? (
+        [ File::HomeDir->my_home, 'etc' ],
+        [ File::HomeDir->my_dist_config('Clustericious') ],
+        [ '', 'etc' ],
+      ) : ()),
+    );
+}
 
 1;
 

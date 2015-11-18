@@ -3,6 +3,7 @@ package Clustericious::Config;
 use strict;
 use warnings;
 use 5.010;
+use Clustericious;
 use Clustericious::Config::Password;
 use List::Util ();
 use JSON::MaybeXS ();
@@ -140,13 +141,6 @@ sub _is_subdir {
   return ($c =~ m[^\Q$p\E]) ? 1 : 0;
 }
 
-my $is_test = 0;
-sub _testing {
-  my($class, $new) = @_;
-  $is_test = $new if defined $new;
-  $is_test;
-}
-
 our $class_suffix = {};
 sub _uncache {
   my($class, $name) = @_;
@@ -210,14 +204,12 @@ sub new {
     }
     else
     {
-      my @conf_dirs;
-      @conf_dirs = $ENV{CLUSTERICIOUS_CONF_DIR} if defined( $ENV{CLUSTERICIOUS_CONF_DIR} );
-      push @conf_dirs, ( File::HomeDir->my_home . "/etc", "/etc" ) unless __PACKAGE__->_testing;
-
       my $name = $arg;
       $name =~ s/::/-/g;      
-
-      ($filename) = List::Util::first { -f $_ } map { File::Spec->catfile($_, "$name.conf") } @conf_dirs;
+      ($filename) = 
+        List::Util::first { -f $_ } 
+        map { File::Spec->catfile($_, "$name.conf") } 
+        Clustericious->_config_path;
       
       unless($filename)
       {
