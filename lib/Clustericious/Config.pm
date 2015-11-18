@@ -193,6 +193,8 @@ sub new {
   my $filename;
   if (ref $arg eq 'SCALAR')
   {
+    # TODO 1:  what does this do, and is it actually used?
+    # if not deprecate and remove
     $callback->(pre_rendered => $$arg);
     my $rendered = $mt->render($$arg);
     $callback->(rendered => SCALAR => $rendered);
@@ -225,11 +227,8 @@ sub new {
       $callback->(rendered => $filename => $rendered);
       die $rendered if ( (ref $rendered) =~ /Exception/ );
       my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
-      if ($ENV{CL_CONF_TRACE})
-      {
-        warn "configuration ($type) : \n";
-        warn $rendered;
-      }
+      # TODO 2: deprecate and remove json config files.
+      # note same for the duplicate code above
       $conf_data =$type eq 'yaml'
         ? eval { YAML::XS::Load($rendered) }
         : eval { JSON::MaybeXS::decode_json $rendered };
