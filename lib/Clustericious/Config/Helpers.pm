@@ -35,11 +35,11 @@ Extend the config using another config file.
 
 =cut
 
-sub extends_config {
-    my $filename = shift;
-    my @args = @_;
-    push @mergeStack, Clustericious::Config->new($filename, \@args);
-    return '';
+sub extends_config
+{
+  my($name, @args) = @_;
+  push @mergeStack, Clustericious::Config->new($name, \@args);
+  return '';
 }
 
 #
@@ -50,19 +50,19 @@ sub extends_config {
 # directives.
 #
 sub _do_merges {
-    my $class = shift;
-    my $conf_data = shift; # Last one; Has highest precedence.
+  my($class, $data) = @_;
 
-    return $conf_data unless @mergeStack;
+  return $data unless @mergeStack;
 
-    # Nested extends_config's form a tree which we traverse depth first.
-    Hash::Merge::set_behavior( 'RIGHT_PRECEDENT' );
-    my %so_far = %{ shift @mergeStack };
-    while (my $c = shift @mergeStack) {
-        my %h = %$c;
-        %so_far = %{ merge( \%so_far, \%h ) };
-    }
-    %$conf_data = %{ merge( \%so_far, $conf_data ) };
+  # Nested extends_config's form a tree which we traverse depth first.
+  Hash::Merge::set_behavior( 'RIGHT_PRECEDENT' );
+  my %so_far = %{ shift @mergeStack };
+  while (my $c = shift @mergeStack)
+  {
+    my %h = %$c;
+    %so_far = %{ merge( \%so_far, \%h ) };
+  }
+  %$data = %{ merge( \%so_far, $data ) };
 }
 
 =head2 get_password
@@ -72,8 +72,9 @@ encountered for a password.
 
 =cut
 
-sub get_password {
-    return Clustericious::Config::Password->sentinel;
+sub get_password
+{
+  return Clustericious::Config::Password->sentinel;
 }
 
 =head2 home( [ $user ] )
