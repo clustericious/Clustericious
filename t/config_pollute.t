@@ -12,7 +12,7 @@ delete $methods{$_} for qw( VERSION );
 
 ## deprecated;
 ## to be removed January 31 2016
-delete $methods{$_} for qw( _is_subdir dump_as_yaml set_singleton );
+delete $methods{$_} for qw( dump_as_yaml set_singleton );
 
 ## eventually I'd like to move/remove these as well.
 

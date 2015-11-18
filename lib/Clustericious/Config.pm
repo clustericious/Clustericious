@@ -133,14 +133,6 @@ for details.
 
 our %singletons;
 
-sub _is_subdir {
-  Carp::carp "Clustericious::Config#_is_subdir is deprecated";
-  my ($child,$parent) = @_;
-  my $p = Cwd::abs_path($parent);
-  my $c = Cwd::abs_path($child);
-  return ($c =~ m[^\Q$p\E]) ? 1 : 0;
-}
-
 our $class_suffix = {};
 sub _uncache {
   my($class, $name) = @_;
