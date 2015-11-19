@@ -48,12 +48,12 @@ L<Clustericious>
 =cut
 
 has description => <<EOT;
-print the various stages of the clustericious app configuration file
+Print the various stages of the clustericious app configuration file
 EOT
 
 has usage => <<EOT;
 usage $0: configdebug
-print the various stages of the clustericious app configuration file
+Print the various stages of the clustericious app configuration file
 EOT
 
 sub run

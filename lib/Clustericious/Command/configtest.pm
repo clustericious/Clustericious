@@ -51,12 +51,12 @@ L<Clustericious>
 =cut
 
 has description => <<EOT;
-load configuration and test for errors
+Load configuration and test for errors
 EOT
 
 has usage => <<EOT;
 usage $0: configtest
-load configuration and test for errors
+Load configuration and test for errors
 EOT
 
 sub run
