@@ -374,6 +374,11 @@ in them (for example L<Clustericious::HelloWorld>),
 a single dash character will be substituted for the name
 (for example C<Clustericious-HelloWorld.conf>).
 
+L<Clustericious::Config> uses C<AUTOLOAD> to perform its
+magic, so some configuration keys that are reserved by
+Perl cannot be used.  Notably C<new>, C<can>, C<isa>,
+etc.
+
 =head1 SEE ALSO
 
 L<Mojo::Template>, L<Hash::Merge>, L<Clustericious>, L<Clustericious::Client>, L<Clustericious::Config::Helpers>

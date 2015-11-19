@@ -40,6 +40,8 @@ $t->get_ok('/version.yml')
 is eval { Load($t->tx->res->body)->[0] }, $SomeService::VERSION, '/version.yml is correct';
 diag $@ if $@;
 
+note $t->tx->res->body;
+
 # trying to get meta data for a bogus table should not
 # return 500 when Rose::Planter is not loaded.
 $t->get_ok('/api/bogus_table')

@@ -28,11 +28,7 @@ directly under your application's namespace (for example above MyApp's
 route module is MyApp::Routes).  The interface is reminiscent of 
 L<Mojolicious::Lite>, because it was forked from there some time ago.
 
-=head1 SUPER CLASS
-
-none
-
-=head1 METHODS
+=head1 FUNCTIONS
 
 =head2 any
 
