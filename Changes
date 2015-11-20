@@ -12,6 +12,9 @@ Revision history for {{$dist->name}}
     removed but not before January 31, 2016.
   - Migrate from JSON::XS to JSON::MaybeXS
   - Much less pollution of Clustericious::Config.
+  - Added some testing functions to Test::Clustericious::Log
+    previously it simply redirected logging to TAP via
+    Log::Log4perl::Appender::TAP (which it still does).
 
 1.04      2015-11-17 10:36:15 -0500
   - Fixed bug where using a single string as start_mode
