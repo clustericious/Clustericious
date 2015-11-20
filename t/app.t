@@ -4,24 +4,24 @@ use Test::Clustericious::Log;
 use Test::More tests => 21;
 use Test::Mojo;
 
-package SomeService;
+do {
+  package SomeService;
 
-$SomeService::VERSION = '867.5309';
+  $SomeService::VERSION = '867.5309';
 
-use base 'Clustericious::App';
-use Clustericious::RouteBuilder;
+  use base 'Clustericious::App';
+  use Clustericious::RouteBuilder;
 
-get '/' => sub { shift->render_text("hello"); };
+  get '/' => sub { shift->render_text("hello"); };
 
-get '/autotest' => sub { shift->stash->{autodata} = { a => 1, b => 2 } };
+  get '/autotest' => sub { shift->stash->{autodata} = { a => 1, b => 2 } };
 
-get '/autotest_not_found' => sub {
-  my($self) = shift;
-  $self->stash->{autodata} = [1,2,3];
-  $self->reply->not_found;
+  get '/autotest_not_found' => sub {
+    my($self) = shift;
+    $self->stash->{autodata} = [1,2,3];
+    $self->reply->not_found;
+  };
 };
-
-package main;
 
 use YAML::XS qw( Load );
 

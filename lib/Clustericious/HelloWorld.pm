@@ -28,4 +28,9 @@ L<Clustericious>, L<Mojo::HelloWorld>
 
 get '/' => sub { shift->render_text('Hello, world') } => 'index';
 
+get '/modules' => sub {
+  my %copy = %INC;
+  shift->stash->{autodata} = \%copy;
+} => 'modules';
+
 1;
