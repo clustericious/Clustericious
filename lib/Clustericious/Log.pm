@@ -14,7 +14,7 @@ use File::HomeDir;
 =head1 SYNOPSIS
 
  use Clustericious::Log -init_logging => "appname";
-
+ 
  use Clustericious::Log;
  INFO "Hi there!";
 
