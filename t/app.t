@@ -3,6 +3,7 @@ use warnings;
 use Test::Clustericious::Log;
 use Test::More tests => 21;
 use Test::Mojo;
+use Capture::Tiny qw( capture );
 
 do {
   package SomeService;
@@ -64,3 +65,12 @@ SKIP: {
 $t->get_ok('/autotest_not_found')
   ->status_is(404);
 note $t->tx->res->text;
+
+my($out,$err,$ret) = capture {
+  local @ARGV = 'routes';
+  local $ENV{MOJO_APP} = 'SomeService';
+  Clustericious::Commands->start;
+};
+note "[routes]\n$out" if $out;
+note "[err]\n$err" if $err;
+

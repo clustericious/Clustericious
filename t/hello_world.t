@@ -5,6 +5,8 @@ use Test::More tests => 5;
 use YAML::XS ();
 use JSON::MaybeXS qw( decode_json );
 use Clustericious::HelloWorld::Client;
+use Clustericious::Commands;
+use Capture::Tiny qw( capture );
 
 my $cluster = Test::Clustericious::Cluster->new;
 $cluster->create_cluster_ok('Clustericious::HelloWorld');
@@ -75,6 +77,14 @@ subtest 'Clustericious::HelloWorld::Client' => sub {
   };
 
 };
+
+my($out,$err,$ret) = capture {
+  local @ARGV = 'routes';
+  local $ENV{MOJO_APP} = 'Clustericious::HelloWorld';
+  Clustericious::Commands->start;
+};
+note "[routes]\n$out" if $out;
+note "[err]\n$err" if $err;
 
 __END__
 
