@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.05      2015-11-20 08:58:24 -0500
   - Mojolicious 6.32 compatability (change to test only)
   - Loading configuration from a relative or absolute pathname
     is now supported, so long as the filename ends in .conf
