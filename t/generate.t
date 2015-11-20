@@ -1,16 +1,12 @@
 use strict;
 use warnings;
 BEGIN { eval q{ use EV } }
-BEGIN { eval q{ use Test::Clustericious::Log } }
+use Test::Clustericious::Log;
 use Test::More tests => 1;
 use IO::Scalar;
 use Clustericious::Commands;
 
 use strict;
-
-BEGIN {
-    $ENV{LOG_LEVEL} = 'FATAL';
-}
 
 my $c;
 {

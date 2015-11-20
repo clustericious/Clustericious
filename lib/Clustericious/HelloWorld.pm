@@ -26,10 +26,6 @@ L<Clustericious>, L<Mojo::HelloWorld>
 
 =cut
 
-BEGIN {
-    $ENV{LOG_LEVEL} = 'FATAL';
-}
-
 any '/*foo' => {foo => '', text => 'Clustericious is working!'};
 
 1;
