@@ -20,7 +20,7 @@ use File::HomeDir;
 
 =head1 DESCRIPTION
 
-This is a simple wrapper around Log::Log4perl for use with
+This is a simple wrapper around L<Log::Log4perl> for use with
 Clustericious.  It handles initialization and exporting of
 convenient logging functions, and a default set of logging
 patterns.  It also makes the name of the application available
@@ -28,7 +28,7 @@ for logging patterns (see the example).
 
 =head1 EXAMPLE
 
-Here is a sample ~/etc/log4perl.conf :
+Here is a sample C<~/etc/log4perl.conf> :
 
  log4perl.rootLogger=TRACE, LOGFILE
  log4perl.appender.LOGFILE=Log::Log4perl::Appender::File
@@ -57,8 +57,8 @@ sub import {
 
 =item init_logging
 
-Start logging.  Looks for log4perl.conf or $app.log4perl.conf
-in ~/etc and /etc.
+Start logging.  Looks for C<log4perl.conf> or C<$app.log4perl.conf>
+in C<~/etc> and C</etc>.
 
 =cut
 

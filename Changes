@@ -15,6 +15,7 @@ Revision history for {{$dist->name}}
   - Added some testing functions to Test::Clustericious::Log
     previously it simply redirected logging to TAP via
     Log::Log4perl::Appender::TAP (which it still does).
+  - Generally improved documentation coverage for Test::Clustericious::Log
 
 1.04      2015-11-17 10:36:15 -0500
   - Fixed bug where using a single string as start_mode

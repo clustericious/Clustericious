@@ -59,6 +59,10 @@ pod_spelling_system:
     - tx
     - fooclient
     - ethernet
+    - app
+    - MyApp1
+    - MyApp2
+    - 2xx
 
 pod_coverage:
   # format is "Class#method" or "Class", regex allowed

@@ -5,7 +5,7 @@ use warnings;
 use Clustericious::Log;
 use Sys::Hostname qw/hostname/;
 
-# ABSTRACT: Routes common to all clustericious apps.
+# ABSTRACT: Routes common to all clustericious applications
 # VERSION
 
 =head1 DESCRIPTION

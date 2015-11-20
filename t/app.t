@@ -50,16 +50,16 @@ $t->get_ok('/api/bogus_table')
 $t->get_ok('/api')
     ->status_is(200);
 
-1;
-
-
 $t->get_ok('/autotest')
   ->status_is(200)
   ->json_is({ a => 1, b => 2 });
 
-$t->get_ok('/autotest.yml')
-  ->status_is(200);
-note $t->tx->res->text;
+SKIP: {
+  skip 'skip test broken by Mojo 6.32', 2 if $ENV{CLUSTERICIOUS_SKIP_BORKED};
+  $t->get_ok('/autotest.yml')
+    ->status_is(200);
+  note $t->tx->res->text;
+};
 
 $t->get_ok('/autotest_not_found')
   ->status_is(404);

@@ -368,16 +368,14 @@ sub _default_start_mode {
 
 =head1 CAVEATS
 
-Some filesystems do not support filenames with a colon
-(:) character in them, so for apps with a double colon
-in them (for example L<Clustericious::HelloWorld>),
-a single dash character will be substituted for the name
-(for example C<Clustericious-HelloWorld.conf>).
+Some filesystems do not support filenames with a colon (:) character in 
+them, so for applications with a double colon in them (for example 
+L<Clustericious::HelloWorld>), a single dash character will be 
+substituted for the name (for example C<Clustericious-HelloWorld.conf>).
 
-L<Clustericious::Config> uses C<AUTOLOAD> to perform its
-magic, so some configuration keys that are reserved by
-Perl cannot be used.  Notably C<new>, C<can>, C<isa>,
-etc.
+L<Clustericious::Config> uses C<AUTOLOAD> to perform its magic, so some 
+configuration keys that are reserved by Perl cannot be used.  Notably 
+C<new>, C<can>, C<isa>, etc.
 
 =head1 SEE ALSO
 

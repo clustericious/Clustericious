@@ -30,23 +30,37 @@ our %EXPORT_TAGS = ( all => \@EXPORT );
 
 =head1 DESCRIPTION
 
-This module redirects the log4perl output from a L<Clustericious> 
-application to TAP using L<Test::Builder>.  By default it sends DEBUG to 
-WARN messages to C<note> and ERROR to FATAL to C<diag>, so you should 
-only see error and fatal messages if you run C<prove -l> on your test 
-but will see debug and warn messages if you run C<prove -lv>.
+This module redirects the L<Log::Log4perl> output from a 
+L<Clustericious> application to TAP using L<Test::Builder>.  By default 
+it sends DEBUG to WARN messages to C<note> and ERROR to FATAL to 
+C<diag>, so you should only see error and fatal messages if you run 
+C<prove -l> on your test but will see debug and warn messages if you run 
+C<prove -lv>.
 
 If the test fails for any reason, the entire log file will be printed 
 out using C<diag> when the test is complete.  This is useful for CPAN 
 testers reports.
 
-This module also provides some functions for testing the log events
-of a Clustericious application.
+In order to control the verbosity of the various logs, you can specify a 
+range of level for each of C<note>, C<diag> and C<file> (file being the 
+log file that is spewed IF the test file as a whole fails).
+
+ use Test::Clustericious::Log note => 'TRACE..ERROR', diag => 'FATAL';
+
+Note that only one set of ranges can be specified for the entire 
+process, so the first module that uses L<Test::Clustericious::Log> gets 
+to specify the ranges.  The defaults are somewhat reasonable: the log 
+file gets everything (C<TRACE..FATAL>), C<note> gets most stuff 
+(C<DEBUG..WARN>) and C<diag> gets errors, including fatal errors 
+(C<ERROR..FATAL>).
+
+This module also provides some functions for testing the log events of a 
+Clustericious application.
 
 =head1 FUNCTIONS
 
-In order to import functions from L<Test::Clustericious::Log>, you must
-pass an "import" to your use line.  The value is a list in the usual
+In order to import functions from L<Test::Clustericious::Log>, you must 
+pass an "import" to your use line.  The value is a list in the usual 
 L<Exporter> format.
 
  use Test::Clustericious::Log import => ':all';
@@ -89,16 +103,17 @@ sub log_context (&)
  log_like \%pattern, $message;
  log_like $pattern, $message;
 
-Test that at least one log event in the given context matches the pattern defined
-by C<\%pattern> or C<$patter>.  If you provide a hash reference, then each key
-in the event much match the pattern values.  The pattern values may be either strings
-or regular expressions.  If you use the scalar form (second) then the pattern
-(either a regular expression or string) must match the events message element.
+Test that at least one log event in the given context matches the 
+pattern defined by C<\%pattern> or C<$patter>.  If you provide a hash 
+reference, then each key in the event much match the pattern values.  
+The pattern values may be either strings or regular expressions.  If you 
+use the scalar form (second) then the pattern (either a regular 
+expression or string) must match the events message element.
 
-Note that only ONE message in the current context has to match because usually you
-want to make sure that particular message shows up in the log, but you don't
-care if other messages get added at a later time, and you do not want that common
-type of change to cause tests to break.
+Note that only ONE message in the current context has to match because 
+usually you want to make sure that particular message shows up in the 
+log, but you don't care if other messages get added at a later time, and 
+you do not want that common type of change to cause tests to break.
 
 Examples:
 
@@ -135,6 +150,16 @@ sub _event_match
   
   $match;
 }
+
+=head2 log_unlike
+
+ log_unlike \%pattern, $message;
+ log_unlike $pattern, $message;
+
+C<log_unlike> works like C<log_like>, except NONE of the events in the 
+current log context must match in order for the test to pass.
+
+=cut
 
 sub log_like ($;$)
 {

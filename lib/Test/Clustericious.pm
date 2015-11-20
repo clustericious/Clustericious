@@ -9,7 +9,7 @@ use Carp;
 use List::Util qw(first);
 use Clustericious::Config;
 
-# ABSTRACT: Test Clustericious apps
+# ABSTRACT: Test Clustericious applications
 # VERSION
 
 =head1 SYNOPSIS
