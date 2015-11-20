@@ -250,7 +250,7 @@ sub import
     if(defined $args->{$type})
     {
       my $name = ucfirst($type) . 'X';
-      if($args->{$type} =~ /^(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)(..(TRACE|DEBUG|INFO|WARN|ERROR|FATAL))$/)
+      if($args->{$type} =~ /^(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)(..(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)|)$/)
       {
         my($min,$max) = ($1,$3);
         $max = $min unless $max;
