@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::Clustericious::Log import => ':all';
+use Test::Clustericious::Log import => ':all', diag => 'NONE', note => 'ALL';
 use Clustericious::Log -init_logging => "Froodle";
 use Test::More tests => 4;
 use File::HomeDir;

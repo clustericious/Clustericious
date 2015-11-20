@@ -26,6 +26,6 @@ L<Clustericious>, L<Mojo::HelloWorld>
 
 =cut
 
-any '/*foo' => {foo => '', text => 'Clustericious is working!'};
+get '/' => sub { shift->render_text('Hello, world') } => 'index';
 
 1;

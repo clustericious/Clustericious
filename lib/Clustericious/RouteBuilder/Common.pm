@@ -2,6 +2,7 @@ package Clustericious::RouteBuilder::Common;
 
 use strict;
 use warnings;
+use 5.010;
 use Clustericious::Log;
 use Sys::Hostname qw/hostname/;
 
@@ -31,7 +32,7 @@ Returns the version of the service as a single element list.
     $app->routes->route('/version')->to(
         cb => sub {
             my $self = shift;
-            $self->stash(autodata => [ $self->app->VERSION ]);
+            $self->stash(autodata => [ $self->app->VERSION // 'dev' ]);
         }
     );
 
@@ -67,7 +68,7 @@ The version of the application.
             my $self = shift;
             my $app = ref $self->app || $self->app;
             $self->stash(autodata => { app_name => $app,
-                                     server_version => $self->app->VERSION,
+                                     server_version => $self->app->VERSION // 'dev',
                                      server_hostname => hostname(),
                                      server_url => $self->config->url(default => 'undef') });
         }

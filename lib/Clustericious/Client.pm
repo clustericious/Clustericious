@@ -878,7 +878,12 @@ sub _base_config {
     # Independent of remotes
     my $self = shift;
     return $self->{_base_config} if defined($self->{_base_config});
-    $self->{_base_config} = Clustericious::Config->new($self->_appname);
+    
+    my $config_name = ref $self;
+    $config_name =~ s/::Client$//;
+    $config_name =~ s/::/-/;
+    
+    $self->{_base_config} = Clustericious::Config->new($config_name);
     return $self->{_base_config};
 }
 

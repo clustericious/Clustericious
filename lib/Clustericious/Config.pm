@@ -251,9 +251,10 @@ sub new {
       $arg =~ s{\.\.::}{__up__::}g;
       $arg =~ tr/a-zA-Z0-0_://cd;
     }
+    $arg =~ s/-/::/g;
     $class = join '::', $class, 'App', $arg;
     $class .= $class_suffix->{$arg} if $class_suffix->{$arg};
-    my $dome = '@'."$class"."::ISA = ('".__PACKAGE__. "')";
+    my $dome = '# line '. __LINE__ . ' "' . __FILE__ . qq("\n) . '@'."$class"."::ISA = ('".__PACKAGE__. "')";
     eval $dome;
     die "error setting ISA : $@" if $@;
   }

@@ -285,6 +285,10 @@ sub import
       {
         delete $config->{$name};
       }
+      elsif($args->{$type} eq 'ALL')
+      {
+        $config->{$name} = [ 'TRACE', 'FATAL' ];
+      }
       else
       {
         carp "illegal log range: " . $args->{$type};
