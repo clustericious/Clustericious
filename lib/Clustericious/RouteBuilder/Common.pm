@@ -29,7 +29,7 @@ Returns the version of the service as a single element list.
 
 =cut
 
-    $app->routes->route('/version')->to(
+    $app->routes->get('/version')->to(
         cb => sub {
             my $self = shift;
             $self->stash(autodata => [ $self->app->VERSION // 'dev' ]);
@@ -63,7 +63,7 @@ The version of the application.
 
 =cut
 
-    $app->routes->route('/status')->to(
+    $app->routes->get('/status')->to(
         cb => sub {
             my $self = shift;
             my $app = ref $self->app || $self->app;
@@ -81,7 +81,7 @@ provided by the L<Mojolicious::Command::routes|routes command>.
 
 =cut
 
-    $app->routes->route('/api')->to(
+    $app->routes->get('/api')->to(
         cb => sub {
             my $self = shift;
             $self->render( autodata => [ $self->app->dump_api() ] );
@@ -96,7 +96,7 @@ table using this route.
 
 =cut
 
-    $app->routes->route('/api/:table')->to(
+    $app->routes->get('/api/:table')->to(
         cb => sub {
             my($self) = @_;
             my $table = $self->app->dump_api_table($self->stash('table'));
