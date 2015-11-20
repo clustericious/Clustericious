@@ -3,19 +3,16 @@ package Test::Clustericious::Log;
 use strict;
 use warnings;
 use 5.010001;
-
-BEGIN {
-  unless($INC{'File/HomeDir/Test.pm'})
-  {
-    eval q{ use File::HomeDir::Test };
-    die $@ if $@;
-  }
-}
-
+use if !$INC{'File/HomeDir/Test.pm'}, 'File::HomeDir::Test';
 use File::HomeDir;
 use Test::Builder::Module;
 use Clustericious::Log ();
 use Carp qw( carp );
+use base qw( Test::Builder::Module Exporter );
+use YAML::XS qw( Dump );
+
+our @EXPORT = qw( log_events log_context log_like log_unlike );
+our %EXPORT_TAGS = ( all => \@EXPORT );
 
 # ABSTRACT: Clustericious logging in tests.
 # VERSION
@@ -33,20 +30,182 @@ use Carp qw( carp );
 
 =head1 DESCRIPTION
 
-This module redirects the log4perl output from a 
-L<Clustericious> application to TAP using 
-L<Test::Builder>.  By default it sends DEBUG to WARN messages
-to C<note> and ERROR to FATAL to C<diag>, so you should only
-see error and fatal messages if you run C<prove -l> on your test
+This module redirects the log4perl output from a L<Clustericious> 
+application to TAP using L<Test::Builder>.  By default it sends DEBUG to 
+WARN messages to C<note> and ERROR to FATAL to C<diag>, so you should 
+only see error and fatal messages if you run C<prove -l> on your test 
 but will see debug and warn messages if you run C<prove -lv>.
 
-If the test fails for any reason, the entire log file will be
-printed out using C<diag> when the test is complete.  This
-is useful for CPAN testers reports.
+If the test fails for any reason, the entire log file will be printed 
+out using C<diag> when the test is complete.  This is useful for CPAN 
+testers reports.
+
+This module also provides some functions for testing the log events
+of a Clustericious application.
+
+=head1 FUNCTIONS
+
+In order to import functions from L<Test::Clustericious::Log>, you must
+pass an "import" to your use line.  The value is a list in the usual
+L<Exporter> format.
+
+ use Test::Clustericious::Log import => ':all';
+ use Test::Clustericious::Log import => [ 'log_events', 'log_like' ];
+
+=head2 log_events
+
+ my @events = log_events;
+
+Returns the set of log events for the current log scope as a list of 
+hash references.
 
 =cut
 
-# TRACE DEBUG INFO WARN ERROR FATAL
+sub log_events
+{
+  @{ Test::Clustericious::Log::Appender->new->{list} };
+}
+
+=head2 log_context
+
+ log_context {
+   # code
+ }
+
+Creates a log context for other L<Test::Clustericious::Log> functions to 
+operate on.
+
+=cut
+
+sub log_context (&)
+{
+  my($code) = @_;
+  local Test::Clustericious::Log::Appender->new->{list} = [];
+  $code->();
+}
+
+=head2 log_like
+
+ log_like \%pattern, $message;
+ log_like $pattern, $message;
+
+Test that at least one log event in the given context matches the pattern defined
+by C<\%pattern> or C<$patter>.  If you provide a hash reference, then each key
+in the event much match the pattern values.  The pattern values may be either strings
+or regular expressions.  If you use the scalar form (second) then the pattern
+(either a regular expression or string) must match the events message element.
+
+Note that only ONE message in the current context has to match because usually you
+want to make sure that particular message shows up in the log, but you don't
+care if other messages get added at a later time, and you do not want that common
+type of change to cause tests to break.
+
+Examples:
+
+ ERROR "Some error";
+ INFO "Exact message";
+ NOTE "some notice";
+ 
+ log_like 'Exact message", 'this should pass';
+ log_like 'xact messag',   'but this would fail';
+ log_like qr{xact messg},  'but this regex would pass';
+ 
+ log_like { message => 'Exact message', log4p_level => 'INFO' }, 'also passes';
+ log_like { message => 'Exact message', log4p_level => 'ERROR' }, 'Fails, level does not match';
+
+=cut
+
+sub _event_match
+{
+  my($pattern, $event) = @_;
+
+  my $match = 1;
+  foreach my $key (keys %$pattern)
+  {
+    my $pattern = $pattern->{$key};
+    if(ref $pattern eq 'Regexp')
+    {
+      $match = 0 unless $event->{$key} =~ $pattern;
+    }
+    else
+    {
+      $match = 0 unless $event->{$key} eq $pattern;
+    }
+  }
+  
+  $match;
+}
+
+sub log_like ($;$)
+{
+  my($pattern, $message) = @_;
+  
+  $message ||= "log matches pattern";
+  $pattern = { message => $pattern } unless ref $pattern eq 'HASH';
+  
+  my $tb = __PACKAGE__->builder;
+  my $ok = 0;
+  
+  foreach my $event (log_events)
+  {
+    if(_event_match($pattern, $event))
+    {
+      $ok = 1;
+      last;
+    }
+  }
+  
+  $tb->ok($ok, $message);
+
+  unless($ok)
+  {
+    
+    $tb->diag("None of the events matched the pattern:");
+    $tb->diag(
+      Dump({
+        events => [log_events],
+        pattern => $pattern,
+      })
+    );
+  }
+  
+  $ok;
+}
+
+sub log_unlike ($;$)
+{
+  my($pattern, $message) = @_;
+  
+  $message ||= "log matches pattern";
+  $pattern = { message => $pattern } unless ref $pattern eq 'HASH';
+
+  my $tb = __PACKAGE__->builder;
+  my $match;
+  
+  foreach my $event (log_events)
+  {
+    if(_event_match($pattern, $event))
+    {
+      $match = $event;
+      last;
+    }
+  }
+  
+  $tb->ok(!$match, $message);
+  
+  if($match)
+  {
+    $tb->diag("This event matched, but should not have:");
+    $tb->diag(
+      Dump({
+        event => $match,
+        pattern => $pattern,
+      })
+    );
+  }
+  
+  !$match
+}
 
 sub import
 {
@@ -65,8 +224,6 @@ sub import
     return;
   }
 
-  $Clustericious::Log::harness_active = 0;
-
   my $home = File::HomeDir->my_home;
   mkdir "$home/etc" unless -d "$home/etc";
   mkdir "$home/log" unless -d "$home/log";
@@ -75,6 +232,7 @@ sub import
     FileX => [ 'TRACE', 'FATAL'  ],
     NoteX => [ 'DEBUG', 'WARN'  ],
     DiagX => [ 'ERROR', 'FATAL' ],
+    TestX => [ 'TRACE', 'FATAL' ],
   };
 
   my $args;
@@ -115,6 +273,7 @@ sub import
   print $fh "FileX, " if defined $config->{FileX};
   print $fh "NoteX, " if defined $config->{NoteX};
   print $fh "DiagX, " if defined $config->{DiagX};
+  print $fh "TestX, " if defined $config->{TestX};
   print $fh "\n";
   
   while(my($appender, $levels) = each %$config)
@@ -132,6 +291,11 @@ sub import
   print $fh "log4perl.appender.FileX.layout=PatternLayout\n";
   print $fh "log4perl.appender.FileX.layout.ConversionPattern=[%P %p{1} %rms] %F:%L %m%n\n";
   print $fh "log4perl.appender.FileX.Filter=MatchFileX\n";
+
+  print $fh "log4perl.appender.TestX=Test::Clustericious::Log::Appender\n";
+  print $fh "log4perl.appender.TestX.layout=PatternLayout\n";
+  print $fh "log4perl.appender.TestX.layout.ConversionPattern=%m\n";
+  print $fh "log4perl.appender.TestX.Filter=MatchTestX\n";
   
   print $fh "log4perl.appender.NoteX=Log::Log4perl::Appender::TAP\n";
   print $fh "log4perl.appender.NoteX.method=note\n";
@@ -146,6 +310,13 @@ sub import
   print $fh "log4perl.appender.DiagX.Filter=MatchDiagX\n";
   
   close $fh;  
+
+  if($args->{import})
+  {
+    @_ = ($class, ref $args->{import} ? @{ $args->{import} } : ($args->{import}));
+    goto &Exporter::import;
+  }  
+
 }
 
 END
@@ -167,6 +338,38 @@ END
       $tb->diag("no detailed log");
     }
   }
+}
+
+package Test::Clustericious::Log::Appender;
+
+use Storable ();
+use Carp ();
+our @ISA = qw( Log::Log4perl::Appender );
+
+sub new
+{
+  my($class) = @_;
+  
+  Carp::croak "not subclassable"
+    unless $class eq __PACKAGE__;
+  
+  state $self;
+  
+  unless(defined $self)
+  {
+    $self = bless { list => [] }, __PACKAGE__;
+  }
+  
+  $self;
+}
+
+sub log
+{
+  my($self, %args) = @_;
+  
+  push @{ $self->{list} }, Storable::dclone(\%args);
+
+  ();
 }
 
 1;
