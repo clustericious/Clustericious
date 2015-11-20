@@ -28,7 +28,7 @@ install:
   - cpanm -n Log::Log4perl::Appender::TAP
   - cpanm -n Test::CPAN::Changes Test::EOL Test::Fixme Test::NoTabs Test::Pod::Spelling::CommonMistakes Test::Spelling Test::Strict Test::Version || true
 
-script: dzil test -v
+script: env CLUSTERICIOUS_SKIP_BORKED=1 dzil test -v
 
 perl:
   - "5.21"
