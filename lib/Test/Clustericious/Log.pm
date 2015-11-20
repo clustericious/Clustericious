@@ -326,7 +326,11 @@ END
   
   unless($tb->is_passing)
   {
-    if(-r "$home/log/test.log")
+    if($ENV{CLUSTERICIOUS_LOG_SPEW_OFF})
+    {
+      $tb->diag("not spewing the entire log (unset CLUSTERICIOUS_LOG_SPEW_OFF to turn back on)");
+    }
+    elsif(-r "$home/log/test.log")
     {
       $tb->diag("detailed log");
       open my $fh, '<', "$home/log/test.log";

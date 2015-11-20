@@ -13,9 +13,6 @@ WARN  "warn";
 ERROR "error";
 FATAL "fatal";
 
-use YAML ();
-#note YAML::Dump(Test::Clustericious::Log::Appender->new->{list});
-
 note "File::HomeDir::Test=$INC{'File/HomeDir/Test.pm'}";
 note "homedir: @{[ File::HomeDir->my_home ]}";
 
