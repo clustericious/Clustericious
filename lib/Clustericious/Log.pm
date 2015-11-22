@@ -51,8 +51,8 @@ sub import {
     if (my $app_name = $args{-init_logging}) {
         init_logging($app_name);
     }
-    no strict 'refs';
-    *{"${dest}::$_"} = *{"${class}::$_"} for qw/TRACE INFO DEBUG ERROR WARN FATAL LOGDIE get_logger/;
+    @_ = ($class, ':easy');
+    goto \&Log::Log4perl::import;
 }
 
 =item init_logging

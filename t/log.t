@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::Clustericious::Log import => ':all', diag => 'NONE', note => 'ALL';
 use Clustericious::Log -init_logging => "Froodle";
-use Test::More tests => 4;
+use Test::More tests => 5;
 use File::HomeDir;
 use YAML::XS ();
 
@@ -88,6 +88,41 @@ subtest log_unlike => sub {
       log4p_level => 'INFO',
     }, 'hashref with regex';
   
+  };
+
+};
+
+
+subtest 'correct package' => sub {
+
+  log_context {
+    do {
+      package
+        Foo::Bar::Baz;
+      use Clustericious::Log;
+      INFO "Message From Foo";
+    };
+    
+    do {
+      package
+        Barf::Baz::Foo;
+      use Clustericious::Log;
+      INFO "Message From Barf";
+    };
+    
+    log_like {
+      message        => 'Message From Foo',
+      log4p_category => 'Foo.Bar.Baz',
+    }, 'correct class';
+    
+    log_like {
+      message        => 'Message From Barf',
+      log4p_category => 'Barf.Baz.Foo',
+    };
+
+    use YAML ();
+    note YAML::Dump(log_events);
+    
   };
 
 };

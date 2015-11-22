@@ -344,8 +344,7 @@ sub import
   {
     @_ = ($class, ref $args->{import} ? @{ $args->{import} } : ($args->{import}));
     goto &Exporter::import;
-  }  
-
+  }
 }
 
 END
