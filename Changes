@@ -2,6 +2,11 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+1.06      2015-11-29 12:40:03 -0500
+  - Clustericious::Log correctly sets the category
+  - Moved repository to clustericious org on github
+    (updated meta appropriately)
+
 1.05      2015-11-20 08:58:24 -0500
   - Mojolicious 6.32 compatability (change to test only)
   - Loading configuration from a relative or absolute pathname
