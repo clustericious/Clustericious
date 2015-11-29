@@ -120,8 +120,7 @@ subtest 'correct package' => sub {
       log4p_category => 'Barf.Baz.Foo',
     };
 
-    use YAML ();
-    note YAML::Dump(log_events);
+    note YAML::XS::Dump(log_events);
     
   };
 
