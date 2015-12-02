@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Fixed bug in Clustericious::COnfig on MSWin32 (thanks to chorny for the report gh#23)
 
 1.06      2015-11-29 12:40:03 -0500
   - Clustericious::Log correctly sets the category
