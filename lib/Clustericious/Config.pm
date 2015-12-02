@@ -250,6 +250,7 @@ sub new {
       $arg =~ s{[\\/]}{::}g;
       $arg =~ s{\.\.::}{__up__::}g;
       $arg =~ tr/a-zA-Z0-0_://cd;
+      $arg =~ s/:{3,}/::/g;
     }
     $arg =~ s/-/::/g;
     $class = join '::', $class, 'App', $arg;
