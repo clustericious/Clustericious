@@ -145,6 +145,8 @@ sub startup {
     # "Common" ones are not overrideable.
     Clustericious::RouteBuilder::Common->_add_routes($self);
     Clustericious::RouteBuilder->_add_routes($self, $auth_plugin);
+    Clustericious::RouteBuilder::Dancer2->_add_routes($self)
+        if eval { Clustericious::RouteBuilder::Dancer2->can('_add_routes') };
 
     $self->plugin('AutodataHandler');
     $self->plugin('DefaultHelpers');
