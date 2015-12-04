@@ -1,4 +1,3 @@
-
 package Clustericious::App;
 
 use strict;
@@ -19,7 +18,6 @@ use File::HomeDir ();
 use Carp qw( cluck );
 use Clustericious::Controller;
 use Clustericious::Renderer;
-use Clustericious::RouteBuilder;
 use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
 use Clustericious::Commands;
@@ -88,6 +86,13 @@ and sets up logging for the client using log::log4perl.
 
 =cut
 
+my @route_builders;
+
+sub _add_route_builder
+{
+  push @route_builders, $_[1];
+}
+
 sub startup {
     my $self = shift;
 
@@ -144,9 +149,7 @@ sub startup {
     my $r = $self->routes;
     # "Common" ones are not overrideable.
     Clustericious::RouteBuilder::Common->_add_routes($self);
-    Clustericious::RouteBuilder->_add_routes($self, $auth_plugin);
-    Clustericious::RouteBuilder::Dancer2->_add_routes($self)
-        if eval { Clustericious::RouteBuilder::Dancer2->can('_add_routes') };
+    $_->($self, $auth_plugin) for @route_builders;
 
     $self->plugin('AutodataHandler');
     $self->plugin('DefaultHelpers');

@@ -3,6 +3,7 @@ package Clustericious::RouteBuilder;
 use strict;
 use warnings;
 use 5.010;
+use Clustericious::App;
 use Log::Log4perl qw( :easy );
 
 # ABSTRACT: Route builder for Clustericious applications
@@ -166,8 +167,7 @@ sub import {
     *{"${caller}::authorize"}    = sub { $route_sub->('authorize',@_) };
 }
 
-sub _add_routes {
-    my $class = shift;
+Clustericious::App->_add_route_builder(sub {
     my $app = shift;
     my $auth_plugin = shift;
 
@@ -236,7 +236,7 @@ sub _add_routes {
          # WebSocket
          $route->websocket if $websocket;
      }
-}
+});
 
 1;
 
