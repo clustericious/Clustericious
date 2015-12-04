@@ -3,12 +3,9 @@ package Clustericious::Command::hypnotoad;
 use strict;
 use warnings;
 use Clustericious;
-use Clustericious::Log;
 use Clustericious::App;
-use Clustericious::Config;
+use Clustericious::Log;
 use Mojo::Server::Hypnotoad;
-use Data::Dumper;
-use Cwd qw/getcwd abs_path/;
 use base 'Clustericious::Command';
 
 # ABSTRACT: Clustericious command to stat Hypnotoad

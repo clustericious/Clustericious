@@ -3,10 +3,7 @@ package Clustericious::Command::apache;
 use strict;
 use warnings;
 use Clustericious::App;
-use Clustericious::Config;
-use File::Path qw/mkpath/;
 use base 'Clustericious::Command';
-use Clustericious::Log;
 use File::Which qw( which );
 
 # ABSTRACT: Clustericious command to stat Apache
