@@ -6,6 +6,10 @@ Revision history for {{$dist->name}}
   - Configs with .yml extension are deprecated and will be removed on or after January 31, 2016
   - Fixed bug where stop command didn't work with default hypnotoad config
   - Fixed bug where plackup command didn't work.
+  - The /status route now returns the actual URL, not the configured one.
+    Among other things, this means that if you start a service withe the mojo
+    daemon command using the -l option, you will get the correct URL in the status
+    body.
 
 1.07      2015-12-02 11:27:28 -0500
   - Fixed bug in Clustericious::COnfig on MSWin32 (thanks to chorny for the report gh#23)
