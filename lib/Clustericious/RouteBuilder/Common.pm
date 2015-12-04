@@ -64,14 +64,11 @@ The version of the application.
     my($self) = @_;
     my $app = ref $self->app || $self->app;
 
-    my $url = $self->req->url->to_abs;
-    pop @{ $url->path->parts };
-
     $self->stash(autodata => {
       app_name => $app,
       server_version => $self->app->VERSION // 'dev',
       server_hostname => Sys::Hostname::hostname(),
-      server_url => $url->to_string,
+      server_url => $self->url_for('/')->to_abs->to_string,
     });
   });
 
