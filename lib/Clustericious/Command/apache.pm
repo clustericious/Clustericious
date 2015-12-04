@@ -59,10 +59,6 @@ Then call from your application's config file:
  ---
  % extend_config 'apache-cgi', host => 'localhost', port => 3001;
 
-=head1 SUPER CLASS
-
-L<Clustericious::Command>
-
 =head1 SEE ALSO
 
 L<Clustericious>

@@ -14,34 +14,46 @@ use base 'Clustericious::Command';
 # ABSTRACT: Clustericious command to stat Hypnotoad
 # VERSION
 
-=head1 SYNOPSIS
-
-in your application configuration (C<~/etc/YourApp.conf>)
-
- ---
- start_mode : "hypnotoad"
- hypnotoad:
-    workers : 1
-        listen :
-            - "http://*:3000"
-    inactivity_timeout : 50
-    pid_file : /tmp/minionrelay.pid
-
-then at the command line:
-
- % yourapp start
-
 =head1 DESCRIPTION
 
 Start a hypnotoad web server.
 
 Configuration for the server is taken directly from the
 "hypnotoad" entry in the config file, and turned into
-a config file for hypnotoad.
+a config file for hypnotoad.  Among other options in
+this section these are recognized:
 
-=head1 SUPER CLASS
+=over 4
 
-L<Clustericious::Command>
+=item listen
+
+List of URLS to listen on
+
+=item pid_file
+
+The location of the PID file.  For the stop command to
+work this MUST be specified.,
+
+=back
+
+=head1 EXAMPLES
+
+=head2 hypnotoad by itself
+
+Create a hypnotoad.conf:
+
+# EXAMPLE: example/etc/hypnotoad.conf
+
+Then call from your application's config file:
+
+ ---
+ % extend_config 'hypnotoad', host => 'localhost', port => 3001;
+
+=head2 paired with another server
+
+Examples for proxying another server to a hypnotoad back end
+can be found in L<Clustericious::Command::apache> and
+L<Clustericious::Command::nginx>.
 
 =head1 SEE ALSO
 
