@@ -3,8 +3,6 @@ package Clustericious::RouteBuilder::Search;
 use strict;
 use warnings;
 use Clustericious::Log;
-use List::MoreUtils qw/uniq/;
-use Data::Dumper;
 
 # ABSTRACT: build routes for searching for objects
 # VERSION
@@ -95,7 +93,7 @@ sub _build_search {
         }
 
 
-        TRACE "searching for $items : ".Dumper($p);
+        #TRACE "searching for $items : ".Dumper($p);
 
         # maybe restrict, by first calling $manager->normalize_get_objects_args(%$p)
 

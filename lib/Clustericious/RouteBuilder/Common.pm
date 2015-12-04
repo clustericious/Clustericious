@@ -3,8 +3,7 @@ package Clustericious::RouteBuilder::Common;
 use strict;
 use warnings;
 use 5.010;
-use Clustericious::Log;
-use Sys::Hostname qw/hostname/;
+use Sys::Hostname ();
 
 # ABSTRACT: Routes common to all clustericious applications
 # VERSION
@@ -73,7 +72,7 @@ The version of the application.
     $self->stash(autodata => {
       app_name => $app,
       server_version => $self->app->VERSION // 'dev',
-      server_hostname => hostname(),
+      server_hostname => Sys::Hostname::hostname(),
       server_url => $url->to_string,
     });
   });

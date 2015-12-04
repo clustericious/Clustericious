@@ -2,7 +2,6 @@ package Clustericious::RouteBuilder::Proxy;
 
 use strict;
 use warnings;
-use Clustericious::Log;
 
 # ABSTRACT: build proxy routes easily
 # VERSION
@@ -123,7 +122,7 @@ sub _build_proxy_service {
     my $service2sub;
     for my $service (keys %$name2url) {
         my $dest = $name2url->{$service} or next;
-        TRACE "Building proxy for $service to $dest";
+        #TRACE "Building proxy for $service to $dest";
         my $sub = $class->_build_proxy( "dummy", { to => $dest, strip_prefix => "/$service" } );
         $service2sub->{$service} = $sub;
     }
