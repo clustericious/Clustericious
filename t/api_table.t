@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::Clustericious::Cluster;
+use Test::Clustericious::Cluster 0.26;
 use Test::More;
 use File::Find qw( find );
 use File::Basename qw( dirname );
@@ -13,15 +13,14 @@ plan tests => 43;
 my $cluster = Test::Clustericious::Cluster->new;
 $cluster->create_cluster_ok('SomeService');
 my $t = $cluster->t;
-my $url = $cluster->url;
 
-$t->get_ok("$url/api")
+$t->get_ok("/api")
   ->status_is(200);
 
-$t->get_ok("$url/api/bogus_table")
+$t->get_ok("/api/bogus_table")
   ->status_is(404);
 
-$t->get_ok("$url/api/person")
+$t->get_ok("/api/person")
   ->status_is(200)
   ->json_is("/columns/first_name/not_null", 1)
   ->json_is("/columns/first_name/rose_db_type", "varchar")
