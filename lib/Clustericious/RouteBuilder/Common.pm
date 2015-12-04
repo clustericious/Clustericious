@@ -62,13 +62,19 @@ The version of the application.
 =cut
 
   $app->routes->get('/status')->to(cb => sub {
-    my $self = shift;
+    my($self) = @_;
     my $app = ref $self->app || $self->app;
+
+    my $url = $self->req->url->to_abs;
+    my $path = $url->path;
+    $path =~ s{/status$}{};
+    $url->path($path);
+
     $self->stash(autodata => {
       app_name => $app,
       server_version => $self->app->VERSION // 'dev',
       server_hostname => hostname(),
-      server_url => $self->config->url(default => 'undef'),
+      server_url => $url->to_string,
     });
   });
 
