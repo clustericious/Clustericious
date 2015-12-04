@@ -6,6 +6,7 @@ use Clustericious::Log;
 use Clustericious::App;
 use Mojo::Server::PSGI;
 use base 'Clustericious::Command';
+use File::Which qw( which );
 
 # ABSTRACT: Clustericious command to start plack server
 # VERSION
@@ -39,19 +40,17 @@ EOT
 
 sub run {
     my $self = shift;
-    my @args = @_ ? @_ : @ARGV;
     my $app_name = $ENV{MOJO_APP};
     my $conf = Clustericious::Config->new( $app_name );
 
     Clustericious::App->init_logging;
 
-    my $plackup = qx[which plackup] or LOGDIE "could not find plackup in $ENV{PATH}";
-    chomp $plackup;
+    my $plackup = which('plackup') || LOGDIE "could not find plackup in $ENV{PATH}";
 
-    DEBUG "starting $plackup @args";
+    DEBUG "starting $plackup $0";
     delete $ENV{MOJO_COMMANDS_DONE};
-    system( $plackup, @args ) == 0
-      or die "could not start $plackup @args ($?) "
+    system( $plackup, $0 ) == 0
+      or die "could not start $plackup $0 ($?) "
       . ( ${^CHILD_ERROR_NATIVE} || '' );
 }
 
