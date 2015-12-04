@@ -123,9 +123,7 @@ sub _stop_nginx {
 
 sub _stop_apache {
     my %conf = @_;
-    my $prefix = $conf{'-d'};
-    INFO "stopping apache in $prefix";
-    _stop_pidfile("$prefix/logs/httpd.pid",'TERM');
+    _stop_pidfile($conf{pid_file},'TERM');
 }
 
 sub run {

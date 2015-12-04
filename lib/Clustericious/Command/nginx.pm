@@ -56,7 +56,6 @@ sub run {
     mkpath "$prefix/logs";
 
     my $nginx = which('nginx') or LOGDIE "could not find nginx in $ENV{PATH}";
-    chomp $nginx;
     DEBUG "starting $nginx @args";
     system( $nginx, @args ) == 0
       or die "could not start $nginx @args ($?) "

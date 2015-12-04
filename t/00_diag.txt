@@ -9,8 +9,8 @@ File::HomeDir
 File::ReadBackwards
 File::ShareDir
 File::ShareDir::Install
+File::Which
 Hash::Merge
-IO::Scalar
 JSON::MaybeXS
 JSON::PP
 JSON::XS
@@ -26,6 +26,7 @@ Term::Prompt
 Test::Builder::Module
 Test::Clustericious::Cluster
 Test::More
+Test::Script
 Test::Warn
 YAML::XS
 autodie

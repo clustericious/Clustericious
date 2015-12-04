@@ -9,6 +9,7 @@ use File::Basename qw/dirname/;
 use Clustericious::App;
 use Clustericious::Config;
 use Mojo::Base 'Clustericious::Command';
+use Text::ParseWords qw( shellwords );
 
 # ABSTRACT: Clustericious command to start a Clustericious application
 # VERSION 
@@ -113,15 +114,26 @@ sub run {
         }
         TRACE "Setting env vars : ".join ',', keys %$env;
 
-        # if it starts with a dash, leave it alone, else add two dashes
-        my %args = mesh
-          @{ [ map {/^-/ ? "$_" : "--$_"} keys %conf ] },
-          @{ [ values %conf                          ] };
+        my @args;
 
-        # squash "null"s (for boolean arguments)
-        my @args = grep { $_ ne 'null' } %args;
+        if(my $args = delete $conf{args})
+        {
+            $DB::single = 1;
+            @args = ref $args ne 'ARRAY' ? (shellwords $args) : @$args;
+        }
+        else
+        {
+          # THIS IS RETARDED AND SHOULD BE DEPRECATED
+          # if it starts with a dash, leave it alone, else add two dashes
+          my %args = mesh
+            @{ [ map {/^-/ ? "$_" : "--$_"} keys %conf ] },
+            @{ [ values %conf                          ] };
+
+          # squash "null"s (for boolean arguments)
+          @args = grep { $_ ne 'null' } %args;
+        }
+
         DEBUG "Sending args for $mode : @args";
-
         $ENV{MOJO_COMMANDS_DONE} = 0;
         Clustericious::Commands->start($mode,@args);
     }
