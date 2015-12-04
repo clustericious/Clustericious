@@ -65,9 +65,7 @@ The version of the application.
     my $app = ref $self->app || $self->app;
 
     my $url = $self->req->url->to_abs;
-    my $path = $url->path;
-    $path =~ s{/status$}{};
-    $url->path($path);
+    pop @{ $url->path->parts };
 
     $self->stash(autodata => {
       app_name => $app,
