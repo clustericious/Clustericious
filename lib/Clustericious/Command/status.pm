@@ -77,8 +77,7 @@ sub run {
     exit 2 unless $self->app->sanity_check;
     my @args = @_ ? @_ : @ARGV;
     my $app  = $ENV{MOJO_APP};
-    my $conf = Clustericious::Config->new($app);
-    $conf->_default_start_mode;
+    my $conf = $self->app->config;
 
     eval "require $app";
     die "Could not load $app : \n$@\n" if $@;
@@ -87,7 +86,7 @@ sub run {
 
     my $exe = $0;
     # webserver
-    for ($self->app->_start_mode) {
+    for ($self->app->config->start_mode) {
         push @status, { name => $_,
          (
            /hypnotoad/ ? _check_pidfile($conf->hypnotoad->pid_file(default => dirname($exe).'/hypnotoad.pid'))

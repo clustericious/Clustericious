@@ -16,9 +16,6 @@ delete $methods{$_} for qw( dump_as_yaml set_singleton );
 
 ## eventually I'd like to move/remove these as well.
 
-## internal
-delete $methods{$_} for qw( _default_start_mode );
-
 note YAML::XS::Dump([keys %methods]);
 
 is_deeply [sort keys %methods], [sort qw( new AUTOLOAD DESTROY )], 'the big three';

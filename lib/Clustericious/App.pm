@@ -113,25 +113,7 @@ sub startup {
     }
 
     $self->plugins->namespaces(['Mojolicious::Plugin','Clustericious::Plugin']);
-    my $config = eval { Clustericious::Config->new(ref $self) };
-    if(my $error = $@)
-    {
-        $self->log->error("error loading config $error");
-        $config = Clustericious::Config->new({ clustericious_config_error => $error });
-    }
-    else
-    {
-        if($config->{url})
-        {
-            # populate start mode and hypntoad with defaults if
-            # they are not specified in the configuration
-            $config->_default_start_mode;
-            $config->hypnotoad 
-              if ref $config->{start_mode} eq 'ARRAY'
-              && @{ $config->{start_mode} } == 1
-              && $config->{start_mode}->[0] eq 'hypnotoad';
-        }
-    }
+    my $config = $self->config;
     my $auth_plugin;
     if(my $auth_config = $config->plug_auth(default => '')) {
         $self->log->info("Loading auth plugin plug_auth");
@@ -165,7 +147,6 @@ sub startup {
         $self->log->warn("Configuration file should contain 'url'.");
     };
 
-    $self->helper( _clustericious_config => sub { $config } );
     $self->helper( url_with => sub {
         my $c = shift;
         my $q = $c->req->url->clone->query;
@@ -317,13 +298,41 @@ Returns the config (an instance of L<Clustericious::Config>) for the application
 =cut
 
 sub config {
-    my $app = shift;
-    if (my $what = shift) {
-        # Mojo config interface
-        $app->_clustericious_config(@_)->{$what};
-    } else {
-        $app->_clustericious_config(@_);
+  my($self, $what) = @_;
+
+  unless($self->{_config})
+  {
+    my $config = $self->{_config} = eval { Clustericious::Config->new(ref $self) };
+    if(my $error = $@)
+    {
+      $self->log->error("error loading config $error");
+      $config = $self->{_config} = Clustericious::Config->new({ clustericious_config_error => $error });
     }
+
+    if($config->{url})
+    {
+      if(grep { $_ eq 'hypnotoad' } $config->start_mode(default => [ 'hypnotoad' ]) )
+      {
+        my $hypnotoad = $config->hypnotoad(
+          default => sub {
+            my $url = Mojo::URL->new($config->{url});
+            {
+              pid_file => File::Spec->catfile( File::HomeDir->my_dist_data("Clustericious", { create => 1 } ), 'hypnotoad-' . $url->port . '-' . $url->host . '.pid' ),
+              listen => [
+                $url->to_string,
+              ],
+            };
+          }
+        );
+      }
+    }
+  }
+
+  my $config = $self->{_config};
+
+  # Mojo uses $app->config('what');
+  # Clustericious usually uses $app->config->what;
+  $what ? $config->{$what} : $config;
 }
 
 =head2 $app-E<gt>sanity_check
@@ -356,11 +365,6 @@ sub sanity_check
     }
     
     $sane;
-}
-
-sub _start_mode
-{
-  shift->config->_default_start_mode;
 }
 
 1;

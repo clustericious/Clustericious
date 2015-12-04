@@ -318,6 +318,7 @@ sub AUTOLOAD {
     elsif($default_exists)
     {
       $value = $self->{$called} = ref $default eq 'CODE' ? $default->() : $default;
+      $obj = ref $value eq 'HASH' ? $invocant->new($value) : undef;
     }
     else
     {
@@ -357,22 +358,6 @@ sub set_singleton {
   Carp::carp "Clustericious::Config#set_singleton is deprecated";
   my($class, $app, $obj) = @_;
   $singletons{$app} = $obj;
-}
-
-sub _default_start_mode {
-  my $self = shift;
-  $self->start_mode(default => sub {
-    $self->hypnotoad(default => sub {
-      my $url = Mojo::URL->new($self->url);
-      {
-        pid_file => File::Spec->catfile( File::HomeDir->my_dist_data("Clustericious", { create => 1 } ), 'hypnotoad-' . $url->port . '-' . $url->host . '.pid' ),
-        listen => [
-          $url->to_string,
-        ],
-      }
-    });
-    [ 'hypnotoad' ];
-  });
 }
 
 =head1 CAVEATS

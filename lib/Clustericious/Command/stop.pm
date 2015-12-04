@@ -8,7 +8,6 @@ use Mojo::URL;
 use File::Basename qw/dirname/;
 use base 'Clustericious::Command';
 use Clustericious;
-use Clustericious::Config;
 
 # ABSTRACT: Clustericious command to stop a Clustericious application
 # VERSION
@@ -132,20 +131,18 @@ sub _stop_apache {
 sub run {
     my $self     = shift;
     exit 2 unless $self->app->sanity_check;
-    my $conf     = Clustericious::Config->new( $ENV{MOJO_APP} );
-    $conf->_default_start_mode;
 
     Clustericious::App->init_logging();
 
     my $exe = $0;
-    for (reverse $self->app->_start_mode) {
+    for (reverse $self->app->config->start_mode) {
         DEBUG "Stopping $_ server";
-        /hypnotoad/ and _stop_pidfile($conf->hypnotoad->pid_file(default => dirname($exe).'/hypnotoad.pid' ));
-        /plackup/   and _stop_pidfile($conf->plackup->pidfile);
-        /lighttpd/  and _stop_pidfile($conf->lighttpd->env->lighttpd_pid);
-        /daemon/    and _stop_daemon($conf->daemon->listen);
-        /nginx/     and _stop_nginx($conf->nginx);
-        /apache/    and _stop_apache($conf->apache);
+        /hypnotoad/ and _stop_pidfile($self->app->config->hypnotoad->pid_file);
+        /plackup/   and _stop_pidfile($self->app->config->plackup->pidfile);
+        /lighttpd/  and _stop_pidfile($self->app->config->lighttpd->env->lighttpd_pid);
+        /daemon/    and _stop_daemon($self->app->config->daemon->listen);
+        /nginx/     and _stop_nginx($self->app->config->nginx);
+        /apache/    and _stop_apache($self->app->config->apache);
     }
 
     1;

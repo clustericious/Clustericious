@@ -79,8 +79,7 @@ sub run {
     exit 2 unless $self->app->sanity_check;
     my @args = @_ ? @_ : @ARGV;
     my $app  = $ENV{MOJO_APP};
-    my $conf     = Clustericious::Config->new( $app );
-    $conf->_default_start_mode;
+    my $conf     = $self->app->config;
 
     local $SIG{__DIE__} = \&Carp::confess;
     eval "use $app;";
@@ -90,7 +89,7 @@ sub run {
 
     Clustericious::App->init_logging;
 
-    for my $mode ($self->app->_start_mode) {
+    for my $mode ($self->app->config->start_mode) {
         #  local %ENV = %ENV;
         INFO "Starting $mode";
         my %conf = $conf->$mode;

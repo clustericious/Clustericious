@@ -60,16 +60,7 @@ EOT
 
 sub run {
     my $self = shift;
-    my $conf = do {
-      my $conf = Clustericious::Config->new($ENV{MOJO_APP});
-      # generate the default values
-      # if they are not filled in already
-      $conf->_default_start_mode;
-      $conf->hypnotoad;
-    };
-    my %conf = %$conf;
-    my $conf_string = Data::Dumper->Dump([\%conf],["conf"]);
-    DEBUG "Config : $conf_string";
+    my $conf = $self->app->config->hypnotoad;
     my $exe = $0;
     DEBUG "Running hypnotoad : $exe";
     $ENV{HYPNOTOAD_EXE} = "$0";
