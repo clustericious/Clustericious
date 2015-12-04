@@ -7,6 +7,7 @@ use Clustericious::Config;
 use File::Path qw/mkpath/;
 use base 'Clustericious::Command';
 use Clustericious::Log;
+use File::Which qw( which );
 
 # ABSTRACT: Clustericious command to stat nginx
 # VERSION
@@ -54,7 +55,7 @@ sub run {
     my $prefix = $args{-p} or INFO "no prefix for nginx";
     mkpath "$prefix/logs";
 
-    my $nginx = qx[which nginx] or LOGDIE "could not find nginx in $ENV{PATH}";
+    my $nginx = which('nginx') or LOGDIE "could not find nginx in $ENV{PATH}";
     chomp $nginx;
     DEBUG "starting $nginx @args";
     system( $nginx, @args ) == 0

@@ -6,6 +6,7 @@ use Clustericious::Log;
 use Clustericious::App;
 use Clustericious::Config;
 use base 'Clustericious::Command';
+use File::Which qw( which );
 
 # ABSTRACT: Clustericious command to stat lighttpd
 # VERSION
@@ -45,7 +46,7 @@ sub run {
 
     # Clustericious::App->init_logging;
 
-    my $lighttpd = qx[which lighttpd] or LOGDIE "could not find lighttpd in $ENV{PATH}";
+    my $lighttpd = which('lighttpd') or LOGDIE "could not find lighttpd in $ENV{PATH}";
     chomp $lighttpd;
     DEBUG "starting $lighttpd @args";
     system( $lighttpd, @args ) == 0

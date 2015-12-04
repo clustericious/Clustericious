@@ -7,6 +7,7 @@ use Clustericious::Config;
 use File::Path qw/mkpath/;
 use base 'Clustericious::Command';
 use Clustericious::Log;
+use File::Which qw( which );
 
 # ABSTRACT: Clustericious command to stat Apache
 # VERSION
@@ -49,7 +50,7 @@ sub run {
 
     my $prefix = $args{-d} or INFO "no server root for Apache";
     mkpath "$prefix/logs" if $prefix;
-    my $apache = qx[which httpd] or LOGDIE "could not find httpd in $ENV{PATH}";
+    my $apache = which('httpd') or LOGDIE "could not find httpd in $ENV{PATH}";
     chomp $apache;
     DEBUG "starting $apache @args";
     system( $apache, @args ) == 0
