@@ -20,8 +20,8 @@ none
 =cut
 
 sub _add_routes {
-    my $class = shift;
-    my $app = shift;
+  my $class = shift;
+  my $app = shift;
 
 =head2 /version
 
@@ -29,12 +29,10 @@ Returns the version of the service as a single element list.
 
 =cut
 
-    $app->routes->get('/version')->to(
-        cb => sub {
-            my $self = shift;
-            $self->stash(autodata => [ $self->app->VERSION // 'dev' ]);
-        }
-    );
+  $app->routes->get('/version')->to(cb => sub {
+    my $self = shift;
+    $self->stash(autodata => [ $self->app->VERSION // 'dev' ]);
+  });
 
 =head2 /status
 
@@ -63,16 +61,16 @@ The version of the application.
 
 =cut
 
-    $app->routes->get('/status')->to(
-        cb => sub {
-            my $self = shift;
-            my $app = ref $self->app || $self->app;
-            $self->stash(autodata => { app_name => $app,
-                                     server_version => $self->app->VERSION // 'dev',
-                                     server_hostname => hostname(),
-                                     server_url => $self->config->url(default => 'undef') });
-        }
-    );
+  $app->routes->get('/status')->to(cb => sub {
+    my $self = shift;
+    my $app = ref $self->app || $self->app;
+    $self->stash(autodata => {
+      app_name => $app,
+      server_version => $self->app->VERSION // 'dev',
+      server_hostname => hostname(),
+      server_url => $self->config->url(default => 'undef'),
+    });
+  });
 
 =head2 /api
 
@@ -81,12 +79,10 @@ provided by the L<Mojolicious::Command::routes|routes command>.
 
 =cut
 
-    $app->routes->get('/api')->to(
-        cb => sub {
-            my $self = shift;
-            $self->render( autodata => [ $self->app->dump_api() ] );
-            }
-    );
+  $app->routes->get('/api')->to(cb => sub {
+    my $self = shift;
+    $self->render( autodata => [ $self->app->dump_api() ] );
+  });
 
 =head2 /api/:table
 
@@ -96,14 +92,12 @@ table using this route.
 
 =cut
 
-    $app->routes->get('/api/:table')->to(
-        cb => sub {
-            my($self) = @_;
-            my $table = $self->app->dump_api_table($self->stash('table'));
-            $table ? $self->render( autodata => $table ) : $self->reply->not_found;
-        },
-    );
-    
+  $app->routes->get('/api/:table')->to(cb => sub {
+    my($self) = @_;
+    my $table = $self->app->dump_api_table($self->stash('table'));
+    $table ? $self->render( autodata => $table ) : $self->reply->not_found;
+  });
+  
 =head2 /log/:lines
 
 Return the last several lines from the application log (number specified by :lines
@@ -118,23 +112,21 @@ example C<~/etc/MyApp.conf>:
 
 =cut
 
-    $app->routes->get('/log/:lines' => [ lines => qr/\d+/ ] =>
-        sub {
-            my $c = shift;
-            my $lines = $c->stash("lines");
-            unless ($c->config->export_logs(default => 0)) {
-                return $c->render_text('logs not available');
-            }
-            $c->render_text(Clustericious::Log->tail(lines => $lines || 10) || '** empty log **');
-        });
+  $app->routes->get('/log/:lines' => [ lines => qr/\d+/ ] => sub {
+    my $c = shift;
+    my $lines = $c->stash("lines");
+    unless ($c->config->export_logs(default => 0)) {
+      return $c->render_text('logs not available');
+    }
+    $c->render_text(Clustericious::Log->tail(lines => $lines || 10) || '** empty log **');
+  });
 
-    $app->routes->options('/*opturl' => { opturl => '' } =>
-        sub {
-            my $c = shift;
-            $c->res->headers->add( 'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS' );
-            # Allow-Origin and Allow-Headers added in after_dispatch hook.
-            $c->render_text('ok');
-        });
+  $app->routes->options('/*opturl' => { opturl => '' } => sub {
+    my $c = shift;
+    $c->res->headers->add( 'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS' );
+    # Allow-Origin and Allow-Headers added in after_dispatch hook.
+    $c->render_text('ok');
+  });
 }
 
 1;
