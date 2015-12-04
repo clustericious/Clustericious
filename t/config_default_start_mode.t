@@ -18,4 +18,4 @@ package
   Foo;
 
 use Mojo::Base qw( Clustericious::App );
-use Clustericious::RouteBuilder qw( Foo );
+use Clustericious::RouteBuilder;

@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::More tests => 8;
 use Clustericious::Config;
 
 # Check for issues with autoload conflicts code imported
@@ -22,9 +22,4 @@ my $c = Clustericious::Config->new({%tests});
 for my $k (sort keys %tests) {
     is $c->$k, $tests{$k}, "$k works";
 }
-
-done_testing();
-
-1;
-
 

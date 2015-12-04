@@ -61,5 +61,3 @@ is ( (Clustericious::Config->new("SomeTestService")->flooble), 'frog', 'get a de
 
 pass 'forteenth';
 
-1;
-

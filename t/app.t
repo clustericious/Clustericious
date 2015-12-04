@@ -1,34 +1,17 @@
 use strict;
 use warnings;
-use Test::Clustericious::Log;
-use Test::More tests => 21;
-use Test::Mojo;
+use Test::Clustericious::Cluster;
+use Test::More tests => 22;
 use Capture::Tiny qw( capture );
-
-do {
-  package SomeService;
-
-  $SomeService::VERSION = '867.5309';
-
-  use base 'Clustericious::App';
-  use Clustericious::RouteBuilder;
-
-  get '/' => sub { shift->render_text("hello"); };
-
-  get '/autotest' => sub { shift->stash->{autodata} = { a => 1, b => 2 } };
-
-  get '/autotest_not_found' => sub {
-    my($self) = shift;
-    $self->stash->{autodata} = [1,2,3];
-    $self->reply->not_found;
-  };
-};
-
 use YAML::XS qw( Load );
 
-my $t = Test::Mojo->new("SomeService");
+my $cluster = Test::Clustericious::Cluster->new;
+$cluster->create_cluster_ok('SomeService');
+my $t = $cluster->t;
 
-$t->get_ok("/")->status_is(200)->content_like(qr/hello/, "got content");
+$t->get_ok("/")
+  ->status_is(200)
+  ->content_like(qr/hello/, "got content");
 
 $t->get_ok('/version')
     ->status_is(200,'GET /version')
@@ -84,3 +67,24 @@ my($out,$err,$ret) = capture {
 note "[routes]\n$out" if $out;
 note "[err]\n$err" if $err;
 
+__DATA__
+
+@@ lib/SomeService.pm
+package SomeService;
+
+$SomeService::VERSION = '867.5309';
+
+use base 'Clustericious::App';
+use Clustericious::RouteBuilder;
+
+get '/' => sub { shift->render_text("hello"); };
+
+get '/autotest' => sub { shift->stash->{autodata} = { a => 1, b => 2 } };
+
+get '/autotest_not_found' => sub {
+  my($self) = shift;
+  $self->stash->{autodata} = [1,2,3];
+  $self->reply->not_found;
+};
+
+1;

@@ -1,8 +1,7 @@
 use strict;
 use warnings;
-use File::HomeDir::Test;
-use Test::More tests => 18;
 use Test::Clustericious::Cluster;
+use Test::More tests => 18;
 use PlugAuth::Lite;
 use Clustericious;
 

@@ -9,6 +9,8 @@ use Carp;
 use List::Util qw(first);
 use Clustericious::Config;
 
+Carp::carp "Test::Clustericious is deprecated and will be removed on or after January 31 2016";
+
 # ABSTRACT: Test Clustericious applications
 # VERSION
 

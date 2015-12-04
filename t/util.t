@@ -1,7 +1,14 @@
 use strict;
 use warnings;
-use Test::More tests => 1;
 use Clustericious;
+use Test::More tests => 2;
+use Path::Class qw( file );
+use File::Temp qw( tempdir );
 
-my $pid = Clustericious::_slurp_pid 't/util.pid';
-is $pid, 42;
+my $pidfile = file( tempdir( CLEANUP => 1 ), 'util.pid' );
+
+$pidfile->spew("42\n");
+is Clustericious::_slurp_pid("$pidfile"), 42, 'with new line';
+
+$pidfile->spew("45");
+is Clustericious::_slurp_pid("$pidfile"), 45, 'without new line';

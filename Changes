@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Test::Clustericious is deprecated.  Use Test::Clustericious::Cluster instead.
+    Test::Clustericious will be removed on or after January 31, 2016
+  - Configs with .yml extension are deprecated and will be removed on or after January 31, 2016
 
 1.07      2015-12-02 11:27:28 -0500
   - Fixed bug in Clustericious::COnfig on MSWin32 (thanks to chorny for the report gh#23)

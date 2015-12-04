@@ -26,6 +26,3 @@ ok defined( $c->something );
 is $c->something->hello,   'there', 'yaml key';
 is $c->something->element, 'bye',   'yaml key';
 is_deeply [ $c->four->seven ], [qw/years ago/], 'array';
-
-1;
-

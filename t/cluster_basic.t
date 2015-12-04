@@ -1,7 +1,7 @@
 use strict;
 use warnings;
-use Test::More tests => 2;
 use Test::Clustericious::Cluster;
+use Test::More tests => 2;
 
 $Clustericious::VERSION //= 0.9925;
 

@@ -45,4 +45,3 @@ do {
 
 is $confb->c(default => ''), '', "no autovivication in other classes";
 
-1;

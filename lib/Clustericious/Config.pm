@@ -193,8 +193,15 @@ sub new {
       print $fh $$arg;
       close $fh;
     }
-    elsif($arg =~ /\.(conf|yml)$/)
+    elsif($arg =~ /\.conf$/)
     {
+      $filename = $arg;
+    }
+    elsif($arg =~ /\.yml$/)
+    {
+      # when we remove this alos remove the reference below
+      # when we mangle the name
+      Carp::carp("Config with .yml extension is deprecated");
       $filename = $arg;
     }
     else
