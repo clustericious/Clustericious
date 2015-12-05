@@ -126,7 +126,7 @@ sub extract_data
 
 sub mirror
 {
-  my($src, $dst) = map { ref ? $_ : dir($_) } @_;
+  my($src, $dst) = map { ref($_) ? $_ : dir($_) } @_;
   
   my $tb = __PACKAGE__->builder;
 
