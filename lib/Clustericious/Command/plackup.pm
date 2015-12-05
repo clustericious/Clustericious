@@ -49,9 +49,10 @@ sub run {
 
     DEBUG "starting $plackup $0";
     delete $ENV{MOJO_COMMANDS_DONE};
-    system( $plackup, $0 ) == 0
-      or die "could not start $plackup $0 ($?) "
-      . ( ${^CHILD_ERROR_NATIVE} || '' );
+    system $plackup, $0;
+    die "'$plackup $0' Failed to execute: $!" if $? == -1;
+    die "'$plackup $0' Killed with signal: ", $? & 127 if $? & 127;
+    die "'$plackup $0' Exited with ", $? >> 8 if $? >> 8;
 }
 
 1;

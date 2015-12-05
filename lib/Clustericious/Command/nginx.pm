@@ -55,9 +55,10 @@ sub run {
 
     my $nginx = which('nginx') or LOGDIE "could not find nginx in $ENV{PATH}";
     DEBUG "starting $nginx @args";
-    system( $nginx, @args ) == 0
-      or die "could not start $nginx @args ($?) "
-      . ( ${^CHILD_ERROR_NATIVE} || '' );
+    system$nginx, @args;
+    die "'$nginx @args' Failed to execute: $!" if $? == -1;
+    die "'$nginx @args' Killed with signal: ", $? & 127 if $? & 127;
+    die "'$nginx @args' Exited with ", $? >> 8 if $? >> 8;
 }
 
 1;
