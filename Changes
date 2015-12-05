@@ -11,6 +11,8 @@ Revision history for {{$dist->name}}
     daemon command using the -l option, you will get the correct URL in the status
     body.
   - Reworked start / stop commands and added documentation.
+  - Added Test::Clustericious::Command for testing clustericious commands.
+    Interface to be documented better later.
 
 1.07      2015-12-02 11:27:28 -0500
   - Fixed bug in Clustericious::COnfig on MSWin32 (thanks to chorny for the report gh#23)

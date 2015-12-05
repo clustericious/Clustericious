@@ -63,6 +63,7 @@ pod_spelling_system:
     - MyApp1
     - MyApp2
     - 2xx
+    - cgi
 
 pod_coverage:
   # format is "Class#method" or "Class", regex allowed

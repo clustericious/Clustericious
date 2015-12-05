@@ -11,6 +11,7 @@ File::ShareDir
 File::ShareDir::Install
 File::Which
 Hash::Merge
+IO::Socket::INET
 JSON::MaybeXS
 JSON::PP
 JSON::XS
