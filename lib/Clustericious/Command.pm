@@ -7,10 +7,6 @@ use Mojo::Base 'Mojolicious::Command';
 # ABSTRACT: Command base class
 # VERSION
 
-=head1 SYNOPSIS
-
- use Mojo::Base 'Mojolicious::Command';
-
 =head1 DESCRIPTION
 
 This class is the base class for all Clustericious commands.  It
@@ -25,19 +21,23 @@ This is a (not exhaustive) list of common Clustericious commands:
 
 =item *
 
-L<hypnotoad|Clustericious::Command::hypnotoad>
+L<apache|Clustericious::Command::apache>
 
 =item *
 
-L<start|Clustericious::Command::start>
+L<configdebug|Clustericious::Command::configdebug>
 
 =item *
 
-L<stop|Clustericious::Command::stop>
+L<configpath|Clustericious::Command::configpath>
 
 =item *
 
-L<status|Clustericious::Command::status>
+L<configtest|Clustericious::Command::configtest>
+
+=item *
+
+L<configure|Clustericious::Command::configure>
 
 =item *
 
@@ -49,14 +49,30 @@ L<generate client|Clustericious::Command::generate::client>
 
 =item *
 
-L<generate mbd_app|Clustericious::Command::generate::mbd_app>
+L<hypnotoad|Clustericious::Command::hypnotoad>
+
+=item *
+
+L<lighttpd|Clustericious::Command::lighttpd>
+
+=item *
+
+L<plackup|Clustericious::Command::plackup>
+
+=item *
+
+L<start|Clustericious::Command::start>
+
+=item *
+
+L<status|Clustericious::Command::status>
+
+=item *
+
+L<stop|Clustericious::Command::stop>
 
 =back
 
-=head1 SUPER CLASS
-
-L<Mojolicious::Command>
- 
 =head1 SEE ALSO
 
 L<Clustericious>

@@ -64,6 +64,9 @@ pod_spelling_system:
     - MyApp2
     - 2xx
     - cgi
+    - configdebug
+    - configpath
+    - configtest
 
 pod_coverage:
   # format is "Class#method" or "Class", regex allowed

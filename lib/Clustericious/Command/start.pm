@@ -10,6 +10,7 @@ use Clustericious::App;
 use Clustericious::Config;
 use Mojo::Base 'Clustericious::Command';
 use Text::ParseWords qw( shellwords );
+use Carp ();
 
 # ABSTRACT: Clustericious command to start a Clustericious application
 # VERSION 
@@ -120,8 +121,9 @@ sub run {
         {
             @args = ref $args ne 'ARRAY' ? (shellwords $args) : @$args;
         }
-        else
+        elsif(%conf)
         {
+          Carp::carp("argumenst specified withouth 'args' option is deprecated and will be removed on or after January 31, 2016");
           # THIS IS RETARDED AND SHOULD BE DEPRECATED
           # if it starts with a dash, leave it alone, else add two dashes
           my %args = mesh
