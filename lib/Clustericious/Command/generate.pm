@@ -9,17 +9,14 @@ use Mojo::Base 'Mojolicious::Command::generate';
 
 =head1 SYNOPSIS
 
- % clustericious generate mbd_app Myapp --schema schema.sql
+ % clustericious generate app MyApp
+ % clustericious generate client MyApp
 
 =head1 DESCRIPTION
 
 This is the base class for all Clustericious code generation commands.
 It inherits from L<Mojolicious::Command::generate> instead of
 L<Clustericious::Command>.
-
-=head1 SUPER CLASS
-
-L<Mojolicious::Command::generate>
 
 =head1 SEE ALSO
 
