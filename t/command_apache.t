@@ -19,7 +19,15 @@ foreach my $type (qw( cgi proxy ))
 
     my $client = Clustericious::HelloWorld::Client->new;
 
+    run_ok('hello', 'status')
+      ->exit_is(2)
+      ->note;
+
     run_ok('hello', 'start')
+      ->exit_is(0)
+      ->note;
+
+    run_ok('hello', 'status')
       ->exit_is(0)
       ->note;
 
@@ -27,6 +35,10 @@ foreach my $type (qw( cgi proxy ))
 
     run_ok('hello', 'stop')
       ->exit_is(0)
+      ->note;
+
+    run_ok('hello', 'status')
+      ->exit_is(2)
       ->note;
 
     note_file 'var/run/*.log';

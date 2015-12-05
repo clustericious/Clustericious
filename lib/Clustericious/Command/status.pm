@@ -2,6 +2,7 @@ package Clustericious::Command::status;
 
 use strict;
 use warnings;
+use 5.010001;
 use Clustericious::Log;
 use Mojo::UserAgent;
 use Clustericious::App;
@@ -89,7 +90,9 @@ sub run {
     for ($self->app->config->start_mode) {
         push @status, { name => $_,
          (
+           # THIS IS A MESS PLEASE CLEAN IT UP
            /hypnotoad/ ? _check_pidfile($conf->hypnotoad->pid_file(default => dirname($exe).'/hypnotoad.pid'))
+         : /apache/ ? _check_pidfile($conf->apache->pid_file)
          : /plackup/   ? _check_pidfile($conf->plackup->pidfile) 
            # NB: see http://redmine.lighttpd.net/issues/2137
            # lighttpd's pid files disappear.  Time to switch to nginx?
@@ -110,12 +113,18 @@ sub run {
         }
     }
 
+    my $ok;
+
     # Send as YAML if requested?
     for (@status) {
         $_->{message} &&= "($_->{message})";;
         $_->{message} ||= "";
         printf "%10s : %-10s %s\n", @$_{qw/name state message/};
+        $ok //= 1 if $_->{state} eq 'ok';
+        $ok   = 0 if $_->{state} ne 'ok';
     }
+    
+    exit($ok ? 0 : 2);
 }
 
 1;

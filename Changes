@@ -13,6 +13,8 @@ Revision history for {{$dist->name}}
   - Reworked start / stop commands and added documentation.
   - Added Test::Clustericious::Command for testing clustericious commands.
     Interface to be documented better later.
+  - The status command now exits with 2 if the service is not
+    up, and 0 if it is.
 
 1.07      2015-12-02 11:27:28 -0500
   - Fixed bug in Clustericious::COnfig on MSWin32 (thanks to chorny for the report gh#23)
