@@ -3,15 +3,7 @@ package Test::Clustericious::Config;
 use strict;
 use warnings;
 use 5.010001;
-
-BEGIN {
-  unless($INC{'File/HomeDir/Test.pm'})
-  {
-    eval q{ use File::HomeDir::Test };
-    die $@ if $@;
-  }
-}
-
+use if !$INC{'File/HomeDir/Test.pm'}, 'File::HomeDir::Test';
 use File::HomeDir;
 use YAML::XS qw( DumpFile );
 use File::Path qw( mkpath );

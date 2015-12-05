@@ -2,7 +2,7 @@ package Test::Clustericious::Command;
 
 use strict;
 use warnings;
-use 5.010;
+use 5.010001;
 use if !$INC{'File/HomeDir/Test.pm'}, 'File::HomeDir::Test';
 use base qw( Exporter Test::Builder::Module );
 use Exporter qw( import );
@@ -12,7 +12,8 @@ use File::HomeDir;
 use Env qw( @PERL5LIB @PATH );
 use Capture::Tiny qw( capture );
 use File::Which qw( which );
-use Mojo::Template;
+use File::Glob qw( bsd_glob );
+use YAML::XS ();
 
 # ABSTRACT: Test Clustericious commands
 # VERSION
@@ -27,7 +28,7 @@ Documentation to be added later.
 
 =cut
 
-our @EXPORT      = qw( extract_data mirror requires run_ok generate_port );
+our @EXPORT      = qw( extract_data mirror requires run_ok generate_port note_file clean_file create_symlink );
 our @EXPORT_OK   = @EXPORT;
 our %EXPORT_TAGS = ( all => \@EXPORT );
 
@@ -45,6 +46,26 @@ sub requires
 {
   my($command, $num) = @_;
   my $tb = __PACKAGE__->builder;
+
+  if($command =~ /^(.*)\.conf$/)
+  {
+    my $name = $1;
+    if(defined $ENV{CLUSTERICIOUS_COMMAND_TEST} && -r $ENV{CLUSTERICIOUS_COMMAND_TEST})
+    {
+      my $config = YAML::XS::LoadFile($ENV{CLUSTERICIOUS_COMMAND_TEST})->{$name};
+      $tb->plan( skip_all => "developer test not configured" ) unless defined $config;
+      
+      unshift @PATH, $config->{path} if defined $config->{path};
+      unshift @PATH, dir(File::HomeDir->my_home, 'bin')->stringify;
+      $ENV{$_} = $config->{env}->{$_} for keys %{ $config->{env} };
+      $command = $config->{exe} // $name;
+    }
+    else
+    {
+      $tb->plan( skip_all => "developer only test" );
+    }
+  }
+
   if(which $command)
   {
     if(defined $num)
@@ -90,16 +111,6 @@ sub extract_data
         $content =~ s{^#!/usr/bin/perl}{#!$^X};
         $file->spew($content);
         chmod 0700, "$file";
-      }
-      elsif($name =~ m{^etc/})
-      {
-        my $content = $all->{$name};
-        my $mt = Mojo::Template->new(
-          tag_start => '[%',
-          tag_end   => '%]',
-          line_start => '^',
-        );
-        $file->spew($mt->render($content, @values));
       }
       else
       {
@@ -177,6 +188,48 @@ sub generate_port
   IO::Socket::INET->new(Listen => 5, LocalAddr => "127.0.0.1")->sockport;
 }
 
+=head2 note_file
+
+=cut
+
+sub note_file
+{
+  my $tb = __PACKAGE__->builder;
+
+  foreach my $file (sort map { file $_ } map { bsd_glob "~/$_" } @_)
+  {
+    $tb->note("[content] $file");
+    $tb->note(scalar $file->slurp);
+  }
+}
+
+=head2 clean_file
+
+=cut
+
+sub clean_file
+{
+  foreach my $file (sort map { file $_ } map { bsd_glob "~/$_" } @_)
+  {
+    $file->remove;
+  }
+}
+
+=head2 create_symlink
+
+=cut
+
+sub create_symlink
+{
+  my $tb = __PACKAGE__->builder;
+  my($old,$new) = map { file(File::HomeDir->my_home, $_) } @_;
+  $new->remove if -f $new;
+  $tb->note("[symlink] $old => $new");
+  use autodie;
+  symlink "$old", "$new";
+  %Clustericious::Config::singletons = ();
+}
+
 package Test::Clustericious::Command::Run;
 
 use base qw( Test::Builder::Module );
@@ -200,6 +253,15 @@ sub note
   my $tb = __PACKAGE__->builder;
   $tb->note("[out]\n" . $self->out) if $self->out;
   $tb->note("[err]\n" . $self->err) if $self->err;
+  $self;
+}
+
+sub diag
+{
+  my($self) = @_;
+  my $tb = __PACKAGE__->builder;
+  $tb->diag("[out]\n" . $self->out) if $self->out;
+  $tb->diag("[err]\n" . $self->err) if $self->err;
   $self;
 }
 

@@ -5,6 +5,7 @@ DateTime::Format::DateParse
 DateTime::Format::ISO8601
 EV
 ExtUtils::MakeMaker
+File::Glob
 File::HomeDir
 File::ReadBackwards
 File::ShareDir

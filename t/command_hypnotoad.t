@@ -5,8 +5,10 @@ use Test::More;
 use Clustericious::HelloWorld::Client;
 
 requires 'hypnotoad', 5;
-extract_data generate_port;
+extract_data;
 mirror 'example/etc' => 'etc';
+
+$ENV{CLUSTERICIOUS_TEST_PORT} = generate_port;
 
 my $client = Clustericious::HelloWorld::Client->new;
 
@@ -33,5 +35,4 @@ Clustericious::Commands->start;
 
 @@ etc/Clustericious-HelloWorld.conf
 ---
-^ my($port) = @_;
-% extends_config 'hypnotoad', host => '127.0.0.1', port => [%= $port %];
+% extends_config 'hypnotoad', host => '127.0.0.1', port => $ENV{CLUSTERICIOUS_TEST_PORT};
