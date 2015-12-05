@@ -2,12 +2,13 @@ use strict;
 use warnings;
 use autodie;
 use Test::Clustericious::Command;
-use Test::More tests => 3;
+use Test::More;
 use File::Temp qw( tempdir );
 use Path::Class qw( dir );
 use File::chdir;
 use File::Which qw( which );
 
+requires undef, 3;
 mirror 'bin', 'bin';
 
 my $prove = which 'prove';

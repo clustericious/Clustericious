@@ -14,6 +14,7 @@ use Capture::Tiny qw( capture );
 use File::Which qw( which );
 use File::Glob qw( bsd_glob );
 use YAML::XS ();
+use File::Temp qw( tempdir );
 
 # ABSTRACT: Test Clustericious commands
 # VERSION
@@ -36,6 +37,16 @@ unshift @INC, dir(File::HomeDir->my_home, 'lib')->stringify;
 unshift @PERL5LIB, map { dir($_)->absolute->stringify } @INC;
 unshift @PATH, dir(File::HomeDir->my_home, 'bin')->stringify;
 
+sub _can_execute_in_tmp
+{
+  my $script = file( tempdir( CLEANUP => 1 ), 'mytest' );
+  $script->spew("#!$^X\nexit 0");
+  chmod 0755, "$script";
+  my $exit;
+  capture { system "$script", "okay"; $exit = $? };
+  $exit == 0;
+}
+
 =head1 FUNCTIONS
 
 =head2 requires
@@ -46,6 +57,14 @@ sub requires
 {
   my($command, $num) = @_;
   my $tb = __PACKAGE__->builder;
+
+  $tb->plan( skip_all => 'test requires execute in tmp') unless __PACKAGE__->_can_execute_in_tmp;
+
+  unless(defined $command)
+  {
+    $tb->plan( tests => $num ) if defined $num;
+    return;
+  }
 
   if($command =~ /^(.*)\.conf$/)
   {
@@ -68,10 +87,7 @@ sub requires
 
   if(which $command)
   {
-    if(defined $num)
-    {
-      $tb->plan( tests => $num );
-    }
+    $tb->plan( tests => $num ) if defined $num;
   }
   else
   {

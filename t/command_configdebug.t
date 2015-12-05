@@ -1,8 +1,9 @@
 use strict;
 use warnings;
 use Test::Clustericious::Command;
-use Test::More tests => 18;
+use Test::More;
 
+requires undef, 18;
 extract_data;
 mirror 'example/etc' => 'etc';
 mirror 'bin' => 'bin';
