@@ -17,7 +17,6 @@ foreach my $type (qw( cgi proxy ))
 
     create_symlink "etc/Clustericious-HelloWorld-$type.conf" => 'etc/Clustericious-HelloWorld.conf';
 
-    $DB::single = 1;
     my $client = Clustericious::HelloWorld::Client->new;
 
     run_ok('hello', 'start')

@@ -149,9 +149,20 @@ sub mirror
       my $dst = $dst->file($child->basename);
       unless(-f $dst)
       {
-        $tb->note("[mirror ] FILE $dst@{[ -x $child ? ' (*)' : '' ]}");
-        $dst->spew(scalar $child->slurp);
-        -x $child ? chmod 0700, "$dst" : chmod 0600, "$dst";
+        if(-x $dst)
+        {
+          $tb->note("[mirror ] FILE $dst (*)");
+          my $content = scalar $child->slurp;
+          $content =~ s{^#!/usr/bin/perl}{#!$^X};
+          $dst->spew($content);
+          chmod 0700, "$dst";
+        }
+        else
+        {
+          $tb->note("[mirror ] FILE $dst");
+          $dst->spew(scalar $child->slurp);
+          chmod 0600, "$dst";
+        }
       }
     }
   }
@@ -164,15 +175,15 @@ sub mirror
 sub run_ok
 {
   my(@cmd) = @_;
-  my($out, $err, $ret, $error, $exit) = capture { my $ret = system @cmd; ($ret,$!,$?) };
+  my($out, $err, $error, $exit) = capture { system @cmd; ($!,$?) };
   
-  my $ok = $ret == 0 && ! ($? & 128);
+  my $ok = ($exit != -1) && ! ($exit & 128);
   
   my $tb = __PACKAGE__->builder;
   
   $tb->ok($ok, "@cmd");
   $tb->diag("  @cmd failed") unless $ok;
-  $tb->diag("    - execute failed: $error") if $ret;
+  $tb->diag("    - execute failed: $error") if $exit == -1;
   $tb->diag("    - died from signal: " . ($exit & 128)) if $exit & 128;
   
   bless { out => $out, err => $err, exit => $exit >> 8 }, 'Test::Clustericious::Command::Run';
@@ -262,6 +273,50 @@ sub diag
   my $tb = __PACKAGE__->builder;
   $tb->diag("[out]\n" . $self->out) if $self->out;
   $tb->diag("[err]\n" . $self->err) if $self->err;
+  $self;
+}
+
+sub out_like
+{
+  my($self, $pattern, $name) = @_;
+  my $tb = __PACKAGE__->builder;
+  
+  $name ||= "output matches";
+  $tb->like($self->out, $pattern, $name);
+
+  $self;
+}
+
+sub out_unlike
+{
+  my($self, $pattern, $name) = @_;
+  my $tb = __PACKAGE__->builder;
+  
+  $name ||= "output does not match";
+  $tb->unlike($self->out, $pattern, $name);
+
+  $self;
+}
+
+sub err_like
+{
+  my($self, $pattern, $name) = @_;
+  my $tb = __PACKAGE__->builder;
+  
+  $name ||= "error matches";
+  $tb->like($self->err, $pattern, $name);
+
+  $self;
+}
+
+sub err_unlike
+{
+  my($self, $pattern, $name) = @_;
+  my $tb = __PACKAGE__->builder;
+  
+  $name ||= "error does not match";
+  $tb->unlike($self->err, $pattern, $name);
+  
   $self;
 }
 

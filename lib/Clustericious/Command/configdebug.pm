@@ -63,41 +63,58 @@ sub run
 
   $ENV{MOJO_TEMPLATE_DEBUG} = 1;
 
-  my $config = Clustericious::Config->new($app_name, sub {
-    my $type = shift;
-    
-    if($type eq 'pre_rendered')
-    {
-      my($src) = @_;
-      my $data;
-      if(ref $src)
-      {
-        say "[SCALAR :: template]";
-        $data = $$src;
-      }
-      else
-      {
-        say "[$src :: template]";
-        open my $fh, '<', $src;
-        local $/;
-        $data = <$fh>;
-        close $fh;
-      }
-      chomp $data;
-      say $data;
-    }
-    elsif($type eq 'rendered')
-    {
-      my($file, $content) = @_;
-      say "[$file :: interpreted]";
-      chomp $content;
-      say $content;
-    }
-  });
+  my $exit = 0;
 
-  say "[merged]";
-  print Dump({ %$config });
+  eval { 
+    my $config = Clustericious::Config->new($app_name, sub {
+      my $type = shift;
 
+      if($type eq 'pre_rendered')
+      {
+        my($src) = @_;
+        my $data;
+        if(ref $src)
+        {
+          say "[SCALAR :: template]";
+          $data = $$src;
+        }
+        else
+        {
+          say "[$src :: template]";
+          open my $fh, '<', $src;
+          local $/;
+          $data = <$fh>;
+          close $fh;
+        }
+        chomp $data;
+        say $data;
+      }
+      elsif($type eq 'rendered')
+      {
+        my($file, $content) = @_;
+        say "[$file :: interpreted]";
+        chomp $content;
+        say $content;
+      }
+      elsif($type eq 'not_found')
+      {
+        say STDERR "ERROR: unable to find $_[0]";
+        $exit = 2;
+      }
+    });
+
+    say "[merged]";
+    print Dump({ %$config });
+
+  };
+  
+  if(my $error = $@)
+  {
+    say STDERR "ERROR: in syntax: $error";
+    $exit = 2;
+  }
+
+  exit $exit;
 };
 
 1;

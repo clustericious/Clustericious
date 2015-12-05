@@ -11,7 +11,6 @@ use Mojo::Template;
 use Log::Log4perl qw( :nowarn );
 use Storable ();
 use Clustericious::Config::Helpers ();
-use Cwd ();
 use File::HomeDir ();
 use Mojo::URL;
 use File::Spec;
@@ -219,7 +218,7 @@ sub new {
         $conf_data = {};
       }
     }
-    
+
     if ($filename) {
       $logger->trace("reading from config file $filename") if $logger->is_trace;
       $callback->(pre_rendered => $filename);
@@ -235,6 +234,8 @@ sub new {
         ? eval { YAML::XS::Load($rendered) }
         : eval { JSON::MaybeXS::decode_json $rendered };
       $logger->logdie("Could not parse $type\n-------\n$rendered\n---------\n$@\n") if $@;
+    } else {
+      $callback->('not_found' => "$arg");
     }
   }
 

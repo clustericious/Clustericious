@@ -118,7 +118,6 @@ sub run {
 
         if(my $args = delete $conf{args})
         {
-            $DB::single = 1;
             @args = ref $args ne 'ARRAY' ? (shellwords $args) : @$args;
         }
         else
