@@ -135,7 +135,7 @@ sub mirror
   unless(-d $dst)
   {
     $tb->note("[mirror ] DIR  $dst");
-    $dst->mlpath(0,0700);
+    $dst->mkpath(0,0700);
   }
   
   foreach my $child ($src->children)
@@ -317,6 +317,13 @@ sub err_unlike
   $name ||= "error does not match";
   $tb->unlike($self->err, $pattern, $name);
   
+  $self;
+}
+
+sub tap
+{
+  my($self, $sub) = @_;
+  $sub->($self);
   $self;
 }
 
