@@ -58,7 +58,7 @@ sub run
     }
     my %args = @args;
 
-    my $templatedir = Clustericious->_dist_dir->subdir('tmpl','app');
+    my $templatedir = Clustericious->_dist_dir->subdir('tmpl', '1.08', 'app');
 
     die "Can't find template.\n" unless -d $templatedir;
 
