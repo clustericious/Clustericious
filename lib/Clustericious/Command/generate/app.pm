@@ -33,38 +33,37 @@ EOF
 
 sub _installfile
 {
-    my $self = shift;
-    my ($templatedir, $file, $class) = @_;
+  my $self = shift;
+  my ($templatedir, $file, $class) = @_;
 
-    my $name = lc $class;
+  my $name = lc $class;
 
-    (my $relpath = $file) =~ s/^$templatedir/$class/;
-    $relpath =~ s/APPCLASS/$class/g;
-    $relpath =~ s/APPNAME/$name/g;
+  (my $relpath = $file) =~ s/^$templatedir/$class/;
+  $relpath =~ s/APPCLASS/$class/g;
+  $relpath =~ s/APPNAME/$name/g;
 
-    return if -e $relpath;
+  return if -e $relpath;
 
-    my $content = Mojo::Template->new->render_file( $file, $class );
-    $self->write_file($relpath, $content );
-    -x $file && $self->chmod_file($relpath, 0744);
+  my $content = Mojo::Template->new->render_file( $file, $class );
+  $self->write_file($relpath, $content );
+  -x $file && $self->chmod_file($relpath, 0755);
 }
 
 sub run
 {
-    my ($self, $class, @args ) = @_;
-    $class ||= 'MyClustericiousApp';
-    if (@args % 2) {
-        die "usage : $0 generate app <name>\n";
-    }
-    my %args = @args;
+  my ($self, $class, @args ) = @_;
+  $class ||= 'MyClustericiousApp';
+  if (@args % 2) {
+    die "usage : $0 generate app <name>\n";
+  }
+  my %args = @args;
 
-    my $templatedir = Clustericious->_dist_dir->subdir('tmpl', '1.08', 'app');
+  my $templatedir = Clustericious->_dist_dir->subdir('tmpl', '1.08', 'app');
 
-    die "Can't find template.\n" unless -d $templatedir;
+  die "Can't find template.\n" unless -d $templatedir;
 
-    find({wanted => sub { $self->_installfile($templatedir, $_, $class) if -f },
-          no_chdir => 1}, $templatedir);
-
+  find({wanted => sub { $self->_installfile($templatedir, $_, $class) if -f },
+        no_chdir => 1}, $templatedir);
 }
 
 1;
