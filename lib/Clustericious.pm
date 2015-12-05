@@ -194,6 +194,20 @@ sub _slurp_pid ($)
   $pid;
 }
 
+sub _dist_dir
+{
+  require Path::Class::File;
+  require Path::Class::Dir;
+  $_ = __FILE__; s{(Clustericious).pm}{.$1.devshare}; -e $_
+    ? Path::Class::File->new(__FILE__)->parent->parent->subdir('share')
+    : do {
+      require File::ShareDir;
+      Path::Class::Dir->new(
+        File::ShareDir::dist_dir('Clustericious'),
+      );
+    }
+}
+
 # Note sub _config_uncache also gets placed
 # in this package, but it is defined in
 # Clustericious::Config.

@@ -33,7 +33,7 @@ our @EXPORT_OK   = @EXPORT;
 our %EXPORT_TAGS = ( all => \@EXPORT );
 
 unshift @INC, dir(File::HomeDir->my_home, 'lib')->stringify;
-unshift @PERL5LIB, @INC;
+unshift @PERL5LIB, map { dir($_)->absolute->stringify } @INC;
 unshift @PATH, dir(File::HomeDir->my_home, 'bin')->stringify;
 
 =head1 FUNCTIONS

@@ -24,6 +24,9 @@ Get a welcome message.
 
 =cut
 
-get '/' => sub {shift->render_text("welcome to <%= $class %>")};
+get '/' => sub {
+  my($c) = @_;
+  $c->render(text => 'welcome to <%= $class %>');
+};
 
 1;

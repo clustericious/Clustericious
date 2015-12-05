@@ -2,10 +2,9 @@ package Clustericious::Command::generate::app;
 
 use strict;
 use warnings;
+use Clustericious;
 use Mojo::Base 'Clustericious::Command';
 use File::Find;
-use File::ShareDir 'dist_dir';
-use File::Basename qw/basename/;
 
 # ABSTRACT: Clustericious command to generate a new Clustericious application
 # VERSION
@@ -17,10 +16,6 @@ use File::Basename qw/basename/;
 =head1 DESCRIPTION
 
 This command generates a new Clustericious application with the given name.
-
-=head1 SUPER CLASS
-
-L<Clustericious::Command>
 
 =head1 SEE ALSO
 
@@ -59,11 +54,11 @@ sub run
     my ($self, $class, @args ) = @_;
     $class ||= 'MyClustericiousApp';
     if (@args % 2) {
-        die "usage : $0 generate app <name> --schema <schema>.sql\n";
+        die "usage : $0 generate app <name>\n";
     }
     my %args = @args;
 
-    my $templatedir = dist_dir('Clustericious') . "/AppTemplate";
+    my $templatedir = Clustericious->_dist_dir->subdir('tmpl','app');
 
     die "Can't find template.\n" unless -d $templatedir;
 
