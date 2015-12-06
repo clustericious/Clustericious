@@ -79,7 +79,6 @@ sub run {
     my $app  = $ENV{MOJO_APP};
     my $conf     = $self->app->config;
 
-    local $SIG{__DIE__} = \&Carp::confess;
     eval "use $app;";
     if ($@) {
         die "\n----------Error loading $app----------\n$@\n--------------\n";

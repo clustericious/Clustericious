@@ -137,7 +137,7 @@ sub run {
         DEBUG "Stopping $_ server";
         /hypnotoad/ and _stop_pidfile($self->app->config->hypnotoad->pid_file);
         /plackup/   and _stop_pidfile($self->app->config->plackup->pidfile);
-        /lighttpd/  and _stop_pidfile($self->app->config->lighttpd->env->lighttpd_pid);
+        /lighttpd/  and _stop_pidfile($self->app->config->lighttpd->pid_file);
         /daemon/    and _stop_daemon($self->app->config->daemon->listen);
         /nginx/     and _stop_nginx($self->app->config->nginx);
         /apache/    and _stop_apache($self->app->config->apache);

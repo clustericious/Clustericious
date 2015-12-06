@@ -92,7 +92,7 @@ sub run {
          : /plackup/   ? _check_pidfile($conf->plackup->pidfile) 
            # NB: see http://redmine.lighttpd.net/issues/2137
            # lighttpd's pid files disappear.  Time to switch to nginx?
-         : /lighttpd/       ? _check_pidfile($conf->lighttpd->env->lighttpd_pid)
+         : /lighttpd/       ? _check_pidfile($conf->lighttpd->pid_file)
          : ( state => 'error', message => "Status for start_mode $_ is unimplemented." ))};
     }
 

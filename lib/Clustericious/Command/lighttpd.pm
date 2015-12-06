@@ -17,8 +17,37 @@ use File::Which qw( which );
 
 =head1 DESCRIPTION
 
-Start a lighttpd web server.
+Start a lighttpd web server. The lighttpd start and stop commands recognize these options
+in their configuration section:
+
+=over 4
+
+=item pid_file
+
+The location to the pid file.  This should usually be the same as the C<PidFile> directive
+in your lighttpd configuration.
+
+=back
  
+=head1 EXAMPLES
+
+=head2 FCGI
+
+See caveats below
+
+# EXAMPLE: example/etc/lighttpd.conf
+
+=head1 CAVEATS
+
+I was unable to get lighttpd to kill the FCGI processes and there are reports
+(see L<http://redmine.lighttpd.net/issues/2137>) of the PID file it generates
+disappearing.  Because of the former limitation, the lighttpd tests for
+Clustericious are skipped by default (though they can be used by developers
+willing to manually kill the FCGI processes).
+
+Pull requests to Clustericious and / or documentation clarification would be
+greatly appreciated if someone manages to get it to work better!
+
 =head1 SEE ALSO
 
 L<Clustericious>
