@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Clustericious::App;
 use Clustericious::Config;
-use File::Path qw/mkpath/;
+use File::Path qw( mkpath );
 use base 'Clustericious::Command';
 use Clustericious::Log;
 use File::Which qw( which );
