@@ -71,7 +71,12 @@ sub requires
     my $name = $1;
     if(defined $ENV{CLUSTERICIOUS_COMMAND_TEST} && -r $ENV{CLUSTERICIOUS_COMMAND_TEST})
     {
-      my $config = YAML::XS::LoadFile($ENV{CLUSTERICIOUS_COMMAND_TEST})->{$name};
+      my $config = do {
+        require Clustericious::Config;
+        my $config = Clustericious::Config->new($ENV{CLUSTERICIOUS_COMMAND_TEST});
+        my %config = %$config;
+        \%config;
+      }->{$name};
       $tb->plan( skip_all => "developer test not configured" ) unless defined $config;
       
       unshift @PATH, $config->{path} if defined $config->{path};
