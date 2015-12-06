@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.08      2015-12-06 14:05:39 -0500
   - Test::Clustericious is deprecated.  Use Test::Clustericious::Cluster instead.
     Test::Clustericious will be removed on or after January 31, 2016
   - Configs with .yml extension are deprecated and will be removed on or after January 31, 2016
@@ -19,7 +21,7 @@ Revision history for {{$dist->name}}
   - Added morbo command to run morbo with the configured url by default
 
 1.07      2015-12-02 11:27:28 -0500
-  - Fixed bug in Clustericious::COnfig on MSWin32 (thanks to chorny for the report gh#23)
+  - Fixed bug in Clustericious::Config on MSWin32 (thanks to chorny for the report gh#23)
 
 1.06      2015-11-29 12:40:03 -0500
   - Clustericious::Log correctly sets the category
