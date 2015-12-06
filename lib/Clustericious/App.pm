@@ -16,6 +16,7 @@ use Scalar::Util qw/weaken/;
 use Mojo::Base 'Mojolicious';
 use File::HomeDir ();
 use Carp qw( cluck );
+use Clustericious;
 use Clustericious::Controller;
 use Clustericious::Renderer;
 use Clustericious::RouteBuilder::Common;
@@ -95,6 +96,13 @@ sub _add_route_builder
 
 sub startup {
     my $self = shift;
+
+    @{ $self->static->paths } = (
+      Clustericious
+        ->_dist_dir
+        ->subdir(qw( www 1.08 ))
+        ->stringify
+    );
 
     $self->controller_class('Clustericious::Controller');
     $self->renderer(Clustericious::Renderer->new());

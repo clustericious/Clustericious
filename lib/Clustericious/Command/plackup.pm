@@ -48,7 +48,7 @@ sub run {
   my $url = Mojo::URL->new($self->app->config->url);
   LOGDIE "@{[ $url->scheme ]} not supported" if $url->scheme ne 'http';
   
-  shift @args if $args[0] eq 'plackup';
+  shift @args if defined $args[0] && $args[0] eq 'plackup';
   push @args, $0;
   unshift @args, '--port' => $url->port;
   unshift @args, '--host' => $url->host;
@@ -60,7 +60,6 @@ sub run {
   
   DEBUG "starting $plackup @args";
   delete $ENV{MOJO_COMMANDS_DONE};
-  print "PID = $$\n";
   exec $plackup, @args;
 }
 
