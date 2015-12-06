@@ -10,7 +10,7 @@ Revision history for {{$dist->name}}
     Among other things, this means that if you start a service withe the mojo
     daemon command using the -l option, you will get the correct URL in the status
     body.
-  - Reworked start / stop commands and added documentation.
+  - Reworked start / stop commands and added examples and documentation.
   - Added Test::Clustericious::Command for testing clustericious commands.
     Interface to be documented better later.
   - The status command now exits with 2 if the service is not
