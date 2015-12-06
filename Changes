@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Clustericious::Log now uses the same config path as
+    Clustericious::Config, as you might expect it should
 
 1.08      2015-12-06 14:05:39 -0500
   - Test::Clustericious is deprecated.  Use Test::Clustericious::Cluster instead.
