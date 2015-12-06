@@ -165,7 +165,7 @@ sub mirror
       my $dst = $dst->file($child->basename);
       unless(-f $dst)
       {
-        if(-x $dst)
+        if(-x $child)
         {
           $tb->note("[mirror ] FILE $dst (*)");
           my $content = scalar $child->slurp;
