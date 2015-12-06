@@ -206,8 +206,10 @@ sub run_ok
   $tb->diag("  @cmd failed") unless $ok;
   $tb->diag("    - execute failed: $error") if $exit == -1;
   $tb->diag("    - died from signal: " . ($exit & 128)) if $exit & 128;
-  
-  bless { out => $out, err => $err, exit => $exit >> 8 }, 'Test::Clustericious::Command::Run';
+
+  Test::Clustericious::Command::Run->new(  
+    out => $out, err => $err, exit => $exit >> 8,
+  );
 }
 
 =head2 generate_port
@@ -265,6 +267,12 @@ sub create_symlink
 package Test::Clustericious::Command::Run;
 
 use base qw( Test::Builder::Module );
+
+sub new
+{
+  my($class, %args) = @_;
+  bless \%args, $class;
+}
 
 sub out { shift->{out} }
 sub err { shift->{err} }

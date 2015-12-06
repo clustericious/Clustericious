@@ -23,30 +23,7 @@ Stop a running daemon.
 =head1 NOTES
 
 The different methods of starting put their pid files in
-different places in the config file.   Here are some
-examples :
-
-   "hypnotoad" : {
-      "pid_file"  : "/tmp/filename.pid",
-      ....
-    }
-
-   "plackup" : {
-      "pidfile"   : "/tmp/nother_filename.pid",
-      "daemonize" : "null"    # means include "--daemonize"
-   ...
-   },
-
-   "lighttpd" : {
-      "env" : {
-          "lighttpd_pid"    : "/tmp/third_filename.pid"
-           ...
-      },
-   },
-
-   "nginx" : {
-     '-p' : '/home/foo/appname/nginx'
-    }
+different places in the config file.  
 
 =cut
 
@@ -136,7 +113,7 @@ sub run {
     for (reverse $self->app->config->start_mode) {
         DEBUG "Stopping $_ server";
         /hypnotoad/ and _stop_pidfile($self->app->config->hypnotoad->pid_file);
-        /plackup/   and _stop_pidfile($self->app->config->plackup->pidfile);
+        /plackup/   and _stop_pidfile($self->app->config->plackup->pid_file);
         /lighttpd/  and _stop_pidfile($self->app->config->lighttpd->pid_file);
         /daemon/    and _stop_daemon($self->app->config->daemon->listen);
         /nginx/     and _stop_nginx($self->app->config->nginx);
