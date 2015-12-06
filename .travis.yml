@@ -6,6 +6,8 @@ install:
   - cpanm -n IO::Prompt 
   - cpanm -n Module::Build
   - cpanm -n MojoX::Log::Log4perl
+  - cpanm -n Log::Log4perl::Appender::TAP
+  - cpanm -n Log::Log4perl::CommandLine
   - cpanm -n Mojolicious
   - cpanm -n Sub::Exporter
   - cpanm -n JSON::MaybeXS
@@ -25,7 +27,6 @@ install:
   - cpanm -n File::ReadBackwards
   - cpanm -n Hash::Merge
   - cpanm -n Data::Rmap
-  - cpanm -n Log::Log4perl::Appender::TAP
   - cpanm -n Test::CPAN::Changes Test::EOL Test::Fixme Test::NoTabs Test::Pod::Spelling::CommonMistakes Test::Spelling Test::Strict Test::Version || true
 
 script: dzil test -v
