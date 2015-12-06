@@ -8,10 +8,6 @@ Generate a new Clustericious application:
 
     % clustericious generate app MyApp
 
-Generate a new Clustericious application database schema:
-
-    % clustericious generate mbd_app MyApp --schema schema.sql
-
 Basic application layout:
 
     package MyApp;

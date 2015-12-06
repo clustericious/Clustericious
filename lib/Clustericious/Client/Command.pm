@@ -136,7 +136,6 @@ sub run {
     my $class = shift;
     my $client = shift;
     my @args = @_ ? @_ : @ARGV;
-    our $TESTING;
 
     return $class->_usage($client) if !$args[0] || $args[0] =~ /help/;
 
@@ -204,7 +203,7 @@ sub run {
             }
             INFO $msg;
         } else {
-           print _prettyDump($obj) unless $TESTING;
+           print _prettyDump($obj);
         }
         return;
     }
@@ -263,7 +262,7 @@ sub run {
             }
             INFO $msg;
         } else {
-           print _prettyDump($obj) unless $TESTING;
+           print _prettyDump($obj);
         }
     }
     return;

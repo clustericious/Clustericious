@@ -1,6 +1,10 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::Clustericious::Log;
+use Test::More tests => 23;
+use Clustericious::Client::Command;
+use YAML::XS qw( Dump );
+use Capture::Tiny qw( capture );
 
 package Baker;
 
@@ -93,15 +97,6 @@ sub legacy {
 
 
 package main;
-use Log::Log4perl qw(:easy);
-use YAML::XS qw/Load Dump/;
-use Clustericious::Client::Command;
-
-# Hide messages during tests
-Log::Log4perl->easy_init({ level => $FATAL,
-                           layout => "",
-                           stderr => 0 });
-$Clustericious::Client::Command::TESTING=1; # suppress output
 
 my $client = Baker->new(server_url => 'http://127.0.0.1');
 
@@ -119,23 +114,23 @@ is_deeply($ret, [ got => {where => "in the oven", for => "baby and me"}], 'got a
     or diag explain $ret;
 undef $argsWeGot;
 
-Clustericious::Client::Command->run( $client, ( "put", "--where", 'in the oven', "--for=baby_and_me" ) );
+capture { Clustericious::Client::Command->run( $client, ( "put", "--where", 'in the oven', "--for=baby_and_me" ) ) };
 is_deeply $argsWeGot, [got => { where => 'in the oven', for => "baby_and_me" }], "cli args with equals sign parsed"
     or diag explain $argsWeGot;
 undef $argsWeGot;
 
-Clustericious::Client::Command->run( $client, ( "legacy", qw/a b c/ ) );
+capture { Clustericious::Client::Command->run( $client, ( "legacy", qw/a b c/ ) ) };
 is_deeply $argsWeGot, [got => [qw/a b c/]], 'default positional params' or diag explain $argsWeGot;
 
 {
     local $SIG{__WARN__} = sub {}; # no stderr messages
     # missing arg
-    eval { Clustericious::Client::Command->run($client, put => '--where' => 'there' ); };
+    eval { capture { Clustericious::Client::Command->run($client, put => '--where' => 'there' ) } };
     ok $@, "exception for missing arg";
     like $@, qr/required/, 'message has required';
 
     # extra arg
-    eval { Clustericious::Client::Command->run($client, put => '--baby' => 'there' ); };
+    eval { capture { Clustericious::Client::Command->run($client, put => '--baby' => 'there' ) } };
     ok $@, "exception for invalid option";
     like $@, qr/missing/i, 'message has invalid';
 }
@@ -157,7 +152,7 @@ close $tmp;
 #is_deeply $argsWeGot, [ got => { food => $struct}], "struct sent as filename";
 #undef $argsWeGot;
 
-Clustericious::Client::Command->run($client, eat => "--food" => "$tmp");
+capture { Clustericious::Client::Command->run($client, eat => "--food" => "$tmp") };
 is_deeply $argsWeGot, [ got => { food => $struct}], "struct sent as filename to command";
 undef $argsWeGot;
 
@@ -165,7 +160,7 @@ undef $argsWeGot;
 $tmp = File::Temp->new;
 print $tmp join "\n", qw/a b c/;
 close $tmp;
-Clustericious::Client::Command->run($client, fry => '--dry_run', '--what' => 'bread', '--things' => "$tmp" );
+capture { Clustericious::Client::Command->run($client, fry => '--dry_run', '--what' => 'bread', '--things' => "$tmp" ) };
 is_deeply $argsWeGot, [ got => { what => 'bread', dry_run => 1, things => [qw/a b c/] } ];
 undef $argsWeGot;
 
@@ -192,6 +187,4 @@ $ret = $client->payload(this => 'foo', that => "bar");
 is_deeply($client->tx->req->json, { this => 'foo', theother => [ 'that' => 'bar' ] } )
     or diag explain $client->tx->req->json;
 
-done_testing();
 
-1;
