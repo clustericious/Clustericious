@@ -69,6 +69,7 @@ pod_spelling_system:
     - configtest
     - FCGI
     - daemonize
+    - morbo
 
 pod_coverage:
   # format is "Class#method" or "Class", regex allowed
