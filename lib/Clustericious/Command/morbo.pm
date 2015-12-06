@@ -2,9 +2,11 @@ package Clustericious::Command::morbo;
 
 use strict;
 use warnings;
+use 5.010001;
 use base qw( Clustericious::Command );
 use Mojolicious::Command::daemon;
 use File::Which qw( which );
+use Capture::Tiny qw( capture );
 
 # ABSTRACT: Clustericious command to stat nginx
 # VERSION
@@ -24,8 +26,20 @@ L<Clustericious>
 
 =cut
 
-sub description { 'Start application with HTTP and WebSocket server' };
-sub usage       { Mojolicious::Command::daemon->extract_usage };
+sub description { 'Start application with Morbo server' };
+sub usage       {
+  state $usage;
+  
+  unless($usage)
+  {
+    my $command = which 'morbo';
+    die "morbo not found!" unless defined $command;
+    my($out, $err) = capture { system $command, '--help' };
+    $usage = $err;
+  }
+  
+  $usage;
+};
 
 sub run
 {

@@ -23,8 +23,8 @@ L<Clustericious>
 
 =cut
 
-sub description { Start application with HTTP and WebSocket server };
-sub usage       { Mojolicious::Command::daemon->extract_usage };
+sub description { Mojolicious::Command::daemon->new->description };
+sub usage       { Mojolicious::Command::daemon->new->usage       };
 
 sub run
 {
