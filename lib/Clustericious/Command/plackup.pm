@@ -19,10 +19,6 @@ use File::Which qw( which );
 
 Start a plack server using plackup.
 
-=head1 SUPER CLASS
-
-L<Clustericious::Command>
-
 =head1 SEE ALSO
 
 L<Clustericious>, L<plackup>, L<Plack>

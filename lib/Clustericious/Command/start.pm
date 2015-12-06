@@ -54,10 +54,6 @@ command line option.
 The special label C<env> is an optional hash of environment variables
 to set before starting the command.
 
-=head1 SUPER CLASS
-
-L<Clustericious::Command>
-
 =head1 SEE ALSO
 
 L<Clustericious>,

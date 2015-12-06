@@ -21,10 +21,6 @@ use base 'Clustericious::Command';
 
 Report the status of a running clustericious daemon, based on its start_mode.
 
-=head1 SUPER CLASS
-
-L<Clustericious::Command>
-
 =head1 SEE ALSO
 
 L<Clustericious>

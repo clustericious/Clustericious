@@ -19,10 +19,6 @@ use File::Which qw( which );
 
 Start a lighttpd web server.
  
-=head1 SUPER CLASS
-
-L<Clustericious::Command>
-
 =head1 SEE ALSO
 
 L<Clustericious>
@@ -48,9 +44,10 @@ sub run {
 
     my $lighttpd = which('lighttpd') or LOGDIE "could not find lighttpd in $ENV{PATH}";
     DEBUG "starting $lighttpd @args";
-    system( $lighttpd, @args ) == 0
-      or die "could not start $lighttpd @args ($?) "
-      . ( ${^CHILD_ERROR_NATIVE} || '' );
+    system $lighttpd, @args;
+    die "'$lighttpd @args' Failed to execute: $!" if $? == -1;
+    die "'$lighttpd @args' Killed with signal: ", $? & 127 if $? & 127;
+    die "'$lighttpd @args' Exited with ", $? >> 8 if $? >> 8;
 }
 
 1;

@@ -18,10 +18,6 @@ use File::Basename qw/basename/;
 
 This command generates a new Clustericious client with the given name.
 
-=head1 SUPER CLASS
-
-L<Clustericious::Command>
-
 =head1 SEE ALSO
 
 L<Clustericious>, L<Clustericious::Client>

@@ -40,10 +40,6 @@ Your app:
 
 Create a default configuration for an app.
 
-=head1 SUPER CLASS
-
-L<Clustericious::Command>
-
 =head1 SEE ALSO
 
 L<Clustericious>

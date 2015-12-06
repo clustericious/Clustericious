@@ -40,10 +40,6 @@ do a sanity check of the configuration:
 This command does a basic sanity check on the configuration for your Clustericious
 application, and calls the application's C<sanity_check>
 
-=head1 SUPER CLASS
-
-L<Clustericious::Command>
-
 =head1 SEE ALSO
 
 L<Clustericious>
