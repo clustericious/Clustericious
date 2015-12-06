@@ -38,8 +38,7 @@ Starts a plack server.  See plackup for valid options.
 EOT
 
 sub run {
-  my($self) = shift;
-  my @args = @_ ? @_ : @ARGV;
+  my($self, @args) = @_;
   my $app_name = $ENV{MOJO_APP};
   
   Clustericious::App->init_logging;
@@ -66,4 +65,3 @@ sub run {
 }
 
 1;
-

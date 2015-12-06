@@ -57,13 +57,8 @@ EOT
 
 sub run
 {
-  my $self = shift;
-  my @args = @_ ? @_ : @ARGV;
-  
-  my $app = $self->app;
-  
-  exit 2 unless $app->sanity_check;
-  
+  my($self, @args) = @_;
+  exit 2 unless $self->app->sanity_check;
   say 'config okay';
 }
 

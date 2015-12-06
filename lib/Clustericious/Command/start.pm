@@ -3,14 +3,15 @@ package Clustericious::Command::start;
 use strict;
 use warnings;
 use Clustericious::Log;
-use List::MoreUtils qw/mesh/;
-use File::Path qw/mkpath/;
-use File::Basename qw/dirname/;
+use List::MoreUtils qw( mesh );
+use File::Path qw( mkpath );
+use File::Basename qw( dirname );
 use Clustericious::App;
 use Clustericious::Config;
 use Mojo::Base 'Clustericious::Command';
 use Text::ParseWords qw( shellwords );
 use Carp ();
+use Env qw( @PERL5LIB );
 
 # ABSTRACT: Clustericious command to start a Clustericious application
 # VERSION 
@@ -73,66 +74,66 @@ See Clustericious::Command::Start for examples.
 EOT
 
 sub run {
-    my $self     = shift;
-    exit 2 unless $self->app->sanity_check;
-    my @args = @_ ? @_ : @ARGV;
-    my $app  = $ENV{MOJO_APP};
-    my $conf     = $self->app->config;
+  my($self, @args) = @_;
+  exit 2 unless $self->app->sanity_check;
+  my $app  = $ENV{MOJO_APP};
+  my $conf     = $self->app->config;
 
-    eval "use $app;";
-    if ($@) {
-        die "\n----------Error loading $app----------\n$@\n--------------\n";
+  eval "use $app;";
+  die $@ if $@;
+
+  Clustericious::App->init_logging;
+
+  for my $mode ($self->app->config->start_mode)
+  {
+    INFO "Starting $mode";
+    my %conf = $conf->$mode;
+    if(my $autogen = delete $conf{autogen})
+    {
+      $autogen = [ $autogen ] if ref $autogen eq 'HASH';
+      for my $i (@$autogen)
+      {
+        DEBUG "autowriting ".$i->{filename};
+        mkpath(dirname($i->{filename}), 0, 0700);
+        open my $fp, ">$i->{filename}" or LOGDIE "cannot write to $i->{filename} : $!";
+        print $fp $i->{content};
+        close $fp or LOGDIE $!;
+      }
     }
 
-    Clustericious::App->init_logging;
-
-    for my $mode ($self->app->config->start_mode) {
-        #  local %ENV = %ENV;
-        INFO "Starting $mode";
-        my %conf = $conf->$mode;
-        if (my $autogen = delete $conf{autogen}) {
-            $autogen = [ $autogen ] if ref $autogen eq 'HASH';
-            for my $i (@$autogen) {
-                DEBUG "autowriting ".$i->{filename};
-                mkpath dirname($i->{filename});
-                open my $fp, ">$i->{filename}" or LOGDIE "cannot write to $i->{filename} : $!";
-                print $fp $i->{content};
-                close $fp or LOGDIE $!;
-            }
-        }
-
-        # env hash goes to the environment
-        my $env = delete $conf{env} || {};
-        @ENV{ keys %$env } = values %$env;
-        if ($env->{PERL5LIB}) {
-            # Do it now, in case we are not spawning a new process.
-            push @INC, split /:/, $env->{PERL5LIB};
-        }
-        TRACE "Setting env vars : ".join ',', keys %$env;
-
-        my @args;
-
-        if(my $args = delete $conf{args})
-        {
-            @args = ref $args ne 'ARRAY' ? (shellwords $args) : @$args;
-        }
-        elsif(%conf)
-        {
-          Carp::carp("argumenst specified withouth 'args' option is deprecated and will be removed on or after January 31, 2016");
-          # THIS IS RETARDED AND SHOULD BE DEPRECATED
-          # if it starts with a dash, leave it alone, else add two dashes
-          my %args = mesh
-            @{ [ map {/^-/ ? "$_" : "--$_"} keys %conf ] },
-            @{ [ values %conf                          ] };
-
-          # squash "null"s (for boolean arguments)
-          @args = grep { $_ ne 'null' } %args;
-        }
-
-        DEBUG "Sending args for $mode : @args";
-        $ENV{MOJO_COMMANDS_DONE} = 0;
-        Clustericious::Commands->start($mode,@args);
+    # env hash goes to the environment
+    my $env = delete $conf{env} || {};
+    @ENV{ keys %$env } = values %$env;
+    if($env->{PERL5LIB})
+    {
+      # Do it now, in case we are not spawning a new process.
+      push @INC, @PERL5LIB;
     }
+    TRACE "Setting env vars : ".join ',', keys %$env;
+
+    my @args;
+
+    if(my $args = delete $conf{args})
+    {
+      @args = ref $args ne 'ARRAY' ? (shellwords $args) : @$args;
+    }
+    elsif(%conf)
+    {
+      Carp::carp("argumenst specified withouth 'args' option is deprecated and will be removed on or after January 31, 2016");
+      # THIS IS RETARDED AND SHOULD BE DEPRECATED
+      # if it starts with a dash, leave it alone, else add two dashes
+      my %args = mesh
+        @{ [ map {/^-/ ? "$_" : "--$_"} keys %conf ] },
+        @{ [ values %conf                          ] };
+
+      # squash "null"s (for boolean arguments)
+      @args = grep { $_ ne 'null' } %args;
+    }
+
+    DEBUG "Sending args for $mode : @args";
+    $ENV{MOJO_COMMANDS_DONE} = 0;
+    Clustericious::Commands->start($mode,@args);
+  }
 }
 
 1;

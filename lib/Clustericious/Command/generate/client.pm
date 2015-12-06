@@ -5,7 +5,7 @@ use warnings;
 use Mojo::Base 'Clustericious::Command';
 use File::Find;
 use File::ShareDir 'dist_dir';
-use File::Basename qw/basename/;
+use File::Basename qw( basename );
 
 # ABSTRACT: Clustericious command to generate a new Clustericious client
 # VERSION
@@ -54,7 +54,8 @@ sub run
 {
   my ($self, $serverclass, @args ) = @_;
   $serverclass ||= 'MyClustericiousApp';
-  if (@args % 2) {
+  if (@args % 2)
+  {
     die "usage : $0 generate client <app_name>\n";
   }
   my %args = @args;

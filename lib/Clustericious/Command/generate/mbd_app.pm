@@ -5,7 +5,7 @@ use warnings;
 use Mojo::Base 'Clustericious::Command';
 use File::Find;
 use File::ShareDir 'dist_dir';
-use File::Basename qw/basename/;
+use File::Basename qw( basename );
 
 # ABSTRACT: Clustericious command to generate a new Clustericious M::B::D application
 # VERSION

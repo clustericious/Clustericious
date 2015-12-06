@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use 5.010;
 use Mojo::Base 'Clustericious::Command';
-use Path::Class qw/dir/;
+use Path::Class qw( dir );
 
 # ABSTRACT: Generate a default configuration.
 # VERSION
@@ -56,28 +56,27 @@ EOT
 
 sub run
 {
-  my $self = shift;
-  my @args = @_ ? @_ : @ARGV;
+  my($self, @args) = @_;
 
   my $root = dir($ENV{CLUSTERICIOUS_CONF_DIR} || $ENV{HOME});
   my $conf = $self->app->generate_config(@args);
 
   for my $d (@{$conf->{dirs} || []}) {
-      my $dir = dir($root, @$d);
-      -d $dir and do { say "-> exists : $dir"; next; };
-      my @made = $dir->mkpath;
-      say "-> mkdir $_" for @made;
+    my $dir = dir($root, @$d);
+    -d $dir and do { say "-> exists : $dir"; next; };
+    my @made = $dir->mkpath;
+    say "-> mkdir $_" for @made;
   }
   
   my $config_root = dir($root)->subdir('etc');
   for my $filename (keys %{$conf->{files}}) {
-      my $file = $config_root->file($filename);
-      -e $file and do {
-          say "-> exists : $file";
-          next;
-      };
-      say "-> write $file";
-      $file->spew($conf->{files}{$filename});
+    my $file = $config_root->file($filename);
+    -e $file and do {
+      say "-> exists : $file";
+      next;
+    };
+    say "-> write $file";
+    $file->spew($conf->{files}{$filename});
   }
 
   1;

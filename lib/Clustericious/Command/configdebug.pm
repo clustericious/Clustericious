@@ -58,8 +58,8 @@ EOT
 
 sub run
 {
-  my $self = shift;
-  my $app_name = $_[0] || ref($self->app);
+  my($self, $name) = @_;
+  my $app_name = $name // ref($self->app);
 
   $ENV{MOJO_TEMPLATE_DEBUG} = 1;
 

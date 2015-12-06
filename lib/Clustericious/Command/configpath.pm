@@ -33,9 +33,7 @@ EOT
 
 sub run
 {
-  my $self = shift;
-  my @args = @_ ? @_ : @ARGV;
-
+  my($self, @args) = @_;
   say for Clustericious->_config_path  
 }
 

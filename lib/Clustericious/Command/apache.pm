@@ -76,17 +76,13 @@ Options are passed verbatim to the httpd executable.
 EOT
 
 sub run {
-    my $self = shift;
-    my @args = @_ ? @_ : @ARGV;
-    my $app_name = $ENV{MOJO_APP};
-
-    Clustericious::App->init_logging;
-
-    my $apache = which('httpd') || die "unable to find apache";
-    system $apache, @args;
-    die "'$apache @args' Failed to execute: $!" if $? == -1;
-    die "'$apache @args' Killed with signal: ", $? & 127 if $? & 127;
-    die "'$apache @args' Exited with ", $? >> 8 if $? >> 8;
+  my($self, @args) = @_;
+  Clustericious::App->init_logging;
+  my $command = which('httpd') || die "unable to find apache";
+  system $command, @args;
+  die "'$command @args' Failed to execute: $!" if $? == -1;
+  die "'$command @args' Killed with signal: ", $? & 127 if $? & 127;
+  die "'$command @args' Exited with ", $? >> 8 if $? >> 8;
 }
 
 1;

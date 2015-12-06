@@ -68,41 +68,44 @@ is used for configuration.
 EOT
 
 sub run {
-    my $self = shift;
-    my $conf = $self->app->config->hypnotoad;
-    my $exe = $0;
-    DEBUG "Running hypnotoad : $exe";
-    $ENV{HYPNOTOAD_EXE} = "$0";
-    my $sentinel = '/no/such/file/because/these/are/deprecated';
-    if ( $ENV{HYPNOTOAD_CONFIG} && $ENV{HYPNOTOAD_CONFIG} ne $sentinel ) {
-        WARN "HYPNOTOAD_CONFIG value $ENV{HYPNOTOAD_CONFIG} will be ignored";
-    }
-    # During deprecation, this value must be defined but not pass the -r test
-    # to avoid warnings.
-    my $pid = fork();
-    if (!defined($pid)) {
-        LOGDIE "Unable to fork";
-    }
+  my($self, @args) = @_;
+  my $conf = $self->app->config->hypnotoad;
+  my $exe = $0;
+  DEBUG "Running hypnotoad : $exe";
+  $ENV{HYPNOTOAD_EXE} = "$0";
+  my $sentinel = '/no/such/file/because/these/are/deprecated';
+  if ( $ENV{HYPNOTOAD_CONFIG} && $ENV{HYPNOTOAD_CONFIG} ne $sentinel ) {
+    WARN "HYPNOTOAD_CONFIG value $ENV{HYPNOTOAD_CONFIG} will be ignored";
+  }
+  # During deprecation, this value must be defined but not pass the -r test
+  # to avoid warnings.
+  my $pid = fork();
+  if (!defined($pid)) {
+    LOGDIE "Unable to fork";
+  }
 
-    unless ($pid) {
-        DEBUG "Child process $$";
-        local $ENV{HYPNOTOAD_CONFIG} = $sentinel;
-        my $pid_file = $conf->{pid_file};
-        if (-e $pid_file) {
-            chomp (my $pid = Clustericious::_slurp_pid $pid_file);
-            if (!kill 0, $pid) {
-                WARN "removing old pid file $pid_file";
-                unlink $pid_file or WARN "Could not remove $pid_file : $!";
-            }
-        }
-        my $toad = Mojo::Server::Hypnotoad->new;
-        $ENV{CLUSTERICIOUS_COMMAND_NAME} = 'hypnotoad';
-        $toad->run($exe);
-        WARN "hypnotoad exited";
-        exit;
+  unless ($pid) {
+    DEBUG "Child process $$";
+    local $ENV{HYPNOTOAD_CONFIG} = $sentinel;
+    my $pid_file = $conf->{pid_file};
+    if (-e $pid_file) {
+      chomp (my $pid = Clustericious::_slurp_pid $pid_file);
+      if (!kill 0, $pid) {
+        WARN "removing old pid file $pid_file";
+        unlink $pid_file or WARN "Could not remove $pid_file : $!";
+      }
     }
-    sleep 1;
-    return 1;
+    my $toad = Mojo::Server::Hypnotoad->new;
+    $ENV{CLUSTERICIOUS_COMMAND_NAME} = 'hypnotoad';
+    $toad->run($exe);
+    WARN "hypnotoad exited";
+    exit;
+  }
+  # TODO: see if we can get away without
+  # using this sleep... it would speed up
+  # the test suite a lot.
+  sleep 1;
+  return 1;
 }
 
 1;

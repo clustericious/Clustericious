@@ -43,22 +43,21 @@ Options are passed verbatim to the nginx executable.
 EOT
 
 sub run {
-    my $self = shift;
-    my @args = @_ ? @_ : @ARGV;
-    my $app_name = $ENV{MOJO_APP};
-    my %args = @args;
+  my($self, @args) = @_;
+  my $app_name = $ENV{MOJO_APP};
+  my %args = @args;
 
-    Clustericious::App->init_logging;
+  Clustericious::App->init_logging;
 
-    my $prefix = $args{-p} or INFO "no prefix for nginx";
-    mkpath "$prefix/logs";
+  my $prefix = $args{-p} or INFO "no prefix for nginx";
+  mkpath "$prefix/logs";
 
-    my $nginx = which('nginx') or LOGDIE "could not find nginx in $ENV{PATH}";
-    DEBUG "starting $nginx @args";
-    system$nginx, @args;
-    die "'$nginx @args' Failed to execute: $!" if $? == -1;
-    die "'$nginx @args' Killed with signal: ", $? & 127 if $? & 127;
-    die "'$nginx @args' Exited with ", $? >> 8 if $? >> 8;
+  my $nginx = which('nginx') or LOGDIE "could not find nginx in $ENV{PATH}";
+  DEBUG "starting $nginx @args";
+  system$nginx, @args;
+  die "'$nginx @args' Failed to execute: $!" if $? == -1;
+  die "'$nginx @args' Killed with signal: ", $? & 127 if $? & 127;
+  die "'$nginx @args' Exited with ", $? >> 8 if $? >> 8;
 }
 
 1;
