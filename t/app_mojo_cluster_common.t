@@ -67,7 +67,6 @@ use Mojolicious::Lite;
 
 our $VERSION = '4.56';
 
-plugin 'Clustericious::Plugin::AutodataHandler';
 plugin 'Clustericious::Plugin::CommonRoutes';
 
 app->start;
@@ -85,7 +84,6 @@ our $VERSION = '1.23';
 sub startup
 {
   my($self) = @_;
-  $self->plugin('Clustericious::Plugin::AutodataHandler');
   $self->plugin('Clustericious::Plugin::CommonRoutes');
 }
 

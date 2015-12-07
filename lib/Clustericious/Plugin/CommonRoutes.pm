@@ -13,7 +13,6 @@ use Sys::Hostname ();
 =head1 SYNOPSIS
 
  # Mojolicious
- $self->plugin('Clustericious::Plugin::AutodataHandler');
  $self->plugin('Clustericious::Plugin::CommonRoutes');
  
  # Clustericious
@@ -28,6 +27,9 @@ This plugin adds routes that are common to all clustericious servers.
 sub register
 {
   my($self, $app) = @_;
+
+  $app->plugin('Clustericious::Plugin::AutodataHandler')
+    unless $app->renderer->handlers->{autodata};
 
 =head2 /version
 
@@ -148,6 +150,11 @@ example C<~/etc/MyApp.conf>:
 }
 
 1;
+
+=head1 CAVEATS
+
+This plugin pulls in the L<Clustericious::Plugin::AutodataHandler> plugin if
+it hasn't already been loaded.
 
 =head1 SEE ALSO
 
