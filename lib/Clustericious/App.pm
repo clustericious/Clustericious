@@ -98,7 +98,7 @@ sub startup {
 
     $self->controller_class('Clustericious::Controller');
     $self->renderer(Clustericious::Renderer->new());
-    $self->renderer->classes([qw/Clustericious::Templates/]);
+    $self->renderer->classes(['Clustericious::Templates']);
     my $home = $self->home;
     $self->renderer->paths([ $home->rel_dir('templates') ]);
 
