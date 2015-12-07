@@ -78,188 +78,195 @@ my %routes;
 
 # Much of the code below taken directly from Mojolicious::Lite.
 sub import {
-    my($class, $app_class) = @_;
-    my $caller = caller;
+  my($class, $app_class) = @_;
+  my $caller = caller;
     
-    unless($app_class)
+  unless($app_class)
+  {
+    if ($caller->isa("Clustericious::App"))
     {
-      if ($caller->isa("Clustericious::App"))
+      $app_class = $caller;
+    }
+    else
+    {
+      $app_class = $caller;
+      $app_class =~ s/::Routes$// or die "could not guess app class : ";
+    }
+  }
+
+  my @routes;
+  $routes{$app_class} = \@routes;
+
+  # Route generator
+  my $route_sub = sub
+  {
+    my ($methods, @args) = @_;
+
+    my ($cb, $constraints, $defaults, $name, $pattern);
+    my $conditions = [];
+
+    # Route information
+    my $condition;
+    while (my $arg = shift @args)
+    {
+
+      # Condition can be everything
+      if ($condition)
       {
-        $app_class = $caller;
+        push @$conditions, $condition => $arg;
+                $condition = undef;
       }
-      else
+
+      # First scalar is the pattern
+      elsif (!ref $arg && !$pattern)
       {
-        $app_class = $caller;
-        $app_class =~ s/::Routes$// or die "could not guess app class : ";
+        $pattern = $arg;
+      }
+
+      # Scalar
+      elsif (!ref $arg && @args)
+      {
+        $condition = $arg;
+      }
+
+      # Last scalar is the route name
+      elsif (!ref $arg)
+      {
+        $name = $arg;
+      }
+
+      # Callback
+      elsif (ref $arg eq 'CODE')
+      {
+        $cb = $arg;
+      }
+
+      # Constraints
+      elsif (ref $arg eq 'ARRAY')
+      {
+        $constraints = $arg;
+      }
+
+      # Defaults
+      elsif (ref $arg eq 'HASH')
+      {
+        $defaults = $arg;
       }
     }
 
-    my @routes;
-    $routes{$app_class} = \@routes;
+    # Defaults
+    $cb ||= sub {1};
+    $constraints ||= [];
 
-    # Route generator
-    my $route_sub = sub
-    {
-        my ($methods, @args) = @_;
+    # Merge
+    $defaults ||= {};
+    $defaults = {%$defaults, cb => $cb};
 
-        my ($cb, $constraints, $defaults, $name, $pattern);
-        my $conditions = [];
+    # Name
+    $name ||= '';
 
-        # Route information
-        my $condition;
-        while (my $arg = shift @args)
-        {
-
-            # Condition can be everything
-            if ($condition)
-            {
-                push @$conditions, $condition => $arg;
-                $condition = undef;
-            }
-
-            # First scalar is the pattern
-            elsif (!ref $arg && !$pattern)
-            {
-              $pattern = $arg;
-            }
-
-            # Scalar
-            elsif (!ref $arg && @args)
-            {
-              $condition = $arg;
-            }
-
-            # Last scalar is the route name
-            elsif (!ref $arg)
-            {
-              $name = $arg;
-            }
-
-            # Callback
-            elsif (ref $arg eq 'CODE')
-            {
-              $cb = $arg;
-            }
-
-            # Constraints
-            elsif (ref $arg eq 'ARRAY')
-            {
-              $constraints = $arg;
-            }
-
-            # Defaults
-            elsif (ref $arg eq 'HASH')
-            {
-              $defaults = $arg;
-            }
-        }
-
-        # Defaults
-        $cb ||= sub {1};
-        $constraints ||= [];
-
-        # Merge
-        $defaults ||= {};
-        $defaults = {%$defaults, cb => $cb};
-
-        # Name
-        $name ||= '';
-
-        push @routes, {
-            name        => $name,
-            pattern     => $pattern,
-            constraints => $constraints,
-            conditions  => $conditions,
-            defaults    => $defaults,
-            methods     => $methods
-          };
-
+    push @routes, {
+      name        => $name,
+      pattern     => $pattern,
+      constraints => $constraints,
+      conditions  => $conditions,
+      defaults    => $defaults,
+      methods     => $methods
     };
 
-    # Export
-    monkey_patch $app_class, startup_route_builder => \&_startup_route_builder;
+  };
 
-    monkey_patch $caller, any => sub { $route_sub->(ref $_[0] ? shift : [], @_) };
-    monkey_patch $caller, $_  => sub { unshift @_, 'delete'; goto $route_sub } for qw( Delete del );
+  # Export
+  monkey_patch $app_class, startup_route_builder => \&_startup_route_builder;
 
-    foreach my $method (qw( get head ladder post put websocket authenticate authorize ))
-    {
-      monkey_patch $caller, $method => sub { unshift @_, $method; goto $route_sub };
-    }
+  monkey_patch $caller, any => sub { $route_sub->(ref $_[0] ? shift : [], @_) };
+  monkey_patch $caller, $_  => sub { unshift @_, 'delete'; goto $route_sub } for qw( Delete del );
+
+  foreach my $method (qw( get head ladder post put websocket authenticate authorize ))
+  {
+    monkey_patch $caller, $method => sub { unshift @_, $method; goto $route_sub };
+  }
 }
 
 sub _startup_route_builder {
-    my($app, $auth_plugin) = @_;
+  my($app, $auth_plugin) = @_;
 
-    my $stashed = $routes{ ref $app } // do { WARN "no routes stashed for $app"; [] };
-    my @stashed            = @$stashed;
-    my $routes             = $app->routes;
-    my $head_route         = $app->routes;
-    my $head_authenticated = $head_route;
+  my $stashed = $routes{ ref $app } // do { WARN "no routes stashed for $app"; [] };
+  my @stashed            = @$stashed;
+  my $routes             = $app->routes;
+  my $head_route         = $app->routes;
+  my $head_authenticated = $head_route;
 
-    for my $spec (@stashed)
+  for my $spec (@stashed)
+  {
+    my      ($name,$pattern,$constraints,$conditions,$defaults,$methods) =
+    @$spec{qw/name  pattern  constraints  conditions  defaults  methods/};
+
+    # authenticate, always connects to app->routes
+    if (!ref $methods && $methods eq 'authenticate')
     {
-       my      ($name,$pattern,$constraints,$conditions,$defaults,$methods) =
-       @$spec{qw/name  pattern  constraints  conditions  defaults  methods/};
+      my $realm = $pattern || ref $app;
+      my $cb = defined $auth_plugin ? sub { $auth_plugin->authenticate(shift, $realm) } : sub { 1 };
+      $head_route = $head_authenticated = $routes =
+      $app->routes->under->to( { cb => $cb } )->name("authenticated");
+      next;
+    }
 
-         # authenticate, always connects to app->routes
-         if (!ref $methods && $methods eq 'authenticate')
-         {
-             my $realm = $pattern || ref $app;
-             my $cb = defined $auth_plugin ? sub { $auth_plugin->authenticate(shift, $realm) } : sub { 1 };
-             $head_route = $head_authenticated = $routes =
-             $app->routes->under->to( { cb => $cb } )->name("authenticated");
-             next;
-         }
+    # authorize replaces previous authorize's
+    if (!ref $methods && $methods eq 'authorize')
+    {
+      die "put authenticate before authorize" unless $head_authenticated;
+      my $action = $pattern;
+      my $resource = $name;
+      if($auth_plugin)
+      {
+        $head_route = $routes = $head_authenticated->under->to( {
+          cb => sub {
+            my($c) = @_;
+            # Dynamically compute resource/action
+            my ($d_resource,$d_action) = ($resource, $action);
+            $d_resource =~ s/<path>/$c->req->url->path/e if $d_resource;
+            $d_resource ||= $c->req->url->path;
+            $d_action =~ s/<method>/$c->req->method/e if $d_action;
+            $d_action ||= $c->req->method;
+            $auth_plugin->authorize( $c, $d_action, $d_resource );
+          } 
+        });
+      }
+      else
+      {
+        $head_route = $routes = $head_authenticated->under->to({ cb => sub { 1 } });
+      }
+      next;
+    }
 
-         # authorize replaces previous authorize's
-         if (!ref $methods && $methods eq 'authorize')
-         {
-            die "put authenticate before authorize" unless $head_authenticated;
-            my $action = $pattern;
-            my $resource = $name;
-            if($auth_plugin)
-            {
-                $head_route = $routes = $head_authenticated->under->to( {
-                        cb => sub {
-                            my $c = shift;
-                            # Dynamically compute resource/action
-                            my ($d_resource,$d_action) = ($resource, $action);
-                            $d_resource =~ s/<path>/$c->req->url->path/e if $d_resource;
-                            $d_resource ||= $c->req->url->path;
-                            $d_action =~ s/<method>/$c->req->method/e if $d_action;
-                            $d_action ||= $c->req->method;
-                            $auth_plugin->authorize( $c, $d_action, $d_resource );
-                          } });
-            }
-            else
-            {
-                $head_route = $routes = $head_authenticated->under->to({ cb => sub { 1 } });
-            }
-            next;
-         }
+    # ladders don't replace previous ladders
+    if (!ref $methods && $methods eq 'ladder')
+    {
+      die "constraints not handled in ladders" if $constraints && @$constraints;
+      $routes = $routes
+        ->under( $pattern )
+        ->over($conditions)
+        ->to($defaults)
+        ->name($name);
+      next;
+    }
 
-         # ladders don't replace previous ladders
-         if (!ref $methods && $methods eq 'ladder')
-         {
-              die "constraints not handled in ladders" if $constraints && @$constraints;
-              $routes = $routes->under( $pattern )->over($conditions)
-                  ->to($defaults)->name($name);
-              next;
-         }
+    # WebSocket?
+    my $websocket = 1 if !ref $methods && $methods eq 'websocket';
+    $methods = [] if $websocket;
 
-         # WebSocket?
-         my $websocket = 1 if !ref $methods && $methods eq 'websocket';
-         $methods = [] if $websocket;
+    # Create route
+    my $route = $routes
+      ->route( $pattern, @$constraints )
+      ->over($conditions)
+      ->via($methods)
+      ->to($defaults)
+      ->name($name);
 
-         # Create route
-         my $route =
-           $routes->route( $pattern, @$constraints )->over($conditions)
-           ->via($methods)->to($defaults)->name($name);
-
-         # WebSocket
-         $route->websocket if $websocket;
-     }
+    # WebSocket
+    $route->websocket if $websocket;
+  }
 }
 
 1;
