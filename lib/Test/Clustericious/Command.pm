@@ -207,7 +207,8 @@ sub run_ok
   $tb->diag("    - execute failed: $error") if $exit == -1;
   $tb->diag("    - died from signal: " . ($exit & 128)) if $exit & 128;
 
-  Test::Clustericious::Command::Run->new(  
+  Test::Clustericious::Command::Run->new(
+    cmd => \@cmd,
     out => $out, err => $err, exit => $exit >> 8,
   );
 }
@@ -274,6 +275,7 @@ sub new
   bless \%args, $class;
 }
 
+sub cmd { @{ shift->{cmd} // [] } }
 sub out { shift->{out} }
 sub err { shift->{err} }
 sub exit { shift->{exit} }
@@ -284,6 +286,12 @@ sub exit_is
   $name //= "exit with $value";
   my $tb = __PACKAGE__->builder;
   $tb->is_eq($self->exit, $value, $name);
+  unless($self->exit == $value)
+  {
+    $tb->diag("[cmd]\n", join(' ', $self->cmd)) if $self->cmd;
+    $tb->diag("[out]\n", $self->out) if $self->out;
+    $tb->diag("[err]\n", $self->err) if $self->err;
+  }
   $self;
 }
 
