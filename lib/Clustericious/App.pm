@@ -15,7 +15,7 @@ use Mojo::URL;
 use Scalar::Util qw/weaken/;
 use Mojo::Base 'Mojolicious';
 use File::HomeDir ();
-use Carp qw( cluck );
+use Carp qw( cluck croak );
 use Clustericious;
 use Clustericious::Controller;
 use Clustericious::Renderer;
@@ -103,14 +103,7 @@ sub startup {
     $self->renderer->paths([ $home->rel_dir('templates') ]);
 
     $self->init_logging();
-    if($self->can('secrets'))
-    {
-      $self->secrets( [ ref $self || $self ] );
-    }
-    else
-    {
-      $self->secret( (ref $self || $self) );
-    }
+    $self->secrets( [ ref $self || $self ] );
 
     $self->plugins->namespaces(['Clustericious::Plugin','Mojolicious::Plugin']);
     my $config = $self->config;
@@ -122,8 +115,7 @@ sub startup {
         { $name = $auth_config->{plugin} }
         $auth_plugin = $self->plugin($name, plug_auth => $auth_config);
     } elsif($auth_config = $config->simple_auth(default => '')) {
-        $self->log->info("Loading auth plugin simple_auth [deprecated]");
-        $auth_plugin = $self->plugin('plug_auth', plug_auth => $auth_config);
+        croak "Using simple_auth in configuration has been removed.  Change your configuration to use plug_auth instead.";
     } else {
         $self->log->info("No auth configured");
     }

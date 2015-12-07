@@ -5,6 +5,8 @@ Revision history for {{$dist->name}}
     Clustericious::Plugin::CommonRoutes and is a Mojo plugin
   - Plugin search order has changed to prefer Clustericious::Plugin
     over Mojolicious::Plugin.
+  - "simple_auth" in configuration has long since been deprecated
+    it will now croak.
 
 1.10      2015-12-07 06:56:57 -0500
   - Marking problematic test t/command_generate.t as dev only
