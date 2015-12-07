@@ -8,7 +8,7 @@ use Path::Class qw( dir );
 use File::chdir;
 use File::Which qw( which );
 
-requires undef, 3;
+requires 'perl.conf', 3;
 mirror 'bin', 'bin';
 
 my $prove = which 'prove';
