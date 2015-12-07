@@ -90,6 +90,11 @@ sub register
     $app->plugins->on( add_autodata_type => \&_autodata_add);
 
     $app->helper( parse_autodata => \&_autodata_parse );
+    
+    $app->hook(before_render => sub {
+      my($c, $args) = @_;
+      $c->stash->{handler} = "autodata" if exists($c->stash->{autodata}) || exists($args->{autodata});
+    });
 }
 
 sub _autodata_add

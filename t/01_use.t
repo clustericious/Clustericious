@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 47;
+use Test::More tests => 46;
 
 BEGIN { eval 'use EV' }
 
@@ -36,7 +36,6 @@ require_ok('Clustericious::Command::generate::client');
 require_ok('Clustericious::Command::generate::mbd_app');
 require_ok('Clustericious::Command::generate::app');
 require_ok('Clustericious::Command');
-require_ok('Clustericious::Renderer');
 require_ok('Clustericious::RouteBuilder::Proxy');
 require_ok('Clustericious::RouteBuilder::Search');
 require_ok('Clustericious::RouteBuilder::CRUD');

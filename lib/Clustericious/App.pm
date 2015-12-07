@@ -18,7 +18,6 @@ use File::HomeDir ();
 use Carp qw( cluck croak );
 use Clustericious;
 use Clustericious::Controller;
-use Clustericious::Renderer;
 use Clustericious::Config;
 use Clustericious::Commands;
 
@@ -89,7 +88,6 @@ sub startup {
     );
 
     $self->controller_class('Clustericious::Controller');
-    $self->renderer(Clustericious::Renderer->new());
     $self->renderer->classes(['Clustericious::Templates']);
     my $home = $self->home;
     $self->renderer->paths([ $home->rel_dir('templates') ]);

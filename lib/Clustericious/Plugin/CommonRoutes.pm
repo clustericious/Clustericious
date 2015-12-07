@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use 5.010;
 use Mojo::Base 'Mojolicious::Plugin';
+use File::Basename ();
 use Sys::Hostname ();
 
 # ABSTRACT: Routes common to all clustericious applications
@@ -12,10 +13,11 @@ use Sys::Hostname ();
 =head1 SYNOPSIS
 
  # Mojolicious
+ $self->plugin('Clustericious::Plugin::AutodataHandler');
  $self->plugin('Clustericious::Plugin::CommonRoutes');
  
  # Clustericious
- # ... not necessary, included by default ...
+ # ... included by default ...
 
 =head1 DESCRIPTION
 
@@ -33,9 +35,14 @@ Returns the version of the service as a single element list.
 
 =cut
 
+  my $version = do {
+    my $class = ref $app;
+    $class = eval { $app->renderer->classes->[0] } // 'main' if $class eq 'Mojolicious::Lite';
+    $class->VERSION // 'dev';
+  };
+
   $app->routes->get('/version')->to(cb => sub {
-    my $self = shift;
-    $self->stash(autodata => [ $self->app->VERSION // 'dev' ]);
+    shift->stash(autodata => [ $version ]);
   });
 
 =head2 /status
@@ -65,15 +72,21 @@ The version of the application.
 
 =cut
 
+  my($app_name, $hostname) = do {
+    my $name = ref $app;
+    $name = File::Basename::basename($0) if $name eq 'Mojolicious::Lite';
+    ($name, Sys::Hostname::hostname());
+  };
+
   $app->routes->get('/status')->to(cb => sub {
     my($self) = @_;
     my $app = ref $self->app || $self->app;
 
     $self->stash(autodata => {
-      app_name => $app,
-      server_version => $self->app->VERSION // 'dev',
-      server_hostname => Sys::Hostname::hostname(),
-      server_url => $self->url_for('/')->to_abs->to_string,
+      app_name        => $app_name,
+      server_version  => $version,
+      server_hostname => $hostname,
+      server_url      => $self->url_for('/')->to_abs->to_string,
     });
   });
 
