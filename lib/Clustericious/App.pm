@@ -36,13 +36,6 @@ specific methods documented here.
 
 L<Mojolicious>
 
-=cut
-
-# TODO: moved into CommonRoutes
-sub _have_rose {
-  return 1 if Rose::Planter->can("tables");
-}
-
 =head1 ATTRIBUTES
 
 =head2 commands
@@ -53,8 +46,8 @@ An instance of L<Clustericious::Commands> for use with this application.
 
 has commands => sub {
   my $commands = Clustericious::Commands->new(app => shift);
-    weaken $commands->{app};
-    return $commands;
+  weaken $commands->{app};
+  return $commands;
 };
 
 {
