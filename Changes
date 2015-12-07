@@ -7,6 +7,8 @@ Revision history for {{$dist->name}}
     over Mojolicious::Plugin.
   - "simple_auth" in configuration has long since been deprecated
     it will now croak.
+  - Clustericious::App:#dump_api is deprecated and will be removed
+    on or after January 31, 2016.
 
 1.10      2015-12-07 06:56:57 -0500
   - Marking problematic test t/command_generate.t as dev only

@@ -3,19 +3,18 @@ package Clustericious::App;
 use strict;
 use warnings;
 use 5.010;
-use List::Util qw/first/;
-use List::MoreUtils qw/uniq/;
+use List::Util qw( first );
 use MojoX::Log::Log4perl;
 use Mojo::UserAgent;
 use Clustericious::Templates;
-use Mojo::ByteStream qw/b/;
+use Mojo::ByteStream qw( b );
 use Data::Dumper;
 use Clustericious::Log;
 use Mojo::URL;
-use Scalar::Util qw/weaken/;
+use Scalar::Util qw( weaken );
 use Mojo::Base 'Mojolicious';
 use File::HomeDir ();
-use Carp qw( cluck croak );
+use Carp qw( cluck croak carp );
 use Clustericious;
 use Clustericious::Controller;
 use Clustericious::Config;
@@ -40,8 +39,9 @@ L<Mojolicious>
 
 =cut
 
+# TODO: moved into CommonRoutes
 sub _have_rose {
-    return 1 if Rose::Planter->can("tables");
+  return 1 if Rose::Planter->can("tables");
 }
 
 =head1 ATTRIBUTES
@@ -194,39 +194,16 @@ sub init_logging {
 
 =head2 $app-E<gt>dump_api
 
+B<DEPRECATED>: will be removed on or after January 31, 2016.
+
 Dump out the API for this REST server.
 
 =cut
 
 sub dump_api {
-    my $self = shift;
-    my $routes = shift || $self->routes->children;
-    my @all;
-    for my $r (@$routes) {
-        my $pat = $r->pattern;
-        $pat->_compile;
-        my %placeholders = map { $_ => "<$_>" } @{ $pat->placeholders };
-        my $method = uc join ',', @{ $r->via || ["GET"] };
-        if (_have_rose() && $placeholders{table}) {
-            for my $table (Rose::Planter->tables) {
-                $placeholders{table} = $table;
-                my $pat = $pat->unparsed;
-                $pat =~ s/:table/$table/;
-                push @all, "$method $pat";
-            }
-        } elsif (_have_rose() && $placeholders{items}) {
-            for my $plural (Rose::Planter->plurals) {
-                $placeholders{items} = $plural;
-                my $line = $pat->render(\%placeholders);
-                push @all, "$method $line";
-            }
-        } elsif (defined($pat->unparsed)) {
-            push @all, join ' ', $method, $pat->unparsed;
-        } else {
-            push @all, $self->dump_api($r->children);
-        }
-    }
-    return uniq sort @all;
+  carp "Clustericious::App#dump_api is deprecated";
+  require Clustericious::Plugin::CommonRoutes;
+  Clustericious::Plugin::CommonRoutes->_dump_api(@_);
 }
 
 =head2 $app-E<gt>dump_api_table( $table )

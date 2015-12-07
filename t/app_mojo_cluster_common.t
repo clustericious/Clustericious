@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::Clustericious::Cluster;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use YAML::XS qw( Dump );
 use File::Basename ();
 use Sys::Hostname ();
@@ -43,7 +43,6 @@ subtest '/status' => sub {
 
   note Dump($t->tx->res->json);
 
-
   $t->get_ok("$url[0]/status")
     ->status_is(200)
     ->json_is('/app_name', File::Basename::basename($0))
@@ -57,6 +56,26 @@ subtest '/status' => sub {
   );
 
   note Dump($t->tx->res->json);
+};
+
+subtest '/api' => sub {
+  plan tests => 4;
+
+  $t->get_ok("$url[1]/api")
+    ->status_is(200);
+
+  ok(
+    scalar(grep /^GET \/version$/, @{ $t->tx->res->json }),
+    'has /version'
+  );
+
+  ok(
+    scalar(grep /^GET \/foo$/, @{ $t->tx->res->json }),
+    'has /foo'
+  );
+
+  note Dump($t->tx->res->json);
+
 };
 
 __DATA__
@@ -85,6 +104,9 @@ sub startup
 {
   my($self) = @_;
   $self->plugin('Clustericious::Plugin::CommonRoutes');
+  $self->routes->get('/foo')->to(cb => sub {
+    shift->render(text => 'foo');
+  });
 }
 
 1;

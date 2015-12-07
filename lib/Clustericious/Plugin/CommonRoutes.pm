@@ -6,6 +6,7 @@ use 5.010;
 use Mojo::Base 'Mojolicious::Plugin';
 use File::Basename ();
 use Sys::Hostname ();
+use List::MoreUtils ();
 
 # ABSTRACT: Routes common to all clustericious applications
 # VERSION
@@ -82,8 +83,6 @@ The version of the application.
 
   $app->routes->get('/status')->to(cb => sub {
     my($self) = @_;
-    my $app = ref $self->app || $self->app;
-
     $self->stash(autodata => {
       app_name        => $app_name,
       server_version  => $version,
@@ -100,8 +99,7 @@ provided by the L<Mojolicious::Command::routes|routes command>.
 =cut
 
   $app->routes->get('/api')->to(cb => sub {
-    my $self = shift;
-    $self->render( autodata => [ $self->app->dump_api() ] );
+    shift->render( autodata => [ __PACKAGE__->_dump_api($app) ]);
   });
 
 =head2 /api/:table
@@ -148,6 +146,55 @@ example C<~/etc/MyApp.conf>:
     $c->render_text('ok');
   });
 }
+
+sub _have_rose
+{
+  Rose::Planter->can('tables') ? 1 : 0;
+}
+
+sub _dump_api {
+  my $class = shift;
+  my $app = shift;
+  my $routes = shift || $app->routes->children;
+  my @all;
+
+  for my $r (@$routes)
+  {
+    my $pat = $r->pattern;
+    $pat->_compile;
+    my %placeholders = map { $_ => "<$_>" } @{ $pat->placeholders };
+    my $method = uc join ',', @{ $r->via || ["GET"] };
+    if (_have_rose() && $placeholders{table})
+    {
+      for my $table (Rose::Planter->tables)
+      {
+        $placeholders{table} = $table;
+        my $pat = $pat->unparsed;
+        $pat =~ s/:table/$table/;
+        push @all, "$method $pat";
+      }
+    }
+    elsif (_have_rose() && $placeholders{items})
+    {
+      for my $plural (Rose::Planter->plurals)
+      {
+        $placeholders{items} = $plural;
+        my $line = $pat->render(\%placeholders);
+        push @all, "$method $line";
+      }
+    }
+    elsif (defined($pat->unparsed))
+    {
+      push @all, join ' ', $method, $pat->unparsed;
+    }
+    else
+    {
+      push @all, $class->_dump_api($app, $r->children);
+    }
+  }
+  return List::MoreUtils::uniq sort @all;
+}
+
 
 1;
 
