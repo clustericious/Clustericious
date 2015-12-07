@@ -25,12 +25,12 @@ present in the stash.
 
 =cut
 
-sub render {
-    my $self = shift;
-    my ($c, $args) = @_;
-
-    $c->stash->{handler} = "autodata" if exists($c->stash->{autodata}) || exists($args->{autodata});
-    $self->SUPER::render(@_);
+sub render
+{
+  my($self, $c, $args) = @_;
+  $c->stash->{handler} = "autodata"
+    if exists($c->stash->{autodata}) || exists($args->{autodata});
+  $self->SUPER::render($c, $args);
 }
 
 1;
