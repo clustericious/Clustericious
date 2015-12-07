@@ -22,6 +22,8 @@ use List::MoreUtils ();
 =head1 DESCRIPTION
 
 This plugin adds routes that are common to all clustericious servers.
+It is available to Vanillia L<Mojolicious> apps that want to work with
+L<Clustericious::Client> based clients.
 
 =cut
 
@@ -105,14 +107,13 @@ provided by the L<Mojolicious::Command::routes|routes command>.
 =head2 /api/:table
 
 If you are using L<Module::Build::Database> and L<Route::Planter> for a database
-back end to your L<Clustericious> application you can get the columns of each
-table using this route.
+back end to your  application you can get the columns of each table using this route.
 
 =cut
 
   $app->routes->get('/api/:table')->to(cb => sub {
     my($self) = @_;
-    my $table = $self->app->dump_api_table($self->stash('table'));
+    my $table = __PACKAGE__->_dump_api_table($self->stash('table'));
     $table ? $self->render( autodata => $table ) : $self->reply->not_found;
   });
   
@@ -128,22 +129,25 @@ example C<~/etc/MyApp.conf>:
  ---
  export_logs: 1
 
+This route is NOT made available to non L<Clustericious> applications.
+
 =cut
 
   $app->routes->get('/log/:lines' => [ lines => qr/\d+/ ] => sub {
-    my $c = shift;
-    my $lines = $c->stash("lines");
-    unless ($c->config->export_logs(default => 0)) {
-      return $c->render_text('logs not available');
+    my($self) = @_;
+    my $lines = $self->stash("lines");
+    unless ($self->config->export_logs(default => 0))
+    {
+      return $self->render_text('logs not available');
     }
-    $c->render_text(Clustericious::Log->tail(lines => $lines || 10) || '** empty log **');
-  });
+    $self->render_text(Clustericious::Log->tail(lines => $lines || 10) || '** empty log **');
+  }) if $app->isa('Clustericious::App');
 
   $app->routes->options('/*opturl' => { opturl => '' } => sub {
-    my $c = shift;
-    $c->res->headers->add( 'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS' );
+    my($self) = @_;
+    $self->res->headers->add( 'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS' );
     # Allow-Origin and Allow-Headers added in after_dispatch hook.
-    $c->render_text('ok');
+    $self->render_text('ok');
   });
 }
 
@@ -195,6 +199,42 @@ sub _dump_api {
   return List::MoreUtils::uniq sort @all;
 }
 
+sub _dump_api_table_types
+{
+  my(undef, $rose_type) = @_;
+  return 'datetime' if $rose_type =~ /^datetime/;
+  state $types = {
+    (map { $_ => 'string' } qw( character text varchar )),
+    (map { $_ => 'numeric' } 'numeric', 'float', 'double precision','decimal'),
+    (map { $_ => $_ } qw( blob set time interval enum bytea chkpass bitfield date boolean )),
+    (map { $_ => 'integer' } qw( bigint integer bigserial serial )),
+    (map { $_ => 'epoch' } 'epoch', 'epoch hires'),
+    (map { $_ => 'timestamp' } 'timestamp', 'timestamp with time zone'),
+  };
+  return $types->{$rose_type} // 'unknown';
+}
+
+sub _dump_api_table
+{
+  my(undef, $table) = @_;
+  return unless _have_rose();
+  my $class = Rose::Planter->find_class($table);
+  return unless defined $class;
+
+  return {
+    columns => {
+      map {
+        $_->name => {
+          rose_db_type => $_->type,
+          not_null     => $_->not_null,
+          type         => __PACKAGE__->_dump_api_table_types($_->type),
+        } } $class->meta->columns
+    },
+    primary_key => [
+      map { $_->name } $class->meta->primary_key_columns
+    ],
+  };
+}
 
 1;
 

@@ -4,6 +4,7 @@ use Test::Clustericious::Cluster 0.26;
 use Test::More;
 use File::Find qw( find );
 use File::Basename qw( dirname );
+use Clustericious::Plugin::CommonRoutes ();
 
 plan skip_all => 'requires Rose::Planter 0.34 and DBD::SQLite: '
   unless eval q{ use Rose::Planter 0.34 (); use DBD::SQLite (); 1 };
@@ -44,7 +45,7 @@ find(
             $class =~ s{/}{::}g;
             $class =~ s/\.pm$//;
             return if $class =~ /^Rose::DB::Object::Metadata::Column::(Array|Scalar)$/;
-            return if Clustericious::App::_dump_api_table_types($class->type) ne 'unknown';
+            return if Clustericious::Plugin::CommonRoutes->_dump_api_table_types($class->type) ne 'unknown';
             diag "not sure about type for $class";
         },
         no_chdir => 1,
@@ -54,32 +55,32 @@ find(
 
 foreach my $type (qw( character text varchar ))
 {
-  is Clustericious::App::_dump_api_table_types($type), 'string', "$type = string";
+  is(Clustericious::Plugin::CommonRoutes->_dump_api_table_types($type), 'string', "$type = string");
 }
 
 foreach my $type ('numeric', 'float', 'double precision', 'decimal')
 {
-  is Clustericious::App::_dump_api_table_types($type), 'numeric', "$type = numeric";
+  is(Clustericious::Plugin::CommonRoutes->_dump_api_table_types($type), 'numeric', "$type = numeric");
 }
 
 foreach my $type (qw( blob set time interval enum datetime bytea chkpass bitfield date boolean ))
 {
-  is Clustericious::App::_dump_api_table_types($type), $type, "$type = $type";
+  is(Clustericious::Plugin::CommonRoutes->_dump_api_table_types($type), $type, "$type = $type");
 }
 
 foreach my $type (qw( bigint integer bigserial serial ))
 {
-  is Clustericious::App::_dump_api_table_types($type), 'integer', "$type = integer";
+  is(Clustericious::Plugin::CommonRoutes->_dump_api_table_types($type), 'integer', "$type = integer");
 }
 
 foreach my $type ('epoch', 'epoch hires')
 {
-  is Clustericious::App::_dump_api_table_types($type), 'epoch', "$type = epoch";
+  is(Clustericious::Plugin::CommonRoutes->_dump_api_table_types($type), 'epoch', "$type = epoch");
 }
 
 foreach my $type ('timestamp', 'timestamp with time zone')
 {
-  is Clustericious::App::_dump_api_table_types($type), 'timestamp', "$type = timestamp";
+  is(Clustericious::Plugin::CommonRoutes->_dump_api_table_types($type), 'timestamp', "$type = timestamp");
 }
 
 __DATA__

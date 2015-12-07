@@ -208,45 +208,25 @@ sub dump_api {
 
 =head2 $app-E<gt>dump_api_table( $table )
 
+B<DEPRECATED>: will be removed on or after January 31, 2016.
+
 Dump out the column information for the given table.
 
 =cut
 
 sub _dump_api_table_types
 {
-    my($rose_type) = @_;
-    return 'datetime' if $rose_type =~ /^datetime/;
-    state $types = {
-        (map { $_ => 'string' } qw( character text varchar )),
-        (map { $_ => 'numeric' } 'numeric', 'float', 'double precision','decimal'),
-        (map { $_ => $_ } qw( blob set time interval enum bytea chkpass bitfield date boolean )),
-        (map { $_ => 'integer' } qw( bigint integer bigserial serial )),
-        (map { $_ => 'epoch' } 'epoch', 'epoch hires'),
-        (map { $_ => 'timestamp' } 'timestamp', 'timestamp with time zone'),
-    };
-    return $types->{$rose_type} // 'unknown';
+  carp "Clustericious::App#dump_api_table is deprecated";
+  require Clustericious::Plugin::CommonRoutes;
+  Clustericious::Plugin::CommonRoutes->_dump_api_table_types(@_);
+  
 }
 
 sub dump_api_table
 {
-    my($self, $table) = @_;
-    return unless _have_rose();
-    my $class = Rose::Planter->find_class($table);
-    return unless defined $class;
-
-    return {
-        columns => {
-            map {
-                $_->name => {
-                    rose_db_type => $_->type,
-                    not_null     => $_->not_null,
-                    type         => _dump_api_table_types($_->type),
-                } } $class->meta->columns
-            },
-        primary_key => [
-            map { $_->name } $class->meta->primary_key_columns
-        ],
-    };
+  carp "Clustericious::App#dump_api_table is deprecated";
+  require Clustericious::Plugin::CommonRoutes;
+  Clustericious::Plugin::CommonRoutes->_dump_api_table($_[1]);
 }
 
 =head2 $app-E<gt>config
