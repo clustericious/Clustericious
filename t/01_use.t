@@ -40,7 +40,7 @@ require_ok('Clustericious::Renderer');
 require_ok('Clustericious::RouteBuilder::Proxy');
 require_ok('Clustericious::RouteBuilder::Search');
 require_ok('Clustericious::RouteBuilder::CRUD');
-require_ok('Clustericious::RouteBuilder::Common');
+require_ok('Clustericious::Plugin::CommonRoutes');
 require_ok('Clustericious::Plugin::PlugAuth');
 require_ok('Clustericious::Plugin::AutodataHandler');
 require_ok('Clustericious::Client');

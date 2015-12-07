@@ -19,7 +19,6 @@ use Carp qw( cluck );
 use Clustericious;
 use Clustericious::Controller;
 use Clustericious::Renderer;
-use Clustericious::RouteBuilder::Common;
 use Clustericious::Config;
 use Clustericious::Commands;
 
@@ -129,13 +128,12 @@ sub startup {
         $self->log->info("No auth configured");
     }
 
-    my $r = $self->routes;
-    # "Common" ones are not overrideable.
-    Clustericious::RouteBuilder::Common->_add_routes($self);    
+    $self->plugin('CommonRoutes');
     $self->startup_route_builder($auth_plugin) if $self->can('startup_route_builder');
-
     $self->plugin('AutodataHandler');
     $self->plugin('DefaultHelpers');
+    
+    # we can probably chuck these ...
     $self->plugin('TagHelpers');
     $self->plugin('EPLRenderer');
     $self->plugin('EPRenderer');

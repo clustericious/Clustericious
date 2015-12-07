@@ -1,26 +1,30 @@
-package Clustericious::RouteBuilder::Common;
+package Clustericious::Plugin::CommonRoutes;
 
 use strict;
 use warnings;
 use 5.010;
+use Mojo::Base 'Mojolicious::Plugin';
 use Sys::Hostname ();
 
 # ABSTRACT: Routes common to all clustericious applications
 # VERSION
 
+=head1 SYNOPSIS
+
+ # Mojolicious
+ $self->plugin('Clustericious::Plugin::CommonRoutes');
+ 
+ # Clustericious
+ # ... not necessary, included by default ...
+
 =head1 DESCRIPTION
 
-This package adds routes that are common to all clustericious servers.
-
-=head1 SUPER CLASS
-
-none
+This plugin adds routes that are common to all clustericious servers.
 
 =cut
 
-sub _add_routes {
-  my $class = shift;
-  my $app = shift;
+sub register {
+  my($self, $app) = @_;
 
 =head2 /version
 
