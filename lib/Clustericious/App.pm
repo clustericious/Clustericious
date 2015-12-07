@@ -112,7 +112,7 @@ sub startup {
       $self->secret( (ref $self || $self) );
     }
 
-    $self->plugins->namespaces(['Mojolicious::Plugin','Clustericious::Plugin']);
+    $self->plugins->namespaces(['Clustericious::Plugin','Mojolicious::Plugin']);
     my $config = $self->config;
     my $auth_plugin;
     if(my $auth_config = $config->plug_auth(default => '')) {

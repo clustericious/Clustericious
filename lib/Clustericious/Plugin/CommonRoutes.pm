@@ -23,7 +23,8 @@ This plugin adds routes that are common to all clustericious servers.
 
 =cut
 
-sub register {
+sub register
+{
   my($self, $app) = @_;
 
 =head2 /version

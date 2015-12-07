@@ -3,6 +3,8 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
   - Clustericious::RouteBuilder::Common is now
     Clustericious::Plugin::CommonRoutes and is a Mojo plugin
+  - Plugin search order has changed to prefer Clustericious::Plugin
+    over Mojolicious::Plugin.
 
 1.10      2015-12-07 06:56:57 -0500
   - Marking problematic test t/command_generate.t as dev only
