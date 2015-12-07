@@ -30,7 +30,9 @@ using L<Clustericious::Config>.
 our @mergeStack;
 our @EXPORT = qw( extends_config get_password home file dir hostname hostname_full json yaml address public_address interface );
 
-=head2 extends_config $config_name, %arguments
+=head2 extends_config 
+
+ % extends_config $config_name, %arguments
 
 Extend the config using another config file.
 
@@ -68,6 +70,8 @@ sub _do_merges {
 
 =head2 get_password
 
+ <%= get_password %>
+
 Prompt for a password.  This will prompt the user the first time it is
 encountered for a password.
 
@@ -78,7 +82,10 @@ sub get_password
   return Clustericious::Config::Callback::Password->new->to_yaml;
 }
 
-=head2 home( [ $user ] )
+=head2 home
+
+ <%= home %>
+ <%= home $user %>
 
 Return the given users' home directory, or if no user is
 specified return the calling user's home directory.
@@ -91,7 +98,9 @@ sub home (;$)
   $_[0] ? File::HomeDir->users_home($_[0]) : File::HomeDir->my_home;
 }
 
-=head2 file( @list )
+=head2 file
+
+ <%= file @list %>
 
 The C<file> shortcut from Path::Class, if it is installed.
 
@@ -104,7 +113,9 @@ sub file
   Path::Class::File->new(@_);
 }
 
-=head2 dir( @list )
+=head2 dir
+
+ <%= dir @list %>
 
 The C<dir> shortcut from Path::Class, if it is installed.
 
@@ -118,6 +129,8 @@ sub dir
 }
 
 =head2 hostname
+
+ <%= hostname %>
 
 The system hostname (uses L<Sys::Hostname>)
 
@@ -139,6 +152,8 @@ sub hostname
 
 =head2 hostname_full
 
+ <%= hostname_full %>
+
 The system hostname in full, including the domain, if
 it can be determined (uses L<Sys::Hostname>).
 
@@ -150,7 +165,9 @@ sub hostname_full
   Sys::Hostname::hostname();
 }
 
-=head2 json $ref
+=head2 json
+
+ <%= json $ref %>
 
 Encode the given hash or list reference.
 
@@ -161,7 +178,9 @@ sub json ($)
   encode_json($_[0]);
 }
 
-=head2 yaml $ref
+=head2 yaml
+
+ <%= yaml $ref %>
 
 Encode the given hash or list reference.
 
@@ -176,7 +195,10 @@ sub yaml ($)
   $str;
 }
 
-=head2 address( [ $interface ] )
+=head2 address
+
+ <%= address %>
+ <%= address $interface %>
 
 Returns a list of IP addresses.  Requires L<Sys::HostAddr> to be installed.
 C<$interfaces>, if specified may be either a string or regular expression.
@@ -223,6 +245,8 @@ sub address (;$)
 
 =head2 public_address
 
+ <%= public_address %>
+
 Returns the public IPv4 address.  May not be an address on your host, if you
 are behind a firewall.  Requires L<Sys::HostAddr> to be installed.
 
@@ -235,6 +259,8 @@ sub public_address ()
 }
 
 =head2 interface
+
+ <%= join ' ', interfaces %>
 
 Returns a list of network interfaces.  Requires L<Sys::HostAddr> to be installed.
 

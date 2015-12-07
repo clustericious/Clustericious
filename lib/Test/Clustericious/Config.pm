@@ -88,7 +88,10 @@ that you use in your test after C<use strict> and C<use warnings>).
 
 =head1 FUNCTIONS
 
-=head2 create_config_ok $name, $config, [$test_name]
+=head2 create_config_ok
+
+  create_config_ok $name, $config;
+  create_config_ok $name, $config, $test_name;
 
 Create a Clustericious config with the given C<$name>.
 If C<$config> is a reference then it will create the 
@@ -173,7 +176,10 @@ sub create_config_ok ($;$$)
   return $config_filename;
 }
 
-=head2 create_directory_ok $path, [$test_name]
+=head2 create_directory_ok
+
+ create_directory_ok $path;
+ create_directory_ok $path, $test_name;
 
 Creates a directory in your test environment home directory.
 This directory will be recursively removed when your test
@@ -198,7 +204,10 @@ sub create_directory_ok ($;$)
   return $fullpath;
 }
 
-=head2 home_directory_ok [$test_name]
+=head2 home_directory_ok
+
+ home_directory_ok;
+ home_directory_ok $test_name;
 
 Tests that the temp home directory has been created okay.
 Returns the full path of the home directory.
@@ -218,7 +227,10 @@ sub home_directory_ok (;$)
   return $fullpath;
 }
 
-=head2 create_config_helper_ok $helper_name, $helper_coderef, [ $test_name ]
+=head2 create_config_helper_ok
+
+ create_config_helper_ok $helper_name, $helper_coderef;
+ create_config_helper_ok $helper_name, $helper_coderef, $test_name;
 
 Install a helper which can be called from within a configuration template.
 Example:

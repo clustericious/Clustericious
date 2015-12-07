@@ -84,7 +84,7 @@ EOPRINT
 
 =head1 METHODS
 
-=head2 C<run>
+=head2 run
 
  Clustericious::Client::Command->run(Some::Clustericious::Client->new, @ARGV);
 

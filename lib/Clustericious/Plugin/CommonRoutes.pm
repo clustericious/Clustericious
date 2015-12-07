@@ -22,7 +22,7 @@ use List::MoreUtils ();
 =head1 DESCRIPTION
 
 This plugin adds routes that are common to all clustericious servers.
-It is available to Vanillia L<Mojolicious> apps that want to work with
+It is available to Vanilla L<Mojolicious> apps that want to work with
 L<Clustericious::Client> based clients.
 
 =cut

@@ -23,7 +23,7 @@ L<Mojolicious::Controller>
 
 =head1 METHODS
 
-=head2 $c-E<gt>url_for
+=head2 url_for
 
 Clustericious version of this method usually provided by Mojolicious.
 

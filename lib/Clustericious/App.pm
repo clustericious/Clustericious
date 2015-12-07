@@ -70,7 +70,9 @@ sub Math::BigInt::TO_JSON {
 
 =head1 METHODS
 
-=head2 $app-E<gt>startup
+=head2 startup
+
+ $app->startup;
 
 Adds the autodata_handler plugin, common routes,
 and sets up logging for the client using log::log4perl.
@@ -177,7 +179,9 @@ sub startup {
 
 }
 
-=head2 $app-E<gt>init_logging
+=head2 init_logging
+
+ $app->init_logging;
 
 Initializing logging using ~/etc/log4perl.conf
 
@@ -192,7 +196,9 @@ sub init_logging {
     $self->log( $logger ) if ref $self;
 }
 
-=head2 $app-E<gt>dump_api
+=head2 dump_api
+
+ my @api = $app->dump_api;
 
 B<DEPRECATED>: will be removed on or after January 31, 2016.
 
@@ -206,7 +212,9 @@ sub dump_api {
   Clustericious::Plugin::CommonRoutes->_dump_api(@_);
 }
 
-=head2 $app-E<gt>dump_api_table( $table )
+=head2 dump_api_table
+
+ my $api = $app->dump_api_table( $table );
 
 B<DEPRECATED>: will be removed on or after January 31, 2016.
 
@@ -229,7 +237,9 @@ sub dump_api_table
   Clustericious::Plugin::CommonRoutes->_dump_api_table($_[1]);
 }
 
-=head2 $app-E<gt>config
+=head2 config
+
+ my $config = $app->config;
 
 Returns the config (an instance of L<Clustericious::Config>) for the application.
 
@@ -273,7 +283,9 @@ sub config {
   $what ? $config->{$what} : $config;
 }
 
-=head2 $app-E<gt>sanity_check
+=head2 sanity_check
+
+ my $ok = $app->sanity_check;
 
 This method is executed after C<startup>, but before the application
 actually starts with the L<start|Clustericious::Command::start> command.
