@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Removed old test t/command_configurepath.t which stopped
+    working and was replaced anyhow by t/command_configpath.t
   - Clustericious::Log now uses the same config path as
     Clustericious::Config, as you might expect it should
 

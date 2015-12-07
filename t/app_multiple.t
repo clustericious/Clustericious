@@ -16,25 +16,6 @@ $t->get_ok($cluster->urls->[1]);
 
 is $cluster->apps->[1]->config->x, 3;
 
-
-=pod
-
-my $t1 = Test::Clustericious->new('Clustericious::HelloWorld');
-
-$t1->get_ok('/');
-
-is $t1->app->config->x, 1, 't.app.config.x = 1';
-
-create_config_ok 'Clustericious::HelloWorld' => { x => 3, y => 4 };
-
-my $t2 = Test::Clustericious->new('Clustericious::HelloWorld');
-
-$t2->get_ok('/');
-
-is $t2->app->config->x, 3, 't.app.config.x = 3';
-
-=cut
-
 __DATA__
 
 @@ etc/Clustericious-HelloWorld.conf
