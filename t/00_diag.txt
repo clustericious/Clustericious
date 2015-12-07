@@ -5,7 +5,6 @@ DateTime::Format::DateParse
 DateTime::Format::ISO8601
 EV
 ExtUtils::MakeMaker
-File::Glob
 File::HomeDir
 File::ReadBackwards
 File::ShareDir
@@ -13,7 +12,6 @@ File::ShareDir::Install
 File::Which
 File::chdir
 Hash::Merge
-IO::Socket::INET
 JSON::MaybeXS
 JSON::PP
 JSON::XS
@@ -32,4 +30,3 @@ Test::More
 Test::Script
 Test::Warn
 YAML::XS
-autodie
