@@ -59,14 +59,6 @@ has commands => sub {
     return $commands;
 };
 
-our @Confdirs = (File::HomeDir->my_home, File::HomeDir->my_home . "/etc", "/util/etc", "/etc" );
-
-if($ENV{TEST_HARNESS} && $ENV{CLUSTERICIOUS_TEST_CONF_DIR})
-{
-  cluck 'Instead of using CLUSTERICIOUS_TEST_CONF_DIR environment variable, ' .
-        'try Test::Clustericious::Config or Test::Clustericious::Cluster';
-}
-
 {
 no warnings 'redefine';
 sub Math::BigInt::TO_JSON {
@@ -123,10 +115,10 @@ sub startup {
     $self->plugin('CommonRoutes');
     $self->startup_route_builder($auth_plugin) if $self->can('startup_route_builder');
     $self->plugin('AutodataHandler');
-    $self->plugin('DefaultHelpers');
     
-    # we can probably chuck these ...
-    $self->plugin('TagHelpers');
+    #
+    $self->plugin('DefaultHelpers');
+    #$self->plugin('TagHelpers');
     $self->plugin('EPLRenderer');
     $self->plugin('EPRenderer');
 
@@ -346,16 +338,16 @@ the base class's version of sanity_check before making your own checks.
 
 sub sanity_check
 {
-    my($self) = @_;
-
-    my $sane = 1;
+  my($self) = @_;
+  my $sane = 1;
+  
+  if(my $error = $self->config->clustericious_config_error(default => ''))
+  {
+    say "error loading configuration: $error";
+    $sane = 0;
+  }
     
-    if(my $error = $self->config->clustericious_config_error(default => '')) {
-        say "error loading configuration: $error";
-        $sane = 0;
-    }
-    
-    $sane;
+  $sane;
 }
 
 1;
