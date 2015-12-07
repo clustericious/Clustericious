@@ -87,13 +87,6 @@ and sets up logging for the client using log::log4perl.
 
 =cut
 
-my @route_builders;
-
-sub _add_route_builder
-{
-  push @route_builders, $_[1];
-}
-
 sub startup {
     my $self = shift;
 
@@ -138,8 +131,8 @@ sub startup {
 
     my $r = $self->routes;
     # "Common" ones are not overrideable.
-    Clustericious::RouteBuilder::Common->_add_routes($self);
-    $_->($self, $auth_plugin) for @route_builders;
+    Clustericious::RouteBuilder::Common->_add_routes($self);    
+    $self->startup_route_builder($auth_plugin) if $self->can('startup_route_builder');
 
     $self->plugin('AutodataHandler');
     $self->plugin('DefaultHelpers');

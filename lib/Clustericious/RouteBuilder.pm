@@ -5,6 +5,7 @@ use warnings;
 use 5.010;
 use Clustericious::App;
 use Log::Log4perl qw( :easy );
+use Mojo::Util qw( monkey_patch );
 
 # ABSTRACT: Route builder for Clustericious applications
 # VERSION
@@ -149,6 +150,8 @@ sub import {
 
     };
 
+    monkey_patch $app_class, startup_route_builder => \&_startup_route_builder;
+
     # Prepare exports
     no strict 'refs';
     no warnings 'redefine';
@@ -167,7 +170,7 @@ sub import {
     *{"${caller}::authorize"}    = sub { $route_sub->('authorize',@_) };
 }
 
-Clustericious::App->_add_route_builder(sub {
+sub _startup_route_builder {
     my $app = shift;
     my $auth_plugin = shift;
 
@@ -236,7 +239,7 @@ Clustericious::App->_add_route_builder(sub {
          # WebSocket
          $route->websocket if $websocket;
      }
-});
+}
 
 1;
 
