@@ -6,7 +6,6 @@ use 5.010;
 use List::Util qw( first );
 use MojoX::Log::Log4perl;
 use Mojo::UserAgent;
-use Clustericious::Templates;
 use Mojo::ByteStream qw( b );
 use Data::Dumper;
 use Clustericious::Log;
@@ -90,7 +89,7 @@ sub startup {
     );
 
     $self->controller_class('Clustericious::Controller');
-    $self->renderer->classes(['Clustericious::Templates']);
+    $self->renderer->classes(['Clustericious::App']);
     my $home = $self->home;
     $self->renderer->paths([ $home->rel_dir('templates') ]);
 
@@ -324,3 +323,28 @@ sub sanity_check
 L<Clustericious>
 
 =cut
+
+__DATA__
+
+@@ not_found.html.ep
+NOT FOUND: "<%= $self->req->url->path || '/' %>"
+
+@@ not_found.development.html.ep
+NOT FOUND: "<%= $self->req->url->path || '/' %>"
+
+@@ layouts/default.html.ep
+<!doctype html><html>
+  <head><title>Welcome</title></head>
+  <body><%== content %></body>
+</html>
+
+@@ exception.html.ep
+% my $s = $self->stash;
+% my $e = $self->stash('exception');
+% delete $s->{inner_template};
+% delete $s->{exception};
+% my $dump = dumper $s;
+% $s->{exception} = $e;
+% use Mojo::ByteStream qw/b/;
+ERROR: <%= b($e); %>
+

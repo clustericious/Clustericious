@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::Clustericious::Cluster;
-use Test::More tests => 22;
+use Test::More tests => 28;
 use Capture::Tiny qw( capture );
 use YAML::XS qw( Load );
 
@@ -67,6 +67,14 @@ my($out,$err,$ret) = capture {
 note "[routes]\n$out" if $out;
 note "[err]\n$err" if $err;
 
+$t->get_ok('/bogus/not/here')
+  ->status_is(404)
+  ->content_like(qr{^NOT FOUND: "/bogus/not/here"});
+
+$t->get_ok('/force/exception')
+  ->status_is(500)
+  ->content_like(qr{^ERROR: this is an exception});
+
 __DATA__
 
 @@ lib/SomeService.pm
@@ -85,6 +93,10 @@ get '/autotest_not_found' => sub {
   my($self) = shift;
   $self->stash->{autodata} = [1,2,3];
   $self->reply->not_found;
+};
+
+get '/force/exception' => sub {
+  die "this is an exception";
 };
 
 1;
