@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.09      2015-12-06 20:19:20 -0500
   - Removed old test t/command_configurepath.t which stopped
     working and was replaced anyhow by t/command_configpath.t
   - Clustericious::Log now uses the same config path as
