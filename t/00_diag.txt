@@ -23,6 +23,7 @@ Mojolicious
 Path::Class
 PlugAuth::Lite
 Sub::Exporter
+Sub::Identify
 Term::Prompt
 Test::Builder::Module
 Test::Clustericious::Cluster

@@ -3,7 +3,7 @@ package Clustericious::Command::which;
 use strict;
 use warnings;
 use 5.010;
-use Sub::Identify qw( get_code_location get_code_info );
+use Sub::Identify 0.05 qw( get_code_location get_code_info );
 use Mojo::Base qw( Clustericious::Command );
 
 # ABSTRACT: Clustericious command to start a Clustericious application
