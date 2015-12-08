@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Clustericious::Config;
 use Clustericious::Log;
+use Carp qw( carp );
 use base 'Mojolicious::Controller';
 
 # ABSTRACT: Clustericious controller base class
@@ -32,7 +33,13 @@ Clustericious version of this method usually provided by Mojolicious.
 sub url_for {
     my $c = shift;
 
-    # link_to calls url_for on a Mojo::URL which for some reason
+    # NOTE: the only place it looks like we need to use this bizzarely 
+    # customized url_for is in Restmd.  If we can confirm/deny that we
+    # do/don't need it there, then we can probably remove this special case
+    # NOTE2: also used in the function below.
+
+    # Note: This dos not seem to be the case anymore:
+    # Original Comment: link_to calls url_for on a Mojo::URL which for some reason
     # causes /a/b?c=d to not work properly (? is escaped)
     return $_[0] if @_==1 && ref($_[0]) eq "Mojo::URL";
 
@@ -82,13 +89,21 @@ sub redirect_to {
     return $self;
 }
 
-=head2 $c-E<gt>render_text
+=head2 render_text
+
+ $c->render_text($text);
+
+B<DEPRECATED>.
 
 Previous versions of Mojolicious included this
 method, and it was added here to ease the transition.  This method should be considered
 deprecated and may be removed in the future.
 
-=head2 $c-E<gt>render_json
+=head2 render_json
+
+ $c->render_json
+
+B<DEPRECATED>.
 
 Previous versions of Mojolicious included this
 method, and it was added here to ease the transition.  This method should be considered
@@ -96,8 +111,17 @@ deprecated and may be removed in the future.
 
 =cut
 
-sub render_text { shift->render( text => @_ ) };
-sub render_json { shift->render( json => @_ ) };
+sub render_text
+{
+  carp "Clustericious::Controller#render_text is deprecated";
+  shift->render( text => @_ );
+}
+
+sub render_json
+{
+  carp "Clustericious::Controller#render_json is deprecated";
+  shift->render( json => @_ );
+}
 
 1;
 

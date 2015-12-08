@@ -202,7 +202,7 @@ use Clustericious::RouteBuilder::Search
     search   => { -as => "do_search" },
     defaults => { finder => "Rose::Planter" };
 
-get '/' => sub { shift->render_text("hello"); };
+get '/' => sub { shift->render(text => "hello"); };
 
 post  '/:items/search' => \&do_search;
 get   '/:items/search' => \&do_search;

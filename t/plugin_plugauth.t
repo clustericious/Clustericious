@@ -183,11 +183,11 @@ package SomeService::Routes;
 
 use Clustericious::RouteBuilder;
 
-get '/' => sub { shift->render_text('hello'); };
+get '/' => sub { shift->render(text => 'hello'); };
 
 authenticate;
 authorize;
 
-get '/private' => sub { shift->render_text('this is private'); };
+get '/private' => sub { shift->render(text => 'this is private'); };
 
 1;

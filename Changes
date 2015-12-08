@@ -13,6 +13,8 @@ Revision history for {{$dist->name}}
     on or after January 31, 2016.
   - Clustericious::Template was removed.  You probably were not
     using it.
+  - Clustericious::Controller#render_text and #render_json are deprecated
+    and will be removed on or after January 31, 2016
 
 1.10      2015-12-07 06:56:57 -0500
   - Marking problematic test t/command_generate.t as dev only

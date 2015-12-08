@@ -1,7 +1,8 @@
 use strict;
 use warnings;
+use Test::Clustericious::Log note => 'INFO..ERROR', diag => 'FATAL';
 use Test::Clustericious::Cluster;
-use Test::More tests => 28;
+use Test::More tests => 33;
 use Capture::Tiny qw( capture );
 use YAML::XS qw( Load );
 
@@ -75,7 +76,22 @@ $t->get_ok('/force/exception')
   ->status_is(500)
   ->content_like(qr{^ERROR: this is an exception});
 
+$t->get_ok('/url_for1')
+  ->status_is(200)
+  ->content_is('/autotest');
+
+$t->get_ok('/url_for2')
+  ->status_is(200);
+
+note $t->tx->res->to_string;
+
 __DATA__
+
+
+@@ etc/SomeService.conf
+---
+url: <%= cluster->url %>
+url_base: http://1.2.3.4:5678
 
 @@ lib/SomeService.pm
 package SomeService;
@@ -85,7 +101,7 @@ $SomeService::VERSION = '867.5309';
 use base 'Clustericious::App';
 use Clustericious::RouteBuilder;
 
-get '/' => sub { shift->render_text("hello"); };
+get '/' => sub { shift->render(text => "hello"); };
 
 get '/autotest' => sub { shift->stash->{autodata} = { a => 1, b => 2 } };
 
@@ -97,6 +113,16 @@ get '/autotest_not_found' => sub {
 
 get '/force/exception' => sub {
   die "this is an exception";
+};
+
+get '/url_for1' => sub {
+  my($self) = @_;
+  $self->render(text => $self->url_for('/autotest'));
+};
+
+get '/url_for2' => sub {
+  my($self) = @_;
+  $self->render(text => $self->url_for('/autotest?foo=bar'));
 };
 
 1;

@@ -105,7 +105,7 @@ sub authenticate {
     # Everyone needs to send an authorization header
     my $auth = $c->req->headers->authorization or do {
         $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
-        $c->render_text("auth required", layout => "", status => 401);
+        $c->render(text => "auth required", layout => "", status => 401);
         return;
     };
 

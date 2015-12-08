@@ -31,9 +31,9 @@ use Clustericious::RouteBuilder::Proxy
 get '/proxyme/here' => \&local_proxy;
 post '/proxyme/here' => \&local_proxy;
 any '/proxyme/here' => \&local_proxy;
-get '/here' => sub { shift->render_text("you made it") };
-post '/here' => sub { shift->render_text("you made it too") };
-del '/here' => sub { shift->render_text("you made it three") };
+get '/here' => sub { shift->render(text => "you made it") };
+post '/here' => sub { shift->render(text => "you made it too") };
+del '/here' => sub { shift->render(text => "you made it three") };
 
 1;
 

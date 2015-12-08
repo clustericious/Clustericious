@@ -108,7 +108,6 @@ sub startup {
     $self->startup_route_builder($auth_plugin) if $self->can('startup_route_builder');
     $self->plugin('AutodataHandler');
     
-    #
     $self->plugin('DefaultHelpers');
     #$self->plugin('TagHelpers');
     $self->plugin('EPLRenderer');

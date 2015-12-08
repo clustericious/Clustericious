@@ -138,16 +138,16 @@ This route is NOT made available to non L<Clustericious> applications.
     my $lines = $self->stash("lines");
     unless ($self->config->export_logs(default => 0))
     {
-      return $self->render_text('logs not available');
+      return $self->render(text => 'logs not available');
     }
-    $self->render_text(Clustericious::Log->tail(lines => $lines || 10) || '** empty log **');
+    $self->render(text => Clustericious::Log->tail(lines => $lines || 10) || '** empty log **');
   }) if $app->isa('Clustericious::App');
 
   $app->routes->options('/*opturl' => { opturl => '' } => sub {
     my($self) = @_;
     $self->res->headers->add( 'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS' );
     # Allow-Origin and Allow-Headers added in after_dispatch hook.
-    $self->render_text('ok');
+    $self->render(text => 'ok');
   });
 }
 

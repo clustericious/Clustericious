@@ -55,7 +55,7 @@ use Clustericious::RouteBuilder::CRUD
         "create" => { -as => "do_create" },
         defaults => { finder => "Fake::Object" };
 
-get  '/'              => sub { shift->render_text('welcome') };
+get  '/'              => sub { shift->render(text => 'welcome') };
 post '/:table'        => \&do_create;
 get  '/:table/(*key)' => \&do_read;
 

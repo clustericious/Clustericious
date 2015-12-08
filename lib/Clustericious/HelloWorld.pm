@@ -26,7 +26,7 @@ L<Clustericious>, L<Mojo::HelloWorld>
 
 =cut
 
-get '/' => sub { shift->render_text('Hello, world') } => 'index';
+get '/' => sub { shift->render(text => 'Hello, world') } => 'index';
 
 get '/modules' => sub {
   my %copy = %INC;

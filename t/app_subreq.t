@@ -99,7 +99,7 @@ use strict;
 use warnings;
 use Clustericious::RouteBuilder;
 
-get '/' => sub { shift->render_text('hello') };
+get '/' => sub { shift->render(text => 'hello') };
 
 get '/indirect' => sub {
   my($self) = @_;
@@ -113,7 +113,7 @@ get '/indirect' => sub {
 authenticate;
 authorize;
 
-get '/private' => sub { shift->render_text('this is private') };
+get '/private' => sub { shift->render(text => 'this is private') };
 
 1;
 
