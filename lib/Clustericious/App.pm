@@ -187,7 +187,8 @@ Dump out the API for this REST server.
 
 =cut
 
-sub dump_api {
+sub dump_api
+{
   carp "Clustericious::App#dump_api is deprecated";
   require Clustericious::Plugin::CommonRoutes;
   Clustericious::Plugin::CommonRoutes->_dump_api(@_);
@@ -207,8 +208,7 @@ sub _dump_api_table_types
 {
   carp "Clustericious::App#dump_api_table is deprecated";
   require Clustericious::Plugin::CommonRoutes;
-  Clustericious::Plugin::CommonRoutes->_dump_api_table_types(@_);
-  
+  Clustericious::Plugin::CommonRoutes->_dump_api_table_types(@_);  
 }
 
 sub dump_api_table
@@ -226,7 +226,8 @@ Returns the config (an instance of L<Clustericious::Config>) for the application
 
 =cut
 
-sub config {
+sub config
+{
   my($self, $what) = @_;
 
   unless($self->{_config})
