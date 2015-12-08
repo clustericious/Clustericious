@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.10_02   2015-12-07 19:51:08 -0500
   - Clustericious::RouteBuilder::Common is now
     Clustericious::Plugin::CommonRoutes and is a Mojo plugin
   - Plugin search order has changed to prefer Clustericious::Plugin
