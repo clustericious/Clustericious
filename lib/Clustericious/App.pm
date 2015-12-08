@@ -50,16 +50,6 @@ has commands => sub {
   return $commands;
 };
 
-{
-no warnings 'redefine';
-sub Math::BigInt::TO_JSON {
-    my $val = shift;
-    my $copy = "$val";
-    my $i = 0 + $copy;
-    return $i;
-}
-}
-
 =head1 METHODS
 
 =head2 startup
