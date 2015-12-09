@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Added 'clustericious which' command
 
 1.10_02   2015-12-07 19:51:08 -0500
   - Clustericious::RouteBuilder::Common is now
