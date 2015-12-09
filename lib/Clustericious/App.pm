@@ -64,6 +64,21 @@ and sets up logging for the client using log::log4perl.
 sub startup {
     my $self = shift;
 
+    $self->init_logging();
+    $self->plugins->namespaces(['Clustericious::Plugin','Mojolicious::Plugin']);
+    $self->controller_class('Clustericious::Controller');
+    $self->renderer->classes(['Clustericious::App']);
+    my $home = $self->home;
+    $self->renderer->paths([ $home->rel_dir('templates') ]);
+
+    $self->plugin('CommonRoutes');
+    $self->plugin('AutodataHandler');
+    $self->plugin('DefaultHelpers');
+    #$self->plugin('TagHelpers');
+    $self->plugin('EPLRenderer');
+    $self->plugin('EPRenderer');
+    $self->plugin('ClustericiousHelpers');
+
     @{ $self->static->paths } = (
       Clustericious
         ->_dist_dir
@@ -71,15 +86,6 @@ sub startup {
         ->stringify
     );
 
-    $self->controller_class('Clustericious::Controller');
-    $self->renderer->classes(['Clustericious::App']);
-    my $home = $self->home;
-    $self->renderer->paths([ $home->rel_dir('templates') ]);
-
-    $self->init_logging();
-    $self->secrets( [ ref $self || $self ] );
-
-    $self->plugins->namespaces(['Clustericious::Plugin','Mojolicious::Plugin']);
     my $config = $self->config;
     my $auth_plugin;
     if(my $auth_config = $config->plug_auth(default => '')) {
@@ -94,40 +100,20 @@ sub startup {
         $self->log->info("No auth configured");
     }
 
-    $self->plugin('CommonRoutes');
     $self->startup_route_builder($auth_plugin) if $self->can('startup_route_builder');
-    $self->plugin('AutodataHandler');
-    
-    $self->plugin('DefaultHelpers');
-    #$self->plugin('TagHelpers');
-    $self->plugin('EPLRenderer');
-    $self->plugin('EPRenderer');
 
-    # Helpers
     if (my $base = $config->url_base(default => '')) {
-        $self->helper( base_tag => sub { b( qq[<base href="$base" />] ) } );
+      $self->helper(
+        base_tag => sub {
+          carp "base_tag is deprecated";
+          b( qq[<base href="$base" />] );
+        }
+      );
     }
+
     my $url = $config->url(default => '') or do {
         $self->log->warn("Configuration file should contain 'url'.");
     };
-
-    $self->helper( url_with => sub {
-        my $c = shift;
-        my $q = $c->req->url->clone->query;
-        my $url = $c->url_for->clone;
-        $url->query($q);
-        $url;
-    });
-
-    $self->helper( auth_ua => sub { shift->ua } );
-
-    $self->helper( render_moved => sub {
-        my $c = shift;
-        $c->res->code(301);
-        my $where = $c->url_for(@_)->to_abs;
-        $c->res->headers->location($where);
-        $c->render(text => "moved to $where");
-    } );
 
     # See http://groups.google.com/group/mojolicious/browse_thread/thread/000e251f0748c997
     my $murl = Mojo::URL->new($url);
