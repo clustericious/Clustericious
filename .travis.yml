@@ -1,11 +1,8 @@
 language: perl
 
 install:
-  - cpanm -n Dist::Zilla
   - dzil authordeps --missing | cpanm -n
-  - cpanm -n IO::Prompt Sub::Identify Module::Build MojoX::Log::Log4perl Log::Log4perl::Appender::TAP Log::Log4perl::CommandLine Mojolicious Sub::Exporter
-  - cpanm -n JSON::MaybeXS YAML::XS List::MoreUtils File::ShareDir File::HomeDir Test::Clustericious::Cluster DateTime::Format::DateParse DateTime::Format::ISO8601
-  - cpanm -n File::ReadBackwards Hash::Merge Data::Rmap
+  - dzil listdeps --missing | cpanm -n
 
 script:
   - prove -lv
