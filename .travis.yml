@@ -10,10 +10,10 @@ install:
 script:
   - prove -lv
   - dzil install --install-command='cpanm -n -v .'
-  - perl corpus/test_from_git git@github.com:clustericious/PlugAuth.git
-  - perl corpus/test_from_git git@github.com:clustericious/Yars.git
-  - perl corpus/test_from_git git@github.com:clustericious/Test-Clustericious-Cluster.git
-  - perl corpus/test_from_git git@github.com:clustericious/Clustericious-Admin.git
+  - perl corpus/test_from_git https://github.com/clustericious/PlugAuth.git
+  - perl corpus/test_from_git https://github.com/clustericious/Yars.git
+  - perl corpus/test_from_git https://github.com/clustericious/Test-Clustericious-Cluster.git
+  - perl corpus/test_from_git https://github.com/clustericious/Clustericious-Admin.git
 
 perl:
   - "5.20"
