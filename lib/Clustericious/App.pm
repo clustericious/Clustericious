@@ -6,7 +6,6 @@ use 5.010;
 use List::Util qw( first );
 use MojoX::Log::Log4perl;
 use Mojo::UserAgent;
-use Mojo::ByteStream qw( b );
 use Data::Dumper;
 use Clustericious::Log;
 use Mojo::URL;
@@ -101,15 +100,6 @@ sub startup {
     }
 
     $self->startup_route_builder($auth_plugin) if $self->can('startup_route_builder');
-
-    if (my $base = $config->url_base(default => '')) {
-      $self->helper(
-        base_tag => sub {
-          carp "base_tag is deprecated";
-          b( qq[<base href="$base" />] );
-        }
-      );
-    }
 
     my $url = $config->url(default => '') or do {
         $self->log->warn("Configuration file should contain 'url'.");
