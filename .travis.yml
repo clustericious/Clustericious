@@ -3,8 +3,9 @@ language: perl
 install:
   - dzil authordeps --missing | cpanm -n
   - dzil listdeps --missing | cpanm -n
-  # needed for Yars, as a dynamic prereq
-  - cpanm -n Filesys::Df
+  # Filesys::Df is needed for Yars (Dynamic prereq)
+  # AnyEvent::Open3::Simple is needed for plackup test
+  - cpanm -n Filesys::Df AnyEvent::Open3::Simple
 
 script:
   - prove -lv
