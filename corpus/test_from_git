@@ -12,6 +12,10 @@ unless(defined $url)
   exit 1;
 }
 
+my $version = shift @ARGV;
+
+exit if defined $version && $version > $];
+
 my $dir = tempdir( CLEANUP => 1 );
 system 'git', 'clone', '--depth' => 2, $url => $dir;
 
