@@ -1,7 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.10_03   2015-12-09 11:02:03 -0500
   - Added 'clustericious which' command
+  - Applications now get a default URL unique on a per application,
+    perl user basis.
 
 1.10_02   2015-12-07 19:51:08 -0500
   - Clustericious::RouteBuilder::Common is now
