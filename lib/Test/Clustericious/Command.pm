@@ -202,7 +202,7 @@ sub run_ok
   
   my $tb = __PACKAGE__->builder;
   
-  $tb->ok($ok, "@cmd");
+  $tb->ok($ok, "run: @cmd");
   $tb->diag("  @cmd failed") unless $ok;
   $tb->diag("    - execute failed: $error") if $exit == -1;
   $tb->diag("    - died from signal: " . ($exit & 128)) if $exit & 128;

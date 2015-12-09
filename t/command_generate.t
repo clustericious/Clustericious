@@ -11,7 +11,7 @@ use File::Which qw( which );
 requires undef, 3;
 mirror 'bin', 'bin';
 
-my $prove = which 'prove';
+my $prove = eval q{ use App::prove; 1 };
 
 foreach my $type (qw( app client ))
 {
@@ -30,7 +30,7 @@ foreach my $type (qw( app client ))
   
     SKIP: {
       skip 'Test requires prove', 2 unless $prove;
-      run_ok($prove, '-l')
+      run_ok('prove', '-l')
         ->exit_is(0)
         ->note;
     }
@@ -62,3 +62,14 @@ subtest 'mbd_app' => sub {
     ->err_like(qr{ERROR: this command has been removed});
 
 };
+
+__DATA__
+
+@@ bin/prove
+#!/usr/bin/perl
+use strict;
+use warnings;
+use App::Prove;
+my $app = App::Prove->new;
+$app->process_args(@ARGV);
+$app->run;
