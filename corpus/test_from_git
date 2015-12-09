@@ -1,0 +1,21 @@
+use strict;
+use warnings;
+use autodie qw( :all );
+use 5.010001;
+use File::chdir;
+use File::Temp qw( tempdir );
+
+my $url = shift @ARGV;
+unless(defined $url)
+{
+  say STDERR "usage: $0 url";
+  exit 1;
+}
+
+my $dir = tempdir( CLEANUP => 1 );
+system 'git', 'clone', '--depth' => 2, $url => $dir;
+
+do {
+  local $CWD = $dir;
+  system 'prove', '-l', 't';
+};
