@@ -1,4 +1,4 @@
-# Clustericious [![Build Status](https://secure.travis-ci.org/plicease/Clustericious.png)](http://travis-ci.org/clustericious/Clustericious)
+# Clustericious [![Build Status](https://secure.travis-ci.org/clustericious/Clustericious.png)](http://travis-ci.org/clustericious/Clustericious)
 
 A framework for RESTful processing systems.
 
