@@ -11,7 +11,7 @@ use File::Which qw( which );
 requires undef, 3;
 mirror 'bin', 'bin';
 
-my $prove = eval q{ use App::prove; 1 };
+my $prove = eval q{ use App::Prove; 1 };
 
 foreach my $type (qw( app client ))
 {
