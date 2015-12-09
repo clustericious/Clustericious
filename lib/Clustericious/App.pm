@@ -215,22 +215,21 @@ sub config
       $config = $self->{_config} = Clustericious::Config->new({ clustericious_config_error => $error });
     }
 
-    if($config->{url})
+    $config->{url} //= Clustericious->_default_url(ref $self);
+    
+    if(grep { $_ eq 'hypnotoad' } $config->start_mode(default => [ 'hypnotoad' ]) )
     {
-      if(grep { $_ eq 'hypnotoad' } $config->start_mode(default => [ 'hypnotoad' ]) )
-      {
-        my $hypnotoad = $config->hypnotoad(
-          default => sub {
-            my $url = Mojo::URL->new($config->{url});
-            {
-              pid_file => File::Spec->catfile( File::HomeDir->my_dist_data("Clustericious", { create => 1 } ), 'hypnotoad-' . $url->port . '-' . $url->host . '.pid' ),
-              listen => [
-                $url->to_string,
-              ],
-            };
-          }
-        );
-      }
+      my $hypnotoad = $config->hypnotoad(
+        default => sub {
+          my $url = Mojo::URL->new($config->{url});
+          {
+            pid_file => File::Spec->catfile( File::HomeDir->my_dist_data("Clustericious", { create => 1 } ), 'hypnotoad-' . $url->port . '-' . $url->host . '.pid' ),
+            listen => [
+              $url->to_string,
+            ],
+          };
+        }
+      );
     }
   }
 

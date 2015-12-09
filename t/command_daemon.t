@@ -6,7 +6,7 @@ use YAML::XS qw( Load );
 use File::HomeDir;
 use Path::Class qw( file );
 
-requires undef, 7;
+requires undef, 3;
 extract_data;
 
 run_ok('hello', 'daemon', 'foo', 'bar', 'baz')
@@ -16,26 +16,6 @@ run_ok('hello', 'daemon', 'foo', 'bar', 'baz')
     is_deeply \@args, [ qw( 
       Clustericious::Command::daemon
       -l http://1.2.3.4:5678
-      foo bar baz
-    ) ], 'arguments are correct';
-  });
-
-my $config = file(
-  File::HomeDir->my_home,
-  'etc',
-  'Clustericious-HelloWorld.conf',
-);
-
-unlink "$config";
-
-ok ! -f "$config", "config removed";
-
-run_ok('hello', 'daemon', 'foo', 'bar', 'baz')
-  ->exit_is(0)
-  ->tap(sub {
-    my @args = @{ Load(shift->out) };
-    is_deeply \@args, [ qw( 
-      Clustericious::Command::daemon
       foo bar baz
     ) ], 'arguments are correct';
   });

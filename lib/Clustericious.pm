@@ -212,6 +212,31 @@ sub _generate_port
   IO::Socket::INET->new(Listen => 5, LocalAddr => "127.0.0.1")->sockport
 }
 
+sub _default_url
+{
+  my(undef, $app_name) = @_;
+  require File::HomeDir;
+  require Path::Class::File;
+  require JSON::PP;
+  require Mojo::URL;
+  my $file = Path::Class::File->new(File::HomeDir->my_dist_data("Clustericious", { create => 1 } ), 'default_ports.json');
+
+  $app_name =~ s{::}{-};
+  
+  my $data = -f $file ? JSON::PP::decode_json(scalar $file->slurp) : {};
+  
+  $data->{$app_name} // do {
+    my $url = Mojo::URL->new('http://127.0.0.1');
+    $url->port(__PACKAGE__->_generate_port);
+    $url = $url->to_string;
+
+    $data->{$app_name} = $url;
+    $file->spew(JSON::PP::encode_json($data));
+
+    $url;
+  };
+}
+
 # Note sub _config_uncache also gets placed
 # in this package, but it is defined in
 # Clustericious::Config.

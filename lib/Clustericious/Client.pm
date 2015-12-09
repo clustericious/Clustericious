@@ -7,6 +7,7 @@ use Mojo::Base qw/-base/;
 use Mojo::UserAgent;
 use Mojo::ByteStream qw/b/;
 use Mojo::Parameters;
+use Clustericious;
 use Clustericious::Config;
 use Clustericious::Client::Object;
 use Clustericious::Client::Meta;
@@ -884,6 +885,7 @@ sub _base_config {
     $config_name =~ s/::/-/;
     
     $self->{_base_config} = Clustericious::Config->new($config_name);
+    $self->{_base_config}->{url} //= Clustericious->_default_url($config_name);
     return $self->{_base_config};
 }
 
