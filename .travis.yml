@@ -29,7 +29,13 @@ install:
   - cpanm -n Data::Rmap
   - cpanm -n Test::CPAN::Changes Test::EOL Test::Fixme Test::NoTabs Test::Pod::Spelling::CommonMistakes Test::Spelling Test::Strict Test::Version || true
 
-script: dzil test -v
+script:
+  - prove -lv
+  - dzil install --install-command='cpanm -n -v .'
+  - perl corpus/test_from_git git@github.com:clustericious/PlugAuth.git
+  - perl corpus/test_from_git git@github.com:clustericious/Yars.git
+  - perl corpus/test_from_git git@github.com:clustericious/Test-Clustericious-Cluster.git
+  - perl corpus/test_from_git git@github.com:clustericious/Clustericious-Admin.git
 
 perl:
   - "5.20"
