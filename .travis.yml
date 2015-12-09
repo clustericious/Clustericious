@@ -3,6 +3,8 @@ language: perl
 install:
   - dzil authordeps --missing | cpanm -n
   - dzil listdeps --missing | cpanm -n
+  # needed for Yars, as a dynamic prereq
+  - cpanm -n Filesys::Df
 
 script:
   - prove -lv
@@ -10,7 +12,7 @@ script:
   - perl corpus/test_from_git https://github.com/clustericious/PlugAuth.git
   - perl corpus/test_from_git https://github.com/clustericious/Yars.git
   - perl corpus/test_from_git https://github.com/clustericious/Test-Clustericious-Cluster.git
-  - perl corpus/test_from_git https://github.com/clustericious/Clustericious-Admin.git
+  - perl corpus/test_from_git https://github.com/clustericious/App-clad.git
 
 perl:
   - "5.20"
