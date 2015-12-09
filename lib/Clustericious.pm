@@ -204,6 +204,14 @@ sub _dist_dir
     }
 }
 
+sub _generate_port
+{
+  require IO::Socket::INET;
+  # this code is duplicated in Test::Clustericious::Command,
+  # don't want to move it just FYI
+  IO::Socket::INET->new(Listen => 5, LocalAddr => "127.0.0.1")->sockport
+}
+
 # Note sub _config_uncache also gets placed
 # in this package, but it is defined in
 # Clustericious::Config.
