@@ -5,7 +5,6 @@ use warnings;
 use Clustericious::Log;
 use Mojo::ByteStream qw/b/;
 use Mojo::URL;
-use Clustericious::Config;
 use Mojo::Base 'Mojolicious::Plugin';
 
 # ABSTRACT: Plugin for clustericious to use PlugAuth.
