@@ -10,6 +10,7 @@ use File::Which qw( which );
 
 requires undef, 3;
 mirror 'bin', 'bin';
+extract_data;
 
 my $prove = eval q{ use App::Prove; 1 };
 

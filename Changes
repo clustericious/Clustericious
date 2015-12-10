@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Hopefully fix t/command_generate correctly this time.
 
 1.10_03   2015-12-09 11:02:03 -0500
   - Added 'clustericious which' command
