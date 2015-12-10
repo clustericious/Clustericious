@@ -67,15 +67,13 @@ sub startup {
     $self->plugins->namespaces(['Clustericious::Plugin','Mojolicious::Plugin']);
     $self->controller_class('Clustericious::Controller');
     $self->renderer->classes(['Clustericious::App']);
+
+    # this is questionable
     my $home = $self->home;
     $self->renderer->paths([ $home->rel_dir('templates') ]);
 
     $self->plugin('CommonRoutes');
     $self->plugin('AutodataHandler');
-    $self->plugin('DefaultHelpers');
-    #$self->plugin('TagHelpers');
-    $self->plugin('EPLRenderer');
-    $self->plugin('EPRenderer');
     $self->plugin('ClustericiousHelpers');
 
     @{ $self->static->paths } = (
