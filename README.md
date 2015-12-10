@@ -17,7 +17,8 @@ Basic application layout:
     sub startup
     {
       my($self) = @_;
-      # just like Mojolicious startup()
+      $self->SUPER::startup;
+      # app startup
     }
     
     package MyApp::Routes;
