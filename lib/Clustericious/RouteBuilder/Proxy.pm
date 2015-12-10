@@ -89,9 +89,6 @@ sub _build_proxy {
         #LOGDIE "recursive proxy " if $self->req->url->to_abs eq $url->to_abs;
 
         my $remote = $self->tx->remote_address;
-        #TRACE "proxying (from $remote) " . $self->req->method . ' ' .
-        #      _sanitize_url($self->req->url->to_abs) . " to " .
-        #      _sanitize_url($url->to_abs);
 
         my $tx = Mojo::Transaction::HTTP->new;
         my $req = $tx->req;
@@ -131,16 +128,6 @@ sub _build_proxy_service {
         my $service = $c->stash("service") or die "no service in url";
         $service2sub->{$service}->($c);
     }
-}
-
-sub _sanitize_url {
-    # Remove passwords from urls for displaying
-    my $url = shift;
-    $url = Mojo::URL->new($url) unless ref $url eq "Mojo::URL";
-    return $url unless $url->userinfo;
-    my $c = $url->clone;
-    $c->userinfo("user:*****");
-    return $c;
 }
 
 1;
