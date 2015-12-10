@@ -14,23 +14,15 @@ use Mojo::Base 'Mojolicious::Plugin';
 
 MyApp.conf:
 
- {"plug_auth":{"url":"http://plugauthserver:3000"}}
+ ---
+ plug_auth:
+   url: http://plugauthserver:3000
 
 Application:
 
  package MyApp;
  
  use base qw( Clustericious::App );
- 
- sub startup {
-   my $self = shift;
-   $self->SUPER::startup(@_);
-   # done by default for all clustericious applications.
-   #$self->plugin('plug_auth');
- }
- 
- package MyApp::Routes;
- 
  use Clustericious::RouteBuilder;
 
  # unprotected 
