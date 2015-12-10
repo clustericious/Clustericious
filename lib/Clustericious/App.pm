@@ -105,6 +105,7 @@ sub startup {
         $self->log->warn("Configuration file should contain 'url'.");
     };
 
+    # This block of code can be removed when Clustericious::RouteBuilder::Proxy goes.
     # See http://groups.google.com/group/mojolicious/browse_thread/thread/000e251f0748c997
     my $murl = Mojo::URL->new($url);
     my $part_count = @{ $murl->path->parts };

@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Clustericious::RouteBuilder::Proxy is deprecated and will be removed on
+    or after January 31, 2016.  Consider using Mojolicious::Plugin::Proxy
+    instead
 
 1.10_04   2015-12-09 21:14:03 -0500
   - Hopefully fix t/command_generate correctly this time.

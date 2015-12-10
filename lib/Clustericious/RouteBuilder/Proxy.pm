@@ -2,6 +2,7 @@ package Clustericious::RouteBuilder::Proxy;
 
 use strict;
 use warnings;
+use Carp qw( carp );
 
 # ABSTRACT: build proxy routes easily
 # VERSION
@@ -45,6 +46,8 @@ none
 L<Clustericious>
 
 =cut
+
+carp "Clustericious::RouteBuilder::Proxy is deprecated, consider using Mojolicious::Plugin::Proxy instead";
 
 use Sub::Exporter -setup => {
     exports => [
