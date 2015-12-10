@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.10_04   2015-12-09 21:14:03 -0500
   - Hopefully fix t/command_generate correctly this time.
 
 1.10_03   2015-12-09 11:02:03 -0500
