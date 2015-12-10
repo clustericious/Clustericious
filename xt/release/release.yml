@@ -70,6 +70,8 @@ pod_spelling_system:
     - FCGI
     - daemonize
     - morbo
+    - apps
+    - apache24
 
 pod_coverage:
   # format is "Class#method" or "Class", regex allowed
