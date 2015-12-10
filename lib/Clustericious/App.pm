@@ -125,11 +125,11 @@ sub startup {
         Log::Log4perl::MDC->put(remote_ip => shift->tx->remote_address || 'unknown');
     });
 
-    if ( my $cors_allowed_origins = $config->cors_allowed_origins( default => '*' ) ) {
+    if ( my $cors_allowed_origins = $config->cors_allowed_origins( default => '' ) ) {
         $self->hook(
             after_dispatch => sub {
                 my $c = shift;
-                $c->res->headers->add( 'Access-Control-Allow-Origin' => '*' );
+                $c->res->headers->add( 'Access-Control-Allow-Origin' => $cors_allowed_origins );
                 $c->res->headers->add( 'Access-Control-Allow-Headers' => 'Authorization' );
             }
         );
