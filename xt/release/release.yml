@@ -72,6 +72,7 @@ pod_spelling_system:
     - morbo
     - apps
     - apache24
+    - AutodataHandler
 
 pod_coverage:
   # format is "Class#method" or "Class", regex allowed
@@ -95,6 +96,7 @@ pod_coverage:
     - Clustericious::Config::Password#.*
     - Clustericious::Config::Helpers#cluster
     - Clustericious::Util#.*
+    - Clustericious::Plugin::AutodataHandler::.*#coder
     
 version:
   dir: lib

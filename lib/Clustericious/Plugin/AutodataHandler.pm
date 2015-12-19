@@ -4,9 +4,9 @@ use strict;
 use warnings;
 use base 'Mojolicious::Plugin';
 use Mojo::ByteStream 'b';
-use JSON::MaybeXS;
-use YAML::XS qw/Dump Load/;
 use Clustericious::Log;
+use PerlX::Maybe qw( maybe );
+use Path::Class qw( dir );
 
 # ABSTRACT: Handle data types automatically
 # VERSION
@@ -48,37 +48,48 @@ too).
 
 =cut
 
+sub _default_coders
+{
+  my %coders = 
+  map { $_ => 1 }
+  map { $_ =~ s/\.pm$//; $_ } 
+  map { $_->basename }
+  grep { ! $_->is_dir } 
+  map { $_->children } 
+  grep { -d $_ } 
+  map { dir($_, 'Clustericious', 'Plugin', 'AutodataHandler' )} @INC;
+  [ keys %coders ];
+}
+
 sub register
 {
   my ($self, $app, $conf) = @_;
 
-  my $default_decode = 'application/x-www-form-urlencoded';
-  my $default_encode = 'application/json';
-
-  my $json_encoder = JSON::MaybeXS->new->allow_nonref->allow_blessed->convert_blessed;
-
+  my @coders = $app->isa('Clustericious::App')
+    ? $app->config->coders( default => __PACKAGE__->_default_coders )
+    : @{ $conf->{coders} // __PACKAGE__->_default_coders };
+  
   my %types = (
-    'application/json' => {
-      encode => sub { $json_encoder->encode($_[0]) },
-      decode => sub { $json_encoder->decode($_[0]) }
-    },
-    'text/x-yaml' => {
-      encode => sub { Dump($_[0]) },
-      decode => sub { Load($_[0]) }
-    },
     'application/x-www-form-urlencoded' => {
       decode => sub { my ($data, $c) = @_; $c->req->params->to_hash }
     }
   );
+  my %formats;
+  
+  foreach my $coder (@coders)
+  {
+    require join('/', qw( Clustericious Plugin AutodataHandler ), "$coder.pm");
+    my $coder = join('::', qw( Clustericious Plugin AutodataHandler ), $coder)->coder;
+    $types{$coder->{type}} = {
+      maybe encode => $coder->{encode},
+      maybe decode => $coder->{decode},
+    },
+    $formats{$coder->{format}} = $coder->{type}
+      if $coder->{format};
+  }
 
-  my %formats = (
-    'json' => 'application/json',
-    'yml'  => 'text/x-yaml',
-  );
-
-  $default_decode = $conf->{default_decode} if $conf->{default_decode};
-  $default_encode = $conf->{default_encode} if $conf->{default_encode};
-
+  my $default_decode = $conf->{default_decode} // 'application/x-www-form-urlencoded';
+  my $default_encode = $conf->{default_encode} // 'application/json'; # TODO: not used
 
   my $find_type = sub {
     my ($c) = @_;
