@@ -48,57 +48,85 @@ too).
 
 =cut
 
-my $default_decode = 'application/x-www-form-urlencoded';
-my $default_encode = 'application/json';
-
-my $json_encoder = JSON::MaybeXS->new->allow_nonref->allow_blessed->convert_blessed;
-
-my %types =
-(
-    'application/json' =>
-    {
-        encode => sub { $json_encoder->encode($_[0]) },
-        decode => sub { $json_encoder->decode($_[0]) }
-    },
-    'text/x-yaml' =>
-    {
-        encode => sub { Dump($_[0]) },
-        decode => sub { Load($_[0]) }
-    },
-    'application/x-www-form-urlencoded' =>
-    {
-        decode => sub { my ($data, $c) = @_; $c->req->params->to_hash }
-    }
-);
-
-my %formats =
-(
-    'json' => 'application/json',
-    'yml'  => 'text/x-yaml',
-);
-
 sub register
 {
-    my ($self, $app, $conf) = @_;
+  my ($self, $app, $conf) = @_;
 
-    $default_decode = $conf->{default_decode} if $conf->{default_decode};
-    $default_encode = $conf->{default_encode} if $conf->{default_encode};
+  my $default_decode = 'application/x-www-form-urlencoded';
+  my $default_encode = 'application/json';
 
-    $app->renderer->add_handler('autodata' => \&_autodata_renderer);
+  my $json_encoder = JSON::MaybeXS->new->allow_nonref->allow_blessed->convert_blessed;
 
-    $app->plugins->on( parse_autodata => \&_autodata_parse);
-    $app->plugins->on( add_autodata_type => \&_autodata_add);
+  my %types = (
+    'application/json' => {
+      encode => sub { $json_encoder->encode($_[0]) },
+      decode => sub { $json_encoder->decode($_[0]) }
+    },
+    'text/x-yaml' => {
+      encode => sub { Dump($_[0]) },
+      decode => sub { Load($_[0]) }
+    },
+    'application/x-www-form-urlencoded' => {
+      decode => sub { my ($data, $c) = @_; $c->req->params->to_hash }
+    }
+  );
 
-    $app->helper( parse_autodata => \&_autodata_parse );
-    
-    $app->hook(before_render => sub {
-      my($c, $args) = @_;
-      $c->stash->{handler} = "autodata" if exists($c->stash->{autodata}) || exists($args->{autodata});
-    });
-}
+  my %formats = (
+    'json' => 'application/json',
+    'yml'  => 'text/x-yaml',
+  );
 
-sub _autodata_add
-{
+  $default_decode = $conf->{default_decode} if $conf->{default_decode};
+  $default_encode = $conf->{default_encode} if $conf->{default_encode};
+
+
+  my $find_type = sub {
+    my ($c) = @_;
+
+    my $headers = $c->tx->req->content->headers;
+
+    foreach my $type (map { /^([^;]*)/ } # get only stuff before ;
+                      split(',', $headers->header('Accept') || ''),
+                      $headers->content_type || '') {
+        return $type if $types{$type} and $types{$type}->{encode};
+    }
+
+    my $format = $c->stash->{format} // 'json';
+    LOGDIE "No type associated with $format" unless $formats{$format};
+
+    return $formats{$format};
+  };
+
+
+  $app->renderer->add_handler('autodata' => sub {
+    my ($r, $c, $output, $data) = @_;
+
+    my $type = $find_type->($c);
+    LOGDIE "no encoder for $type" unless $types{$type}{encode};
+    $$output = $types{$type}->{encode}->($c->stash("autodata"), $c);
+
+    $c->tx->res->headers->content_type($type);
+
+    return 1;
+  });
+
+  my $parse_autodata = sub {
+    my ($c) = @_;
+
+    my $content_type = $c->req->headers->content_type || $default_decode;
+    if ($content_type =~ /^([^;]+);/) {
+        # strip charset
+        $content_type = $1;
+    }
+    my $entry = $types{$content_type} || $types{$default_decode};
+
+    $c->stash->{autodata} = $entry->{decode}->($c->req->body, $c);
+    return $c->stash->{autodata};
+  };
+
+  $app->plugins->on( parse_autodata => $parse_autodata );
+
+  $app->plugins->on( add_autodata_type => sub {
     my($plugins, $args) = @_;
 
     LOGDIE "No extension provided" unless defined $args->{extension};
@@ -114,52 +142,14 @@ sub _autodata_add
     if(defined $args->{decode}) {
         $types{$mime}->{decode} = $args->{decode};
     }
-}
+  });
 
-sub _find_type
-{
-    my ($c) = @_;
-
-    my $headers = $c->tx->req->content->headers;
-
-    foreach my $type (map { /^([^;]*)/ } # get only stuff before ;
-                      split(',', $headers->header('Accept') || ''),
-                      $headers->content_type || '') {
-        return $type if $types{$type} and $types{$type}->{encode};
-    }
-
-    my $format = $c->stash->{format} // 'json';
-    LOGDIE "No type associated with $format" unless $formats{$format};
-
-    return $formats{$format};
-}
-
-sub _autodata_renderer
-{
-    my ($r, $c, $output, $data) = @_;
-
-    my $type = _find_type($c);
-    LOGDIE "no encoder for $type" unless $types{$type}{encode};
-    $$output = $types{$type}->{encode}->($c->stash("autodata"), $c);
-
-    $c->tx->res->headers->content_type($type);
-
-    return 1;
-}
-
-sub _autodata_parse
-{
-    my ($c) = @_;
-
-    my $content_type = $c->req->headers->content_type || $default_decode;
-    if ($content_type =~ /^([^;]+);/) {
-        # strip charset
-        $content_type = $1;
-    }
-    my $entry = $types{$content_type} || $types{$default_decode};
-
-    $c->stash->{autodata} = $entry->{decode}->($c->req->body, $c);
-    return $c->stash->{autodata};
+  $app->helper( parse_autodata => $parse_autodata );
+    
+  $app->hook(before_render => sub {
+    my($c, $args) = @_;
+    $c->stash->{handler} = "autodata" if exists($c->stash->{autodata}) || exists($args->{autodata});
+  });
 }
 
 1;
