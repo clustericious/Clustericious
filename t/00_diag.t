@@ -46,7 +46,6 @@ $modules{$_} = $_ for qw(
   Test::Script
   Test::Warn
   YAML::XS
-  join
 );
 
 
