@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+1.12      2015-12-19 15:40:15 -0700
+  - Add hooks for custom en/decoders
+
 1.11      2015-12-10 09:03:13 -0500
   - Clustericious::RouteBuilder::Proxy is deprecated and will be removed on
     or after January 31, 2016.  Consider using Mojolicious::Plugin::Proxy
