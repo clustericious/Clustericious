@@ -94,7 +94,7 @@ sub register
     my $format = $c->stash->{format} // 'json';
     LOGDIE "No type associated with $format" unless $formats{$format};
 
-    return $formats{$format};
+    $formats{$format};
   };
 
 
@@ -107,7 +107,7 @@ sub register
 
     $c->tx->res->headers->content_type($type);
 
-    return 1;
+    1;
   });
 
   my $parse_autodata = sub {
@@ -121,7 +121,7 @@ sub register
     my $entry = $types{$content_type} || $types{$default_decode};
 
     $c->stash->{autodata} = $entry->{decode}->($c->req->body, $c);
-    return $c->stash->{autodata};
+    $c->stash->{autodata};
   };
 
   $app->plugins->on( parse_autodata => $parse_autodata );
