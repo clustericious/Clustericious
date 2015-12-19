@@ -55,7 +55,7 @@ sub _default_coders
   map { $_ =~ s/\.pm$//; $_ } 
   map { $_->basename }
   grep { ! $_->is_dir } 
-  map { $_->children } 
+  map { $_->children( no_hidden => 1 ) } 
   grep { -d $_ } 
   map { dir($_, 'Clustericious', 'Coder' )} @INC;
   [ keys %coders ];
