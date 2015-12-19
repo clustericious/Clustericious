@@ -1,4 +1,4 @@
-package Clustericious::Plugin::AutodataHandler::JSON;
+package Clustericious::Coder::JSON;
 
 use strict;
 use warnings;

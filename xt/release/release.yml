@@ -96,7 +96,7 @@ pod_coverage:
     - Clustericious::Config::Password#.*
     - Clustericious::Config::Helpers#cluster
     - Clustericious::Util#.*
-    - Clustericious::Plugin::AutodataHandler::.*#coder
+    - Clustericious::Coder::[A-Za-z]+#coder
     
 version:
   dir: lib

@@ -57,7 +57,7 @@ sub _default_coders
   grep { ! $_->is_dir } 
   map { $_->children } 
   grep { -d $_ } 
-  map { dir($_, 'Clustericious', 'Plugin', 'AutodataHandler' )} @INC;
+  map { dir($_, 'Clustericious', 'Coder' )} @INC;
   [ keys %coders ];
 }
 
@@ -78,8 +78,8 @@ sub register
   
   foreach my $coder (@coders)
   {
-    require join('/', qw( Clustericious Plugin AutodataHandler ), "$coder.pm");
-    my $coder = join('::', qw( Clustericious Plugin AutodataHandler ), $coder)->coder;
+    require join('/', qw( Clustericious Coder ), "$coder.pm");
+    my $coder = join('::', qw( Clustericious Coder ), $coder)->coder;
     $types{$coder->{type}} = {
       maybe encode => $coder->{encode},
       maybe decode => $coder->{decode},

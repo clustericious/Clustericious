@@ -1,4 +1,4 @@
-package Clustericious::Plugin::AutodataHandler::YAML;
+package Clustericious::Coder::YAML;
 
 use strict;
 use warnings;
