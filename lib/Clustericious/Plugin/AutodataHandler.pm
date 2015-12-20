@@ -50,14 +50,14 @@ too).
 
 sub _default_coders
 {
-  my %coders = 
-  map { $_ => 1 }
-  map { $_ =~ s/\.pm$//; $_ } 
-  map { $_->basename }
-  grep { ! $_->is_dir } 
-  map { $_->children( no_hidden => 1 ) } 
-  grep { -d $_ } 
-  map { dir($_, 'Clustericious', 'Coder' )} @INC;
+  my %coders =
+    map { $_ => 1 }
+    map { $_ =~ s/\.pm$//; $_ }
+    map { $_->basename }
+    grep { ! $_->is_dir }
+    map { $_->children( no_hidden => 1 ) }
+    grep { -d $_ }
+    map { dir $_, 'Clustericious', 'Coder' } @INC;
   [ keys %coders ];
 }
 
@@ -98,7 +98,8 @@ sub register
 
     foreach my $type (map { /^([^;]*)/ } # get only stuff before ;
                       split(',', $headers->header('Accept') || ''),
-                      $headers->content_type || '') {
+                      $headers->content_type || '')
+    {
         return $type if $types{$type} and $types{$type}->{encode};
     }
 
@@ -113,12 +114,9 @@ sub register
     my ($r, $c, $output, $data) = @_;
 
     my $type = $find_type->($c);
-    LOGDIE "no encoder for $type" unless $types{$type}{encode};
-    $$output = $types{$type}->{encode}->($c->stash("autodata"), $c);
-
+    LOGDIE "no encoder for $type" unless $types{$type}->{encode};
+    $$output = $types{$type}->{encode}->($c->stash("autodata"));
     $c->tx->res->headers->content_type($type);
-
-    1;
   });
 
   my $parse_autodata = sub {
@@ -131,8 +129,9 @@ sub register
     }
     my $entry = $types{$content_type} || $types{$default_decode};
 
+    # TODO: avoid passing $c in, only used by
+    # application/x-www-form-urlencoded above
     $c->stash->{autodata} = $entry->{decode}->($c->req->body, $c);
-    $c->stash->{autodata};
   };
 
   $app->plugins->on( parse_autodata => $parse_autodata );
