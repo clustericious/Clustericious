@@ -190,7 +190,7 @@ sub new
         $self->client($self->_mojo_user_agent_factory());
         if (not length $self->server_url)
         {
-            my $url = $self->_config->url;
+            my $url = $self->config->url;
             $url =~ s{/$}{};
             $self->server_url($url);
         }
@@ -239,7 +239,7 @@ sub remote {
     my $remote = shift;
     unless ($remote) { # reset to default
         $self->{_remote} = '';
-        $self->server_url($self->_config->url);
+        $self->server_url($self->config->url);
         return;
     }
     my $info = $self->_base_config->remotes->$remote;
@@ -278,7 +278,7 @@ sub login {
     my ($user,$pw) =
            @_==2 ? @_
          : @_    ?  @args{qw/username password/}
-         : map $self->_config->$_, qw/username password/;
+         : map $self->config->$_, qw/username password/;
     $self->userinfo(join ':', $user,$pw);
 }
 
@@ -808,7 +808,7 @@ sub _doit {
         ERROR $res->body if $res->body;
         return undef;
     }
-    my $failover_urls = $self->_config->failover_urls(default => []);
+    my $failover_urls = $self->config->failover_urls(default => []);
     unless (@$failover_urls) {
         ERROR $msg;
         return undef;
@@ -866,7 +866,8 @@ sub _appname {
     return $appname;
 }
 
-sub _config {
+
+sub config {
     my $self = shift;
     my $conf = $self->_base_config;
     if (my $remote = $self->_remote) {
@@ -874,6 +875,8 @@ sub _config {
     }
     return $conf;
 }
+
+*_config = \&config;
 
 sub _base_config {
     # Independent of remotes
@@ -891,8 +894,8 @@ sub _base_config {
 
 sub _has_auth {
     my $self = shift;
-    return 0 unless $self->_config->username(default => '');
-    return 0 unless $self->_config->password(default => '');
+    return 0 unless $self->config->username(default => '');
+    return 0 unless $self->config->password(default => '');
     return 1;
 }
 

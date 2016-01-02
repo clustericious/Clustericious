@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::Clustericious::Cluster 0.26;
-use Test::More tests => 9;
+use Test::More tests => 11;
 
 my $cluster = Test::Clustericious::Cluster->new;
 $cluster->create_cluster_ok('SomeService');
@@ -25,11 +25,17 @@ is($client->meta_for("welcome")->doc, "Say hello", "Set metadata");
 is($client->broken, undef, 'client.broken');
 is $client->errorstring, '(404) Not Found', 'client.errormessage';
 
+isa_ok $client->config, 'Clustericious::Config';
+is_deeply scalar $client->config->{a}, {b => [1,2,3]};
+
 __DATA__
 
 @@ etc/SomeService.conf
 ---
 url: <%= cluster->url %>
+
+a:
+  b: [1,2,3]
 
 @@ lib/SomeService.pm
 package Fake::Object::Thing;
