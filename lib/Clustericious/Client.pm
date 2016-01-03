@@ -197,6 +197,8 @@ sub new
   
   my $self = $class->SUPER::new(%args);
 
+  $self->{_base_config} = $config if $config;
+
   if($self->{app})
   {
     my $app = $self->{app};
@@ -216,8 +218,6 @@ sub new
       $self->server_url($url);
     }
   }
-  
-  $self->{_base_config} = $config if $config;
 
   my $ua = $self->ua;
   $ua->transactor->name($self->user_agent_string);
@@ -912,7 +912,6 @@ sub _base_config
 {
   # Independent of remotes
   my($self) = @_;
-
   unless(defined $self->{_base_config})
   {
     my $config_name = ref $self;

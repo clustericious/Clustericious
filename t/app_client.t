@@ -1,12 +1,13 @@
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Clustericious::Cluster;
 
 Test::Clustericious::Cluster->extract_data_section;
 
 my $cluster = Test::Clustericious::Cluster->new;
 $cluster->create_cluster_ok(qw( Foo Foo Bar ));
+my $t = $cluster->t;
 
 subtest isa => sub {
   plan tests => 4;
@@ -21,11 +22,33 @@ note "url[1] = @{[ $cluster->apps->[1]->client->config->url ]}";
 note "url[2] = @{[ $cluster->apps->[2]->client->config->url ]}";
 
 subtest 'sans client class' => sub {
-  plan skip_all => 'borked for now';
+  plan tests => 6;
+
+  $t->get_ok("@{[ $cluster->urls->[0] ]}/status")
+    ->status_is(200)
+    ->json_is('/server_version', '1.23');
+
+  note $t->tx->res->to_string;
 
   my $client = $cluster->apps->[0]->client;
-  is $client->status->{version}, '1.23';
+  is $client->status->{server_version}, '1.23';
+  
+  is $cluster->apps->[0]->client->config->index, 0;
+  is $cluster->apps->[1]->client->config->index, 1;
 
+};
+
+subtest 'with client class' => sub {
+  plan tests => 4;
+
+  $t->get_ok("@{[ $cluster->urls->[2] ]}/status")
+    ->status_is(200)
+    ->json_is('/server_version', '4.56');
+
+  note $t->tx->res->to_string;
+ 
+  my $client = $cluster->apps->[2]->client;
+  is $client->status->{server_version}, '4.56';
 };
 
 __DATA__
@@ -46,6 +69,12 @@ use warnings;
 use base qw( Clustericious::App );
 
 1;
+
+
+
+@@ etc/Bar.conf
+---
+url: <%= cluster->url %>
 
 
 @@ lib/Bar.pm
