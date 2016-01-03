@@ -8,6 +8,6 @@ use Clustericious::HelloWorld::Client;
 my $app    = Clustericious::HelloWorld->new;
 my $client = Clustericious::HelloWorld::Client->new;
 
-is($app->config->url, $client->_config->url, "URLs match");
+is($app->config->url, $client->config->url, "URLs match");
 
 note "url is : @{[ $app->config->url ]}";

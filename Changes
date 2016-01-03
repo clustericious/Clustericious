@@ -3,7 +3,8 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
   - Clustericious::Client#_config is now a public method named
     Clustericious::Client#config.  The older form is now an alias
-    of the new one.
+    of the new one, but may be removed in the future, but not before
+    February 29, 2016.
   - Clustericious::Client#client is now renamed to #ua
     The old attribute may be removed in the fiture, but not before
     February 29, 2016.

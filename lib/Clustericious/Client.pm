@@ -893,7 +893,11 @@ sub config {
     return $conf;
 }
 
-*_config = \&config;
+sub _config
+{
+  carp "Clustericious::Client->_config has been deprecated use config instead";
+  shift->config(@_);
+}
 
 sub _base_config {
     # Independent of remotes
