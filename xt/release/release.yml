@@ -73,6 +73,7 @@ pod_spelling_system:
     - apps
     - apache24
     - AutodataHandler
+    - ua
 
 pod_coverage:
   # format is "Class#method" or "Class", regex allowed

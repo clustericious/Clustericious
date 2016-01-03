@@ -8,6 +8,8 @@ Revision history for {{$dist->name}}
   - Clustericious::Client#client is now renamed to #ua
     The old attribute may be removed in the fiture, but not before
     February 29, 2016.
+  - Added helper client which returns either a Clustericious::Client
+    or YourApp::Client
 
 1.12      2015-12-19 15:40:15 -0700
   - Add hooks for custom en/decoders

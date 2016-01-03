@@ -17,6 +17,7 @@ use Log::Log4perl qw/:easy/;
 use File::Temp;
 use JSON::MaybeXS qw( encode_json decode_json );
 use Carp qw( carp );
+use Mojo::Util qw( monkey_patch );
 
 # ABSTRACT: Construct command line and perl clients for RESTful services.
 # VERSION
@@ -149,21 +150,22 @@ sub client
 
 sub import
 {
-    my $class = shift;
-    my $caller = caller;
+  my($class) = @_;
+  my $caller = caller;
 
-    {
+  monkey_patch $caller, route => \&route;
+  monkey_patch $caller, route_meta => \&route_meta;
+  monkey_patch $caller, route_args => \&route_args;
+  monkey_patch $caller, route_doc => sub {
+    Clustericious::Client::Meta->add_route( $caller, @_ );
+  };
+  monkey_patch $caller, object => \&object;
+  monkey_patch $caller, import => sub {};
+
+  do {
     no strict 'refs';
     push @{"${caller}::ISA"}, $class unless $caller->isa($class);
-    *{"${caller}::route"} = \&route;
-    *{"${caller}::route_meta"} = \&route_meta;
-    *{"${caller}::route_args"} = \&route_args;
-    *{"${caller}::route_doc"} = sub {
-        Clustericious::Client::Meta->add_route( $caller, @_ )
-    };
-    *{"${caller}::object"} = \&object;
-    *{"${caller}::import"} = sub {};
-    }
+  };
 }
 
 =head1 METHODS
@@ -189,40 +191,44 @@ sub _mojo_user_agent_factory
 
 sub new
 {
-    my $self = shift->SUPER::new(@_);
-    my %args = @_;
+  my($class, %args) = @_;
 
-    if ($self->{app})
+  my $config = delete $args{config};
+  
+  my $self = $class->SUPER::new(%args);
+
+  if($self->{app})
+  {
+    my $app = $self->{app};
+    $app = $app->new() unless ref($app);
+    my $ua = $self->_mojo_user_agent_factory();
+    return undef unless $ua;
+    eval { $ua->server->app($app) } // $ua->app($app);
+    $self->ua($ua);
+  }
+  else
+  {
+    $self->ua($self->_mojo_user_agent_factory());
+    unless(length $self->server_url)
     {
-        my $app = $self->{app};
-        $app = $app->new() unless ref($app);
-        my $ua = $self->_mojo_user_agent_factory();
-        return undef unless $ua;
-        eval { $ua->server->app($app) } // $ua->app($app);
-
-        $self->ua($ua);
+      my $url = $self->config->url;
+      $url =~ s{/$}{};
+      $self->server_url($url);
     }
-    else
-    {
-        $self->ua($self->_mojo_user_agent_factory());
-        if (not length $self->server_url)
-        {
-            my $url = $self->config->url;
-            $url =~ s{/$}{};
-            $self->server_url($url);
-        }
-    }
+  }
+  
+  $self->{_base_config} = $config if $config;
 
-    my $ua = $self->ua;
-    $ua->transactor->name($self->user_agent_string);
-    $ua->inactivity_timeout($ENV{CLUSTERICIOUS_KEEP_ALIVE_TIMEOUT} || 300);
+  my $ua = $self->ua;
+  $ua->transactor->name($self->user_agent_string);
+  $ua->inactivity_timeout($ENV{CLUSTERICIOUS_KEEP_ALIVE_TIMEOUT} || 300);
 
-    if(eval { require Clustericious::Client::Local; })
-    {
-        Clustericious::Client::Local->local($self);
-    }
+  if(eval { require Clustericious::Client::Local; })
+  {
+    Clustericious::Client::Local->local($self);
+  }
 
-    return $self;
+  $self;
 }
 
 =head2 userinfo
@@ -874,23 +880,26 @@ sub _sanitize_url {
     return $url unless $url->userinfo;
     my $c = $url->clone;
     $c->userinfo("user:*****");
-    return $c;
+    $c;
 }
 
-sub _appname {
-    my $self = shift;
-    (my $appname = ref $self) =~ s/:.*$//;
-    return $appname;
+sub _appname
+{
+  my($self) = @_;
+  (my $appname = ref $self) =~ s/:.*$//;
+  $appname;
 }
 
 
-sub config {
-    my $self = shift;
-    my $conf = $self->_base_config;
-    if (my $remote = $self->_remote) {
-        return $conf->remotes->$remote;
-    }
-    return $conf;
+sub config
+{
+  my($self) = @_;  
+  my $conf = $self->_base_config;
+  if (my $remote = $self->_remote)
+  {
+    return $conf->remotes->$remote;
+  }
+  $conf;
 }
 
 sub _config
@@ -899,30 +908,34 @@ sub _config
   shift->config(@_);
 }
 
-sub _base_config {
-    # Independent of remotes
-    my $self = shift;
-    return $self->{_base_config} if defined($self->{_base_config});
-    
+sub _base_config
+{
+  # Independent of remotes
+  my($self) = @_;
+
+  unless(defined $self->{_base_config})
+  {
     my $config_name = ref $self;
     $config_name =~ s/::Client$//;
     $config_name =~ s/::/-/;
-    
     $self->{_base_config} = Clustericious::Config->new($config_name);
     $self->{_base_config}->{url} //= Clustericious->_default_url($config_name);
-    return $self->{_base_config};
+  }
+  
+  $self->{_base_config};
 }
 
-sub _has_auth {
-    my $self = shift;
-    return 0 unless $self->config->username(default => '');
-    return 0 unless $self->config->password(default => '');
-    return 1;
+sub _has_auth
+{
+  my($self) = @_;
+  my $config = $self->config;
+  $config->username(default => '') && password(default => '') ? 1 : 0;
 }
 
-sub _can_auth {
-    my $self = shift;
-    return -t STDIN ? 1 : 0;
+sub _can_auth
+{
+  my $self = shift;
+  -t STDIN ? 1 : 0;
 }
 
 sub _get_user_pw  {

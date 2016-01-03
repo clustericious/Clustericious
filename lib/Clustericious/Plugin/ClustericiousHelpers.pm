@@ -68,6 +68,24 @@ Render a 301 response.
     $c->res->headers->location($where);
     $c->render(text => "moved to $where");
   });
+
+=head2 client
+
+ my $client = $c->client;
+
+Returns the appropriate L<Clustericious::Client> object for your app.
+
+=cut
+
+  do {
+    my $client_class = ref($app) . "::Client";
+    $client_class = 'Clustericious::Client' unless eval qq{ require $client_class; 1 };
+
+    $app->helper(client => sub {
+      $client_class->new(config => $app->config);
+    });
+  };
+
 }
 
 1;
