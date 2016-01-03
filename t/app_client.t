@@ -6,15 +6,17 @@ use Test::Clustericious::Cluster;
 Test::Clustericious::Cluster->extract_data_section;
 
 my $cluster = Test::Clustericious::Cluster->new;
-$cluster->create_cluster_ok(qw( Foo Foo Bar ));
+$cluster->create_cluster_ok(qw( Foo Foo Bar Baz ));
 my $t = $cluster->t;
 
 subtest isa => sub {
-  plan tests => 4;
+  plan tests => 6;
   isa_ok $cluster->apps->[0]->client, 'Clustericious::Client';
   isa_ok $cluster->apps->[1]->client, 'Clustericious::Client';
   isa_ok $cluster->apps->[2]->client, 'Clustericious::Client';
   isa_ok $cluster->apps->[2]->client, 'Bar::Client';
+  isa_ok $cluster->apps->[3]->client, 'Clustericious::Client';
+  isa_ok $cluster->apps->[3]->client, 'Baz::Client';
 };
 
 note "url[0] = @{[ $cluster->apps->[0]->client->config->url ]}";
@@ -94,6 +96,27 @@ package Bar::Client;
 
 use strict;
 use warnings;
+use Clustericious::Client;
+
+1;
+
+
+@@ etc/Baz.conf
+---
+url: <%= cluster->url %>
+
+
+@@ lib/Baz.pm
+package Baz;
+
+our $VERSION = '7.89';
+
+use strict;
+use warnings;
+use base qw( Clustericious::App );
+
+package Baz::Client;
+
 use Clustericious::Client;
 
 1;

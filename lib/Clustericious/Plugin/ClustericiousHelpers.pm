@@ -79,7 +79,9 @@ Returns the appropriate L<Clustericious::Client> object for your app.
 
   do {
     my $client_class = ref($app) . "::Client";
-    $client_class = 'Clustericious::Client' unless eval qq{ require $client_class; 1 };
+    $client_class = 'Clustericious::Client'
+      unless $client_class->can('new')
+      ||     eval qq{ require $client_class; $client_class->can('new') };
 
     $app->helper(client => sub {
       $client_class->new(config => $app->config);
