@@ -16,6 +16,7 @@ use MojoX::Log::Log4perl;
 use Log::Log4perl qw/:easy/;
 use File::Temp;
 use JSON::MaybeXS qw( encode_json decode_json );
+use Carp qw( carp );
 
 # ABSTRACT: Construct command line and perl clients for RESTful services.
 # VERSION
@@ -100,10 +101,20 @@ a data structure if it is application/json.
 This class inherits from L<Mojo::Base>, and handles attributes like
 that class.  The following additional attributes are used.
 
+=head2 config
+
+Configuration object.  Defaults to the appropriate L<Clustericious::Config>
+class.
+
+=head2 ua
+
+User agent to process the HTTP stuff with.  Defaults to a
+L<Mojo::UserAgent>.
+
 =head2 client
 
-A client to process the HTTP stuff with.  Defaults to a
-L<Mojo::UserAgent>.
+Deprecated alias for L</ua> above.  Do not use in new code.  May be removed
+in the future.
 
 =head2 app
 
@@ -126,9 +137,15 @@ tx has the Mojo::Transaction::HTTP object.
 =cut
 
 has server_url => '';
-has [qw(tx res userinfo client)];
+has [qw(tx res userinfo ua )];
 has _remote => ''; # Access via remote()
 has _cache => sub { + {} }; # cache of credentials
+
+sub client
+{
+  carp "Clustericious::Client->client is deprecated (use ua instead)";
+  shift->ua(@_);
+}
 
 sub import
 {
@@ -179,15 +196,15 @@ sub new
     {
         my $app = $self->{app};
         $app = $app->new() unless ref($app);
-        my $client = $self->_mojo_user_agent_factory();
-        return undef unless $client;
-        eval { $client->server->app($app) } // $client->app($app);
+        my $ua = $self->_mojo_user_agent_factory();
+        return undef unless $ua;
+        eval { $ua->server->app($app) } // $ua->app($app);
 
-        $self->client($client);
+        $self->ua($ua);
     }
     else
     {
-        $self->client($self->_mojo_user_agent_factory());
+        $self->ua($self->_mojo_user_agent_factory());
         if (not length $self->server_url)
         {
             my $url = $self->config->url;
@@ -196,9 +213,9 @@ sub new
         }
     }
 
-    my $client = $self->client;
-    $client->transactor->name($self->user_agent_string);
-    $client->inactivity_timeout($ENV{CLUSTERICIOUS_KEEP_ALIVE_TIMEOUT} || 300);
+    my $ua = $self->ua;
+    $ua->transactor->name($self->user_agent_string);
+    $ua->inactivity_timeout($ENV{CLUSTERICIOUS_KEEP_ALIVE_TIMEOUT} || 300);
 
     if(eval { require Clustericious::Client::Local; })
     {
@@ -294,7 +311,7 @@ parts)
 
 sub errorstring {
     my $self = shift;
-    WARN "Missing response in client object" unless $self->res;
+    WARN "Missing response in ua object" unless $self->res;
     return unless $self->res;
     return if $self->res->code && $self->res->is_status_class(200);
     my $error = $self->res->error;
@@ -751,11 +768,11 @@ sub _doit {
         $body = encode_json $body;
     }
 
-    return $self->client->build_tx($method, $url, $headers, $body, $cb) if $cb;
+    return $self->ua->build_tx($method, $url, $headers, $body, $cb) if $cb;
 
-    my $tx = $self->client->build_tx($method, $url, $headers, $body);
+    my $tx = $self->ua->build_tx($method, $url, $headers, $body);
 
-    $tx = $self->client->start($tx);
+    $tx = $self->ua->start($tx);
     my $res = $tx->res;
     $self->res($res);
     $self->tx($tx);
@@ -831,7 +848,7 @@ sub _mycallback
     my $cb = shift;
     sub
     {
-        my ($client, $tx) = @_;
+        my ($ua, $tx) = @_;
 
         $self->res($tx->res);
         $self->tx($tx);

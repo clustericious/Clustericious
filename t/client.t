@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::Clustericious::Cluster 0.26;
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 my $cluster = Test::Clustericious::Cluster->new;
 $cluster->create_cluster_ok('SomeService');
@@ -27,6 +27,8 @@ is $client->errorstring, '(404) Not Found', 'client.errormessage';
 
 isa_ok $client->config, 'Clustericious::Config';
 is_deeply scalar $client->config->{a}, {b => [1,2,3]};
+
+isa_ok $client->ua, 'Mojo::UserAgent';
 
 __DATA__
 

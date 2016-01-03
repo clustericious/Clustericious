@@ -24,7 +24,7 @@ subtest 'get user agent string' => sub {
   require_ok 'MyApp::Client';
   my $client = MyApp::Client->new;  
   my $expected = "Clustericious::Client/@{[ $Clustericious::Client::VERSION // 'dev' ]} MyApp::Client/1.02";
-  is $client->client->transactor->name, $expected, 'name matches on the client side';
+  is $client->ua->transactor->name, $expected, 'name matches on the client side';
   is $client->getua, $expected, 'name matches on the server side';
 };
 

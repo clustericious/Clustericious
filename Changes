@@ -4,6 +4,9 @@ Revision history for {{$dist->name}}
   - Clustericious::Client#_config is now a public method named
     Clustericious::Client#config.  The older form is now an alias
     of the new one.
+  - Clustericious::Client#client is now renamed to #ua
+    The old attribute may be removed in the fiture, but not before
+    February 29, 2016.
 
 1.12      2015-12-19 15:40:15 -0700
   - Add hooks for custom en/decoders
