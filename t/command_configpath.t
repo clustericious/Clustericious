@@ -1,8 +1,9 @@
 use strict;
 use warnings;
 use Test::Clustericious::Command;
-use Test::More tests => 3;
+use Test::More;
 
+requires undef, 3;
 mirror 'example/etc' => 'etc';
 mirror 'bin' => 'bin';
 
