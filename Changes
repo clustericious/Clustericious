@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Mojo 6.41 compatability
 
 1.14      2016-01-03 10:39:31 -0500
   - Clustericious::Client#_config is now a public method named

@@ -9,13 +9,13 @@ my $cluster = Test::Clustericious::Cluster
 my $t = $cluster->t;
 
 my $got =
-  $t->get_ok( '/proxyme/here', '', 'got proxy url' )
+  $t->get_ok( '/proxyme/here')
   ->content_is( "you made it", 'proxy had right content' )->status_is(200);
 
-$t->post_ok( '/proxyme/here', '', 'got proxy url' )
+$t->post_ok( '/proxyme/here')
   ->content_is( "you made it too", 'proxy had right content' )->status_is(200);
 
-$t->delete_ok( '/proxyme/here', '', 'got proxy url' )
+$t->delete_ok( '/proxyme/here')
   ->content_is( "you made it three", 'proxy had right content' )->status_is(200);
 
 __DATA__

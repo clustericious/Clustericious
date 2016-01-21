@@ -13,36 +13,31 @@ $t->post_ok("/my_table", form => { foo => "bar" }, {}, "posted to create")
   ->json_is('', {foo => "bar"}, "got structure back");
 
 $t->get_ok('/my_table/foo',
-           { Accept => 'application/json' },
-           '', "get json")
+           { Accept => 'application/json' })
   ->status_is(200, "got 200")
   ->header_is('Content-Type' => 'application/json')
   ->json_is('', {foo => "bar"}, "got structure back in JSON");
 
 $t->get_ok('/my_table/foo',
-           { Accept => 'application/bogus;q=0.8,application/json' },
-           '', "ignore bogus accept, still get json")
+           { Accept => 'application/bogus;q=0.8,application/json' })
   ->status_is(200, "got 200")
   ->header_is('Content-Type' => 'application/json')
   ->json_is('', {foo => "bar"}, "got structure back in JSON");
 
 $t->get_ok('/my_table/foo',
-           { Accept => 'application/bogus;q=0.8' },
-           '', "ignore bogus accept, still get json by default")
+           { Accept => 'application/bogus;q=0.8' })
   ->status_is(200, "got 200")
   ->header_is('Content-Type' => 'application/json')
   ->json_is('', {foo => "bar"}, "got structure back in JSON");
 
 $t->get_ok('/my_table/foo',
-           { Accept => 'text/x-yaml' },
-           '', "get yaml by accept")
+           { Accept => 'text/x-yaml' })
   ->status_is(200, "got 200")
   ->header_is('Content-Type' => 'text/x-yaml')
   ->content_is("---\nfoo: bar\n", "got structure back in YAML");
 
 $t->get_ok('/my_table/foo',
-           { 'Content-Type' => 'text/x-yaml' },
-           '', "get yaml by Content-Type")
+           { 'Content-Type' => 'text/x-yaml' })
   ->status_is(200, "got 200")
   ->header_is('Content-Type' => 'text/x-yaml')
   ->content_is("---\nfoo: bar\n", "got structure back in YAML");
@@ -64,8 +59,7 @@ $t->post_ok("/my_table",
   ->json_is('', {foo => "bar"}, "got structure back");
 
 $t->get_ok('/my_table/foo',
-           { Accept => 'text/x-yaml' },
-           '', "get yaml by accept")
+           { Accept => 'text/x-yaml' })
   ->status_is(200, "got 200")
   ->header_is('Content-Type' => 'text/x-yaml')
   ->content_is("---\nfoo: bar\n", "got structure back in YAML");
@@ -78,8 +72,7 @@ $t->post_ok("/my_table", json => { foo => 'bar' },
   ->header_is('Content-Type' => 'application/json')
   ->json_is('', {foo => "bar"}, "got structure back");
 
-$t->get_ok('/my_table/foo',
-           '', "get json")
+$t->get_ok('/my_table/foo')
   ->status_is(200, "got 200")
   ->header_is('Content-Type' => 'application/json')
   ->json_is('', {foo => "bar"}, "got structure back");
