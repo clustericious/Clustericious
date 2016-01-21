@@ -83,7 +83,7 @@ Simplified route builder based on L<Mojolicious::Lite> (see L<Clustericious::Rou
 =item *
 
 Provides a set of default routes (e.g. /status, /version, /api) for consistent
-interaction with Clustericious services (see L<Clustericious::RouteBuilder::Common>).
+interaction with Clustericious services (see L<Clustericious::Plugin::CommonRoutes>).
 
 =item *
 
@@ -147,7 +147,7 @@ Create Remove Update Delete builder for Clustericious.
 
 Build routes for searching for objects.
 
-=item L<Clustericious::RouteBuilder::Common>
+=item L<Clustericious::Plugin::CommonRoutes>
 
 Common routes for all Clustericious applications.
 

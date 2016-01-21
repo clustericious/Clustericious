@@ -69,7 +69,7 @@ Here are some of the distinctive aspects of Clustericious :
 
 - Simplified route builder based on [Mojolicious::Lite](https://metacpan.org/pod/Mojolicious::Lite) (see [Clustericious::RouteBuilder](https://metacpan.org/pod/Clustericious::RouteBuilder)).
 - Provides a set of default routes (e.g. /status, /version, /api) for consistent
-interaction with Clustericious services (see [Clustericious::RouteBuilder::Common](https://metacpan.org/pod/Clustericious::RouteBuilder::Common)).
+interaction with Clustericious services (see [Clustericious::Plugin::CommonRoutes](https://metacpan.org/pod/Clustericious::Plugin::CommonRoutes)).
 - Introspects the routes available and publishes the API as /api.
 - Automatically handle different formats (YAML or JSON) depending on request 
 (see [Clustericious::Plugin::AutodataHandler](https://metacpan.org/pod/Clustericious::Plugin::AutodataHandler)).
