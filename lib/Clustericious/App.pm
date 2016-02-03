@@ -127,11 +127,9 @@ Initializing logging using ~/etc/log4perl.conf
 
 sub init_logging {
     my $self = shift;
-
-    my $logger = Clustericious::Log->init_logging(ref $self || $self);
-
-    # Can no longer use log as a class method
-    $self->log( $logger ) if ref $self;
+    croak "cannot be called as class method" unless ref $self;
+    my $logger = Clustericious::Log->init_logging($self);
+    $self->log( $logger );
 }
 
 =head2 dump_api

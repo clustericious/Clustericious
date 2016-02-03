@@ -47,7 +47,7 @@ sub run {
   my $app_name = $ENV{MOJO_APP};
   my %args = @args;
 
-  Clustericious::App->init_logging;
+  $self->app->init_logging;
 
   my $prefix = $args{-p} or INFO "no prefix for nginx";
   mkpath "$prefix/logs";

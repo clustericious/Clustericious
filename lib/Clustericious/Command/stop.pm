@@ -117,7 +117,7 @@ sub run
   my($self, @args) = @_;
   exit 2 unless $self->app->sanity_check;
 
-  Clustericious::App->init_logging();
+  $self->app->init_logging();
 
   my $exe = $0;
   for (reverse $self->app->config->start_mode) {

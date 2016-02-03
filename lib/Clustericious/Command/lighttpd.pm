@@ -68,8 +68,6 @@ sub run {
   my($self, @args) = @_;
   my $app_name = $ENV{MOJO_APP};
 
-  # Clustericious::App->init_logging;
-
   my $lighttpd = which('lighttpd') or LOGDIE "could not find lighttpd in $ENV{PATH}";
   DEBUG "starting $lighttpd @args";
   system $lighttpd, @args;

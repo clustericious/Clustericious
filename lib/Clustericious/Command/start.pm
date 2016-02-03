@@ -82,7 +82,7 @@ sub run {
   eval "use $app;";
   die $@ if $@;
 
-  Clustericious::App->init_logging;
+  $self->app->init_logging;
 
   for my $mode ($self->app->config->start_mode)
   {

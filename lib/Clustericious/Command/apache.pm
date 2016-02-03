@@ -77,7 +77,7 @@ EOT
 
 sub run {
   my($self, @args) = @_;
-  Clustericious::App->init_logging;
+  $self->app->init_logging;
   my $command = which('httpd') || die "unable to find apache";
   system $command, @args;
   die "'$command @args' Failed to execute: $!" if $? == -1;

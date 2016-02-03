@@ -13,6 +13,7 @@ Revision history for {{$dist->name}}
   - removed deprecated helpers base_tag and auth_ua
   - removed deprecated Clustericious::RouteBuilder::Proxy
   - removed deprecated Clustericious::Config::Plugin
+  - removed deprecated use of Clustericious::App->init_logging as a class method
 
 1.15      2016-01-21 17:41:26 -0500
   - Mojo 6.41 compatability

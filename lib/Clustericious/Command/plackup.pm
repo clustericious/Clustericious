@@ -41,7 +41,7 @@ sub run {
   my($self, @args) = @_;
   my $app_name = $ENV{MOJO_APP};
   
-  Clustericious::App->init_logging;
+  $self->app->init_logging;
 
   my $plackup = which('plackup') || LOGDIE "could not find plackup in $ENV{PATH}";
 
