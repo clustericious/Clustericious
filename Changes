@@ -1,6 +1,18 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - removed deprecated Test::Clustericious
+  - removed deprecated config files with .yml extension
+  - removed deprecated config from calar
+  - removed deprecated method Clustericious::Config->dump_as_yaml
+  - removed deprecated method Clustericious::Config->set_singleton
+  - removed deprecated JSON configurations
+  - removed deprecated generate mbd_app command
+  - removed deprecated config item simple_auth
+  - removed deprecated Clustericious::Controller->render_text and ->render_json
+  - removed deprecated helpers base_tag and auth_ua
+  - removed deprecated Clustericious::RouteBuilder::Proxy
+  - removed deprecated Clustericious::Config::Plugin
 
 1.15      2016-01-21 17:41:26 -0500
   - Mojo 6.41 compatability

@@ -119,7 +119,7 @@ sub run {
     }
     elsif(%conf)
     {
-      Carp::carp("argumenst specified withouth 'args' option is deprecated and will be removed on or after January 31, 2016");
+      Carp::carp("argumenst specified withouth 'args' option is deprecated and will be removed on or after February 29, 2016");
       # THIS IS RETARDED AND SHOULD BE DEPRECATED
       # if it starts with a dash, leave it alone, else add two dashes
       my %args = mesh

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::Clustericious::Cluster;
-use Test::More tests => 3;
+use Test::More tests => 2;
 use Mojo::URL;
 use Test::Warn;
 
@@ -9,14 +9,6 @@ my $cluster = Test::Clustericious::Cluster->new;
 $cluster->create_cluster_ok('Foo');
 my $app = $cluster->apps->[0];
 my $t = $cluster->t;
-
-subtest auth_ua => sub {
-  plan tests => 2;
-  warnings_exist {
-    my $ua = $app->auth_ua;
-    isa_ok $ua, 'Mojo::UserAgent';
-  } [ qr{auth_ua has been deprecated} ], 'auth_ua issues warning';
-};
 
 subtest render_moved => sub {
   plan tests => 6;

@@ -91,8 +91,6 @@ sub startup {
         if(ref($auth_config) && $auth_config->{plugin})
         { $name = $auth_config->{plugin} }
         $auth_plugin = $self->plugin($name, plug_auth => $auth_config);
-    } elsif($auth_config = $config->simple_auth(default => '')) {
-        croak "Using simple_auth in configuration has been removed.  Change your configuration to use plug_auth instead.";
     } else {
         $self->log->info("No auth configured");
     }
@@ -102,22 +100,6 @@ sub startup {
     my $url = $config->url(default => '') or do {
         $self->log->warn("Configuration file should contain 'url'.");
     };
-
-    # This block of code can be removed when Clustericious::RouteBuilder::Proxy goes.
-    # See http://groups.google.com/group/mojolicious/browse_thread/thread/000e251f0748c997
-    my $murl = Mojo::URL->new($url);
-    my $part_count = @{ $murl->path->parts };
-    if ($part_count > 0 ) {
-        $self->hook(before_dispatch  => sub {
-            my $c = shift;
-            if (@{ $c->req->url->base->path->parts } > 0) {
-                # subrequest
-                my @extra = splice @{ $c->req->url->base->path->parts }, -$part_count;
-            }
-            push @{ $c->req->url->base->path->parts },
-              splice @{ $c->req->url->path->parts }, 0, $part_count;
-        });
-    }
 
     $self->hook( before_dispatch => sub {
         Log::Log4perl::MDC->put(remote_ip => shift->tx->remote_address || 'unknown');

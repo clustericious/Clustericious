@@ -5,7 +5,6 @@ use warnings;
 use 5.010;
 use Clustericious;
 use List::Util ();
-use JSON::MaybeXS ();
 use YAML::XS ();
 use Mojo::Template;
 use Log::Log4perl qw( :nowarn );
@@ -91,9 +90,6 @@ From a script:
  # Supply a default value for a missing configuration parameter :
  $c->url(default => "http://localhost:9999");
  print $c->this_param_is_missing(default => "something_else");
-
- # Dump out the entire config as yaml
- print $c->dump_as_yaml;
 
 =head1 DESCRIPTION
 
@@ -183,24 +179,8 @@ sub new {
   {
     my $filename;
   
-    if (ref $arg eq 'SCALAR')
+    if($arg =~ /\.conf$/)
     {
-      Carp::carp("string scalar configuration is deprecated");
-      $filename = File::Spec->catfile(File::Temp::tempdir(CLEANUP => 1), "Scalar@{[int $arg]}.conf");
-      my $fh;
-      open($fh, '>', $filename);
-      print $fh $$arg;
-      close $fh;
-    }
-    elsif($arg =~ /\.conf$/)
-    {
-      $filename = $arg;
-    }
-    elsif($arg =~ /\.yml$/)
-    {
-      # when we remove this alos remove the reference below
-      # when we mangle the name
-      Carp::carp("Config with .yml extension is deprecated");
       $filename = $arg;
     }
     else
@@ -226,14 +206,9 @@ sub new {
       $callback->(rendered => $filename => $rendered);
 
       die $rendered if ( (ref $rendered) =~ /Exception/ );
-      my $type = $rendered =~ /^---/ ? 'yaml' : 'json';
 
-      Carp::carp("JSON configuration file is deprecated") if $type eq 'json';
-
-      $conf_data =$type eq 'yaml'
-        ? eval { YAML::XS::Load($rendered) }
-        : eval { JSON::MaybeXS::decode_json $rendered };
-      $logger->logdie("Could not parse $type\n-------\n$rendered\n---------\n$@\n") if $@;
+      $conf_data = eval { YAML::XS::Load($rendered) };
+      $logger->logdie("Could not parse\n-------\n$rendered\n---------\n$@\n") if $@;
     } else {
       $callback->('not_found' => "$arg");
     }
@@ -251,7 +226,7 @@ sub new {
       $arg = "$arg";
       $arg =~ tr/a-zA-Z0-9//cd;
     }
-    elsif($arg =~ s/\.(conf|yml)$//)
+    elsif($arg =~ s/\.conf$//)
     {
       # NOTE: may revisit this later.
       $arg = "cwd::$arg" unless $arg =~ s{^/+}{root::};
@@ -268,24 +243,6 @@ sub new {
     die "error setting ISA : $@" if $@;
   }
   bless $conf_data, $class;
-}
-
-=head1 METHODS
-
-=head2 dump_as_yaml
-
-B<DEPRECATED>
-
- my $yaml_string = $config->dump_as_yaml;
-
-Returns a string with the configuration encoded as YAML.
-
-=cut
-
-sub dump_as_yaml {
-  Carp::carp "Clustericious::Config#dump_as_yaml is deprecated";
-  my($self) = @_;
-  return YAML::XS::Dump($self);
 }
 
 # defined so that AUTOLOAD doesn't get called
@@ -341,24 +298,6 @@ sub AUTOLOAD {
   };
   do { no strict 'refs'; *{ $invocant . "::$called" } = $sub };
   $sub->($self);
-}
-
-=head2 set_singleton
-
-B<DEPRECATED>
-
- Clustericious::Config->set_singleton;
-
-Cache a config object to be returned by the constructor.  Usage:
-
- Clustericicious::Config->set_singleton(App => $object);
-
-=cut
-
-sub set_singleton {
-  Carp::carp "Clustericious::Config#set_singleton is deprecated";
-  my($class, $app, $obj) = @_;
-  $singletons{$app} = $obj;
 }
 
 =head1 CAVEATS

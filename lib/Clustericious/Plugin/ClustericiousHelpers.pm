@@ -25,34 +25,6 @@ sub register
 {
   my ($self, $app, $conf) = @_;
 
-=head2 auth_ua
-
-B<DEPRECATED>
-
-Returns an instance of L<Mojo::UserAgent> that can be used
-to authenticate against a L<PlugAuth> service.  Used primarily
-for testing.
-
-=cut
-
-  $app->helper(auth_ua => sub {
-    my($c) = @_;
-    carp "auth_ua has been deprecated";
-    $c->ua;
-  });
-
-=head2 base_tag
-
-B<DEPRECATED>
-
-=cut
-
-  $app->helper(base_tag => sub {
-    my $base = $app->config->url_base(default => '');
-    carp "base_tag is deprecated";
-    b("<base href='$base' />");
-  });
-
 =head2 render_moved
 
  $c->render_moved($path);

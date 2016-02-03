@@ -1,12 +1,11 @@
 use strict;
 use warnings;
-use Test::More tests => 48;
+use Test::More tests => 44;
 
 BEGIN { eval 'use EV' }
 
 require_ok('Clustericious');
 require_ok('Clustericious::Config::Helpers');
-require_ok('Clustericious::Config::Plugin');
 require_ok('Clustericious::Config');
 require_ok('Clustericious::HelloWorld');
 require_ok('Clustericious::Controller');
@@ -34,10 +33,8 @@ require_ok('Clustericious::Command::plackup');
 require_ok('Clustericious::Command::nginx');
 require_ok('Clustericious::Command::configpath');
 require_ok('Clustericious::Command::generate::client');
-require_ok('Clustericious::Command::generate::mbd_app');
 require_ok('Clustericious::Command::generate::app');
 require_ok('Clustericious::Command');
-require_ok('Clustericious::RouteBuilder::Proxy');
 require_ok('Clustericious::RouteBuilder::Search');
 require_ok('Clustericious::RouteBuilder::CRUD');
 require_ok('Clustericious::Plugin::CommonRoutes');
@@ -48,7 +45,6 @@ require_ok('Clustericious::Coder::YAML');
 require_ok('Clustericious::Client');
 require_ok('Clustericious::HelloWorld::Client');
 require_ok('Clustericious::Log');
-require_ok('Test::Clustericious');
 require_ok('Test::Clustericious::Command');
 require_ok('Test::Clustericious::Config');
 require_ok('Test::Clustericious::Log');

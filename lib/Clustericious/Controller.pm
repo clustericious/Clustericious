@@ -89,40 +89,6 @@ sub redirect_to {
     return $self;
 }
 
-=head2 render_text
-
- $c->render_text($text);
-
-B<DEPRECATED>.
-
-Previous versions of Mojolicious included this
-method, and it was added here to ease the transition.  This method should be considered
-deprecated and may be removed in the future.
-
-=head2 render_json
-
- $c->render_json
-
-B<DEPRECATED>.
-
-Previous versions of Mojolicious included this
-method, and it was added here to ease the transition.  This method should be considered
-deprecated and may be removed in the future.
-
-=cut
-
-sub render_text
-{
-  carp "Clustericious::Controller#render_text is deprecated";
-  shift->render( text => @_ );
-}
-
-sub render_json
-{
-  carp "Clustericious::Controller#render_json is deprecated";
-  shift->render( json => @_ );
-}
-
 1;
 
 =head1 SEE ALSO
