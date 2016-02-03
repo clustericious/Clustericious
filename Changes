@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.16      2016-02-03 10:34:37 -0500
   - removed deprecated Test::Clustericious
   - removed deprecated config files with .yml extension
   - removed deprecated config from calar
