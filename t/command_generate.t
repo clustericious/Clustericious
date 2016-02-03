@@ -8,7 +8,7 @@ use Path::Class qw( dir );
 use File::chdir;
 use File::Which qw( which );
 
-requires undef, 3;
+requires undef, 2;
 mirror 'bin', 'bin';
 extract_data;
 
@@ -54,15 +54,6 @@ foreach my $type (qw( app client ))
     
   };
 }
-
-subtest 'mbd_app' => sub {
-  plan tests => 3;
-
-  run_ok('clustericious', 'generate', 'mbd_app', 'Foo')
-    ->exit_is(2)
-    ->err_like(qr{ERROR: this command has been removed});
-
-};
 
 __DATA__
 
