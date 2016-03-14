@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - removed stragler deprecated use of auth_ua
 
 1.16      2016-02-03 10:34:37 -0500
   - removed deprecated Test::Clustericious

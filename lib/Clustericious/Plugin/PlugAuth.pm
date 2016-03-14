@@ -110,7 +110,7 @@ sub authenticate {
 
     # VIP treatment for some hosts
     my $ip = $c->tx->remote_address;
-    $c->auth_ua->get("$config_url/host/$ip/trusted", sub {
+    $c->ua->get("$config_url/host/$ip/trusted", sub {
         my $ua = shift;
     
         do {
@@ -195,9 +195,9 @@ sub authorize {
 
     my $url = Mojo::URL->new( join '/', $self->config_url, "authz/user", $user, $action, $resource );
 
-    my $tx = $c->auth_ua->build_tx(HEAD => $url);
+    my $tx = $c->ua->build_tx(HEAD => $url);
     
-    $c->auth_ua->start($tx, sub {
+    $c->ua->start($tx, sub {
         my($ua, $tx) = @_;
         
         my $code = $tx->res->code;

@@ -29,7 +29,7 @@ subtest 'prep' => sub {
 };
 
 my $t = $cluster->t;
-$cluster->apps->[0]->auth_ua->inactivity_timeout(1);
+$cluster->apps->[0]->ua->inactivity_timeout(1);
 
 subtest 'simple get without authentication' => sub {
   plan tests => 3;
