@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.17      2016-03-14 12:18:27 -0400
   - removed stragler deprecated use of auth_ua
 
 1.16      2016-02-03 10:34:37 -0500
