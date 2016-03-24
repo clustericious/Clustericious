@@ -6,6 +6,7 @@ use Clustericious::Log;
 use Mojo::ByteStream qw/b/;
 use Mojo::URL;
 use Mojo::Base 'Mojolicious::Plugin';
+use JSON::MaybeXS qw( encode_json );
 
 # ABSTRACT: Plugin for clustericious to use PlugAuth.
 # VERSION
@@ -70,11 +71,13 @@ has 'config_url';
 
 sub register {
     my ($self, $app, $conf) = @_;
-    eval { $self->config_url($conf->{plug_auth}->url(default => '')) };
-    if ($@ || !$self->config_url) {
+    my $url = eval { $conf->{plug_auth}->url(default => '') };
+    $url =~ s{/$}{} if defined $url;
+    if ($@) {
         WARN "unable to determine PlugAuth URL: $@";
         return $self;
     }
+    $self->config_url($url);
     $self;
 }
 
@@ -126,11 +129,11 @@ sub authenticate {
                     WARN "PlugAuth returned code " . $res->code;
                 }
             } else {
-                my ( $message, $code ) = $tx->error;
-                if ($code) {
-                    TRACE "Not VIP $config_url/host/$ip/trusted : $code $message";
+                my $error = $tx->error;
+                if ($error->{code}) {
+                    TRACE "Not VIP $config_url/host/$ip/trusted : @{[ $error->{code} ]} @{[ $error->{message} ]}";
                 } else {
-                    WARN "Error connecting to PlugAuth at $config_url/host/$ip/trusted : $message";
+                    WARN "Error connecting to PlugAuth at $config_url/host/$ip/trusted : @{[ encode_json $error ]}";
                 }
             }
         };
@@ -151,11 +154,11 @@ sub authenticate {
 
             if(!defined $check || $check == 503) {
                 $c->res->headers->www_authenticate(qq[Basic realm="$realm"]);
-                my ( $message, $code ) = $tx->error;
-                if ($code) {
-                    WARN "Error connecting to PlugAuth at $auth_url : $code $message";
+                my $error = $tx->error;
+                if ($error->{code}) {
+                    WARN "Error connecting to PlugAuth at $auth_url : @{[ $error->{code} ]} @{[ $error->{message} ]}";
                 } else {
-                    WARN "Error connecting to PlugAuth at $auth_url : $message";
+                    WARN "Error connecting to PlugAuth at $auth_url : @{[ encode_json $error ]}";
                 }
                 $c->render(text => "auth server down", status => 503); # "Service unavailable"
                 return;

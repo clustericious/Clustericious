@@ -3,7 +3,7 @@ use warnings;
 use autodie;
 use 5.010;
 use Test::Clustericious::Log;
-use Test::More tests => 10;
+use Test::More;
 use Test::Clustericious::Cluster;
 
 $Clustericious::VERSION //= 0.9925;
@@ -157,13 +157,17 @@ subtest 'non VIP host making request with bad credentials, but user IS authorize
     ->content_is('authentication failure');
 };
 
+Test::Clustericious::Log::log_unlike(qr{HASH\(0x}, 'no hashrefs');
+
+done_testing;
+
 __DATA__
 
 @@ etc/SomeService.conf
 ---
 url: <%= cluster->url %>
 plug_auth:
-  url: <%= cluster->auth_url %>
+  url: <%= cluster->auth_url %>/
 
 
 @@ lib/SomeService.pm
