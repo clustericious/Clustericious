@@ -19,7 +19,7 @@ use Path::Class qw( dir );
  
  get '/some/route' => sub {
    my $c = shift;
-   $c->{autodata} = { x => 1, y => 'hello, z => [1,2,3] };
+   $c->stash->{autodata} = { x => 1, y => 'hello, z => [1,2,3] };
  };
 
 =head1 DESCRIPTION

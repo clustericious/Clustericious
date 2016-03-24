@@ -86,7 +86,7 @@ facilities for a variety of deployment options.
 
 Original author: Brian Duggan
 
-Current maintainer: Graham Ollis &lt;plicease@cpan.org>
+Current maintainer: Graham Ollis <plicease@cpan.org>
 
 Contributors:
 
