@@ -2,6 +2,12 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+1.18      2016-03-24 15:49:47 -0400
+  - Documentation fixes
+  - Fix bug where errors from mojo were not being decoded correctly
+    in PlugAuth plugin
+  - make plackup test a dev only test
+
 1.17      2016-03-14 12:18:27 -0400
   - removed stragler deprecated use of auth_ua
 
