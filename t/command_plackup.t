@@ -17,7 +17,7 @@ BEGIN {
 use Test::Clustericious::Command;
 use Clustericious::HelloWorld::Client;
 
-requires 'plackup', 1;
+requires 'plackup.conf', 1;
 extract_data;
 mirror 'example/etc' => 'etc';
 
