@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - make hypnotoad test a dev only test
 
 1.18      2016-03-24 15:49:47 -0400
   - Documentation fixes

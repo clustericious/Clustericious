@@ -4,7 +4,7 @@ use Test::Clustericious::Command;
 use Test::More;
 use Clustericious::HelloWorld::Client;
 
-requires 'hypnotoad', 11;
+requires 'hypnotoad.conf', 11;
 extract_data;
 mirror 'example/etc' => 'etc';
 
