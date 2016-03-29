@@ -4,7 +4,7 @@ use Clustericious::Log;
 use Path::Class qw( file );
 use Clustericious::HelloWorld::Client;
 use Clustericious::Client::Command;
-use Log::Log4perl::CommandLine (':all', ':loginit' => <<"EOT");
+use Clustericious::Log::CommandLine (':all', ':loginit' => <<"EOT");
            log4perl.rootLogger = WARN, Screen
            log4perl.appender.Screen = Log::Log4perl::Appender::ScreenColoredLevels
            log4perl.appender.Screen.layout = Log::Log4perl::Layout::PatternLayout

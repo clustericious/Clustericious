@@ -1,5 +1,5 @@
 use Log::Log4perl qw(:easy);
-use Log::Log4perl::CommandLine qw(:all);
+use Clustericious::Log::CommandLine qw(:all);
 
 use SampleModule;
 

@@ -1,5 +1,5 @@
 use Log::Log4perl qw(:easy);
-use Log::Log4perl::CommandLine qw(:all :logconfig log4perl.conf);
+use Clustericious::Log::CommandLine qw(:all :logconfig log4perl.conf);
 
 TRACE "trace message";
 DEBUG "debug message";

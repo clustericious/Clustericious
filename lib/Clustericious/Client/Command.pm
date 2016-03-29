@@ -70,7 +70,7 @@ EOPRINT
        $name [opts] update <object> <keys> [<filename>]
        $name [opts] delete <object> <keys>
 
-    where "opts" are as described in Log::Log4perl::CommandLine, or
+    where "opts" are as described in Clustericious::Log::CommandLine, or
     may be "--remote <remote>" to specify a remote to use from the
     config file (see Clustericious::Client).
 

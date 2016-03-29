@@ -1,5 +1,5 @@
 use Log::Log4perl qw(:easy);
-use Log::Log4perl::CommandLine ':all',
+use Clustericious::Log::CommandLine ':all',
 ':loginit' => q(
     log4perl.logger = WARN,  screen
     log4perl.appender.screen=Log::Log4perl::Appender::Screen

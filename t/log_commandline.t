@@ -1,7 +1,8 @@
-use Test::More tests => 96;
-use Config;
+use strict;
+use warnings;
+use Test::More;
 
-chdir 'eg' or die "Can't chdir eg: $!";
+chdir 'corpus/log_commandline/' or die "Can't chdir corpus/log_commandline/: $!";
 
 unlink 'mylog.output';  # clean up from prior test
 
@@ -40,3 +41,5 @@ foreach my $sample (<sample*.pl>)
         is($output, $case, "output $command");
     }
 }
+
+done_testing;

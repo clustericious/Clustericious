@@ -1,5 +1,5 @@
 use Log::Log4perl qw(:easy);
-use Log::Log4perl::CommandLine ':all',
+use Clustericious::Log::CommandLine ':all',
                                ':loginit' => { level => $INFO };
 
 TRACE "trace message";

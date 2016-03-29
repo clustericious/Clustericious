@@ -9,7 +9,7 @@ BEGIN {
 
 plan tests => 1;
 
-my($out,$err) = capture { require Log::Log4perl::CommandLine };
+my($out,$err) = capture { require Clustericious::Log::CommandLine };
 is $err, '', 'no warnings';
 
 

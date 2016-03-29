@@ -1,5 +1,5 @@
 use Log::Log4perl qw(:easy);
-use Log::Log4perl::CommandLine qw(:all :noinit handlelogoptions);
+use Clustericious::Log::CommandLine qw(:all :noinit handlelogoptions);
 
 Log::Log4perl->easy_init($FATAL);
 
