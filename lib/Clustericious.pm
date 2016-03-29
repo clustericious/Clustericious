@@ -218,13 +218,13 @@ sub _default_url
   my(undef, $app_name) = @_;
   require File::HomeDir;
   require Path::Class::File;
-  require JSON::PP;
+  require JSON::MaybeXS;
   require Mojo::URL;
   my $file = Path::Class::File->new(File::HomeDir->my_dist_data("Clustericious", { create => 1 } ), 'default_ports.json');
 
   $app_name =~ s{::}{-};
   
-  my $data = -f $file ? JSON::PP::decode_json(scalar $file->slurp) : {};
+  my $data = -f $file ? JSON::MaybeXS::decode_json(scalar $file->slurp) : {};
   
   $data->{$app_name} // do {
     my $url = Mojo::URL->new('http://127.0.0.1');
@@ -232,7 +232,7 @@ sub _default_url
     $url = $url->to_string;
 
     $data->{$app_name} = $url;
-    $file->spew(JSON::PP::encode_json($data));
+    $file->spew(JSON::MaybeXS::encode_json($data));
 
     $url;
   };
