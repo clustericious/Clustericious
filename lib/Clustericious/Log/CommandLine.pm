@@ -15,7 +15,8 @@ use Getopt::Long;
 =head1 DESCRIPTION
 
 This is a fork of L<Log::Log4perl::CommandLine> used internally by
-L<Clustericious>.
+L<Clustericious>.  This module is used for legacy purposes and may
+be removed in the future, so do not use or depend on it.
 
 =cut
 
