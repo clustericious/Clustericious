@@ -74,6 +74,7 @@ pod_spelling_system:
     - apache24
     - AutodataHandler
     - ua
+    - handlelogoptions
 
 pod_coverage:
   # format is "Class#method" or "Class", regex allowed
