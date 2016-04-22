@@ -134,7 +134,7 @@ sub create_config_ok ($;$$)
   unless(defined $config)
   {
     my $caller = caller;
-    Mojo::Loader::load_class($caller);
+    Mojo::Loader::load_class($caller) unless $caller eq 'main';
     $config = Mojo::Loader::data_section($caller, "etc/$fn");
   }
   
