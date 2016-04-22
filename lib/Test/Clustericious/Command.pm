@@ -108,7 +108,7 @@ sub extract_data
 {
   my(@values) = @_;
   my $caller = caller;
-  Mojo::Loader::load_class $caller;
+  Mojo::Loader::load_class($caller) unless $caller eq 'main';
   my $all = Mojo::Loader::data_section $caller;
   
   my $tb = __PACKAGE__->builder;
