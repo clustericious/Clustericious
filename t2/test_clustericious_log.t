@@ -6,12 +6,30 @@ use YAML::XS qw( Load );
 subtest exports => sub {
 
   imported_ok $_ for qw(
-    log_events
     log_context
+    log_events
     log_like
     log_unlike
   );
   
+};
+
+subtest log_context => sub {
+
+  ERROR "this should not appear";
+  my @e = log_context {
+    log_events;
+  };
+  
+  is \@e, [], 'this should not appear does not appear';
+  
+  @e = log_context {
+    ERROR "this should";
+    log_events;
+  };
+  
+  is $e[0]->{message}, 'this should', 'this should does appear';
+
 };
 
 subtest log_events => sub {
@@ -61,6 +79,121 @@ subtest log_events => sub {
 EOF
 
   is(\@e, $expected, 'log_events');
+
+};
+
+subtest log_like => sub {
+
+  log_context {
+  
+    ERROR "message1";
+    ERROR "message2";
+    
+    is(
+      intercept { log_like 'message1' },
+      array {
+        event Ok => sub {
+          call pass => T();
+          call name => 'log matches pattern';
+        };
+        end;
+      },
+      'log_like message1',
+    );
+
+    is(
+      intercept { log_like qr{age1} },
+      array {
+        event Ok => sub {
+          call pass => T();
+          call name => 'log matches pattern';
+        };
+        end;
+      },
+      'log_like qr{age1}',
+    );
+
+    is(
+      intercept { log_like 'message3' },
+      array {
+        event Ok => sub {
+          call pass => F();
+          call name => 'log matches pattern';
+        };
+        event Diag => sub {};
+        event Diag => sub {};
+        event Diag => sub {
+          call message => 'None of the events matched the pattern:';
+        };
+        event Diag => sub {
+          call message => match qr{^---};
+        };
+        end;
+      },
+      'log_like message3',
+    );
+    
+    is(
+      intercept { log_unlike 'message3' },
+      array {
+        event Ok => sub {
+          call pass => T();
+          call name => 'log does not match pattern';
+        };
+        end;
+      },
+      'log_unlike message3',
+    );
+  
+    is(
+      intercept { log_unlike 'message1' },
+      array {
+        event Ok => sub {
+          call pass => F();
+          call name => 'log does not match pattern';
+        };
+        event Diag => sub {};
+        event Diag => sub {};
+        event Diag => sub {
+          call message => 'This event matched, but should not have:';
+        };
+        event Diag => sub {
+          call message => match qr{^---};
+        };
+        end;
+      },
+      'log_unlike message1',
+    );
+
+    is(
+      intercept { log_unlike qr{message} },
+      array {
+        event Ok => sub {
+          call pass => F();
+          call name => 'log does not match pattern';
+        };
+        event Diag => sub {};
+        event Diag => sub {};
+        event Diag => sub {
+          call message => 'This event matched, but should not have:';
+        };
+        event Diag => sub {
+          call message => match qr{^---};
+        };
+        event Diag => sub {
+          call message => 'This event matched, but should not have:';
+        };
+        event Diag => sub {
+          call message => match qr{^---};
+        };
+        end;
+      },
+      'log_unlike qr{message}',
+    );
+    
+    # TODO: also test matching of other fields
+
+  };
 
 };
 

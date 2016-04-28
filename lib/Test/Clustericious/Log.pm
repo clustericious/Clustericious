@@ -201,24 +201,23 @@ sub log_unlike ($;$)
 {
   my($pattern, $message) = @_;
   
-  $message ||= "log matches pattern";
+  $message ||= "log does not match pattern";
   $pattern = { message => $pattern } unless ref $pattern eq 'HASH';
 
   my $tb = __PACKAGE__->builder;
-  my $match;
+  my @match;
   
   foreach my $event (log_events)
   {
     if(_event_match($pattern, $event))
     {
-      $match = $event;
-      last;
+      push @match, $event;
     }
   }
   
-  $tb->ok(!$match, $message);
+  $tb->ok(!scalar @match, $message);
   
-  if($match)
+  foreach my $match (@match)
   {
     $tb->diag("This event matched, but should not have:");
     $tb->diag(
@@ -229,7 +228,7 @@ sub log_unlike ($;$)
     );
   }
   
-  !$match
+  !scalar @match;
 }
 
 sub import
