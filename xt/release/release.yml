@@ -99,6 +99,7 @@ pod_coverage:
     - Clustericious::Config::Helpers#cluster
     - Clustericious::Util#.*
     - Clustericious::Coder::[A-Za-z]+#coder
+    - Test::Clustericious::Command
     
 version:
   dir: lib

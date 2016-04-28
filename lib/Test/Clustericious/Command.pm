@@ -25,7 +25,8 @@ use File::Temp qw( tempdir );
 
 =head1 DESCRIPTION
 
-Documentation to be added later.
+This is currently a private module used internally by L<Clustericious>.  This may change in the future,
+but for now you should not depend on it providing any functionality.
 
 =cut
 
@@ -46,12 +47,6 @@ sub _can_execute_in_tmp
   capture { system "$script", "okay"; $exit = $? };
   $exit == 0;
 }
-
-=head1 FUNCTIONS
-
-=head2 requires
-
-=cut
 
 sub requires
 {
@@ -100,10 +95,6 @@ sub requires
   }
 }
 
-=head2 extract_data
-
-=cut
-
 sub extract_data
 {
   my(@values) = @_;
@@ -140,10 +131,6 @@ sub extract_data
     }
   }
 }
-
-=head2 mirror
-
-=cut
 
 sub mirror
 {
@@ -189,10 +176,6 @@ sub mirror
   }
 }
 
-=head2 run_ok
-
-=cut
-
 sub run_ok
 {
   my(@cmd) = @_;
@@ -213,19 +196,11 @@ sub run_ok
   );
 }
 
-=head2 generate_port
-
-=cut
-
 sub generate_port
 {
   require IO::Socket::INET;
   IO::Socket::INET->new(Listen => 5, LocalAddr => "127.0.0.1")->sockport;
 }
-
-=head2 note_file
-
-=cut
 
 sub note_file
 {
@@ -238,10 +213,6 @@ sub note_file
   }
 }
 
-=head2 clean_file
-
-=cut
-
 sub clean_file
 {
   foreach my $file (sort map { file $_ } map { bsd_glob "~/$_" } @_)
@@ -249,10 +220,6 @@ sub clean_file
     $file->remove;
   }
 }
-
-=head2 create_symlink
-
-=cut
 
 sub create_symlink
 {
