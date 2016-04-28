@@ -138,41 +138,48 @@ sub create_config_ok ($;$$)
     $config = Mojo::Loader::data_section($caller, "etc/$fn");
   }
   
+  my @diag;
+  my $config_filename;
+  
   my $tb = __PACKAGE__->builder;  
   my $ok = 1;
-  unless(defined $config)
+  if(!defined $config)
   {
     $config = "---\n";
-    $tb->diag("unable to locate text for $config_name");
+    push @diag, "unable to locate text for $config_name";
     $ok = 0;
+    $test_name //= "create config for $config_name";
   }
-  
-  my $config_filename = "$config_dir/$fn";
-  
-  eval {
-    if(ref $config)
-    {
-      DumpFile($config_filename, $config);
-    }
-    else
-    {
-      open my $fh, '>', $config_filename;
-      print $fh $config;
-      close $fh;
-    }
-  };
-  if(my $error = $@)
+  else
   {
-    $ok = 0;
-    $tb->diag("exception: $error");
+    $config_filename = "$config_dir/$fn";
+  
+    eval {
+      if(ref $config)
+      {
+        DumpFile($config_filename, $config);
+      }
+      else
+      {
+        open my $fh, '>', $config_filename;
+        print $fh $config;
+        close $fh;
+      }
+    };
+    if(my $error = $@)
+    {
+      $ok = 0;
+      push @diag, "exception: $error";
+    }
+  
+    $test_name //= "create config for $config_name at $config_filename";
+  
+    # remove any cached copy if necessary
+    Clustericious->_config_uncache($config_name);
   }
-  
-  $test_name //= "create config for $config_name at $config_filename";
-  
-  # remove any cached copy if necessary
-  Clustericious->_config_uncache($config_name);
 
   $tb->ok($ok, $test_name);
+  $tb->diag($_) for @diag;  
   return $config_filename;
 }
 
@@ -191,16 +198,28 @@ directory created.
 sub create_directory_ok ($;$)
 {
   my($path, $test_name) = @_;
+
+  my $fullpath;
+  my $ok;
   
-  my $fullpath = $path;
-  $fullpath =~ s{^/}{};
-  $fullpath = join('/', File::HomeDir->my_home, $fullpath);
-  mkpath $fullpath, 0, 0700;
+  if(defined $path)
+  {
+    $fullpath = $path;
+    $fullpath =~ s{^/}{};
+    $fullpath = join('/', File::HomeDir->my_home, $fullpath);
+    mkpath $fullpath, 0, 0700;
   
-  $test_name //= "create directory $fullpath";
+    $test_name //= "create directory $fullpath";
+    $ok = -d $fullpath;
+  }
+  else
+  {
+    $test_name //= "create directory [undef]";
+    $ok = 0;
+  }
   
   my $tb = __PACKAGE__->builder;
-  $tb->ok(-d $fullpath, $test_name);
+  $tb->ok($ok, $test_name);
   return $fullpath;
 }
 
@@ -251,6 +270,7 @@ sub create_config_helper_ok ($$;$)
   my($helper_name, $helper_code, $test_name) = @_;
   
   $test_name //= "create config helper $helper_name";
+  my $ok = 1;
   
   require Clustericious::Config::Helpers;
   do {
@@ -260,8 +280,8 @@ sub create_config_helper_ok ($$;$)
   push @Clustericious::Config::Helpers::EXPORT, $helper_name;
   
   my $tb = __PACKAGE__->builder;
-  $tb->ok(1, $test_name);
-  return;
+  $tb->ok($ok, $test_name);
+  return $ok;
 }
 
 1;
