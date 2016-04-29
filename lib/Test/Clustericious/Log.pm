@@ -94,8 +94,28 @@ operate on.
 sub log_context (&)
 {
   my($code) = @_;
+  my $old = Test::Clustericious::Log::Appender->new->{list};
   local Test::Clustericious::Log::Appender->new->{list} = [];
-  $code->();
+  
+  my @ret;
+  my $ret;
+  
+  if(wantarray)
+  {
+    @ret = $code->()
+  }
+  elsif(defined wantarray)
+  {
+    $ret = $code->();
+  }
+  else
+  {
+    $code->();
+  }
+  
+  push @$old, @{ Test::Clustericious::Log::Appender->new->{list} };
+
+  wantarray ? @ret : $ret;
 }
 
 =head2 log_like

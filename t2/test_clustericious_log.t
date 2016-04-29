@@ -78,7 +78,19 @@ subtest log_events => sub {
   name: TestX
 EOF
 
-  is(\@e, $expected, 'log_events');
+  is(\@e, $expected, 'log_events (list context)');
+
+  my $e = log_context {
+    TRACE "main trace";
+    DEBUG "main debug";
+    INFO  "main info";
+    WARN  "main warn";
+    ERROR "main error";
+    FATAL "main fatal";
+    log_events;
+  };
+
+  is $e, 6, 'log_events (scalar context)';
 
 };
 
@@ -194,6 +206,20 @@ subtest log_like => sub {
     # TODO: also test matching of other fields
 
   };
+
+};
+
+subtest 'local context is also in global' => sub {
+
+  ERROR "PLATYPUS-42";
+  log_context {
+    ERROR "PLATYPUS-47";
+    log_unlike qr{PLATYPUS-42};
+    log_like qr{PLATYPUS-47};
+  };
+
+  log_like qr{PLATYPUS-42};
+  log_like qr{PLATYPUS-47};
 
 };
 
