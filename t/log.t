@@ -35,8 +35,8 @@ subtest log_context => sub {
     like [log_events]->[0]->{message}, qr{some info}, 'contains message';
   };
   
-  is scalar log_events, $count, "exactly $count events back out of context";
-  unlike [log_events]->[0]->{message}, qr{some info}, 'does not contain message';
+  is scalar log_events, $count+1, "exactly @{[ $count+1 ]} events back out of context";
+  like [log_events]->[-1]->{message}, qr{some info}, 'does not contain message';
 
 };
 
