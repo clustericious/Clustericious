@@ -104,7 +104,7 @@ sub register
     }
 
     my $format = $c->stash->{format} // 'json';
-    LOGDIE "No type associated with $format" unless $formats{$format};
+    $format = 'json' unless $formats{$format};
 
     $formats{$format};
   };

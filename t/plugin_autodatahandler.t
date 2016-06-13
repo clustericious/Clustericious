@@ -1,7 +1,8 @@
 use strict;
 use warnings;
 use Test::Clustericious::Cluster;
-use Test::More tests => 45;
+use Test::More;
+use YAML::XS qw( Load );
 
 my $cluster = Test::Clustericious::Cluster->new;
 $cluster->create_cluster_ok('SomeService');
@@ -77,6 +78,23 @@ $t->get_ok('/my_table/foo')
   ->header_is('Content-Type' => 'application/json')
   ->json_is('', {foo => "bar"}, "got structure back");
 
+my $whatever = { foo => 'bar', baz => [1,2,3] };
+
+$t->get_ok('/whatever')
+  ->status_is(200)
+  ->json_is('', $whatever);
+
+$t->get_ok('/whatever.yml')
+  ->status_is(200);
+
+is_deeply YAML::XS::Load($t->tx->res->body), $whatever, 'yml matches';
+
+$t->get_ok('/whatever.unknown')
+  ->status_is(200)
+  ->json_is('', $whatever);
+
+done_testing;
+
 __DATA__
 
 @@ lib/SomeService.pm
@@ -105,5 +123,9 @@ use Clustericious::RouteBuilder::CRUD
 
 post '/:table'        => \&do_create;
 get  '/:table/(*key)' => \&do_read;
+
+get '/whatever' => sub {
+  shift->stash->{autodata} = { foo => 'bar', baz => [1,2,3] };
+};
 
 1;
