@@ -1,5 +1,7 @@
 package SampleModule2;
 
+use strict;
+use warnings;
 use Log::Log4perl qw(:easy);
 
 sub test
