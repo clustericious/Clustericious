@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.21      2016-07-20 14:45:16 -0400
   - Mojo 7.x compatability
   - Fixes to Test::Clustericious::Log#log_context
   - autodata defaults to JSON instead of throwing an exception now.
