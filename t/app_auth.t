@@ -53,12 +53,13 @@ subtest 'basic auth, no vip hosts and authz ok' => sub {
 
   $url->userinfo('foo:baz');
   
-  $t->get_ok("$url/private")
+  $url->path('/private');
+  $t->get_ok($url)
     ->status_is(401);
 
   $url->userinfo('foo:bar');
 
-  $t->get_ok("$url/private")
+  $t->get_ok($url)
     ->status_is(200)
     ->content_like(qr{this message is private});
     
@@ -79,13 +80,14 @@ subtest 'vip host' => sub {
 
   $url->userinfo('foo:baz');
   
-  $t->get_ok("$url/private")
+  $url->path('/private');
+  $t->get_ok($url)
     ->status_is(200)
     ->content_like(qr{this message is private});
 
   $url->userinfo('foo:bar');
 
-  $t->get_ok("$url/private")
+  $t->get_ok($url)
     ->status_is(200)
     ->content_like(qr{this message is private});
   
@@ -105,12 +107,13 @@ subtest 'auth but not authz' => sub {
 
   $url->userinfo('foo:baz');
   
-  $t->get_ok("$url/private")
+  $url->path('/private');
+  $t->get_ok($url)
     ->status_is(401);
 
   $url->userinfo('foo:bar');
 
-  $t->get_ok("$url/private")
+  $t->get_ok($url)
     ->status_is(403);
 
 };

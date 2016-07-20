@@ -54,7 +54,8 @@ subtest 'test against an auth server that appears to be down, or spewing interna
   my $url = $cluster->url->clone;  
   $url->userinfo('foo:bar');
 
-  $t->get_ok("$url/private")
+  $url->path('/private');
+  $t->get_ok($url)
     ->status_is(503)
     ->content_is('auth server down');
 };
@@ -70,7 +71,8 @@ subtest 'non VIP host making request, authentication credentials are ok and user
     authz   => 1,
   };
 
-  $t->get_ok("$url/private")
+  $url->path('/private');
+  $t->get_ok($url)
     ->status_is(200)
     ->content_is('this is private');    
 };
@@ -86,7 +88,8 @@ subtest "host is trusted, credentials wouldn't check out, but users is authorize
     authz   => 1,
   };
 
-  $t->get_ok("$url/private")
+  $url->path('/private');
+  $t->get_ok($url)
     ->status_is(200)
     ->content_is('this is private');
 };
@@ -102,7 +105,8 @@ subtest 'non VIP host making request with bad credentials, user is authorized' =
     authz   => 1,
   };
 
-  $t->get_ok("$url/private")
+  $url->path('/private');
+  $t->get_ok($url)
     ->status_is(503)
     ->content_is('auth server down');
 };
@@ -118,7 +122,8 @@ subtest 'non VIP host making request with good credentials, authz server is DOWN
     authz   => undef,
   };
 
-  $t->get_ok("$url/private")
+  $url->path('/private');
+  $t->get_ok($url)
     ->status_is(503)
     ->content_is('auth server down');
 
@@ -135,7 +140,8 @@ subtest 'non VIP host making request with good credentials, but user is not auth
     authz   => 0,
   };
 
-  $t->get_ok("$url/private")
+  $url->path('/private');
+  $t->get_ok($url)
     ->status_is(403)
     ->content_is('unauthorized');
 };
@@ -152,7 +158,8 @@ subtest 'non VIP host making request with bad credentials, but user IS authorize
     authz   => 1,
   };
 
-  $t->get_ok("$url/private")
+  $url->path('/private');
+  $t->get_ok($url)
     ->status_is(401)
     ->content_is('authentication failure');
 };

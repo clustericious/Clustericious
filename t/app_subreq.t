@@ -48,8 +48,8 @@ subtest 'auth with foo:bar' => sub {
 
   my $url = $cluster->url->clone;
   $url->userinfo('foo:bar');
-
-  $t->get_ok("$url/private")
+  $url->path('/private');
+  $t->get_ok($url)
     ->status_is(200);
 
 };

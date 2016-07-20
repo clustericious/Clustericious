@@ -48,13 +48,21 @@ do {
 
 $url->userinfo('foo:bar');
 
-$t->get_ok("$url/private")
+sub url ($$)
+{
+  my($url, $path) = @_;
+  $url->clone;
+  $url->path($path);
+  $url;
+}
+
+$t->get_ok(url $url, '/private' )
   ->status_is(200);
 
 do {
   my($ua, $tx);
   my $ws = $t->ua->websocket(
-    "$url/echo2" => sub {
+    url($url, '/echo2') => sub {
       ($ua, $tx) = @_;
       Mojo::IOLoop->stop;
     }
@@ -64,7 +72,7 @@ do {
   is $tx->res->code, 101, 'code = 101';
 };
 
-$t->websocket_ok("$url/echo2")
+$t->websocket_ok(url $url, '/echo2')
   ->send_ok('hello')
   ->message_ok
   ->message_is('hello')
