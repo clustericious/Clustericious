@@ -26,13 +26,13 @@ use Path::Class qw( dir );
 
 Adds a renderer that automatically serializes that "autodata" in the
 stash into a format based on HTTP Accept and Content-Type headers.
-Also adds a helper called 'parse_autodata' that handles incoming data by
+Also adds a helper called C<parse_autodata> that handles incoming data by
 Content-Type.
 
 Supports application/json, text/x-yaml and
 application/x-www-form-urlencoded (in-bound only).
 
-When parse_autodata is called from within a route like this:
+When C<parse_autodata> is called from within a route like this:
 
  $self->parse_autodata;
 
