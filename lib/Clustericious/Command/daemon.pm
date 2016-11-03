@@ -30,11 +30,14 @@ sub run
 {
   my($self, @args) = @_;
   
-  if(my $url = $self->app->config->{url})
+  if(!grep /^-l/, @args)
   {
-    unshift @args, -l => $url;
+    if(my $url = $self->app->config->{url})
+    {
+      unshift @args, -l => $url;
+    }
   }
-  
+
   Mojolicious::Command::daemon::run($self, @args);
 }
 

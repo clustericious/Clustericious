@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - the -l option for 'clustericious daemon' overrides any value
+    if any in the config
 
 1.21      2016-07-20 14:45:16 -0400
   - Mojo 7.x compatability
