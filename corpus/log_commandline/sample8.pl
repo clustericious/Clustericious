@@ -2,6 +2,7 @@ use Log::Log4perl qw(:easy);
 use Clustericious::Log::CommandLine ':all',
                                ':loginit' => { layout => '[%-5p] %c %m%n' };
 
+use lib '.';
 use SampleModule;
 use SampleModule2;
 

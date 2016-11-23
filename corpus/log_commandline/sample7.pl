@@ -7,6 +7,7 @@ use Clustericious::Log::CommandLine ':all',
     log4perl.appender.screen.layout.ConversionPattern=[%-5p] %c %m%n
 );
 
+use lib '.';
 use SampleModule;
 
 SampleModule::test();

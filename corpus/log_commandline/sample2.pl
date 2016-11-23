@@ -1,6 +1,7 @@
 use Log::Log4perl qw(:easy);
 use Clustericious::Log::CommandLine qw(:all);
 
+use lib '.';
 use SampleModule;
 
 SampleModule::test();
