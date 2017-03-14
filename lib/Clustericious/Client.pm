@@ -319,7 +319,7 @@ sub errorstring {
     my $self = shift;
     WARN "Missing response in ua object" unless $self->res;
     return unless $self->res;
-    return if $self->res->code && $self->res->is_status_class(200);
+    return if $self->res->code && $self->res->is_success;
     my $error = $self->res->error;
     if(defined $error->{advice})
     {
@@ -793,7 +793,7 @@ sub _doit {
         return $self->_doit($meta ? $meta : (), @_);
     }
 
-    if ($res->is_status_class(200)) {
+    if ($res->is_success) {
         TRACE "Got response : ".$res->to_string;
         my $content_type = $res->headers->content_type || do {
             WARN "No content-type from "._sanitize_url($url);

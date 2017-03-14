@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - More Mojolicious deprecation workarounds
 
 1.22      2016-11-28 14:28:57 -0500
   - Fixes for Perls that do not have '.' in @INC

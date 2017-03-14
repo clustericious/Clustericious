@@ -12,11 +12,12 @@ use Mojo::URL;
 use Scalar::Util qw( weaken );
 use Mojo::Base 'Mojolicious';
 use File::HomeDir ();
-use Carp qw( cluck croak carp );
+use Carp qw( croak carp );
 use Clustericious;
 use Clustericious::Controller;
 use Clustericious::Config;
 use Clustericious::Commands;
+use Path::Class::Dir;
 
 # ABSTRACT: Clustericious app base class
 # VERSION
@@ -70,7 +71,7 @@ sub startup {
 
     # this is questionable
     my $home = $self->home;
-    $self->renderer->paths([ $home->rel_dir('templates') ]);
+    $self->renderer->paths([ Path::Class::Dir->new($home)->subdir('templates')->stringify ]);
 
     $self->plugin('CommonRoutes');
     $self->plugin('AutodataHandler');
