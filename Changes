@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.23      2017-03-14 10:59:27 -0400
   - More Mojolicious deprecation workarounds
 
 1.22      2016-11-28 14:28:57 -0500
