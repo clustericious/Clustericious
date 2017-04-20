@@ -1000,7 +1000,7 @@ Retrieve the status from the server.
 sub status {
     my $self = shift;
     my $meta = $self->meta_for("status");
-    $meta->set(auto_failover => 1);
+    $meta->set(auto_failover => 0);
     $self->_doit($meta, GET => '/status');
 }
 
