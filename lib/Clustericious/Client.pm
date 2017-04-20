@@ -345,7 +345,7 @@ sub has_error {
     my $c = shift;
     return unless $c->tx || $c->res;
     return 1 if $c->tx && $c->tx->error;
-    return 1 if $c->res && !$c->res->is_status_class(200);
+    return 1 if $c->res && !$c->res->is_success;
     return 0;
 }
 
@@ -859,7 +859,7 @@ sub _mycallback
         $self->res($tx->res);
         $self->tx($tx);
 
-        if ($tx->res->is_status_class(200))
+        if ($tx->res->is_success)
         {
             my $body = $tx->res->headers->content_type =~ qr[application/json]
                 ? decode_json($tx->res->body) : $tx->res->body;
