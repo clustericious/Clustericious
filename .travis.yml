@@ -2,6 +2,7 @@ language: perl
 sudo: false
 
 install:
+  - cpanm Dist::Zilla
   - dzil authordeps --missing | cpanm -n
   - dzil listdeps --missing | cpanm -n
   # Filesys::Df is needed for Yars (Dynamic prereq)
