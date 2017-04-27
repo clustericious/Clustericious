@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+1.24      2017-04-27 08:37:08 -0400
+  - Mojolicious 7.31 compat
+  - Drop support for older versions of Mojolicious
+
 1.23      2017-03-14 10:59:27 -0400
   - More Mojolicious deprecation workarounds
 
