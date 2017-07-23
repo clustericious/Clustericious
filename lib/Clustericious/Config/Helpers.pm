@@ -94,8 +94,8 @@ specified return the calling user's home directory.
 
 sub home (;$)
 {
-  require File::HomeDir;
-  $_[0] ? File::HomeDir->users_home($_[0]) : File::HomeDir->my_home;
+  require File::Glob;
+  $_[0] ? File::Glob::bsd_glob("~$_[0]") : File::Glob::bsd_glob('~');
 }
 
 =head2 file

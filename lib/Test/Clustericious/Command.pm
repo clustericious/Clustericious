@@ -3,12 +3,12 @@ package Test::Clustericious::Command;
 use strict;
 use warnings;
 use 5.010001;
-use if !$INC{'File/HomeDir/Test.pm'}, 'File::HomeDir::Test';
+use Test2::Plugin::FauxHomeDir;
+use File::Glob qw( bsd_glob );
 use base qw( Exporter Test::Builder::Module );
 use Exporter qw( import );
 use Mojo::Loader;
 use Path::Class qw( file dir );
-use File::HomeDir;
 use Env qw( @PERL5LIB @PATH );
 use Capture::Tiny qw( capture );
 use File::Which qw( which );
@@ -34,9 +34,9 @@ our @EXPORT      = qw( extract_data mirror requires run_ok generate_port note_fi
 our @EXPORT_OK   = @EXPORT;
 our %EXPORT_TAGS = ( all => \@EXPORT );
 
-unshift @INC, dir(File::HomeDir->my_home, 'lib')->stringify;
+unshift @INC, dir(bsd_glob '~/lib')->stringify;
 unshift @PERL5LIB, map { dir($_)->absolute->stringify } @INC;
-unshift @PATH, dir(File::HomeDir->my_home, 'bin')->stringify;
+unshift @PATH, dir(bsd_glob '~/bin')->stringify;
 
 sub _can_execute_in_tmp
 {
@@ -75,7 +75,7 @@ sub requires
       $tb->plan( skip_all => "developer test not configured" ) unless defined $config;
       
       unshift @PATH, $config->{path} if defined $config->{path};
-      unshift @PATH, dir(File::HomeDir->my_home, 'bin')->stringify;
+      unshift @PATH, dir(bsd_glob '~/bin')->stringify;
       $ENV{$_} = $config->{env}->{$_} for keys %{ $config->{env} };
       $command = $config->{exe} // $name;
     }
@@ -106,7 +106,7 @@ sub extract_data
   
   foreach my $name (sort keys %$all)
   {
-    my $file = file(File::HomeDir->my_home, $name);
+    my $file = file(bsd_glob('~'), $name);
     my $dir  = $file->parent;
     unless(-d $dir)
     {
@@ -138,7 +138,7 @@ sub mirror
   
   my $tb = __PACKAGE__->builder;
 
-  $dst = dir(File::HomeDir->my_home, $dst) unless $dst->is_absolute;
+  $dst = dir(bsd_glob('~'), $dst) unless $dst->is_absolute;
   
   unless(-d $dst)
   {
@@ -224,7 +224,7 @@ sub clean_file
 sub create_symlink
 {
   my $tb = __PACKAGE__->builder;
-  my($old,$new) = map { file(File::HomeDir->my_home, $_) } @_;
+  my($old,$new) = map { file(bsd_glob('~'), $_) } @_;
   $new->remove if -f $new;
   $tb->note("[symlink] $old => $new");
   use autodie;

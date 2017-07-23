@@ -10,7 +10,6 @@ use Mojo::Template;
 use Log::Log4perl qw( :nowarn );
 use Storable ();
 use Clustericious::Config::Helpers ();
-use File::HomeDir ();
 use Mojo::URL;
 use File::Spec;
 use File::Temp ();
@@ -43,7 +42,7 @@ In your ~/etc/hypnotoad.conf:
 
  listen :
    - <%= $url %>
- # home uses File::HomeDir to find the calling users'
+ # home uses ~ to find the calling users'
  # home directory
  pid_file : <%= home %>/<%= $app %>/hypnotoad.pid
  env :

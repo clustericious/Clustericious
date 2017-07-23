@@ -3,8 +3,8 @@ package Test::Clustericious::Log;
 use strict;
 use warnings;
 use 5.010001;
-use if !$INC{'File/HomeDir/Test.pm'}, 'File::HomeDir::Test';
-use File::HomeDir;
+use Test2::Plugin::FauxHomeDir;
+use File::Glob qw( bsd_glob );
 use Test::Builder::Module;
 use Clustericious::Log ();
 use Carp qw( carp );
@@ -268,7 +268,7 @@ sub import
     return;
   }
 
-  my $home = File::HomeDir->my_home;
+  my $home = bsd_glob('~');
   mkdir "$home/etc" unless -d "$home/etc";
   mkdir "$home/log" unless -d "$home/log";
 
@@ -369,7 +369,7 @@ sub import
 END
 {
   my $tb = Test::Builder::Module->builder;
-  my $home = File::HomeDir->my_home;
+  my $home = bsd_glob('~');
   
   unless($tb->is_passing)
   {

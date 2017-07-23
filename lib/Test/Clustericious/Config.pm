@@ -3,8 +3,8 @@ package Test::Clustericious::Config;
 use strict;
 use warnings;
 use 5.010001;
-use if !$INC{'File/HomeDir/Test.pm'}, 'File::HomeDir::Test';
-use File::HomeDir;
+use Test2::Plugin::FauxHomeDir;
+use File::Glob qw( bsd_glob );
 use YAML::XS qw( DumpFile );
 use File::Path qw( mkpath );
 use Clustericious::Config;
@@ -20,7 +20,7 @@ my $config_dir;
 
 sub _init
 {
-  $config_dir = File::HomeDir->my_home . "/etc";
+  $config_dir = bsd_glob('~/etc');
   mkdir $config_dir;
 
   $ENV{CLUSTERICIOUS_CONF_DIR} = $config_dir;
@@ -78,11 +78,11 @@ This module provides an interface for testing Clustericious
 configurations, or Clustericious applications which use
 a Clustericious configuration.
 
-It uses L<File::HomeDir::Test> to isolate your test environment
+It uses L<Test2::Plugin::FauxHomeDir> to isolate your test environment
 from any configurations you may have in your C<~/etc>.  Keep
 in mind that this means that C<$HOME> and friends will be in
 a temporary directory and removed after the test runs.  It also
-means that the caveats for L<File::HomeDir::Test> apply when
+means that the caveats for L<Test2::Plugin::FauxHomeDir> apply when
 using this module as well (specifically this should be the first module
 that you use in your test after C<use strict> and C<use warnings>).
 
@@ -206,7 +206,7 @@ sub create_directory_ok ($;$)
   {
     $fullpath = $path;
     $fullpath =~ s{^/}{};
-    $fullpath = join('/', File::HomeDir->my_home, $fullpath);
+    $fullpath = bsd_glob("~/$fullpath");
     mkpath $fullpath, 0, 0700;
   
     $test_name //= "create directory $fullpath";
@@ -237,7 +237,7 @@ sub home_directory_ok (;$)
 {
   my($test_name) = @_;
   
-  my $fullpath = File::HomeDir->my_home;
+  my $fullpath = bsd_glob('~');
   
   $test_name //= "home directory $fullpath";
   

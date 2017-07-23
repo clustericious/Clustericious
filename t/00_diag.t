@@ -40,7 +40,8 @@ $modules{$_} = $_ for qw(
   Sub::Exporter
   Sub::Identify
   Term::Prompt
-  Test2::Suite
+  Test2::Bundle::Extended
+  Test2::Plugin::FauxHomeDir
   Test::Clustericious::Cluster
   Test::More
   Test::Script
