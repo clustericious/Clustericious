@@ -4,7 +4,8 @@ use strict;
 use warnings;
 use 5.010;
 use File::Spec;
-use File::HomeDir;
+use File::Glob qw( bsd_glob );
+use File::Path qw( mkpath );
 
 # ABSTRACT: A framework for RESTful processing systems.
 # VERSION
@@ -173,8 +174,8 @@ sub _config_path
     (
       [ $ENV{CLUSTERICIOUS_CONF_DIR} ],
       (!_testing) ? (
-        [ File::HomeDir->my_home, 'etc' ],
-        [ File::HomeDir->my_dist_config('Clustericious') ],
+        [ bsd_glob('~'), 'etc' ],
+        [ bsd_glob('~/.config/Perl/Clustericious') ],
         [ '', 'etc' ],
       ) : (),
     );
@@ -213,14 +214,20 @@ sub _generate_port
   IO::Socket::INET->new(Listen => 5, LocalAddr => "127.0.0.1")->sockport
 }
 
+sub _my_dist_data
+{
+  my $dir = bsd_glob '~/.local/share/Perl/dist/Clustericious';
+  mkpath $dir, 0, 0700;
+  $dir;
+}
+
 sub _default_url
 {
   my(undef, $app_name) = @_;
-  require File::HomeDir;
   require Path::Class::File;
   require JSON::MaybeXS;
   require Mojo::URL;
-  my $file = Path::Class::File->new(File::HomeDir->my_dist_data("Clustericious", { create => 1 } ), 'default_ports.json');
+  my $file = Path::Class::File->new(_my_dist_data(), 'default_ports.json');
 
   $app_name =~ s{::}{-};
   

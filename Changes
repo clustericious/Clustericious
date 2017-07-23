@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Remove dependency on File::HomeDir
 
 1.24      2017-04-27 08:37:08 -0400
   - Mojolicious 7.31 compat

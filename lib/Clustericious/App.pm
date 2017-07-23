@@ -11,7 +11,8 @@ use Clustericious::Log;
 use Mojo::URL;
 use Scalar::Util qw( weaken );
 use Mojo::Base 'Mojolicious';
-use File::HomeDir ();
+use File::Glob qw( bsd_glob );
+use File::Path qw( mkpath );
 use Carp qw( croak carp );
 use Clustericious;
 use Clustericious::Controller;
@@ -182,6 +183,13 @@ Returns the config (an instance of L<Clustericious::Config>) for the application
 
 =cut
 
+sub _my_dist_data
+{
+  my $dir = bsd_glob '~/.local/share/Perl/dist/Clustericious';
+  mkpath $dir, 0, 0700;
+  $dir;
+}
+
 sub config
 {
   my($self, $what) = @_;
@@ -203,7 +211,7 @@ sub config
         default => sub {
           my $url = Mojo::URL->new($config->{url});
           {
-            pid_file => File::Spec->catfile( File::HomeDir->my_dist_data("Clustericious", { create => 1 } ), 'hypnotoad-' . $url->port . '-' . $url->host . '.pid' ),
+            pid_file => File::Spec->catfile( _my_dist_data(), 'hypnotoad-' . $url->port . '-' . $url->host . '.pid' ),
             listen => [
               $url->to_string,
             ],

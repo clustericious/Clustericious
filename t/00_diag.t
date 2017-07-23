@@ -18,7 +18,6 @@ $modules{$_} = $_ for qw(
   DateTime::Format::ISO8601
   EV
   ExtUtils::MakeMaker
-  File::HomeDir
   File::ReadBackwards
   File::ShareDir
   File::ShareDir::Install
