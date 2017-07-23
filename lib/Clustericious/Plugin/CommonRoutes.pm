@@ -6,7 +6,7 @@ use 5.010;
 use Mojo::Base 'Mojolicious::Plugin';
 use File::Basename ();
 use Sys::Hostname ();
-use List::MoreUtils ();
+use List::MoreUtils qw/ uniq /;
 
 # ABSTRACT: Routes common to all clustericious applications
 # VERSION
@@ -196,7 +196,7 @@ sub _dump_api {
       push @all, $class->_dump_api($app, $r->children);
     }
   }
-  return List::MoreUtils::uniq sort @all;
+  return uniq sort @all;
 }
 
 sub _dump_api_table_types

@@ -3,7 +3,6 @@ package Clustericious::Command::start;
 use strict;
 use warnings;
 use Clustericious::Log;
-use List::MoreUtils qw( mesh );
 use File::Path qw( mkpath );
 use File::Basename qw( dirname );
 use Clustericious::App;
