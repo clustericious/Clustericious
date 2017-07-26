@@ -6,7 +6,7 @@ use 5.010;
 use Mojo::Base 'Mojolicious::Plugin';
 use File::Basename ();
 use Sys::Hostname ();
-use List::MoreUtils qw/ uniq /;
+use List::Util qw/ uniq /;
 
 # ABSTRACT: Routes common to all clustericious applications
 # VERSION

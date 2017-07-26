@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
   - Migrate from File::ShareDir to File::ShareDir::Dist
+  - Remove deprecated code (gh#43)
+  - Remove dependency on List::MoreUtils
 
 1.25      2017-07-22 23:44:14 -0400
   - Remove dependency on File::HomeDir
