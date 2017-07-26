@@ -21,7 +21,7 @@ system 'git', 'clone', '--depth' => 2, $url => $dir;
 
 do {
   local $CWD = $dir;
-  system "dzil authordeps --missing | cpanm -n";
-  system "dzil listdeps --missing | cpanm -n";
+  system "dzil -I. authordeps --missing | cpanm -n";
+  system "dzil -I. listdeps --missing | cpanm -n";
   system 'prove', '-l', 't';
 };

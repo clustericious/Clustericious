@@ -2,6 +2,7 @@ language: perl
 sudo: false
 
 install:
+  - ./maint/travis-install-file-sharedir-dist
   - cpanm Dist::Zilla
   - dzil authordeps --missing | cpanm -n
   - dzil listdeps --missing | cpanm -n
@@ -12,11 +13,11 @@ install:
 script:
   - prove -lv
   - dzil install --install-command='cpanm -n -v .'
-  - perl corpus/test_from_git https://github.com/clustericious/PlugAuth.git
-  - perl corpus/test_from_git https://github.com/clustericious/Yars.git
-  - perl corpus/test_from_git https://github.com/clustericious/Clustericious-RouteBuilder-Dancer2.git 5.014
-  - perl corpus/test_from_git https://github.com/clustericious/Test-Clustericious-Cluster.git
-  - perl corpus/test_from_git https://github.com/clustericious/App-clad.git
+  - perl maint/test_from_git https://github.com/clustericious/PlugAuth.git
+  - perl maint/test_from_git https://github.com/clustericious/Yars.git
+  - perl maint/test_from_git https://github.com/clustericious/Clustericious-RouteBuilder-Dancer2.git 5.014
+  - perl maint/test_from_git https://github.com/clustericious/Test-Clustericious-Cluster.git
+  - perl maint/test_from_git https://github.com/clustericious/App-clad.git
 
 perl:
   - "5.26"

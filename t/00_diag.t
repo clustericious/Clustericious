@@ -19,7 +19,7 @@ $modules{$_} = $_ for qw(
   EV
   ExtUtils::MakeMaker
   File::ReadBackwards
-  File::ShareDir
+  File::ShareDir::Dist
   File::ShareDir::Install
   File::Which
   File::chdir

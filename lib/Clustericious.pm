@@ -194,16 +194,14 @@ sub _slurp_pid ($)
 
 sub _dist_dir
 {
-  require Path::Class::File;
-  require Path::Class::Dir;
-  $_ = __FILE__; s{(Clustericious).pm}{.$1.devshare}; -e $_
-    ? Path::Class::File->new(__FILE__)->parent->parent->subdir('share')
-    : do {
-      require File::ShareDir;
-      Path::Class::Dir->new(
-        File::ShareDir::dist_dir('Clustericious'),
-      );
-    }
+  state $dir;
+  $dir //= do {
+    require Path::Class::Dir;
+    require File::ShareDir::Dist;
+    Path::Class::Dir->new(
+      File::ShareDir::Dist::dist_share('Clustericious') or die "unable to find share directory",
+    );
+  };
 }
 
 sub _generate_port
