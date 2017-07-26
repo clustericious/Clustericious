@@ -11,7 +11,7 @@ install:
   - cpanm -n Filesys::Df AnyEvent::Open3::Simple
 
 script:
-  - prove -lv
+  - prove -PShareDirDist -lv
   - dzil install --install-command='cpanm -n -v .'
   - perl maint/test_from_git https://github.com/clustericious/PlugAuth.git
   - perl maint/test_from_git https://github.com/clustericious/Yars.git
