@@ -3,7 +3,6 @@ package Clustericious::Command::start;
 use strict;
 use warnings;
 use Clustericious::Log;
-use List::MoreUtils qw( mesh );
 use File::Path qw( mkpath );
 use File::Basename qw( dirname );
 use Clustericious::App;
@@ -119,15 +118,7 @@ sub run {
     }
     elsif(%conf)
     {
-      Carp::carp("arguments specified withouth 'args' option is deprecated and will be removed on or after February 29, 2016");
-      # THIS IS RETARDED AND SHOULD BE DEPRECATED
-      # if it starts with a dash, leave it alone, else add two dashes
-      my %args = mesh
-        @{ [ map {/^-/ ? "$_" : "--$_"} keys %conf ] },
-        @{ [ values %conf                          ] };
-
-      # squash "null"s (for boolean arguments)
-      @args = grep { $_ ne 'null' } %args;
+      die "arguments specified withouth 'args' option\n";
     }
 
     DEBUG "Sending args for $mode : @args";

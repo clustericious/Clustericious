@@ -134,47 +134,6 @@ sub init_logging {
     $self->log( $logger );
 }
 
-=head2 dump_api
-
- my @api = $app->dump_api;
-
-B<DEPRECATED>: will be removed on or after January 31, 2016.
-
-Dump out the API for this REST server.
-
-=cut
-
-sub dump_api
-{
-  carp "Clustericious::App#dump_api is deprecated";
-  require Clustericious::Plugin::CommonRoutes;
-  Clustericious::Plugin::CommonRoutes->_dump_api(@_);
-}
-
-=head2 dump_api_table
-
- my $api = $app->dump_api_table( $table );
-
-B<DEPRECATED>: will be removed on or after January 31, 2016.
-
-Dump out the column information for the given table.
-
-=cut
-
-sub _dump_api_table_types
-{
-  carp "Clustericious::App#dump_api_table is deprecated";
-  require Clustericious::Plugin::CommonRoutes;
-  Clustericious::Plugin::CommonRoutes->_dump_api_table_types(@_);  
-}
-
-sub dump_api_table
-{
-  carp "Clustericious::App#dump_api_table is deprecated";
-  require Clustericious::Plugin::CommonRoutes;
-  Clustericious::Plugin::CommonRoutes->_dump_api_table($_[1]);
-}
-
 =head2 config
 
  my $config = $app->config;
