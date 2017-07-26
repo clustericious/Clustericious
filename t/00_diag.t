@@ -27,7 +27,7 @@ $modules{$_} = $_ for qw(
   JSON::MaybeXS
   JSON::PP
   JSON::XS
-  List::MoreUtils
+  List::Util
   Log::Log4perl
   Log::Log4perl::Appender::TAP
   MojoX::Log::Log4perl
