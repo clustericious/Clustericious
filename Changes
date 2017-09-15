@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Add compatability with Test2::Harness / App::Yath
 
 1.26      2017-07-26 07:48:09 -0400
   - Migrate from File::ShareDir to File::ShareDir::Dist

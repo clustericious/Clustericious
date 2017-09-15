@@ -179,6 +179,12 @@ sub mirror
 sub run_ok
 {
   my(@cmd) = @_;
+  
+  # Yath set some environment variables which confuse a subprocess
+  # for when we are testing the use of prove, etc
+  local %ENV = %ENV;
+  delete $ENV{$_} for grep /^T2_/, keys %ENV;
+  
   my($out, $err, $error, $exit) = capture { system @cmd; ($!,$?) };
   
   my $ok = ($exit != -1) && ! ($exit & 128);
