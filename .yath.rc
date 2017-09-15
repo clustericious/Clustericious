@@ -1,2 +1,3 @@
 [test]
 -p ShareDirDist
+-j 4
