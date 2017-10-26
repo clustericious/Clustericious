@@ -5,7 +5,7 @@ use warnings;
 use 5.010001;
 use Test2::Plugin::FauxHomeDir;
 use File::Glob qw( bsd_glob );
-use base qw( Exporter Test::Builder::Module );
+use base qw( Exporter );
 use Exporter qw( import );
 use Mojo::Loader;
 use Path::Class qw( file dir );
@@ -15,6 +15,7 @@ use File::Which qw( which );
 use File::Glob qw( bsd_glob );
 use YAML::XS ();
 use File::Temp qw( tempdir );
+use Test2::API qw( context );
 
 # ABSTRACT: Test Clustericious commands
 # VERSION
@@ -51,13 +52,14 @@ sub _can_execute_in_tmp
 sub requires
 {
   my($command, $num) = @_;
-  my $tb = __PACKAGE__->builder;
 
-  $tb->plan( skip_all => 'test requires execute in tmp') unless __PACKAGE__->_can_execute_in_tmp;
+  my $ctx = context();
+  $ctx->plan( 0, 'SKIP', 'test requires execute in tmp') unless __PACKAGE__->_can_execute_in_tmp;
 
   unless(defined $command)
   {
-    $tb->plan( tests => $num ) if defined $num;
+    $ctx->plan( $num ) if defined $num;
+    $ctx->release;
     return;
   }
 
@@ -72,7 +74,7 @@ sub requires
         my %config = %$config;
         \%config;
       }->{$name};
-      $tb->plan( skip_all => "developer test not configured" ) unless defined $config;
+      $ctx->plan( 0, 'SKIP', "developer test not configured" ) unless defined $config;
       
       unshift @PATH, $config->{path} if defined $config->{path};
       unshift @PATH, dir(bsd_glob '~/bin')->stringify;
@@ -81,18 +83,19 @@ sub requires
     }
     else
     {
-      $tb->plan( skip_all => "developer only test" );
+      $ctx->plan( 0, 'SKIP', "developer only test" );
     }
   }
 
   if(which $command)
   {
-    $tb->plan( tests => $num ) if defined $num;
+    $ctx->plan( $num ) if defined $num;
   }
   else
   {
-    $tb->plan( skip_all => "test requires $command to be in the PATH" );
+    $ctx->plan( 0, 'SKIP', "test requires $command to be in the PATH" );
   }
+  $ctx->release;
 }
 
 sub extract_data
@@ -102,7 +105,7 @@ sub extract_data
   Mojo::Loader::load_class($caller) unless $caller eq 'main';
   my $all = Mojo::Loader::data_section $caller;
   
-  my $tb = __PACKAGE__->builder;
+  my $ctx = context();
   
   foreach my $name (sort keys %$all)
   {
@@ -110,12 +113,12 @@ sub extract_data
     my $dir  = $file->parent;
     unless(-d $dir)
     {
-      $tb->note("[extract] DIR  $dir");
+      $ctx->note("[extract] DIR  $dir");
       $dir->mkpath(0,0700);
     }
     unless(-f $file)
     {
-      $tb->note("[extract] FILE $file@{[ $name =~ m{^bin/} ? ' (*)' : '']}");
+      $ctx->note("[extract] FILE $file@{[ $name =~ m{^bin/} ? ' (*)' : '']}");
       
       if($name =~ m{^bin/})
       {
@@ -130,19 +133,21 @@ sub extract_data
       }
     }
   }
+  
+  $ctx->release;
 }
 
 sub mirror
 {
   my($src, $dst) = map { ref($_) ? $_ : dir($_) } @_;
   
-  my $tb = __PACKAGE__->builder;
+  my $ctx = context();
 
   $dst = dir(bsd_glob('~'), $dst) unless $dst->is_absolute;
   
   unless(-d $dst)
   {
-    $tb->note("[mirror ] DIR  $dst");
+    $ctx->note("[mirror ] DIR  $dst");
     $dst->mkpath(0,0700);
   }
   
@@ -159,7 +164,7 @@ sub mirror
       {
         if(-x $child)
         {
-          $tb->note("[mirror ] FILE $dst (*)");
+          $ctx->note("[mirror ] FILE $dst (*)");
           my $content = scalar $child->slurp;
           $content =~ s{^#!/usr/bin/perl}{#!$^X};
           $dst->spew($content);
@@ -167,13 +172,15 @@ sub mirror
         }
         else
         {
-          $tb->note("[mirror ] FILE $dst");
+          $ctx->note("[mirror ] FILE $dst");
           $dst->spew(scalar $child->slurp);
           chmod 0600, "$dst";
         }
       }
     }
   }
+  
+  $ctx->release;
 }
 
 sub run_ok
@@ -189,17 +196,21 @@ sub run_ok
   
   my $ok = ($exit != -1) && ! ($exit & 128);
   
-  my $tb = __PACKAGE__->builder;
+  my $ctx = context();
   
-  $tb->ok($ok, "run: @cmd");
-  $tb->diag("  @cmd failed") unless $ok;
-  $tb->diag("    - execute failed: $error") if $exit == -1;
-  $tb->diag("    - died from signal: " . ($exit & 128)) if $exit & 128;
+  $ctx->ok($ok, "run: @cmd");
+  $ctx->diag("  @cmd failed") unless $ok;
+  $ctx->diag("    - execute failed: $error") if $exit == -1;
+  $ctx->diag("    - died from signal: " . ($exit & 128)) if $exit & 128;
 
-  Test::Clustericious::Command::Run->new(
+  my $run = Test::Clustericious::Command::Run->new(
     cmd => \@cmd,
     out => $out, err => $err, exit => $exit >> 8,
   );
+  
+  $ctx->release;
+  
+  $run;
 }
 
 sub generate_port
@@ -210,13 +221,13 @@ sub generate_port
 
 sub note_file
 {
-  my $tb = __PACKAGE__->builder;
-
+  my $ctx = context();
   foreach my $file (sort map { file $_ } map { bsd_glob "~/$_" } @_)
   {
-    $tb->note("[content] $file");
-    $tb->note(scalar $file->slurp);
+    $ctx->note("[content] $file");
+    $ctx->note(scalar $file->slurp);
   }
+  $ctx->release;
 }
 
 sub clean_file
@@ -229,10 +240,11 @@ sub clean_file
 
 sub create_symlink
 {
-  my $tb = __PACKAGE__->builder;
   my($old,$new) = map { file(bsd_glob('~'), $_) } @_;
   $new->remove if -f $new;
-  $tb->note("[symlink] $old => $new");
+  my $ctx = context();
+  $ctx->note("[symlink] $old => $new");
+  $ctx->release;
   use autodie;
   symlink "$old", "$new";
   %Clustericious::Config::singletons = ();
@@ -240,7 +252,7 @@ sub create_symlink
 
 package Test::Clustericious::Command::Run;
 
-use base qw( Test::Builder::Module );
+use Test2::API qw( context );
 
 sub new
 {
@@ -257,42 +269,46 @@ sub exit_is
 {
   my($self, $value, $name) = @_;
   $name //= "exit with $value";
-  my $tb = __PACKAGE__->builder;
-  $tb->is_eq($self->exit, $value, $name);
+  my $ctx = context();
+  $ctx->ok($self->exit eq $value, $name);
   unless($self->exit == $value)
   {
-    $tb->diag("[cmd]\n", join(' ', $self->cmd)) if $self->cmd;
-    $tb->diag("[out]\n", $self->out) if $self->out;
-    $tb->diag("[err]\n", $self->err) if $self->err;
+    $ctx->diag("[cmd]\n", join(' ', $self->cmd)) if $self->cmd;
+    $ctx->diag("[out]\n", $self->out) if $self->out;
+    $ctx->diag("[err]\n", $self->err) if $self->err;
   }
+  $ctx->release;
   $self;
 }
 
 sub note
 {
   my($self) = @_;
-  my $tb = __PACKAGE__->builder;
-  $tb->note("[out]\n" . $self->out) if $self->out;
-  $tb->note("[err]\n" . $self->err) if $self->err;
+  my $ctx = context();
+  $ctx->note("[out]\n" . $self->out) if $self->out;
+  $ctx->note("[err]\n" . $self->err) if $self->err;
+  $ctx->release;
   $self;
 }
 
 sub diag
 {
   my($self) = @_;
-  my $tb = __PACKAGE__->builder;
-  $tb->diag("[out]\n" . $self->out) if $self->out;
-  $tb->diag("[err]\n" . $self->err) if $self->err;
+  my $ctx = context();
+  $ctx->diag("[out]\n" . $self->out) if $self->out;
+  $ctx->diag("[err]\n" . $self->err) if $self->err;
+  $ctx->release;
   $self;
 }
 
 sub out_like
 {
   my($self, $pattern, $name) = @_;
-  my $tb = __PACKAGE__->builder;
-  
+
+  my $ctx = context();
   $name ||= "output matches";
-  $tb->like($self->out, $pattern, $name);
+  $ctx->ok($self->out =~ $pattern, $name);
+  $ctx->release;
 
   $self;
 }
@@ -300,10 +316,11 @@ sub out_like
 sub out_unlike
 {
   my($self, $pattern, $name) = @_;
-  my $tb = __PACKAGE__->builder;
-  
+
+  my $ctx = context();  
   $name ||= "output does not match";
-  $tb->unlike($self->out, $pattern, $name);
+  $ctx->ok($self->out !~ $pattern, $name);
+  $ctx->release;
 
   $self;
 }
@@ -311,10 +328,11 @@ sub out_unlike
 sub err_like
 {
   my($self, $pattern, $name) = @_;
-  my $tb = __PACKAGE__->builder;
-  
+
+  my $ctx = context();  
   $name ||= "error matches";
-  $tb->like($self->err, $pattern, $name);
+  $ctx->ok($self->err =~ $pattern, $name);
+  $ctx->release;
 
   $self;
 }
@@ -322,10 +340,11 @@ sub err_like
 sub err_unlike
 {
   my($self, $pattern, $name) = @_;
-  my $tb = __PACKAGE__->builder;
-  
+
+  my $ctx = context();
   $name ||= "error does not match";
-  $tb->unlike($self->err, $pattern, $name);
+  $ctx->unlike($self->err, $pattern, $name);
+  $ctx->release;
   
   $self;
 }
