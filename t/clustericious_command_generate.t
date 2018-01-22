@@ -82,8 +82,9 @@ $app->process_args(@ARGV);
 $app->run;
 
 @@ bin/yath
-#!/usr/bin/yath
+#!/usr/bin/perl
 use strict;
 use warnings;
 use App::Yath (\@ARGV, \$App::Yath::RUN);
 exit($App::Yath::RUN->());
+
