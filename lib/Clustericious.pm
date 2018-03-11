@@ -7,7 +7,7 @@ use File::Spec;
 use File::Glob qw( bsd_glob );
 use File::Path qw( mkpath );
 
-# ABSTRACT: A framework for RESTful processing systems.
+# ABSTRACT: (Deprecated) A framework for RESTful processing systems.
 # VERSION
 
 =head1 SYNOPSIS
@@ -60,6 +60,9 @@ Basic testing for Clustericious application:
  url: <%= cluster->url %>
 
 =head1 DESCRIPTION
+
+B<NOTE>: This module has been deprecated, and may be removed on or after 31 December 2018.
+Please see L<https://github.com/clustericious/Clustericious/issues/46>.
 
 Clustericious is a web application framework designed to create HTTP/RESTful
 web services that operate on a cluster, where each service does one thing 

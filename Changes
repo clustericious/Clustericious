@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Deprecated. See https://github.com/clustericious/Clustericious/issues/46
 
 1.28_01   2018-01-22 10:34:23 -0500
   - Possible fx for gh#45
