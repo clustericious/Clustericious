@@ -1,6 +1,6 @@
 # Clustericious [![Build Status](https://secure.travis-ci.org/clustericious/Clustericious.png)](http://travis-ci.org/clustericious/Clustericious) [![Build status](https://ci.appveyor.com/api/projects/status/ifie1gwv9xyey7t6/branch/master?svg=true)](https://ci.appveyor.com/project/clustericious/Clustericious/branch/master)
 
-A framework for RESTful processing systems.
+(Deprecated) A framework for RESTful processing systems.
 
 # SYNOPSIS
 
@@ -52,6 +52,9 @@ Basic testing for Clustericious application:
     url: <%= cluster->url %>
 
 # DESCRIPTION
+
+**NOTE**: This module has been deprecated, and may be removed on or after 31 December 2018.
+Please see [https://github.com/clustericious/Clustericious/issues/46](https://github.com/clustericious/Clustericious/issues/46).
 
 Clustericious is a web application framework designed to create HTTP/RESTful
 web services that operate on a cluster, where each service does one thing 
